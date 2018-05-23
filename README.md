@@ -18,7 +18,7 @@ This repository is for the Reserve In-Store Shopify app.
 ## Application Overview
 
 #### Why do merchants need this?
-** TODO: PLEASE FILL THIS OUT **
+When cusstomers comes in to your online store, they either make the purchases right away or they leaves. Especially when it comes to high-priced items, many people won't place their orders online. Let customers actually see the products will clearly increase their chance of buying. Reserve In-Store is a simple application that adds a "reserve in store" option in your online store. By adding this feature, you will have the chance to make more deals when customers comes into your store in person.
 
 #### How do merchants start using the app?
 ** TODO: PLEASE FILL THIS OUT **

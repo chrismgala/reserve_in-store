@@ -1,0 +1,46 @@
+<div class="modal" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <%= form_for :reservation, url: {action: "create"}, html: {class: 'form-group', id: 'reservationCreateForm'} do |f| %>
+        <div class="modal-header">
+          <h4 class="modal-title">New Reservation</h4>
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        </div>
+        <div class="modal-body">
+          <%= f.label :customer_name %>
+          <%= f.text_field :customer_name, class: 'form-control', required: true %>
+
+          <%= f.label :customer_email %>
+          <%= f.text_field :customer_email, class: 'form-control', required: true, 'data-parsley-type': 'email' %>
+
+          <%= f.label :customer_phone %>
+          <%= f.text_field :customer_phone, class: 'form-control' %>
+
+          <%= f.label :location_id %>
+          <%= f.select :location_id, @current_store.locations.collect {|p| [p.name, p.id]}, {include_blank: true}, {class: 'form-control', required: true} %>
+
+          <%= f.label :product_id %>
+          <%= f.text_field :platform_product_id, class: 'form-control' %>
+
+          <%= f.label :variant_id %>
+          <%= f.text_field :platform_variant_id, class: 'form-control' %>
+
+          <%= f.label :comments %>
+          <%= f.text_field :comments, class: 'form-control' %>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+          <%= f.submit 'Save', class: 'btn btn-primary' %>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Parsley form validation-->
+<script>
+    $('#reservationCreateForm').parsley();
+</script>

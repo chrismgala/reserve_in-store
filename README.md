@@ -18,7 +18,7 @@ This repository is for the Reserve In-Store Shopify app.
 ## Application Overview
 
 #### Why do merchants need this?
-** TODO: PLEASE FILL THIS OUT **
+When customers comes in to your online store, they either make the purchases right away or they leaves. Especially when it comes to high-priced items, many people won't place their orders online. Let customers actually see the products will clearly increase their chance of buying. Reserve In-Store is a simple application that adds a "reserve in store" option in your online store. By adding this feature, you will have the chance to make more deals when customers comes into your store in person.
 
 #### How do merchants start using the app?
 ** TODO: PLEASE FILL THIS OUT **
@@ -26,7 +26,7 @@ This repository is for the Reserve In-Store Shopify app.
 ----
 
 # Setup
-Here's how to to get the app running on your local computer for development.
+Here's how to get the app running on your local computer for development.
 
 ### Prerequisites
 You must have the following to run this app:
@@ -185,7 +185,7 @@ It's important to understand Bootstrap's column layout in order to be effective 
 </div>
 ```
 
-#### Identation
+#### Indentation
 Use four spaces for CSS and SCSS. 2 for Ruby code and HTML.
 
 #### Adhere to best practices
@@ -245,7 +245,7 @@ Always use `link_to` and `image_tag`. Use `action\_model\_paths` wherever possib
 #### Be RESTful wherever possible, using Rails resources patterns
 Stick to the PUT/PATCH/POST/GET patterns that Rails facilitates. This will help in scaling our app as we integrate with 3rd parties and become more of a SaaS platform.
 
-#### Ruby Best Practises
+#### Ruby Best Practices
 * When adding to the Gemfile, make sure to alphabetize gems you add and set a specific version number of the gem (so that we don't get random versions loaded in production that aren't tested). Also mention a quick comment about **why** the gem is being included. This helps us clean up old unused gems in the future.
 * When adding to the `bower.json` file make sure to alphabetize your requirements and be as specific about the version number as you can for the same reason as above.
 * Document methods unless it is 100% totally obvious what the method does. 95% of the time when you have parameters required you probably need a method doc block.
@@ -264,7 +264,7 @@ Use four spaces for CSS and SCSS.
 Follow the following style guide: https://github.com/airbnb/css
 
 
-## General Coding Best Practises
+## General Coding Best Practices
 * If you're going to leave commented code in the repository add a comment to the top (or somewhere) near the commented code explaining why you left it there. Most of the time, it doens't need to be there and we can find it later if we need it in our source control system
 * Whenever something isn't 100% obvious, add code comments.
 * Be consistent. When given the choice between being consistent and being slightly better, choose to be consistent. If you want to be better then make everything consistently better.

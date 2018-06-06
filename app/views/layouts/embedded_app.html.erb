@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <% application_name = ShopifyApp.configuration.application_name %>
+    <title><%= application_name %></title>
+    <%= stylesheet_link_tag 'application' %>
+    <%= javascript_include_tag 'application', "data-turbolinks-track" => true %>
+    <%= csrf_meta_tags %>
+  </head>
+
+  <body>
+
+    <!-- top navbar-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link <%= 'active' if params[:controller] == 'stores' %>" href="<%= stores_settings_path %>">Options
+            <span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link <%= 'active' if params[:controller] == 'reservations' %>" href="<%= reservations_path %>">Reservations</a>
+          <a class="nav-item nav-link <%= 'active' if params[:controller] == 'locations' %>" href="<%= locations_path %>">Locations</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main section-->
+    <div class="app-wrapper">
+      <div class="app-content container">
+        <main role="main">
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+
+    <%= render 'layouts/flash_messages' %>
+
+    <script src="https://cdn.shopify.com/s/assets/external/app.js?<%= Time.now.strftime('%Y%m%d%H') %>"></script>
+
+    <script type="text/javascript">
+      ShopifyApp.init({
+        apiKey: "<%= ShopifyApp.configuration.api_key %>",
+        shopOrigin: "<%= "https://#{ @shop_session.url }" if @shop_session %>",
+        debug: <%= Rails.env.development? %>,
+        forceRedirect: true
+      });
+    </script>
+
+    <% if content_for?(:javascript) %>
+      <div id="ContentForJavascript" data-turbolinks-temporary>
+        <%= yield :javascript %>
+      </div>
+    <% end %>
+
+  </body>
+</html>

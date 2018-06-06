@@ -1,0 +1,7 @@
+{
+  "name": "reserve_in-store",
+  "private": true,
+  "dependencies": {
+    "@shopify/polaris": "^2.0.0"
+  }
+}

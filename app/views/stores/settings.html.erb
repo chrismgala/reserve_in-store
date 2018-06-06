@@ -9,7 +9,7 @@
 <% end %>
 <!--END-->
 
-<%= form_for @store, url: {action: 'save_settings'}, html: {class: 'form-group'} do |f| %>
+<%= form_for @current_store, url: {action: 'save_settings'}, html: {class: 'form-group'} do |f| %>
   <%= f.label 'Message on top of the window:' %><br>
   <%= f.text_area :top_msg, class: 'form-control' %><br>
 

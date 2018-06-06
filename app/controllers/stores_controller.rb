@@ -1,5 +1,4 @@
-class StoresController < ShopifyApp::AuthenticatedController
-  before_action :set_store
+class StoresController < LoggedInController
 
   ##
   # GET /stores/settings
@@ -21,11 +20,6 @@ class StoresController < ShopifyApp::AuthenticatedController
   end
 
   private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_store
-    @store = Store.find_by(shopify_domain: current_shopify_domain)
-  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def store_params

@@ -1,5 +1,4 @@
-class ReservationsController < ShopifyApp::AuthenticatedController
-  before_action :set_store
+class ReservationsController < LoggedInController
   before_action :set_reservation, only: [:show, :edit, :update, :destroy]
 
   ##
@@ -52,11 +51,6 @@ class ReservationsController < ShopifyApp::AuthenticatedController
   end
 
   private
-
-  # Set current store
-  def set_store
-    @current_store = Store.find_by(shopify_domain: current_shopify_domain)
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_reservation

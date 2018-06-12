@@ -1,33 +1,40 @@
 module Integrator
 
+  ##
+  # @param store [Store] The store that you want to run the integration process on
   def install!(store)
     install_script_tag!("#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js")
     install_footer!(store)
     set_platform_data(store)
   end
 
+  ##
+  # @param [Object] src Source of the script tag to install
   def install_script_tag!(src)
     return true if ShopifyAPI::ScriptTag.all.any? # There should only be one
 
     ShopifyAPI::ScriptTag.create(src: src, event: 'onload')
   end
 
+  ##
+  # @param [Object] asset_path Path of the asset to load
+  # @return [Object] The Shopify asset object if successful, nil otherwise.
   def load_asset(asset_path)
     asset(asset_path)
   rescue ActiveResource::ResourceNotFound => e
     nil
   end
 
-  def assets
-    return @assets if @assets.present?
-
-    @assets = ShopifyAPI::Asset.all
-  end
-
+  ##
+  # @param [Object] path Path of the asset to load
+  # @return [Object] The Shopify asset object if successful, raise an error otherwise.
   def asset(path)
     ShopifyAPI::Asset.find(path)
   end
 
+  ##
+  # @param store [Store] The store that you want to set its name and platform id
+  # @return [Boolean] True if successful, false otherwise.
   def set_platform_data(store)
     platform_data = ShopifyAPI::Shop.current.attributes
     store.platform_store_id = platform_data['id']
@@ -36,7 +43,7 @@ module Integrator
   end
 
   ##
-  # @param [Object]  snippet_path Path of the snipped to check and update if necessary
+  # @param [Object]  snippet_path Path of the snippet to check and update if necessary
   # @param [Object]  snippet_content Content to ensure is in the path requested
   # @return [Boolean] True if successful, false otherwise.
   def ensure_snippet!(snippet_path, snippet_content)

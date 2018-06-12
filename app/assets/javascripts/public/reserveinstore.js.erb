@@ -1,0 +1,18 @@
+//=require public/library
+
+<%# unless Rails.env.development? %>
+<!--try {-->
+    <%# end %>
+<!--    if (!(window.__reserveInStore && window.__reserveInStore.version)) {-->
+<!--        window.__reserveInStore = new ReserveInStore.App({-->
+<!--            pushBuffer: window.__reserveInStore,-->
+<!--            debugMode: <%#= Rails.env.development?.to_s %>-->
+<!--        });-->
+<!--    }-->
+    <%# unless Rails.env.development? %>
+<!--} catch (e) {-->
+<!--    if (console) console.error(e);-->
+<!--}-->
+<%# end %>
+
+console.log("loaded reserveinstore.js.erb");

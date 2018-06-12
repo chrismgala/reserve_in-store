@@ -6,6 +6,4 @@ class SetupController < LoggedInController
     redirect_to stores_settings_url
   end
 
-
-
 end

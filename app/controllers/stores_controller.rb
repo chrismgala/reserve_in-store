@@ -3,6 +3,9 @@ class StoresController < LoggedInController
   ##
   # GET /stores/settings
   def settings
+    unless ShopifyAPI::ScriptTag.all.any?
+      redirect_to setup_integrate_path
+    end
   end
 
   ##

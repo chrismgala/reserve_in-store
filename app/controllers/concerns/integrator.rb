@@ -18,7 +18,7 @@ module Integrator
 
   ##
   # @param [Object] asset_path Path of the asset to load
-  # @return [Object] The Shopify asset object if successful, nil otherwise.
+  # @return [ShopifyAPI::Asset|NilClass] The Shopify asset object if successful, nil otherwise.
   def load_asset(asset_path)
     asset(asset_path)
   rescue ActiveResource::ResourceNotFound => e
@@ -27,7 +27,7 @@ module Integrator
 
   ##
   # @param [Object] path Path of the asset to load
-  # @return [Object] The Shopify asset object if successful, raise an error otherwise.
+  # @return [ShopifyAPI::Asset] The Shopify asset object if successful, raise an error otherwise.
   def asset(path)
     ShopifyAPI::Asset.find(path)
   end

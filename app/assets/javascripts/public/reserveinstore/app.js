@@ -1,5 +1,3 @@
-console.log("loaded app.js");
-
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
     this.version = '0.1.0.0'; // Version of the JS library.
@@ -15,6 +13,9 @@ ReserveInStore.App = function(opts) {
         });
     };
 
+    /**
+     * Add the reserve-in-store button
+     */
     var addReserveInStoreButton = function() {
         // detect the add to cart button
         var $btns = $('form[action~="/cart/add"] button[type=submit],form[action~="/cart/add"] input[type=submit],.product-form__cart-submit,.add-to-cart, .addToCart, #addToCart, #add-to-cart, .add-to-cart input.button');
@@ -23,14 +24,13 @@ ReserveInStore.App = function(opts) {
             var $btn = $(this);
             $btn.parent().parent().after('<button class="reserveinstore-btn">Reserve In-Store</button>');
 
-            // set css properties to the Reserve-In-Store button
+            // set css properties to the added button
             var style = window.getComputedStyle($btn[0], null);
             var $reservebtn = $('.reserveinstore-btn')
             $reservebtn[0].style.cssText = style.cssText;
+
+            // set the button's width
             $reservebtn.css("width", "auto");
-
-            // console.log(style);
-
             var btnwidth = parseInt($btn.css("width"));
             if (parseInt($reservebtn.css("width")) < btnwidth){
                 $reservebtn.css("width", btnwidth + "px");
@@ -60,7 +60,6 @@ ReserveInStore.App = function(opts) {
         }
     };
 
-    /**
 
      /**
      * Runs a method on the app using the push.
@@ -75,7 +74,6 @@ ReserveInStore.App = function(opts) {
             // Data should be:  { store_pk: \"#{public_key}\", api_url: \"#{ENV['BASE_APP_URL']}\" }
             opts.storePublicKey = object.data.store_pk;
             opts.apiUrl = object.data.api_url;
-            console.log("Configured the API for Reserve In Store!", opts); // TODO: Remove me before commiting!
         } else {
             console.error("Unknown action: ", object.action);
         }
@@ -118,4 +116,3 @@ ReserveInStore.App = function(opts) {
 
     init();
 };
-

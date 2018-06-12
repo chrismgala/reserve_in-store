@@ -1,0 +1,29 @@
+<!--not sure what to set to-->
+<!--leave it here for now-->
+<% content_for :javascript do %>
+  <script type="text/javascript">
+      ShopifyApp.ready(function () {
+          ShopifyApp.Bar.initialize({title: "Home"});
+      });
+  </script>
+<% end %>
+<!--END-->
+
+<%= form_for @current_store, url: {action: 'save_settings'}, html: {class: 'form-group'} do |f| %>
+  <%= f.label 'Message on top of the window:' %><br>
+  <%= f.text_area :top_msg, class: 'form-control' %><br>
+
+  <%= f.label 'Fields to collect:' %><br>
+  <%= f.check_box :show_phone %>
+  <%= f.label 'Phone' %><br>
+  <%= f.check_box :show_comments %>
+  <%= f.label 'Comments' %><br>
+
+  <%= f.label 'Success message' %><br>
+  <%= f.text_area :success_msg, class: 'form-control' %><br>
+
+  <%= f.label 'Email template' %><br>
+  <%= f.text_area :email_template, class: 'form-control' %><br>
+  <%= f.submit 'Save', class: 'btn btn-primary'%>
+<% end %>
+

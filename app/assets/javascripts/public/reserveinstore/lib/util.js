@@ -1,4 +1,4 @@
-BananaStand.Util = {
+ReserveInStore.Util = {
     /**
      * Tells you if the element selector is visible in any way in view.
      * @param $el jquery element selector
@@ -64,8 +64,10 @@ BananaStand.Util = {
         var s   = document.createElement("script");
         s.type  = "text/javascript";
         s.async = !0;
-        // TODO where is this cdn path...
-        s.src   = "https://cdn.ReserveInStore.io/js/lib/zepto" + (opts.debugMode ? '' : '.min') + ".js";
+        // TODO This is accessing vendor/assets/bower_components/zepto/zepto.js right now
+        // Later may move it to cdn
+        // opts.apiUrl is not set rn
+        s.src   = "https://879409cc.ngrok.io/assets/zepto/zepto" + (opts.debugMode ? '' : '.min') + ".js";
         document.body.appendChild(s);
     },
 

@@ -1,5 +1,7 @@
 class StoreIntegrator
 
+  RESERVE_IN_STORE_CODE = "Reserve In-store App Code" # Code that lets you recognize the footer start/end
+
   ##
   # @param store [Store] The store that you want to integrate into
   def initialize(store)
@@ -17,10 +19,10 @@ class StoreIntegrator
   ##
   # @param store [Store] The store that you want to check if has been integrated properly
   # @return [Boolean] True if integrated properly, false otherwise.
-  def self.integrated?(store)
+  def integrated?
     ShopifyAPI::ScriptTag.all.any? &&
-      store.platform_store_id.present? &&
-      load_asset('snippets/reserveinstore_footer.liquid').value.include?('Reserve In-store App Code') &&
+      @store.platform_store_id.present? &&
+      load_asset('snippets/reserveinstore_footer.liquid').value.include?(RESERVE_IN_STORE_CODE) &&
       load_asset('layout/theme.liquid').value.include?("{% include 'reserveinstore_footer' %}")
   end
 
@@ -35,7 +37,7 @@ class StoreIntegrator
   ##
   # @param [Object] asset_path Path of the asset to load
   # @return [ShopifyAPI::Asset|NilClass] The Shopify asset object if successful, nil otherwise.
-  def self.load_asset(asset_path)
+  def load_asset(asset_path)
     asset(asset_path)
   rescue ActiveResource::ResourceNotFound => e
     nil
@@ -44,7 +46,7 @@ class StoreIntegrator
   ##
   # @param [Object] path Path of the asset to load
   # @return [ShopifyAPI::Asset] The Shopify asset object if successful, raise an error otherwise.
-  def self.asset(path)
+  def asset(path)
     ShopifyAPI::Asset.find(path)
   end
 
@@ -64,7 +66,7 @@ class StoreIntegrator
   # @return [Boolean] True if successful, false otherwise.
   def ensure_snippet!(snippet_path, snippet_content)
 
-    snippet = StoreIntegrator.load_asset(snippet_path)
+    snippet = load_asset(snippet_path)
 
     if snippet.blank?
       snippet = ShopifyAPI::Asset.new(key: snippet_path)
@@ -80,7 +82,7 @@ class StoreIntegrator
   def install_footer!
     public_key = @store.public_key
     footer_script = "
-      <!-- // BEGIN // Reserve In-store App Code - DO NOT MODIFY // -->
+      <!-- // BEGIN // #{RESERVE_IN_STORE_CODE} - DO NOT MODIFY // -->
       <script type=\"application/javascript\">
       (function(){
         window.__reserveInStore = window.__reserveInStore || [];
@@ -88,12 +90,12 @@ class StoreIntegrator
         var headSrcUrls=document.getElementsByTagName(\"head\")[0].innerHTML.match(/var urls = \[.*\]/);if(headSrcUrls&&window.__reserveInStore){window.__reserveInStore.jsUrl=JSON.parse(headSrcUrls[0].replace(\"var urls = \",\"\")).find(function(url){return url.indexOf(\"reserveinstore.js\")!==-1});if(window.__reserveInStore.jsUrl){var s=document.createElement(\"script\");s.type=\"text/javascript\";s.async=!0;s.src=window.__reserveInStore.jsUrl;document.body.appendChild(s)}}
       })();</script>
       <link crossorigin=\"anonymous\" media=\"all\" rel=\"stylesheet\" href=\"#{ENV['CDN_JS_BASE_PATH']}reserveinstore.css\">
-      <!-- // END // Reserve In-store App Code // -->
+      <!-- // END // #{RESERVE_IN_STORE_CODE} // -->
     "
 
     ensure_snippet!("snippets/reserveinstore_footer.liquid", footer_script)
 
-    theme_template = StoreIntegrator.load_asset('layout/theme.liquid')
+    theme_template = load_asset('layout/theme.liquid')
     include_code = "{% include 'reserveinstore_footer' %}"
 
     if theme_template.value.include?(include_code)

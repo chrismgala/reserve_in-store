@@ -65,7 +65,7 @@ ReserveInStore.Util = {
         s.type  = "text/javascript";
         s.async = !0;
 <!--        This is accessing vendor/assets/bower_components/zepto/zepto.js-->
-<!--        TODOLater may drop the .erb suffix-->
+<!--        TODO Later may drop the .erb suffix-->
         s.src   = "<%= ENV['BASE_APP_URL'] %>/assets/zepto/zepto" + (opts.debugMode ? '' : '.min') + ".js";
         document.body.appendChild(s);
     },

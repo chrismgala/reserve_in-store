@@ -18,23 +18,22 @@ ReserveInStore.App = function(opts) {
      */
     var addReserveInStoreButton = function() {
         // detect the add to cart button
-        var $btns = $('form[action~="/cart/add"] button[type=submit],form[action~="/cart/add"] input[type=submit],.product-form__cart-submit,.add-to-cart, .addToCart, #addToCart, #add-to-cart, .add-to-cart input.button');
+        var $addToCartBtns = $('form[action~="/cart/add"] button[type=submit],form[action~="/cart/add"] input[type=submit],.product-form__cart-submit,.add-to-cart, .addToCart, #addToCart, #add-to-cart, .add-to-cart input.button');
 
-        $btns.each(function() {
-            var $btn = $(this);
-            $btn.parent().parent().after('<button class="reserveinstore-btn">Reserve In-Store</button>');
+        $addToCartBtns.each(function() {
+            var $addToCartBtn = $(this);
 
-            // set css properties to the added button
-            var style = window.getComputedStyle($btn[0], null);
-            var $reservebtn = $('.reserveinstore-btn')
-            $reservebtn[0].style.cssText = style.cssText;
-
-            // set the button's width
-            $reservebtn.css("width", "auto");
-            var btnwidth = parseInt($btn.css("width"));
-            if (parseInt($reservebtn.css("width")) < btnwidth){
-                $reservebtn.css("width", btnwidth + "px");
+            if ($addToCartBtn.parent().find('[data-reserveInStoreBtn=true]').length <= 0 ){
+                $addToCartBtn.after('<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>');
             }
+
+            var $reserveBtn = $addToCartBtn.parent().find('[data-reserveInStoreBtn="true"]');
+            $reserveBtn.on('click', function(event) {
+                event.preventDefault(); return false;
+            }); // This will load our modal when we have it.
+
+
+            setButtonWidth($reserveBtn.find('.reserveInStore-btn'), $addToCartBtn);
 
             //TODO maybe I should get current product&variant information here, not sure for now
         });
@@ -110,6 +109,16 @@ ReserveInStore.App = function(opts) {
             for (var i = 0; i< opts.pushBuffer.length; i++) {
                 self.push(opts.pushBuffer[i]);
             }
+        }
+    };
+
+    /**
+     * Set the Reserve In-Store button's width to be the greater of Add To Cart button's width and its default value
+     */
+    var setButtonWidth = function(reserveBtn, addToCartBtn) {
+        var addToCartBtnWidth = parseInt(addToCartBtn.css("width"));
+        if (parseInt(reserveBtn.css("width")) < addToCartBtnWidth){
+            reserveBtn.css("width", addToCartBtnWidth + "px");
         }
     };
 

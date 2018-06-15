@@ -1,11 +1,26 @@
-module Integrator
+class StoreIntegrator
 
   ##
-  # @param store [Store] The store that you want to run the integration process on
-  def install!(store)
+  # @param store [Store] The store that you want to integrate into
+  def initialize(store)
+    @store = store
+  end
+
+  ##
+  # Integrate the app into current store
+  def integrate!
     install_script_tag!("#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js")
-    install_footer!(store)
-    set_platform_data(store)
+    install_footer!
+    set_platform_data
+  end
+
+  ##
+  # @return [Boolean] True if integrated properly, false otherwise.
+  def integrated?
+    ShopifyAPI::ScriptTag.all.any? &&
+      @store.platform_store_id.present? &&
+      load_asset('snippets/reserveinstore_footer.liquid').value.include?('Reserve In-store App Code') &&
+      load_asset('layout/theme.liquid').value.include?("{% include 'reserveinstore_footer' %}")
   end
 
   ##
@@ -33,13 +48,13 @@ module Integrator
   end
 
   ##
-  # @param store [Store] The store that you want to set its name and platform id
+  # Set current store's name and platform id
   # @return [Boolean] True if successful, false otherwise.
-  def set_platform_data(store)
+  def set_platform_data
     platform_data = ShopifyAPI::Shop.current.attributes
-    store.platform_store_id = platform_data['id']
-    store.name = platform_data['name']
-    store.save
+    @store.platform_store_id = platform_data['id']
+    @store.name = platform_data['name']
+    @store.save
   end
 
   ##
@@ -60,9 +75,9 @@ module Integrator
   end
 
   ##
-  # @param store [Store] The store that you want to install the footer on.
-  def install_footer!(store)
-    public_key = store.public_key
+  # @return [Boolean] True if successful, raise an error otherwise.
+  def install_footer!
+    public_key = @store.public_key
     footer_script = "
       <!-- // BEGIN // Reserve In-store App Code - DO NOT MODIFY // -->
       <script type=\"application/javascript\">
@@ -76,7 +91,7 @@ module Integrator
 
     ensure_snippet!("snippets/reserveinstore_footer.liquid", footer_script)
 
-    theme_template = asset('layout/theme.liquid')
+    theme_template = load_asset('layout/theme.liquid')
     include_code = "{% include 'reserveinstore_footer' %}"
 
     if theme_template.value.include?(include_code)
@@ -86,4 +101,5 @@ module Integrator
       theme_template.save
     end
   end
+
 end

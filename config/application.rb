@@ -15,6 +15,9 @@ module ReserveInStore
     # setup bower components folder for lookup
     # config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
 
+    config.autoload_paths << Rails.root.join('lib')
+    config.eager_load_paths << Rails.root.join('lib')
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

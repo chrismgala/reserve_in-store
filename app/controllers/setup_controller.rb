@@ -1,10 +1,9 @@
 class SetupController < LoggedInController
-  include Integrator
 
   ##
   # GET /setup/integrate
   def integrate
-    install!(@current_store)
+    StoreIntegrator.new(@current_store).integrate!
     redirect_to stores_settings_url
   end
 

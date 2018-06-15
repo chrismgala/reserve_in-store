@@ -15,10 +15,11 @@ class StoreIntegrator
   end
 
   ##
+  # @param store [Store] The store that you want to check if has been integrated properly
   # @return [Boolean] True if integrated properly, false otherwise.
-  def integrated?
+  def self.integrated?(store)
     ShopifyAPI::ScriptTag.all.any? &&
-      @store.platform_store_id.present? &&
+      store.platform_store_id.present? &&
       load_asset('snippets/reserveinstore_footer.liquid').value.include?('Reserve In-store App Code') &&
       load_asset('layout/theme.liquid').value.include?("{% include 'reserveinstore_footer' %}")
   end
@@ -34,7 +35,7 @@ class StoreIntegrator
   ##
   # @param [Object] asset_path Path of the asset to load
   # @return [ShopifyAPI::Asset|NilClass] The Shopify asset object if successful, nil otherwise.
-  def load_asset(asset_path)
+  def self.load_asset(asset_path)
     asset(asset_path)
   rescue ActiveResource::ResourceNotFound => e
     nil
@@ -43,7 +44,7 @@ class StoreIntegrator
   ##
   # @param [Object] path Path of the asset to load
   # @return [ShopifyAPI::Asset] The Shopify asset object if successful, raise an error otherwise.
-  def asset(path)
+  def self.asset(path)
     ShopifyAPI::Asset.find(path)
   end
 
@@ -63,7 +64,7 @@ class StoreIntegrator
   # @return [Boolean] True if successful, false otherwise.
   def ensure_snippet!(snippet_path, snippet_content)
 
-    snippet = load_asset(snippet_path)
+    snippet = StoreIntegrator.load_asset(snippet_path)
 
     if snippet.blank?
       snippet = ShopifyAPI::Asset.new(key: snippet_path)
@@ -92,7 +93,7 @@ class StoreIntegrator
 
     ensure_snippet!("snippets/reserveinstore_footer.liquid", footer_script)
 
-    theme_template = load_asset('layout/theme.liquid')
+    theme_template = StoreIntegrator.load_asset('layout/theme.liquid')
     include_code = "{% include 'reserveinstore_footer' %}"
 
     if theme_template.value.include?(include_code)

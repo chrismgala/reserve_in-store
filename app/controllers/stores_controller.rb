@@ -3,6 +3,9 @@ class StoresController < LoggedInController
   ##
   # GET /stores/settings
   def settings
+    unless StoreIntegrator.new(@current_store).integrated?
+      redirect_to setup_integrate_path
+    end
   end
 
   ##

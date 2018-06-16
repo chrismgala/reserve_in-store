@@ -18,7 +18,7 @@ gem 'jquery-rails', '~> 4.3', '>= 4.3.3' # Use jquery as the JavaScript library
 gem 'bootstrap', '~> 4.1', '>= 4.1.1' # Right now it's only for the navbar
 gem 'kaminari', '~> 1.1', '>= 1.1.1' # Pagination such as `Product.all.page(params[:page])`
 gem "parsley-rails", '~> 2.7.0'
-
+gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (CORS) serve public assets
 
 
 # Reduces boot times through caching; required in config/boot.rb

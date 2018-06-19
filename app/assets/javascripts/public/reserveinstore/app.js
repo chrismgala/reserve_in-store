@@ -8,7 +8,7 @@ ReserveInStore.App = function(opts) {
 
         waitFor$(function jqueryWaitingFunction() {
             loadPushBuffer();
-
+            console.log(opts);
             addReserveInStoreButton();
         });
     };
@@ -24,16 +24,27 @@ ReserveInStore.App = function(opts) {
             var $addToCartBtn = $(this);
 
             if ($addToCartBtn.parent().find('[data-reserveInStoreBtn=true]').length <= 0 ){
-                $addToCartBtn.after('<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>');
+                $addToCartBtn.after('<div class="reserveInStore-container" data-reserveInStoreBtn="true"><div class="reserveInStore-btn-container"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>' +
+                    '<div class="reserveInStore-modal-container"></div></div>');
+                // $("body").append('<div class="reserveInStore-modal-container"></div>');
             }
 
-            var $reserveBtn = $addToCartBtn.parent().find('[data-reserveInStoreBtn="true"]');
-            $reserveBtn.on('click', function(event) {
-                event.preventDefault(); return false;
-            }); // This will load our modal when we have it.
+            // window.append()
 
+            var $reserveContainer = $addToCartBtn.parent().find('[data-reserveInStoreBtn=true]');
+            var $reserveBtnContainer = $reserveContainer.find('.reserveInStore-btn-container');
+            var $reserveModalContainer = $reserveContainer.find('.reserveInStore-modal-container');
 
-            setButtonWidth($reserveBtn.find('.reserveInStore-btn'), $addToCartBtn);
+            setButtonWidth($reserveBtnContainer.find('.reserveInStore-btn'), $addToCartBtn);
+
+            var containers = {btnContainer:$reserveBtnContainer, modalContainer:$reserveModalContainer}
+            var reservationCreator = new ReserveInStore.ReservationCreator(opts, containers);
+
+            $reserveBtnContainer.on('click', function(event) {
+                // event.preventDefault();
+                reservationCreator.displayModal();
+                return false;
+            });
 
             //TODO maybe I should get current product&variant information here, not sure for now
         });

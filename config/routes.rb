@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'settings' => 'stores#settings'
       get 'locations' => 'locations#index'
+      get 'modal' => 'reservations#modal'
+      post 'store_reservations' => 'reservations#create'
 
       # get 'stores/:public_key/push_event/view/p/:product_id/c/:customer_id.png' => 'stores/product_events#push_view', as: :push_view_event
       # get 'stores/:public_key/push_event/order/p/:product_id/c/:customer_id.png' => 'stores/product_events#push_order'

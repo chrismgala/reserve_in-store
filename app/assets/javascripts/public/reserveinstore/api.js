@@ -7,7 +7,7 @@ ReserveInStore.Api = function(opts) {
     };
 
     /**
-     * Request modal via the API reservations#modal
+     * Request modal via the API /api/v1/modal
      * @param params URL params to send with the GET request.
      * @param successCallback {function} (optional) Callback to run if the request is successful. This will not be called if the request fails.
      * @param errorCallback {function} (optional) Callback to run if the request failed.

@@ -7,13 +7,17 @@ ReserveInStore.ReservationCreator = function(opts, containers){
         api = new ReserveInStore.Api(opts);
     };
 
+    /**
+     * DisplayModal
+     * First get product id/title and variant id/title
+     */
     self.displayModal = function(){
         self.getProductAndVariantId(window.location.href);
     };
 
     /**
-     * Get current viewing product and variant information by visiting current site's json
-     * @param url url of current site
+     * Get current viewing product and variant information by hitting current site's JSON endpoint
+     * @param url {string} url of current site
      */
     self.getProductAndVariantId = function(url){
         // Check if variant id is in query parameters
@@ -51,7 +55,7 @@ ReserveInStore.ReservationCreator = function(opts, containers){
 
     /**
      * Insert the HTML code of modal into the container
-     * @param modalHTML the HTML code of modal
+     * @param modalHTML {string} the HTML code of modal
      */
     self.insertModal = function(modalHTML){
         containers.modalContainer[0].innerHTML = modalHTML;

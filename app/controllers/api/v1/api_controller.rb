@@ -7,25 +7,18 @@ module Api
 
       private
 
+      ##
+      # Check if public key is present and then set the store
       def authenticate!
-        # bad_request!("Secret and Public key must both be present in the parameters or headers in order to use the API. See https://www.bananastand.io/resources/private-rest-api for more information.") unless secret_key.present? && public_key.present?
         bad_request!("Public key must be present in the parameters in order to use the API.") unless public_key.present?
-        # @store = Store.find_by!(secret_key: secret_key, public_key: public_key)
         @store = Store.find_by!(public_key: public_key)
       end
 
-      # def secret_key
-      #   @secret_key ||= request.headers['X-Secret-Key'] || params[:secret_key].to_s.strip
-      # end
-
+      ##
+      # @return [String] the store public key sent within the query string
       def public_key
-        # @public_key ||= request.headers['X-Public-Key'] || params[:public_key].to_s.strip
         @public_key ||= params[:store_pk].to_s.strip
       end
-
-      # def account
-      #   @store.account
-      # end
     end
   end
 end

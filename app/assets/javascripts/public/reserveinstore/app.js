@@ -27,22 +27,19 @@ ReserveInStore.App = function(opts) {
                     '<div class="reserveInStore-modal-container"></div></div>');
             }
 
-
             var $reserveContainer = $addToCartBtn.parent().find('[data-reserveInStoreBtn=true]');
             var $reserveBtnContainer = $reserveContainer.find('.reserveInStore-btn-container');
             var $reserveModalContainer = $reserveContainer.find('.reserveInStore-modal-container');
 
-            setButtonWidth($reserveBtnContainer.find('.reserveInStore-btn'), $addToCartBtn);
-
             var containers = {btnContainer:$reserveBtnContainer, modalContainer:$reserveModalContainer}
             var reservationCreator = new ReserveInStore.ReservationCreator(opts, containers);
 
+            setButtonWidth($reserveBtnContainer.find('.reserveInStore-btn'), $addToCartBtn);
             $reserveBtnContainer.on('click', function(event) {
                 event.preventDefault();
                 reservationCreator.displayModal();
                 return false;
             });
-
         });
 
 

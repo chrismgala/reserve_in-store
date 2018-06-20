@@ -1,35 +1,33 @@
 module Api
   module V1
     class ReservationsController < ApiController
-      # respond_to :json
+      # skip_before_action :verify_authenticity_token, only: [:create]
 
+      ##
+      # GET /api/v1/modal
       def modal
-        # @locations = @store.locations
-
-        @reservation = Reservation.new
-        render_to_string :modal, locals: {store_pk: @store_pk}
-        # render html: '<div>html goes here</div>'.html_safe
-        # render json: @locations
-        # respond_to do |format|
-        #   format.json { render json: @locations }
-        # end
-
-        # TODO Not sure what it is doing looks like a logger or something like that
-        # I.increment("#{self.class.to_s.gsub('::', '.')}.index")
+        @product_title = params[:product_title]
+        @variant_title = params[:variant_title]
+        render_to_string :modal
       end
 
-      def create
-        @reservation = Reservation.new(reservation_params.merge(store: @store))
-        @reservation.save
-      end
-
-      private
-
-      def reservation_params
-        # params.fetch(:reservation, {}).require(:name, :email).permit(:address, :country, :state, :city, :phone)
-        params.fetch(:reservation, {}).permit(:customer_name, :customer_email, :customer_phone, :location_id,
-                                              :platform_product_id, :platform_variant_id, :comments, :fulfilled)
-      end
+      # ##
+      # # POST /api/v1/store_reservations
+      # def create
+      #   @reservation = Reservation.new(reservation_params.merge(store: @store))
+      #   if @reservation.save
+      #     render json: 'test', status: :ok
+      #   else
+      #     render json: @reservation.errors, status: :unprocessable_entity
+      #   end
+      # end
+      #
+      # private
+      #
+      # def reservation_params
+      #   params.fetch(:reservation, {}).except(:location_name).permit(:customer_name, :customer_email, :customer_phone, :location_id,
+      #                                         :platform_product_id, :platform_variant_id, :comments, :fulfilled)
+      # end
 
     end
   end

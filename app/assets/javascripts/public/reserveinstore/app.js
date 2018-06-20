@@ -8,7 +8,6 @@ ReserveInStore.App = function(opts) {
 
         waitFor$(function jqueryWaitingFunction() {
             loadPushBuffer();
-            console.log(opts);
             addReserveInStoreButton();
         });
     };
@@ -26,10 +25,8 @@ ReserveInStore.App = function(opts) {
             if ($addToCartBtn.parent().find('[data-reserveInStoreBtn=true]').length <= 0 ){
                 $addToCartBtn.after('<div class="reserveInStore-container" data-reserveInStoreBtn="true"><div class="reserveInStore-btn-container"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>' +
                     '<div class="reserveInStore-modal-container"></div></div>');
-                // $("body").append('<div class="reserveInStore-modal-container"></div>');
             }
 
-            // window.append()
 
             var $reserveContainer = $addToCartBtn.parent().find('[data-reserveInStoreBtn=true]');
             var $reserveBtnContainer = $reserveContainer.find('.reserveInStore-btn-container');
@@ -41,12 +38,11 @@ ReserveInStore.App = function(opts) {
             var reservationCreator = new ReserveInStore.ReservationCreator(opts, containers);
 
             $reserveBtnContainer.on('click', function(event) {
-                // event.preventDefault();
+                event.preventDefault();
                 reservationCreator.displayModal();
                 return false;
             });
 
-            //TODO maybe I should get current product&variant information here, not sure for now
         });
 
 

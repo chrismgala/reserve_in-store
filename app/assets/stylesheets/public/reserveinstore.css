@@ -2,10 +2,8 @@
     margin-top: 12px;
 }
 
-/*body {font-family: Arial, Helvetica, sans-serif;}*/
-
  /*The Modal (background) */
-#reserveinstore-modal {
+#reserveInStore-modal {
     display: block; /* Hidden by default */
     opacity: 100;
     position: fixed; /* Stay in place */
@@ -21,7 +19,8 @@
 }
 
  /*Modal Content */
-.modal-content {
+#reserveInStore-modal-content {
+    font-family: Arial, Helvetica, sans-serif;
     position: relative;
     background-color: #fefefe;
     margin: auto;
@@ -29,49 +28,66 @@
     border: 1px solid #888;
     width: 400px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-    -webkit-animation-name: animatetop;
+    -webkit-animation-name: reserveInStore-animatetop;
     -webkit-animation-duration: 0.4s;
-    animation-name: animatetop;
+    animation-name: reserveInStore-animatetop;
     animation-duration: 0.4s
 }
 
-/*!* Add Animation *!*/
-/*@-webkit-keyframes animatetop {*/
-    /*from {top:-300px; opacity:0}*/
-    /*to {top:0; opacity:1}*/
-/*}*/
+/* Add Animation */
+@-webkit-keyframes reserveInStore-animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
 
-/*@keyframes animatetop {*/
-    /*from {top:-300px; opacity:0}*/
-    /*to {top:0; opacity:1}*/
-/*}*/
+@keyframes reserveInStore-animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
 
  /*The Close Button */
-#reserveinstore-close-modal {
+#reserveInStore-close-modal {
     color: white;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-#reserveinstore-close-modal:hover,
-#reserveinstore-close-modal:focus {
+#reserveInStore-close-modal:hover,
+#reserveInStore-close-modal:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
 }
 
-.modal-header {
+#reserveInStore-modal-header {
     padding: 2px 16px;
-    background-color: #5cb85c;
-    color: white;
+    background-color: #c8c8c8;
+    color: #ffffff;
 }
 
-.modal-body {padding: 2px 16px;}
-
-.modal-footer {
-    padding: 2px 16px;
-    background-color: #5cb85c;
-    color: white;
+#reserveInStore-modal-title {
+    text-transform: none;
 }
+#reserveInStore-modal-body {
+    padding: 2px 16px;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#reserveInStore-modal-footer {
+    padding: 2px 16px;
+    background-color: #b3b3b3;
+    color: white;
+    text-align: center;
+}
+
+#reserveInStore-submit-modal {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    width: 80%;
+}
+
+
 

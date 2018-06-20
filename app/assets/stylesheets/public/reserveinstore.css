@@ -2,6 +2,10 @@
     margin-top: 12px;
 }
 
+ /* I know it is ugly, and it will not work on all store themes */
+ /* I guess I need to add a lot more css code in the future. Also I am not sure how I am gonna validate the form before submitting...*/
+ /* So I just left css as what it is for now....*/
+
  /*The Modal (background) */
 #reserveInStore-modal {
     display: block; /* Hidden by default */

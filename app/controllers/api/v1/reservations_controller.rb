@@ -8,7 +8,6 @@ module Api
       def modal
         @product_title = params[:product_title]
         @variant_title = params[:variant_title]
-        render :modal
       end
 
       # ##

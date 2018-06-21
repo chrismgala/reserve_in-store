@@ -22,6 +22,7 @@ class StoreIntegrator
   def integrated?
     ShopifyAPI::ScriptTag.all.any? &&
       @store.platform_store_id.present? &&
+      load_asset('snippets/reserveinstore_footer.liquid').present? &&
       load_asset('snippets/reserveinstore_footer.liquid').value.include?(RESERVE_IN_STORE_CODE) &&
       load_asset('layout/theme.liquid').value.include?("{% include 'reserveinstore_footer' %}")
   end

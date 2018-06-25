@@ -17,7 +17,7 @@ ReserveInStore.Api = function(opts) {
         successCallback          = successCallback || function () {
         };
         return $.ajax({
-            url: self.url("modal") + "&" + $.param(params),
+            url: self.urlPath("modal") + "&" + $.param(params),
             success: function (data, textStatus, jqXHR) {
                 successCallback(data, textStatus, jqXHR);
             },
@@ -32,7 +32,7 @@ ReserveInStore.Api = function(opts) {
      * @param uri {string} URI path we want to access on the server. IE: 'modal' (no leading slash needed)
      * @returns {string}
      */
-    self.url = function(uri) {
+    self.urlPath = function(uri) {
         uri = uri || "";
         return opts.apiUrl + '/api/v1/' + uri + '?store_pk=' + opts.storePublicKey;
     };

@@ -63,16 +63,16 @@ ReserveInStore.ReservationCreator = function (opts) {
         opts.$modalContainer.html(modalHTML);
         opts.$modalContainer.show();
         $modal = opts.$modalContainer.find('.reserveInStore-modal');
-        self.setCloseConditions();
+        setCloseConditions();
 
         $form = $modal.find("#reserveInStore-reservation-form");
-        self.setSubmitConditions();
+        setSubmitConditions();
     };
 
     /**
      * Set close conditions to the modal: click on the "x" or click anywhere outside of the modal
      */
-    self.setCloseConditions = function () {
+    var setCloseConditions = function () {
         var $span = $modal.find(".reserveInStore-close-modal");
         $span.on('click', function () {
             opts.$modalContainer.hide();
@@ -89,7 +89,7 @@ ReserveInStore.ReservationCreator = function (opts) {
      * Set submit conditions to the modal:
      * click on the "Reserve" button or press the enter key in the last input field
      */
-    self.setSubmitConditions = function () {
+    var setSubmitConditions = function () {
         var $submitBtn = $modal.find(".reserveInStore-form-submit");
         $submitBtn.on('click', function () {
             self.submitForm();

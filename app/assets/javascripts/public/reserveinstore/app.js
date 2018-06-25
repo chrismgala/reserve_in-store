@@ -8,6 +8,7 @@ ReserveInStore.App = function(opts) {
 
         waitFor$(function jqueryWaitingFunction() {
             loadPushBuffer();
+
             addReserveInStoreButton();
         });
     };
@@ -30,15 +31,15 @@ ReserveInStore.App = function(opts) {
             var reservationCreator = new ReserveInStore.ReservationCreator(opts);
 
             var $reserveBtnContainer = $addToCartBtn.parent().find('.reserveInStore-btn-container');
+
             setButtonWidth($reserveBtnContainer.find('.reserveInStore-btn'), $addToCartBtn);
+
             $reserveBtnContainer.on('click', function(event) {
                 event.preventDefault();
                 reservationCreator.displayModal();
                 return false;
             });
         });
-
-
     };
 
     /**

@@ -11,26 +11,26 @@ ReserveInStore.ReservationCreator = function (opts) {
      * Get product id/title and variant id/title, then make API call and display the modal
      */
     self.displayModal = function () {
-        var productVariantNames = self.setProductAndVariantId();
-        api.getModal(productVariantNames, self.insertModal);
+        var productVariantTitles = self.setProductAndVariantId();
+        api.getModal(productVariantTitles, self.insertModal);
     };
 
     /**
      * Set Product ID/Title and Variant Id/Title
-     * @returns {object} Product and variant names used to build the modal
+     * @returns {object} Product and variant titles, in the form of {product_title: "bleh", variant_title: "bleh"}
      */
     self.setProductAndVariantId = function () {
         setVariantID();
-        productId = opts.product.id;
         variantId = variantId || opts.product.variants[0].id;
         var variantTitle = $.grep(opts.product.variants, function (obj) {
             return obj.id === variantId;
         })[0].title;
+        productId = opts.product.id;
         return {product_title: opts.product.title, variant_title: variantTitle};
     };
 
     /**
-     * If variant id is in url's query string, set variant ID, otherwise get the variant id from URL
+     * Get variant ID from the add to cart form, if failed, try parsing the URL to get variant ID
      */
     var setVariantID = function () {
         var variantIdEntry = $('form[action~="/cart/add"]').serializeArray().find(function (obj) {
@@ -47,7 +47,7 @@ ReserveInStore.ReservationCreator = function (opts) {
     /**
      * If variant id is in url's query string, set variant ID
      */
-    var tryGetVariantIdFromURL = function(){
+    var tryGetVariantIdFromURL = function () {
         var re_variant = /variant=(.*?)(&|$)/,
             matchVariantId = window.location.href.match(re_variant);
         if (matchVariantId) {
@@ -61,8 +61,8 @@ ReserveInStore.ReservationCreator = function (opts) {
      */
     self.insertModal = function (modalHTML) {
         opts.$modalContainer.html(modalHTML);
-        $modal = opts.$modalContainer.find('.reserveInStore-modal');
         opts.$modalContainer.show();
+        $modal = opts.$modalContainer.find('.reserveInStore-modal');
         self.setCloseConditions();
 
         $form = $modal.find("#reserveInStore-reservation-form");
@@ -75,12 +75,12 @@ ReserveInStore.ReservationCreator = function (opts) {
     self.setCloseConditions = function () {
         var $span = $modal.find(".reserveInStore-close-modal");
         $span.on('click', function () {
-            $modal.hide();
+            opts.$modalContainer.hide();
         });
 
-        $(document).on('click', function(event) {
+        $(document).on('click', function (event) {
             if (!$(event.target).closest('.reserveInStore-modal-content').length) {
-                $modal.hide();
+                opts.$modalContainer.hide();
             }
         });
     };
@@ -105,7 +105,7 @@ ReserveInStore.ReservationCreator = function (opts) {
     };
 
     /**
-     * Submit the form, make a ajax call to create new reservation
+     * Submit the form, make an Ajax call to create new reservation
      */
     self.submitForm = function () {
         alert('submit');

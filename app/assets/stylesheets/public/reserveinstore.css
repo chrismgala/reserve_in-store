@@ -2,16 +2,12 @@
     margin-top: 12px;
 }
 
- /* I know it is ugly, and it will not work on all store themes */
- /* I guess I need to add a lot more css code in the future. Also I am not sure how I am gonna validate the form before submitting...*/
- /* So I just left css as what it is for now....*/
-
  /*The Modal (background) */
-#reserveInStore-modal {
+.reserveInStore-modal {
     display: block; /* Hidden by default */
     opacity: 100;
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 2; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
@@ -23,7 +19,7 @@
 }
 
  /*Modal Content */
-#reserveInStore-modal-content {
+.reserveInStore-modal-content {
     font-family: Arial, Helvetica, sans-serif;
     position: relative;
     background-color: #fefefe;
@@ -50,44 +46,44 @@
 }
 
  /*The Close Button */
-#reserveInStore-close-modal {
+.reserveInStore-close-modal {
     color: white;
     float: right;
     font-size: 28px;
     font-weight: bold;
 }
 
-#reserveInStore-close-modal:hover,
-#reserveInStore-close-modal:focus {
+.reserveInStore-close-modal:hover,
+.reserveInStore-close-modal:focus {
     color: #000;
     text-decoration: none;
     cursor: pointer;
 }
 
-#reserveInStore-modal-header {
+.reserveInStore-modal-header {
     padding: 2px 16px;
     background-color: #c8c8c8;
     color: #ffffff;
 }
 
-#reserveInStore-modal-title {
+.reserveInStore-modal-title {
     text-transform: none;
 }
-#reserveInStore-modal-body {
+.reserveInStore-modal-body {
     padding: 2px 16px;
     margin-left: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-#reserveInStore-modal-footer {
+.reserveInStore-modal-footer {
     padding: 2px 16px;
     background-color: #b3b3b3;
     color: white;
     text-align: center;
 }
 
-#reserveInStore-submit-modal {
+.reserveInStore-form-submit {
     margin-top: 12px;
     margin-bottom: 12px;
     width: 80%;

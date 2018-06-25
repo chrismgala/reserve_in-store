@@ -1,22 +1,19 @@
-<div class="modal" id="reserveInStore-modal">
-  <div class="modal-content" id="reserveInStore-modal-content">
-    <div class="modal-header" id="reserveInStore-modal-header">
-      <span class="close" id="reserveInStore-close-modal">&times;</span>
-      <h4 class="modal-title" id="reserveInStore-modal-title"><%= @store.top_msg %><br>
+<div class="modal reserveInStore-modal">
+  <div class="modal-content reserveInStore-modal-content">
+    <div class="modal-header reserveInStore-modal-header">
+      <span class="close reserveInStore-close-modal">&times;</span>
+      <h4 class="modal-title reserveInStore-modal-title"><%= @store.top_msg %><br>
         <% if @product_title.present? %>
-         Thank you for reserving product
-          <% if @variant_title.present? %>
-            <%= @variant_title %>
+         Thank you for reserving product <%= @product_title %>
+          <% if @variant_title.present? && @variant_title != 'Default Title' %>
+            (<%= @variant_title %>)
           <% end %>
-          <%= @product_title %> in store.
+           in store.
         <% end %>
       </h4>
     </div>
 
-    <div class="modal-body" id="reserveInStore-modal-body">
-<!--      TODO This looks like a Javascript feature, if I leave the form alone, the surrounding form tag-->
-<!--      will be stripped-->
-      <form></form>
+    <div class="modal-body reserveInStore-modal-body">
       <%= form_for :reservation, html: {id: 'reserveInStore-reservation-form'} do |f| %>
         <%= f.label :location %>
         <% if @store.locations.count == 1  %>
@@ -40,9 +37,11 @@
       <% end %>
     </div>
 
-    <div class="modal-footer" id="reserveInStore-modal-footer">
-      <button type="button" class="btn" id="reserveInStore-submit-modal">Reserve</button>
+    <div class="modal-footer reserveInStore-modal-footer">
+      <button type="button" class="btn reserveInStore-form-submit">Reserve</button>
     </div>
   </div>
 </div>
+
+
 

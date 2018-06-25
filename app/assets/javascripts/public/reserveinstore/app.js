@@ -23,17 +23,13 @@ ReserveInStore.App = function(opts) {
             var $addToCartBtn = $(this);
 
             if ($addToCartBtn.parent().find('[data-reserveInStoreBtn=true]').length <= 0 ){
-                $addToCartBtn.after('<div class="reserveInStore-container" data-reserveInStoreBtn="true"><div class="reserveInStore-btn-container"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>' +
-                    '<div class="reserveInStore-modal-container"></div></div>');
+                $addToCartBtn.after('<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>');
+                opts.$modalContainer = $('<div class="reserveInStore-modal-container" style="display:none;"></div>').appendTo('body');
             }
 
-            var $reserveContainer = $addToCartBtn.parent().find('[data-reserveInStoreBtn=true]');
-            var $reserveBtnContainer = $reserveContainer.find('.reserveInStore-btn-container');
-            var $reserveModalContainer = $reserveContainer.find('.reserveInStore-modal-container');
+            var reservationCreator = new ReserveInStore.ReservationCreator(opts);
 
-            var containers = {btnContainer:$reserveBtnContainer, modalContainer:$reserveModalContainer}
-            var reservationCreator = new ReserveInStore.ReservationCreator(opts, containers);
-
+            var $reserveBtnContainer = $addToCartBtn.parent().find('.reserveInStore-btn-container');
             setButtonWidth($reserveBtnContainer.find('.reserveInStore-btn'), $addToCartBtn);
             $reserveBtnContainer.on('click', function(event) {
                 event.preventDefault();
@@ -77,6 +73,9 @@ ReserveInStore.App = function(opts) {
             // Data should be:  { store_pk: \"#{public_key}\", api_url: \"#{ENV['BASE_APP_URL']}\" }
             opts.storePublicKey = object.data.store_pk;
             opts.apiUrl = object.data.api_url;
+        } else if (object.action == "setProduct") {
+            // Data should be:  { product: {id: 123, name: "bleh", ...} }
+            opts.product = object.data;
         } else {
             console.error("Unknown action: ", object.action);
         }

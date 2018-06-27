@@ -2,6 +2,11 @@
     margin-top: 12px;
 }
 
+.reserveInStore-modal-container {
+    width:0;
+    height:0;
+}
+
  /*The Modal (background) */
 .reserveInStore-modal {
     display: block; /* Hidden by default */
@@ -69,6 +74,7 @@
 .reserveInStore-modal-title {
     text-transform: none;
 }
+
 .reserveInStore-modal-body {
     padding: 2px 16px;
     margin-left: 20px;
@@ -88,6 +94,4 @@
     margin-bottom: 12px;
     width: 80%;
 }
-
-
 

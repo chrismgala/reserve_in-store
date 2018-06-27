@@ -22,6 +22,7 @@ class StoreIntegrator
   def integrated?
     ShopifyAPI::ScriptTag.all.any? &&
       @store.platform_store_id.present? &&
+      load_asset('snippets/reserveinstore_footer.liquid').present? &&
       load_asset('snippets/reserveinstore_footer.liquid').value.include?(RESERVE_IN_STORE_CODE) &&
       load_asset('layout/theme.liquid').value.include?("{% include 'reserveinstore_footer' %}")
   end
@@ -87,6 +88,7 @@ class StoreIntegrator
       (function(){
         window.__reserveInStore = window.__reserveInStore || [];
         window.__reserveInStore.push({ action: \"configure\", data: { store_pk: \"#{public_key}\", api_url: \"#{ENV['BASE_APP_URL']}\" }} );
+        window.__reserveInStore.push({ action: \"setProduct\", data: {{ product | json }} });
         var headSrcUrls=document.getElementsByTagName(\"head\")[0].innerHTML.match(/var urls = \[.*\]/);if(headSrcUrls&&window.__reserveInStore){window.__reserveInStore.jsUrl=JSON.parse(headSrcUrls[0].replace(\"var urls = \",\"\")).find(function(url){return url.indexOf(\"reserveinstore.js\")!==-1});if(window.__reserveInStore.jsUrl){var s=document.createElement(\"script\");s.type=\"text/javascript\";s.async=!0;s.src=window.__reserveInStore.jsUrl;document.body.appendChild(s)}}
       })();</script>
       <link crossorigin=\"anonymous\" media=\"all\" rel=\"stylesheet\" href=\"#{ENV['CDN_JS_BASE_PATH']}reserveinstore.css\">

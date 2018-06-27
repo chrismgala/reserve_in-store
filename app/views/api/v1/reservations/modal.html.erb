@@ -1,0 +1,47 @@
+<div class="modal reserveInStore-modal">
+  <div class="modal-content reserveInStore-modal-content">
+    <div class="modal-header reserveInStore-modal-header">
+      <span class="close reserveInStore-close-modal">&times;</span>
+      <h4 class="modal-title reserveInStore-modal-title"><%= @store.top_msg %><br>
+        <% if @product_title.present? %>
+         Thank you for reserving product <%= @product_title %>
+          <% if @variant_title.present? && @variant_title != 'Default Title' %>
+            (<%= @variant_title %>)
+          <% end %>
+           in store.
+        <% end %>
+      </h4>
+    </div>
+
+    <div class="modal-body reserveInStore-modal-body">
+      <%= form_for :reservation, html: {id: 'reserveInStore-reservation-form'} do |f| %>
+        <%= f.label :location %>
+        <% if @store.locations.count == 1  %>
+          <%= f.hidden_field :location_id, :value => @store.locations.first.id %>
+          <%= f.text_field :location_name, :value => @store.locations.first.name, readonly: true %>
+        <% else %>
+          <%= f.select :location_id, @store.locations.collect {|p| [p.name, p.id]}, {include_blank: true}, required: true %>
+        <% end %>
+
+        <%= f.label :name %>
+        <%= f.text_field :customer_name, required: true %>
+
+        <%= f.label :email %>
+        <%= f.text_field :customer_email, required: true %>
+
+        <%= f.label :phone %>
+        <%= f.text_field :customer_phone %>
+
+        <%= f.label 'Questions/Comments' %>
+        <%= f.text_field :comments %>
+      <% end %>
+    </div>
+
+    <div class="modal-footer reserveInStore-modal-footer">
+      <button type="button" class="btn reserveInStore-form-submit">Reserve</button>
+    </div>
+  </div>
+</div>
+
+
+

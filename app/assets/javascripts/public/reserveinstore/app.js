@@ -25,20 +25,21 @@ ReserveInStore.App = function(opts) {
 
             if ($addToCartBtn.parent().find('[data-reserveInStoreBtn=true]').length <= 0 ){
                 $addToCartBtn.after('<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>');
+                opts.$modalContainer = $('<div class="reserveInStore-modal-container" style="display:none;"></div>').appendTo('body');
             }
 
-            var $reserveBtn = $addToCartBtn.parent().find('[data-reserveInStoreBtn="true"]');
-            $reserveBtn.on('click', function(event) {
-                event.preventDefault(); return false;
-            }); // This will load our modal when we have it.
+            var reservationCreator = new ReserveInStore.ReservationCreator(opts);
 
+            var $reserveBtnContainer = $addToCartBtn.parent().find('.reserveInStore-btn-container');
 
-            setButtonWidth($reserveBtn.find('.reserveInStore-btn'), $addToCartBtn);
+            setButtonWidth($reserveBtnContainer.find('.reserveInStore-btn'), $addToCartBtn);
 
-            //TODO maybe I should get current product&variant information here, not sure for now
+            $reserveBtnContainer.on('click', function(event) {
+                event.preventDefault();
+                reservationCreator.displayModal();
+                return false;
+            });
         });
-
-
     };
 
     /**
@@ -73,6 +74,9 @@ ReserveInStore.App = function(opts) {
             // Data should be:  { store_pk: \"#{public_key}\", api_url: \"#{ENV['BASE_APP_URL']}\" }
             opts.storePublicKey = object.data.store_pk;
             opts.apiUrl = object.data.api_url;
+        } else if (object.action == "setProduct") {
+            // Data should be:  { product: {id: 123, name: "bleh", ...} }
+            opts.product = object.data;
         } else {
             console.error("Unknown action: ", object.action);
         }

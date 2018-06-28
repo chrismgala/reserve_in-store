@@ -65,7 +65,7 @@ ReserveInStore.ReservationCreator = function (opts) {
         $modal = opts.$modalContainer.find('.reserveInStore-modal');
         setCloseConditions();
 
-        $form = $modal.find("#reserveInStore-reservation-form");
+        $form = $modal.find(".reserveInStore-reservation-form");
         setSubmitConditions();
     };
 
@@ -105,10 +105,54 @@ ReserveInStore.ReservationCreator = function (opts) {
     };
 
     /**
-     * Submit the form, make an Ajax call to create new reservation
+     * Submit the form
+     * If the form has been validated, make an Ajax call to create new reservation
+     * Otherwise, show html 5 validation errors
      */
     self.submitForm = function () {
-        alert('submit');
+        if ($form[0].checkValidity()) {
+            api.createReservation(serializeFormData(), self.displaySuccessModal, showErrorMessages);
+        } else {
+            $form.find('input, select').addClass('reserveInStore-attempted');
+            $form[0].reportValidity();
+        }
+    };
+
+    /**
+     * Display a nice modal to say "thank you... etc" and whatever is configured to display via the store settings
+     * @param successMsg {string} Customized message that store wants to display
+     */
+    self.displaySuccessModal = function (successMsg) {
+        // Leave to next PR
+        alert(successMsg);
+    };
+
+    /**
+     * Display errors messages came from the server in a list
+     * In theory, this function should never be called, since we are using HTML 5 form validation
+     * @param data {object} Response to the failed Ajax call
+     */
+    var showErrorMessages = function(data){
+        var errorMessages = "";
+        if (typeof data.responseJSON === 'object' && Object.keys(data.responseJSON).length > 0) {
+            $.each(data.responseJSON, function (key, value) {
+                errorMessages += "<li>" + value + "</li>";
+            });
+        } else {
+            errorMessages += "<li>An unknown error occurred.</li>";
+        }
+        $form.find(".reserveInStore-error-ul").html(errorMessages).show();
+    };
+
+    /**
+     * Serializes the form's elements, and add product id and variant id
+     * @returns {object} Array of all information needed to generate new reservation
+     */
+    var serializeFormData = function () {
+        var data = $form.serializeArray();
+        data.push({name: "reservation[platform_product_id]", value: productId});
+        data.push({name: "reservation[platform_variant_id]", value: variantId});
+        return data;
     };
 
     init();

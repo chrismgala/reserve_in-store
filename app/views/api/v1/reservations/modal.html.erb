@@ -19,7 +19,7 @@
         <%= f.label :location %>
         <% if @store.locations.count == 1  %>
           <%= f.hidden_field :location_id, :value => @store.locations.first.id %>
-          <%= f.text_field :location_name, :value => @store.locations.first.name, readonly: true %>
+          <input value="<%= @store.locations.first.name %>" readonly="readonly" type="text">
         <% else %>
           <%= f.select :location_id, @store.locations.collect {|p| [p.name, p.id]}, {include_blank: true}, required: true %>
         <% end %>

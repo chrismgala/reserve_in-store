@@ -24,7 +24,7 @@ module Api
       private
 
       def reservation_params
-        params.fetch(:reservation, {}).except(:location_name).permit(:customer_name, :customer_email, :customer_phone, :location_id,
+        params.fetch(:reservation, {}).permit(:customer_name, :customer_email, :customer_phone, :location_id,
                                                                      :platform_product_id, :platform_variant_id, :comments, :fulfilled)
       end
 

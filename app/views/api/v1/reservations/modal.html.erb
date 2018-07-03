@@ -4,11 +4,11 @@
       <span class="close reserveInStore-close-modal">&times;</span>
       <h4 class="modal-title reserveInStore-modal-title"><%= @store.top_msg %><br>
         <% if @product_title.present? %>
-         Thank you for reserving product <%= @product_title %>
+          Thank you for reserving product <%= @product_title %>
           <% if @variant_title.present? && @variant_title != 'Default Title' %>
             (<%= @variant_title %>)
           <% end %>
-           in store.
+          in store.
         <% end %>
       </h4>
     </div>
@@ -17,7 +17,7 @@
       <%= form_for :reservation, remote: true, html: {class: 'reserveInStore-reservation-form'} do |f| %>
         <ul class="reserveInStore-error-ul" style="display:none;"></ul>
         <%= f.label :location %>
-        <% if @store.locations.count == 1  %>
+        <% if @store.locations.count == 1 %>
           <%= f.hidden_field :location_id, :value => @store.locations.first.id %>
           <input value="<%= @store.locations.first.name %>" readonly="readonly" type="text">
         <% else %>

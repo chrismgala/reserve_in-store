@@ -3,11 +3,11 @@
 }
 
 .reserveInStore-modal-container {
-    width:0;
-    height:0;
+    width: 0;
+    height: 0;
 }
 
- /*The Modal (background) */
+/*The Modal (background) */
 .reserveInStore-modal {
     display: block; /* Hidden by default */
     opacity: 100;
@@ -19,11 +19,11 @@
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
- /*Modal Content */
+/*Modal Content */
 .reserveInStore-modal-content {
     font-family: Arial, Helvetica, sans-serif;
     position: relative;
@@ -32,7 +32,7 @@
     padding: 0;
     border: 1px solid #888;
     width: 400px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -webkit-animation-name: reserveInStore-animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: reserveInStore-animatetop;
@@ -41,16 +41,28 @@
 
 /* Add Animation */
 @-webkit-keyframes reserveInStore-animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 @keyframes reserveInStore-animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
- /*The Close Button */
+/*The Close Button */
 .reserveInStore-close-modal {
     color: white;
     float: right;

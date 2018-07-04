@@ -112,13 +112,12 @@ ReserveInStore.ReservationCreator = function (opts) {
      * Otherwise, show html 5 validation errors
      */
     self.submitForm = function () {
-        self.displaySuccessModal();
-        // if ($form[0].checkValidity()) {
-        //     api.createReservation(serializeFormData(), self.displaySuccessModal, showErrorMessages);
-        // } else {
-        //     $form.find('input, select').addClass('reserveInStore-attempted');
-        //     $form[0].reportValidity();
-        // }
+        if ($form[0].checkValidity()) {
+            api.createReservation(serializeFormData(), self.displaySuccessModal, showErrorMessages);
+        } else {
+            $form.find('input, select').addClass('reserveInStore-attempted');
+            $form[0].reportValidity();
+        }
     };
 
     /**

@@ -56,8 +56,10 @@ ReserveInStore.ReservationCreator = function (opts) {
     };
 
     /**
-     * Insert the HTML code of modal into the container
-     * @param modalHTML {string} the HTML code of modal
+     * Insert the HTML code of two modals into the container:
+     * $reserveModal is for creating new reservation, collecting customer's information
+     * $successModal is to be displayed after new reservation is created
+     * @param modalHTML {string} the HTML code of two modals
      */
     self.insertModal = function (modalHTML) {
         opts.$modalContainer.html(modalHTML);
@@ -133,7 +135,7 @@ ReserveInStore.ReservationCreator = function (opts) {
      * In theory, this function should never be called, since we are using HTML 5 form validation
      * @param data {object} Response to the failed Ajax call
      */
-    var showErrorMessages = function (data) {
+    var showErrorMessages = function(data){
         var errorMessages = "";
         if (typeof data.responseJSON === 'object' && Object.keys(data.responseJSON).length > 0) {
             $.each(data.responseJSON, function (key, value) {

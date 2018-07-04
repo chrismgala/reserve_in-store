@@ -1,7 +1,7 @@
 ReserveInStore.ReservationCreator = function (opts) {
     var self = this;
     opts = opts || {};
-    var api, $modal, $form, productId, variantId;
+    var api, $modalBackground, $reserveModal, $successModal, $form, productId, variantId;
 
     var init = function () {
         api = new ReserveInStore.Api(opts);
@@ -62,24 +62,26 @@ ReserveInStore.ReservationCreator = function (opts) {
     self.insertModal = function (modalHTML) {
         opts.$modalContainer.html(modalHTML);
         opts.$modalContainer.show();
-        $modal = opts.$modalContainer.find('.reserveInStore-modal');
+        $modalBackground = opts.$modalContainer.find('.reserveInStore-modal-background');
+        $reserveModal = $modalBackground.find('.reserveInStore-reserve-modal');
+        $successModal = $modalBackground.find('.reserveInStore-success-modal');
         setCloseConditions();
 
-        $form = $modal.find(".reserveInStore-reservation-form");
+        $form = $modalBackground.find(".reserveInStore-reservation-form");
         setSubmitConditions();
     };
 
     /**
-     * Set close conditions to the modal: click on the "x" or click anywhere outside of the modal
+     * Set close conditions to two modals: click on the "x", "OK" or click anywhere outside of the modal
      */
     var setCloseConditions = function () {
-        var $span = $modal.find(".reserveInStore-close-modal");
+        var $span = $modalBackground.find(".reserveInStore-reserve-close, .reserveInStore-success-close");
         $span.on('click', function () {
             opts.$modalContainer.hide();
         });
 
         $(document).on('click', function (event) {
-            if (!$(event.target).closest('.reserveInStore-modal-content').length) {
+            if (!$(event.target).closest('.reserveInStore-reserve-modal, .reserveInStore-success-modal', $modalBackground).length) {
                 opts.$modalContainer.hide();
             }
         });
@@ -90,7 +92,7 @@ ReserveInStore.ReservationCreator = function (opts) {
      * click on the "Reserve" button or press the enter key in the last input field
      */
     var setSubmitConditions = function () {
-        var $submitBtn = $modal.find(".reserveInStore-form-submit");
+        var $submitBtn = $modalBackground.find(".reserveInStore-form-submit");
         $submitBtn.on('click', function () {
             self.submitForm();
         });
@@ -121,13 +123,10 @@ ReserveInStore.ReservationCreator = function (opts) {
 
     /**
      * Display a nice modal to say "thank you... etc" and whatever is configured to display via the store settings
-     * @param successMsg {string} Customized message that store wants to display
      */
-    self.displaySuccessModal = function (successMsg) {
-        // Leave to next PR
-        // alert(successMsg);
-        $modal.find(".reserveInStore-modal-content").hide();
-        opts.$modalContainer.find(".reserveInStore-success-modal").show();
+    self.displaySuccessModal = function () {
+        $reserveModal.hide();
+        $successModal.show();
     };
 
     /**

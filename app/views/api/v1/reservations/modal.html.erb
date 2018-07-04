@@ -1,7 +1,8 @@
-<div class="modal reserveInStore-modal">
-  <div class="modal-content reserveInStore-modal-content">
+<div class="modal reserveInStore-modal-background">
+
+  <div class="reserveInStore-reserve-modal">
     <div class="modal-header reserveInStore-modal-header">
-      <span class="close reserveInStore-close-modal">&times;</span>
+      <span class="close reserveInStore-reserve-close">&times;</span>
       <h4 class="modal-title reserveInStore-modal-title"><%= @store.top_msg %><br>
         <% if @product_title.present? %>
           Thank you for reserving product <%= @product_title %>
@@ -43,16 +44,15 @@
     </div>
   </div>
 
-  <div class="modal-content reserveInStore-success-modal reserveInStore-center animate" style="display: none;">
-    <div class="icon">
-      <span class="checkmark reserveInStore-center">&#10004;</span>
+  <div class="reserveInStore-success-modal reserveInStore-center" style="display: none;">
+    <div class="reserveInStore-modal-icon">
+      <span class="reserveInStore-center">&#10004;</span>
     </div>
     <h1>Success!</h1>
     <p><%= @store.success_msg %><br>
       A confirmation email has been sent to you.</p>
-    <button type="button" class="redo btn">Ok</button>
+    <button type="button" class="btn reserveInStore-success-close">Ok</button>
   </div>
-
 
 </div>
 

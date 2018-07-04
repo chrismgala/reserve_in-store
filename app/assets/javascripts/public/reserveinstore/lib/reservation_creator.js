@@ -69,7 +69,7 @@ ReserveInStore.ReservationCreator = function (opts) {
         $successModal = $modalBackground.find('.reserveInStore-success-modal');
         setCloseConditions();
 
-        $form = $modalBackground.find(".reserveInStore-reservation-form");
+        $form = $reserveModal.find(".reserveInStore-reservation-form");
         setSubmitConditions();
     };
 
@@ -94,7 +94,7 @@ ReserveInStore.ReservationCreator = function (opts) {
      * click on the "Reserve" button or press the enter key in the last input field
      */
     var setSubmitConditions = function () {
-        var $submitBtn = $modalBackground.find(".reserveInStore-form-submit");
+        var $submitBtn = $reserveModal.find(".reserveInStore-form-submit");
         $submitBtn.on('click', function () {
             self.submitForm();
         });

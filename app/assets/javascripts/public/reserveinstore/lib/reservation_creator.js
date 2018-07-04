@@ -133,7 +133,7 @@ ReserveInStore.ReservationCreator = function (opts) {
      * In theory, this function should never be called, since we are using HTML 5 form validation
      * @param data {object} Response to the failed Ajax call
      */
-    var showErrorMessages = function(data){
+    var showErrorMessages = function (data) {
         var errorMessages = "";
         if (typeof data.responseJSON === 'object' && Object.keys(data.responseJSON).length > 0) {
             $.each(data.responseJSON, function (key, value) {

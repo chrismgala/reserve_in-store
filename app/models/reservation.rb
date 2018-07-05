@@ -33,7 +33,7 @@ class Reservation < ActiveRecord::Base
   #
   # @return [Boolean] save result
   def save_and_email
-    # return false unless save
+    return false unless save
     ShopifyAPI::Session.temp(store.shopify_domain, store.shopify_token) {
       @product = shopify_product
       @variant = shopify_variant

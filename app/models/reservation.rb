@@ -42,5 +42,4 @@ class Reservation < ActiveRecord::Base
     UserMailer.new_reservation(store, self, @product, @variant).deliver
     true
   end
-
 end

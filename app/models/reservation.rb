@@ -23,4 +23,32 @@ class Reservation < ActiveRecord::Base
     Rails.logger.error(e)
     nil
   end
+
+  def customer_first_name
+    customer_name.to_s.split(' ').first
+  end
+
+  ##
+  # Save the reservation, hit ShopifyAPI to get product and variant information
+  # and send notification emails to the customer and the store owner
+  #
+  # @return [Boolean] save result
+  def save_and_email
+    return false unless save
+    ShopifyAPI::Session.temp(store.shopify_domain, store.shopify_token) {
+      @product = shopify_product
+      @variant = shopify_variant
+    }
+    send_notification_emails
+    true
+  end
+
+  ##
+  # Send emails to confirm with the customer and notify the store owner
+  def send_notification_emails
+    CustomerMailer.reserve_confirmation(store, self, @product, @variant).deliver
+    LocationMailer.new_reservation(store, self, @product, @variant).deliver
+  rescue => e
+    Rails.logger.error(e)
+  end
 end

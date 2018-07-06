@@ -1,0 +1,38 @@
+<div style="font-family: 'Source Sans Pro', sans-serif;">
+  <h3>Hello <%= @reservation.location.name %>, </h3>
+  <p>A new reservation request has been submitted. Details are listed below:</p>
+  <table style="width:100%">
+    <tr>
+      <th>Customer Name</th>
+      <td><%= @reservation.customer_name %></td>
+    </tr>
+    <tr>
+      <th>Customer Email</th>
+      <td><%= @reservation.customer_email %></td>
+    </tr>
+    <% if @reservation.customer_phone.present? %>
+      <tr>
+        <th>Customer Phone Number</th>
+        <td><%= @reservation.customer_phone %></td>
+      </tr>
+    <% end %>
+    <% if @product.present? %>
+      <tr>
+        <th>Product</th>
+        <td><%= @product.title %></td>
+      </tr>
+    <% end %>
+    <% if @variant.present? && @variant.title != 'Default Title' %>
+      <tr>
+        <th>Variant</th>
+        <td><%= @variant.title %></td>
+      </tr>
+    <% end %>
+    <% if @reservation.comments.present? %>
+      <tr>
+        <th>Comments</th>
+        <td><%= @reservation.comments %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

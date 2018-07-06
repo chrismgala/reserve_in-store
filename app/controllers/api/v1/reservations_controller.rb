@@ -14,7 +14,7 @@ module Api
       # POST /api/v1/store_reservations
       def create
         @reservation = Reservation.new(reservation_params.merge(store: @store))
-        if @reservation.save
+        if @reservation.save_and_email
           render json: {}, status: :ok
         else
           render json: @reservation.errors.full_messages, status: :unprocessable_entity

@@ -3,15 +3,11 @@ class ApplicationMailer < ActionMailer::Base
   layout 'mailer'
 
   def from_system
-    email = "noreply@bananastand.io"
-    name = "Banana Stand System"
-    "#{name} <#{email}>"
+    "#{ENV['SYSTEM_NAME']} <#{ENV['SYSTEM_EMAIL']}>"
   end
 
   def from_team
-    email = "team@bananastand.io"
-    name = "Banana Stand Team"
-    "#{name} <#{email}>"
+    "#{ENV['TEAM_NAME']} <#{ENV['TEAM_EMAIL']}>"
   end
 
 end

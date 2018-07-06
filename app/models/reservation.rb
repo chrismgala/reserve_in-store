@@ -39,7 +39,7 @@ class Reservation < ActiveRecord::Base
       @variant = shopify_variant
     }
     CustomerMailer.reserve_confirmation(store, self, @product, @variant).deliver
-    UserMailer.new_reservation(store, self, @product, @variant).deliver
+    LocationMailer.new_reservation(store, self, @product, @variant).deliver
     true
   end
 end

@@ -1,6 +1,6 @@
-class UserMailer < ApplicationMailer
+class LocationMailer < ApplicationMailer
   ##
-  # Generate email to tell the store owner that a new reservation request has been submitted and all the details of the request.
+  # Generate email to tell the store owner that a new reservation request has been submitted and provide all the details of the request.
   # @param [object] store - The store object that got a new reservation
   # @param [object] reservation - The reservation object that just been created
   # @param [object] product - The product object being reserved

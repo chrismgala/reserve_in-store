@@ -29,7 +29,8 @@ class Reservation < ActiveRecord::Base
   end
 
   ##
-  # Save the reservation, and send confirmation email to the customer and the store owner
+  # Save the reservation, hit ShopifyAPI to get product and variant information
+  # and send notification emails to the customer and the store owner
   #
   # @return [Boolean] save result
   def save_and_email
@@ -38,8 +39,16 @@ class Reservation < ActiveRecord::Base
       @product = shopify_product
       @variant = shopify_variant
     }
+    send_notification_emails
+    true
+  end
+
+  ##
+  # Send emails to confirm with the customer and notify the store owner
+  def send_notification_emails
     CustomerMailer.reserve_confirmation(store, self, @product, @variant).deliver
     LocationMailer.new_reservation(store, self, @product, @variant).deliver
-    true
+  rescue => e
+    Rails.logger.error(e)
   end
 end

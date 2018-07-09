@@ -11,9 +11,8 @@ module ReserveInStore
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 
-    # not in use right now TODO delete it later
     # setup node modules folder for lookup
-    # config.assets.paths << Rails.root.join('node_modules')
+    config.assets.paths << Rails.root.join('node_modules')
 
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')

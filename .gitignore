@@ -37,3 +37,8 @@
 
 # Temporary file
 .DS_Store
+
+# yarn installed files
+/node_modules/
+yarn.lock
+

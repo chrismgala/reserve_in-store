@@ -1,7 +1,0 @@
-{
-  "name": "reserveinstore",
-  "private": true,
-  "dependencies": {
-    "zepto": "^1.2.0"
-  }
-}

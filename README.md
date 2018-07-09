@@ -37,7 +37,7 @@ You must have the following to run this app:
 
 ### Dev tools
 * Bundler is used
-* For JS/CSS assets we use [bower](https://bower.io/).
+* For JS/CSS assets we use [yarn](https://yarnpkg.com/lang/en/).
 * To view emails being send installed [mailcatcher](https://mailcatcher.me)
 
 
@@ -46,7 +46,7 @@ Follow these instructions to setup your local development environment:
 
 1. Create a DB in postgres called `reserve_in-store` and the appropriate user permissions, OR run `rake db:create`
 2. Copy .env-example to .env and fill in the relevant details. Assuming default settings from postgres and redis, then you'll probably not have to set anything up.
-3. Run `bundle install && bundle exec rake db:migrate && bundle exec rake db:seed`. Then run `rails server` to run your rails server. All of these chained commands must pass for successful installation.
+3. Run `bundle install && bundle exec rake db:migrate && bundle exec rake db:seed && yarn`. Then run `rails server` to run your rails server. All of these chained commands must pass for successful installation.
 
 By default it runs at http://localhost:3000. You can also run the server through RubyMine so you can use the debugger and step through code.
 
@@ -98,7 +98,7 @@ After you've created your test store, navigate to your local web app (via your n
 # Technology Overview
 #### Tech used:
 Make sure you read up on and understand these technologies before diving into the application:
-* Bower
+* Yarn
 * Bootstrap
 * jQuery
 * Rails 4.1.8
@@ -247,7 +247,7 @@ Stick to the PUT/PATCH/POST/GET patterns that Rails facilitates. This will help 
 
 #### Ruby Best Practices
 * When adding to the Gemfile, make sure to alphabetize gems you add and set a specific version number of the gem (so that we don't get random versions loaded in production that aren't tested). Also mention a quick comment about **why** the gem is being included. This helps us clean up old unused gems in the future.
-* When adding to the `bower.json` file make sure to alphabetize your requirements and be as specific about the version number as you can for the same reason as above.
+* When adding to the `package.json` file make sure to alphabetize your requirements and be as specific about the version number as you can for the same reason as above.
 * Document methods unless it is 100% totally obvious what the method does. 95% of the time when you have parameters required you probably need a method doc block.
 
 

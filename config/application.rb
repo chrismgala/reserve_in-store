@@ -13,6 +13,7 @@ module ReserveInStore
 
     # setup node modules folder for lookup
     config.assets.paths << Rails.root.join('node_modules')
+    config.assets.paths << Rails.root.join('vendor', 'assets')
 
     config.autoload_paths << Rails.root.join('lib')
     config.eager_load_paths << Rails.root.join('lib')

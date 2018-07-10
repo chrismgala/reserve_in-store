@@ -8,78 +8,80 @@
   </script>
 <% end %>
 <!--END-->
-<% if @reservations.any? %>
-  <p>
-    Showing <%= pluralize(@reservations.count, 'reservation') %>.
-  </p>
-  <table class="table table-responsive table-striped">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Location</th>
-      <th>Customer Name</th>
-      <th>Customer Email</th>
-      <th>Customer Phone</th>
-      <th>Product</th>
-      <th>Variant</th> <%# For testing %>
-      <th>Comments</th>
-      <th>Status</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @reservations.each do |reservation| %>
+<section class="card">
+  <% if @reservations.any? %>
+    <p>
+      Showing <%= pluralize(@reservations.count, 'reservation') %>.
+    </p>
+    <table class="table table-responsive">
+      <thead>
       <tr>
-        <td><%= reservation.id %></td>
-        <td><%= reservation.location.name %></td>
-        <td><%= reservation.customer_name %></td>
-        <td><%= reservation.customer_email %></td>
-        <td><%= reservation.customer_phone %></td>
-        <td>
-          <% if reservation.shopify_product.present? %>
-            <%= reservation.shopify_product.title %>
-          <% else %>
-            Product not found.
-          <% end %>
-        </td>
-        <td>
-          <% if reservation.shopify_variant.present? %>
-            <%= reservation.shopify_variant.title %>
-          <% else %>
-            Variant not found.
-          <% end %>
-        </td>
-        <td><%= reservation.comments %></td>
-        <td>
-          <% if reservation.fulfilled? %>
-            Fulfilled
-          <% else %>
-            <%= form_for :reservation, url: reservation_path(reservation), method: :put do |f| %>
-              <%= f.hidden_field :fulfilled, value: true %>
-              <%= f.submit 'Fulfill', class: 'btn btn-primary btn-sm' %>
-            <% end %>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to 'Delete', reservation, method: :delete, class: 'btn btn-danger btn-sm', data: {confirm: "Are you sure?"} %>
-        </td>
+        <th>ID</th>
+        <th>Location</th>
+        <th>Customer Name</th>
+        <th>Customer Email</th>
+        <th>Customer Phone</th>
+        <th>Product</th>
+        <th>Variant</th> <%# For testing %>
+        <th>Comments</th>
+        <th>Status</th>
+        <th></th>
       </tr>
-    <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+      <% @reservations.each do |reservation| %>
+        <tr>
+          <td><%= reservation.id %></td>
+          <td><%= reservation.location.name %></td>
+          <td><%= reservation.customer_name %></td>
+          <td><%= reservation.customer_email %></td>
+          <td><%= reservation.customer_phone %></td>
+          <td>
+            <% if reservation.shopify_product.present? %>
+              <%= reservation.shopify_product.title %>
+            <% else %>
+              Product not found.
+            <% end %>
+          </td>
+          <td>
+            <% if reservation.shopify_variant.present? %>
+              <%= reservation.shopify_variant.title %>
+            <% else %>
+              Variant not found.
+            <% end %>
+          </td>
+          <td><%= reservation.comments %></td>
+          <td>
+            <% if reservation.fulfilled? %>
+              Fulfilled
+            <% else %>
+              <%= form_for :reservation, url: reservation_path(reservation), method: :put do |f| %>
+                <%= f.hidden_field :fulfilled, value: true %>
+                <%= f.submit 'Fulfill', class: 'btn btn-primary btn-sm' %>
+              <% end %>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to 'Delete', reservation, method: :delete, class: 'btn btn-danger btn-sm', data: {confirm: "Are you sure?"} %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
 
-  <%= paginate @reservations %>
+    <%= paginate @reservations %>
 
-<% else %>
-  <p>
-    There are no reservations yet.
-  </p>
-<% end %>
+  <% else %>
+    <p>
+      There are no reservations yet.
+    </p>
+  <% end %>
 
 <!-- Button trigger modal-->
 <button class="btn btn-success" data-toggle="modal" data-target="#reservationModal">
   Add New Reservation
 </button>
+</section>
 
 <!-- Modal -->
 <%= render partial: 'new_reservation_modal' %>

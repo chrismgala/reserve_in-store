@@ -12,9 +12,11 @@
  *
  *= require_tree .
  *= require_self
- *= require bootstrap-polaris
  */
 
 // Custom bootstrap variables must be set or imported *before* bootstrap.
 //@import "bootstrap";
 @import 'parsley';
+@import '@shopify/polaris/styles.css';
+
+

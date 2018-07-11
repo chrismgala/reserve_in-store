@@ -14,6 +14,6 @@
 //= require activestorage
 //= require turbolinks
 //= require jquery
-////= require bootstrap-polaris
-////= require bootstrap
+
 //= require parsley
+

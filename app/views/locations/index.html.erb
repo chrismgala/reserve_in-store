@@ -9,54 +9,150 @@
 <% end %>
 <!--END-->
 
-<% if @locations.any? %>
-  <p>
-    Showing <%= pluralize(@locations.count, 'location') %>.
-  </p>
-  <table class="table table-responsive table-striped">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Address</th>
-      <th>Country</th>
-      <th>State</th>
-      <th>City</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th></th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @locations.each do |location| %>
-      <tr>
-        <td><%= location.id %></td>
-        <td><%= location.name %></td>
-        <td><%= location.address %></td>
-        <td><%= location.country %></td>
-        <td><%= location.state %></td>
-        <td><%= location.city %></td>
-        <td><%= location.email %></td>
-        <td><%= location.phone %></td>
-        <td>
-          <%= link_to 'Edit', edit_location_path(location), class: 'btn btn-info btn-xs', remote: true %>
-        </td>
-        <td>
-          <%= link_to 'Delete', location, method: :delete, class: 'btn btn-danger btn-xs', data: { confirm: "Are you sure? Deleting this location will also delete all its reservations." } %>
-        </td>
-      </tr>
+
+<div class="Polaris-Page">
+
+  <div class="Polaris-Page__Content">
+
+
+
+    <!--<section class="card">-->
+    <% if @locations.any? %>
+      <div class="Polaris-Stack">
+        <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
+        <div class="Polaris-Stack__Item">
+          <button type="button" class="Polaris-Button Polaris-Button--primary" id="location-modal-display">
+            <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>
+        </div>
+      </div>
+      <br>
+
+      <div class="Polaris-Card">
+        <div class="">
+          <!--          <div class="Polaris-DataTable__Navigation">-->
+          <!--            <button type="button" class="Polaris-Button Polaris-Button--plain Polaris-Button--iconOnly" aria-label="Scroll table left one column">-->
+          <!--              <span class="Polaris-Button__Content"><span class="Polaris-Button__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16" fill-rule="evenodd"></path></svg></span></span></span>-->
+          <!--            </button>-->
+          <!--            <button-->
+          <!--              type="button" class="Polaris-Button Polaris-Button--plain Polaris-Button--iconOnly" aria-label="Scroll table right one column"><span class="Polaris-Button__Content"><span class="Polaris-Button__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M8 16a.999.999 0 0 1-.707-1.707L11.586 10 7.293 5.707a.999.999 0 1 1 1.414-1.414l5 5a.999.999 0 0 1 0 1.414l-5 5A.997.997 0 0 1 8 16" fill-rule="evenodd"></path></svg></span></span>-->
+          <!--            </span>-->
+          <!--            </button>-->
+          <!--          </div>-->
+          <div class="Polaris-DataTable Polaris-DataTable--hasFooter">
+            <div class="Polaris-DataTable__ScrollContainer">
+              <table class="Polaris-DataTable__Table">
+                <thead>
+                <tr>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header" scope="col" aria-disabled="true">
+                    ID
+                  </th>
+                  <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header"></th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Name
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Address
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Country
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    State
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    City
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Email
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Phone
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @locations.each do |location| %>
+                  <tr class="Polaris-DataTable__TableRow">
+                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row"><%= location.id %></th>
+                    <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.name %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.address %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.country %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.state %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.city %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.email %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.phone %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary', remote: true %>
+                      </td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive', data: { confirm: "Are you sure? Deleting this location will also delete all its locations." } %>
+                    </td>
+                  </tr>
+                <% end %>
+                </tbody>
+                <tfoot class="Polaris-DataTable__TableFoot">
+                <tr>
+                  <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--footer">
+                    <p>
+                      Showing <%= @locations.count %>
+                      of <%= pluralize(@current_store.locations.count, 'location') %>.
+                    </p>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <% if @locations.count < @current_store.locations.count %>
+        <div class="Polaris-Stack Polaris-Stack--distributionCenter Polaris-Stack--alignmentTrailing">
+          <div class="Polaris-Stack__Item">
+            <nav class="Polaris-Pagination" aria-label="Pagination">
+              <% if path_to_prev_page(@locations).blank? %>
+                <button class="Polaris-Pagination__Button" aria-label="Previous" disabled=""><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M17 9H5.414l3.293-3.293a.999.999 0 1 0-1.414-1.414l-5 5a.999.999 0 0 0 0 1.414l5 5a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L5.414 11H17a1 1 0 1 0 0-2" fill-rule="evenodd"></path></svg></span>
+                </button>
+              <% else %>
+                <a class="Polaris-Pagination__Button" aria-label="Previous" href="<%= path_to_prev_page @locations %>" disabled="<%= path_to_prev_page(@locations).blank? %>"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M17 9H5.414l3.293-3.293a.999.999 0 1 0-1.414-1.414l-5 5a.999.999 0 0 0 0 1.414l5 5a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L5.414 11H17a1 1 0 1 0 0-2" fill-rule="evenodd"></path></svg></span>
+                </a>
+              <% end %>
+
+              <% if path_to_next_page(@locations).blank? %>
+                <button class="Polaris-Pagination__Button" aria-label="Next" disabled=""><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M17.707 9.293l-5-5a.999.999 0 1 0-1.414 1.414L14.586 9H3a1 1 0 1 0 0 2h11.586l-3.293 3.293a.999.999 0 1 0 1.414 1.414l5-5a.999.999 0 0 0 0-1.414" fill-rule="evenodd"></path></svg></span>
+                </button>
+              <% else %>
+                <a class="Polaris-Pagination__Button" aria-label="Next" href="<%= path_to_next_page @locations %>" disabled="<%= path_to_next_page(@locations).blank? %>"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M17.707 9.293l-5-5a.999.999 0 1 0-1.414 1.414L14.586 9H3a1 1 0 1 0 0 2h11.586l-3.293 3.293a.999.999 0 1 0 1.414 1.414l5-5a.999.999 0 0 0 0-1.414" fill-rule="evenodd"></path></svg></span>
+                </a>
+              <% end %>
+
+            </nav>
+          </div>
+        </div>
+      <% end %>
+
+    <% else %>
+      <div class="Polaris-Stack">
+        <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
+          <p>
+            You haven't add any location yet.
+          </p>
+        </div>
+        <div class="Polaris-Stack__Item">
+          <button type="button" class="Polaris-Button Polaris-Button--primary" id="location-modal-display">
+            <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>
+        </div>
+      </div>
     <% end %>
-    </tbody>
-  </table>
+  </div>
+</div>
 
-  <%= paginate @locations %>
-
-<% else %>
-<p>
-  You haven't add any location yet.
-</p>
-<% end %>
 
 <!--Edit Modal-->
 <div id="edit_location_modal"></div>

@@ -14,14 +14,11 @@
 
   <div class="Polaris-Page__Content">
 
-
-
-    <!--<section class="card">-->
     <% if @locations.any? %>
       <div class="Polaris-Stack">
         <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
         <div class="Polaris-Stack__Item">
-          <button type="button" class="Polaris-Button Polaris-Button--primary" id="location-modal-display">
+          <button type="button" class="Polaris-Button Polaris-Button--primary location-modal-display">
             <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>
         </div>
       </div>
@@ -29,15 +26,6 @@
 
       <div class="Polaris-Card">
         <div class="">
-          <!--          <div class="Polaris-DataTable__Navigation">-->
-          <!--            <button type="button" class="Polaris-Button Polaris-Button--plain Polaris-Button--iconOnly" aria-label="Scroll table left one column">-->
-          <!--              <span class="Polaris-Button__Content"><span class="Polaris-Button__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16" fill-rule="evenodd"></path></svg></span></span></span>-->
-          <!--            </button>-->
-          <!--            <button-->
-          <!--              type="button" class="Polaris-Button Polaris-Button--plain Polaris-Button--iconOnly" aria-label="Scroll table right one column"><span class="Polaris-Button__Content"><span class="Polaris-Button__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M8 16a.999.999 0 0 1-.707-1.707L11.586 10 7.293 5.707a.999.999 0 1 1 1.414-1.414l5 5a.999.999 0 0 1 0 1.414l-5 5A.997.997 0 0 1 8 16" fill-rule="evenodd"></path></svg></span></span>-->
-          <!--            </span>-->
-          <!--            </button>-->
-          <!--          </div>-->
           <div class="Polaris-DataTable Polaris-DataTable--hasFooter">
             <div class="Polaris-DataTable__ScrollContainer">
               <table class="Polaris-DataTable__Table">
@@ -87,10 +75,10 @@
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.email %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.phone %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary', remote: true %>
+                      <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim', remote: true %>
                       </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive', data: { confirm: "Are you sure? Deleting this location will also delete all its locations." } %>
+                      <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: { confirm: "Are you sure? Deleting this location will also delete all its locations." } %>
                     </td>
                   </tr>
                 <% end %>
@@ -158,9 +146,12 @@
 <div id="edit_location_modal"></div>
 
 <!-- Button trigger modal-->
-<button class="btn btn-success" data-toggle="modal" data-target="#locationModal">
-  Add New Location
-</button>
+<!--<button class="btn btn-success" data-toggle="modal" data-target="#locationModal">-->
+<!--  Add New Location-->
+<!--</button>-->
 
 <!-- Modal -->
 <%= render partial: 'modal', locals: { id: 'locationModal', action: 'New', location: :location }   %>
+
+
+

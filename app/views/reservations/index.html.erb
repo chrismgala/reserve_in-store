@@ -17,7 +17,7 @@
       <div class="Polaris-Stack">
         <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
         <div class="Polaris-Stack__Item">
-          <button type="button" class="Polaris-Button Polaris-Button--primary">
+          <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-display">
             <span class="Polaris-Button__Content"><span>Add New Reservation</span></span></button>
         </div>
       </div>
@@ -65,7 +65,7 @@
                 <tbody>
                 <% @reservations.each do |reservation| %>
                   <tr class="Polaris-DataTable__TableRow">
-                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row"><%= reservation.id %></th>
+                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row"><%= reservation.id %></th>
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.location.name %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %></td>
@@ -156,196 +156,14 @@
       </div>
     <% end %>
   </div>
-
-
 </div>
 
-<!-- Button trigger modal-->
-<!--<button class="btn btn-success" data-toggle="modal" data-target="#reservationModal">-->
-<!--  Add New Reservation-->
-<!--</button>-->
-
 <!-- Modal -->
-<%#= render partial: 'new_reservation_modal' %>
+<%= render partial: 'new_reservation_modal' %>
+
+<script>
+
+</script>
 
 
 
-
-
-<!--<div class="Polaris-Page">-->
-<!--  <div class="Polaris-Page__Header">-->
-<!--    <div class="Polaris-Page__Title">-->
-<!--      <h1 class="Polaris-DisplayText Polaris-DisplayText--sizeLarge">Sales by product</h1>-->
-<!--    </div>-->
-<!--    <div class="Polaris-Page__Actions"></div>-->
-<!--  </div>-->
-<!--  <div class="Polaris-Page__Content">-->
-<!--    <div class="Polaris-Card">-->
-<!--      <div class="">-->
-<!--        <div class="Polaris-DataTable__Navigation">-->
-<!--          <button type="button" class="Polaris-Button Polaris-Button--plain Polaris-Button--iconOnly" aria-label="Scroll table left one column">-->
-<!--            <span class="Polaris-Button__Content"><span class="Polaris-Button__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16" fill-rule="evenodd"></path></svg></span></span></span>-->
-<!--          </button>-->
-<!--          <button-->
-<!--            type="button" class="Polaris-Button Polaris-Button--plain Polaris-Button--iconOnly" aria-label="Scroll table right one column"><span class="Polaris-Button__Content"><span class="Polaris-Button__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M8 16a.999.999 0 0 1-.707-1.707L11.586 10 7.293 5.707a.999.999 0 1 1 1.414-1.414l5 5a.999.999 0 0 1 0 1.414l-5 5A.997.997 0 0 1 8 16" fill-rule="evenodd"></path></svg></span></span>-->
-<!--            </span>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div class="Polaris-DataTable Polaris-DataTable--hasFooter">-->
-<!--          <div class="Polaris-DataTable__ScrollContainer">-->
-<!--            <table class="Polaris-DataTable__Table">-->
-<!--              <thead>-->
-<!--              <tr>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header" scope="col" aria-disabled="true">Product</th>-->
-<!--                <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header"></th>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" scope="col" aria-disabled="true">Price</th>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" scope="col" aria-disabled="true">SKU-->
-<!--                  Number-->
-<!--                </th>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" scope="col" aria-disabled="true">Net-->
-<!--                  quantity-->
-<!--                </th>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" scope="col" aria-disabled="true">Net-->
-<!--                  sales-->
-<!--                </th>-->
-<!--              </tr>-->
-<!--              <tr>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--total" scope="row">Totals</th>-->
-<!--                <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--total Polaris-DataTable__Cell--numeric"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--total Polaris-DataTable__Cell--numeric"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--total Polaris-DataTable__Cell--numeric">255</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--total Polaris-DataTable__Cell--numeric">$155,830.00</td>-->
-<!--              </tr>-->
-<!--              </thead>-->
-<!--              <tbody>-->
-<!--              <tr class="Polaris-DataTable__TableRow">-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row">Emerald Silk Gown</th>-->
-<!--                <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">$875.00</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">124689</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">140</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">$122,500.00</td>-->
-<!--              </tr>-->
-<!--              <tr class="Polaris-DataTable__TableRow">-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row">Mauve Cashmere Scarf</th>-->
-<!--                <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">$230.00</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">124533</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">83</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">$19,090.00</td>-->
-<!--              </tr>-->
-<!--              <tr class="Polaris-DataTable__TableRow">-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row">Navy Merino Wool Blazer-->
-<!--                  with khaki chinos and yellow belt-->
-<!--                </th>-->
-<!--                <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">$445.00</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">124518</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">32</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric">$14,240.00</td>-->
-<!--              </tr>-->
-<!--              </tbody>-->
-<!--              <tfoot class="Polaris-DataTable__TableFoot">-->
-<!--              <tr>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--footer">Showing 3 of 3 results</td>-->
-<!--              </tr>-->
-<!--              </tfoot>-->
-<!--            </table>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-
-<!--<div class="Polaris-Page">-->
-<!--  <div class="Polaris-Page__Header">-->
-<!--    <div class="Polaris-Page__Title">-->
-<!--      <h1 class="Polaris-DisplayText Polaris-DisplayText--sizeLarge">Sales by product</h1></div>-->
-<!--    <div class="Polaris-Page__Actions"></div>-->
-<!--  </div>-->
-<!--  <div class="Polaris-Page__Content">-->
-<!--    <div class="Polaris-Card">-->
-<!--      <div class="">-->
-<!--        <div class="Polaris-DataTable__Navigation">-->
-<!--          <button type="button" class="Polaris-Button Polaris-Button--plain Polaris-Button--iconOnly" aria-label="Scroll table left one column">-->
-<!--            <span class="Polaris-Button__Content"><span class="Polaris-Button__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16" fill-rule="evenodd"></path></svg></span></span></span>-->
-<!--          </button>-->
-<!--          <button type="button" class="Polaris-Button Polaris-Button--plain Polaris-Button--iconOnly" aria-label="Scroll table right one column">-->
-<!--            <span class="Polaris-Button__Content"><span class="Polaris-Button__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M8 16a.999.999 0 0 1-.707-1.707L11.586 10 7.293 5.707a.999.999 0 1 1 1.414-1.414l5 5a.999.999 0 0 1 0 1.414l-5 5A.997.997 0 0 1 8 16" fill-rule="evenodd"></path></svg></span></span></span>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div class="Polaris-DataTable Polaris-DataTable--hasFooter">-->
-<!--          <div class="Polaris-DataTable__ScrollContainer" style="margin-bottom: 52px;">-->
-<!--            <table class="Polaris-DataTable__Table">-->
-<!--              <thead>-->
-<!--              <tr>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header" scope="col" aria-disabled="true" style="height: 54px;">Product</th>-->
-<!--                <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header" style="height: 54px;"></th>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" scope="col" aria-disabled="true" style="height: 54px;">Price</th>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" scope="col" aria-disabled="true" style="height: 54px;">SKU-->
-<!--                  Number-->
-<!--                </th>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" scope="col" aria-disabled="true" style="height: 54px;">Net-->
-<!--                  quantity-->
-<!--                </th>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--numeric" scope="col" aria-disabled="true" style="height: 54px;">Net-->
-<!--                  sales-->
-<!--                </th>-->
-<!--              </tr>-->
-<!--              <tr>-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--total" scope="row" style="height: 53px;">Totals</th>-->
-<!--                <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational" style="height: 53px;"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--total Polaris-DataTable__Cell--numeric" style="height: 53px;"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--total Polaris-DataTable__Cell--numeric" style="height: 53px;"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--total Polaris-DataTable__Cell--numeric" style="height: 53px;">255</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--total Polaris-DataTable__Cell--numeric" style="height: 53px;">$155,830.00</td>-->
-<!--              </tr>-->
-<!--              </thead>-->
-<!--              <tbody>-->
-<!--              <tr class="Polaris-DataTable__TableRow">-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row" style="height: 72px;">Emerald-->
-<!--                  Silk Gown-->
-<!--                </th>-->
-<!--                <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational" style="height: 72px;"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 72px;">$875.00</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 72px;">124689</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 72px;">140</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 72px;">$122,500.00</td>-->
-<!--              </tr>-->
-<!--              <tr class="Polaris-DataTable__TableRow">-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row" style="height: 72px;">Mauve-->
-<!--                  Cashmere Scarf-->
-<!--                </th>-->
-<!--                <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational" style="height: 72px;"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 72px;">$230.00</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 72px;">124533</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 72px;">83</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 72px;">$19,090.00</td>-->
-<!--              </tr>-->
-<!--              <tr class="Polaris-DataTable__TableRow">-->
-<!--                <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row" style="height: 112px;">Navy-->
-<!--                  Merino Wool Blazer with khaki chinos and yellow belt-->
-<!--                </th>-->
-<!--                <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational" style="height: 112px;"></td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 112px;">$445.00</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 112px;">124518</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 112px;">32</td>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--numeric" style="height: 112px;">$14,240.00</td>-->
-<!--              </tr>-->
-<!--              </tbody>-->
-<!--              <tfoot class="Polaris-DataTable__TableFoot">-->
-<!--              <tr>-->
-<!--                <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--footer" style="height: 52px;">Showing 3 of 3-->
-<!--                  results-->
-<!--                </td>-->
-<!--              </tr>-->
-<!--              </tfoot>-->
-<!--            </table>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->

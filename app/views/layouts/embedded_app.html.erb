@@ -12,9 +12,8 @@
 <body>
 
 <!-- top navigation tabs -->
-<!-- TODO It shouldn't be card, but it looks nice -->
-<div class="Polaris-Card sticky-top">
-<!--<div style="background-color: #ffffff;">-->
+<!--TODO Sticky-top -->
+<div class="Polaris-Card">
   <ul role="tablist" class="Polaris-Tabs">
     <li role="presentation" class="Polaris-Tabs__TabContainer">
       <a class="Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if controller?('stores') %>" href="<%= stores_settings_path %>">
@@ -29,12 +28,8 @@
         <span class="Polaris-Tabs__Title">Locations</span></a>
     </li>
   </ul>
-<!--  TODO This is definitely working for now, but for future developers, it may cause problems-->
-<!--  <div class="Polaris-Card__Section">-->
-<!--    <div class="Polaris-Card__SectionHeader">-->
-<!--      <h3 aria-label="Repeat customers" class="Polaris-Subheading">Repeat customers</h3></div>-->
-<!--    <p>Tab 2 selected</p></div>-->
 </div>
+
 
 <!-- Main section-->
 <div class="app-wrapper">

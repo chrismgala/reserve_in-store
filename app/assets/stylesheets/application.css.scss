@@ -13,9 +13,7 @@
  *= require_tree .
  *= require_self
  */
-
-// Custom bootstrap variables must be set or imported *before* bootstrap.
-@import 'parsley';
+// Import Shopify Polaris components
 @import '@shopify/polaris/styles.css';
 
 

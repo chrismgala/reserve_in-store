@@ -13,6 +13,7 @@
 
 <div class="Polaris-Page">
   <div class="Polaris-Page__Content">
+    <%= form_for @current_store, url: {action: 'save_settings'}, html: {class: ''} do |f| %>
     <div class="Polaris-Layout">
       <div class="Polaris-Layout__AnnotatedSection">
         <div class="Polaris-Layout__AnnotationWrapper">
@@ -25,34 +26,35 @@
           <div class="Polaris-Layout__AnnotationContent">
             <div class="Polaris-Card">
               <div class="Polaris-Card__Section">
-                <%= form_for @current_store, url: {action: 'save_settings'}, html: {class: 'Polaris-FormLayout'} do |f| %>
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-Labelled__LabelWrapper">
-                        <div class="Polaris-Label">
-                          <%= f.label 'Message on top of the window', class: 'Polaris-Label__Text' %>
-                        </div>
-                      </div>
-                      <div class="Polaris-TextField">
-                        <%= f.text_area :top_msg, class: 'Polaris-TextField__Input' %>
-                        <div class="Polaris-TextField__Backdrop"></div>
+                <%#= form_for @current_store, url: {action: 'save_settings'}, html: {class: 'Polaris-FormLayout settings-form1'} do |f| %>
+                <div class="Polaris-FormLayout">
+                <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label 'Message on top of the window', class: 'Polaris-Label__Text' %>
                       </div>
                     </div>
+                    <div class="Polaris-TextField">
+                      <%= f.text_area :top_msg, class: 'Polaris-TextField__Input' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
+                  </div>
 
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-Labelled__LabelWrapper">
-                        <div class="Polaris-Label">
-                          <%= f.label 'Fields to collect', class: 'Polaris-Label__Text' %>
-                        </div>
+                  <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label 'Fields to collect', class: 'Polaris-Label__Text' %>
                       </div>
-                      <fieldset class="Polaris-ChoiceList">
-                        <ul class="Polaris-ChoiceList__Choices">
-                          <li>
-                            <label class="Polaris-Choice" for="store_show_phone">
-                              <div class="Polaris-Choice__Control">
-                                <div class="Polaris-Checkbox">
-                                  <%= f.check_box :show_phone, class: 'Polaris-Checkbox__Input' %>
-                                  <div class="Polaris-Checkbox__Backdrop"></div>
-                                  <div class="Polaris-Checkbox__Icon">
+                    </div>
+                    <fieldset class="Polaris-ChoiceList">
+                      <ul class="Polaris-ChoiceList__Choices">
+                        <li>
+                          <label class="Polaris-Choice" for="store_show_phone">
+                            <div class="Polaris-Choice__Control">
+                              <div class="Polaris-Checkbox">
+                                <%= f.check_box :show_phone, class: 'Polaris-Checkbox__Input' %>
+                                <div class="Polaris-Checkbox__Backdrop"></div>
+                                <div class="Polaris-Checkbox__Icon">
                                   <span class="Polaris-Icon">
                                     <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
                                       <g fill-rule="evenodd">
@@ -60,19 +62,19 @@
                                       </g>
                                     </svg>
                                   </span>
-                                  </div>
                                 </div>
                               </div>
-                              <div class="Polaris-Choice__Label">Phone</div>
-                            </label>
-                          </li>
-                          <li>
-                            <label class="Polaris-Choice" for="store_show_comments">
-                              <div class="Polaris-Choice__Control">
-                                <div class="Polaris-Checkbox">
-                                  <%= f.check_box :show_comments, class: 'Polaris-Checkbox__Input' %>
-                                  <div class="Polaris-Checkbox__Backdrop"></div>
-                                  <div class="Polaris-Checkbox__Icon">
+                            </div>
+                            <div class="Polaris-Choice__Label">Phone</div>
+                          </label>
+                        </li>
+                        <li>
+                          <label class="Polaris-Choice" for="store_show_comments">
+                            <div class="Polaris-Choice__Control">
+                              <div class="Polaris-Checkbox">
+                                <%= f.check_box :show_comments, class: 'Polaris-Checkbox__Input' %>
+                                <div class="Polaris-Checkbox__Backdrop"></div>
+                                <div class="Polaris-Checkbox__Icon">
                                   <span class="Polaris-Icon">
                                     <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
                                       <g fill-rule="evenodd">
@@ -80,50 +82,61 @@
                                       </g>
                                     </svg>
                                   </span>
-                                  </div>
                                 </div>
                               </div>
-                              <div class="Polaris-Choice__Label">Comments</div>
-                            </label>
-                          </li>
-                        </ul>
-                      </fieldset>
-                    </div>
+                            </div>
+                            <div class="Polaris-Choice__Label">Comments</div>
+                          </label>
+                        </li>
+                      </ul>
+                    </fieldset>
+                  </div>
+                </div>
+                <%# end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-Labelled__LabelWrapper">
-                        <div class="Polaris-Label">
-                          <%= f.label 'Success message', class: 'Polaris-Label__Text' %>
-                        </div>
-                      </div>
-                      <div class="Polaris-TextField">
-                        <%= f.text_area :success_msg, class: 'Polaris-TextField__Input' %>
-                        <div class="Polaris-TextField__Backdrop"></div>
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+          <div class="Polaris-Layout__Annotation">
+            <div class="Polaris-TextContainer">
+              <h2 class="Polaris-Heading">Reservation popup</h2>
+              <p>Customize the style of your reserve in-store popup</p>
+            </div>
+          </div>
+          <div class="Polaris-Layout__AnnotationContent">
+            <div class="Polaris-Card">
+              <div class="Polaris-Card__Section">
+                <%#= form_for @current_store, url: {action: 'save_settings'}, html: {class: 'Polaris-FormLayout settings-form2'} do |f| %>
+                <div class="Polaris-FormLayout">
+                <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label 'Success message', class: 'Polaris-Label__Text' %>
                       </div>
                     </div>
+                    <div class="Polaris-TextField">
+                      <%= f.text_area :success_msg, class: 'Polaris-TextField__Input' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
+                  </div>
 
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-Labelled__LabelWrapper">
-                        <div class="Polaris-Label">
-                          <%= f.label 'Email template', class: 'Polaris-Label__Text' %>
-                        </div>
-                      </div>
-                      <div class="Polaris-TextField">
-                        <%= f.text_area :email_template, class: 'Polaris-TextField__Input' %>
-                        <div class="Polaris-TextField__Backdrop"></div>
+                  <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label 'Email template', class: 'Polaris-Label__Text' %>
                       </div>
                     </div>
+                    <div class="Polaris-TextField">
+                      <%= f.text_area :email_template, class: 'Polaris-TextField__Input' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
+                  </div>
+                </div>
 
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-SettingAction">
-                        <div class="Polaris-SettingAction__Setting"></div>
-                        <div class="Polaris-SettingAction__Action">
-                          <button type="submit" class="Polaris-Button Polaris-Button--primary">
-                            <span class="Polaris-Button__Content"><span>Save</span></span></button>
-                        </div>
-                      </div>
-                    </div>
-                <% end %>
               </div>
             </div>
           </div>
@@ -131,11 +144,22 @@
       </div>
 
       <div class="Polaris-Layout__Section">
+        <div class="Polaris-PageActions">
+          <div class="Polaris-Stack Polaris-Stack--spacingTight Polaris-Stack--distributionTrailing">
+            <div class="Polaris-Stack__Item">
+              <button type="submit" class="Polaris-Button Polaris-Button--primary settings-form-submit">
+                <span class="Polaris-Button__Content"><span>Save</span></span></button>
+            </div>
+          </div>
+        </div>
+<!--      </div>-->
+
+<!--      <div class="Polaris-Layout__Section">-->
         <div class="Polaris-FooterHelp">
           <div class="Polaris-FooterHelp__Content">
             <div class="Polaris-FooterHelp__Icon">
-<!--             TODO This should be change to Fera logo-->
-                          <span class="Polaris-Icon Polaris-Icon--colorTeal Polaris-Icon--hasBackdrop">
+              <!--             TODO This should be change to Fera logo-->
+              <span class="Polaris-Icon Polaris-Icon--colorTeal Polaris-Icon--hasBackdrop">
                           <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
                             <g fill-rule="evenodd">
                               <path d="M6 4.038a2 2 0 1 0-3.999-.001A2 2 0 0 0 6 4.038zm2 0c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4zM18 4a2 2 0 1 0-3.999-.001A2 2 0 0 0 18 4zm2 0c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4zm-2 12a2 2 0 1 0-3.999-.001A2 2 0 0 0 18 16zm2 0c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4zm-14 .038a2 2 0 1 0-3.999-.001A2 2 0 0 0 6 16.038zm2 0c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4z" fill-rule="nonzero"></path>
@@ -153,6 +177,8 @@
             </div>
           </div>
         </div>
+
+                <% end %>
       </div>
     </div>
   </div>

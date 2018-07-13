@@ -15,3 +15,5 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 Rails.application.config.assets.precompile += ['stores.js', 'stores.css']
 Rails.application.config.assets.precompile += ['reservations.js', 'reservations.css']
 Rails.application.config.assets.precompile += ['locations.js', 'locations.css']
+
+# TODO May drop the css at the end

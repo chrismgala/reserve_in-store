@@ -2,8 +2,8 @@
 <!--leave it here for now-->
 <% content_for :javascript do %>
   <script type="text/javascript">
-      ShopifyApp.ready(function(){
-          ShopifyApp.Bar.initialize({ title: "Home" });
+      ShopifyApp.ready(function () {
+          ShopifyApp.Bar.initialize({title: "Home"});
       });
   </script>
 <% end %>
@@ -11,9 +11,7 @@
 
 
 <div class="Polaris-Page">
-
   <div class="Polaris-Page__Content">
-
     <% if @locations.any? %>
       <div class="Polaris-Stack">
         <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
@@ -76,9 +74,9 @@
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.phone %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim', remote: true %>
-                      </td>
+                    </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: { confirm: "Are you sure? Deleting this location will also delete all its locations." } %>
+                      <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: {confirm: "Are you sure? Deleting this location will also delete all its locations."} %>
                     </td>
                   </tr>
                 <% end %>
@@ -101,28 +99,7 @@
 
       <br>
       <% if @locations.count < @current_store.locations.count %>
-        <div class="Polaris-Stack Polaris-Stack--distributionCenter Polaris-Stack--alignmentTrailing">
-          <div class="Polaris-Stack__Item">
-            <nav class="Polaris-Pagination" aria-label="Pagination">
-              <% if path_to_prev_page(@locations).blank? %>
-                <button class="Polaris-Pagination__Button" aria-label="Previous" disabled=""><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M17 9H5.414l3.293-3.293a.999.999 0 1 0-1.414-1.414l-5 5a.999.999 0 0 0 0 1.414l5 5a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L5.414 11H17a1 1 0 1 0 0-2" fill-rule="evenodd"></path></svg></span>
-                </button>
-              <% else %>
-                <a class="Polaris-Pagination__Button" aria-label="Previous" href="<%= path_to_prev_page @locations %>" disabled="<%= path_to_prev_page(@locations).blank? %>"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M17 9H5.414l3.293-3.293a.999.999 0 1 0-1.414-1.414l-5 5a.999.999 0 0 0 0 1.414l5 5a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L5.414 11H17a1 1 0 1 0 0-2" fill-rule="evenodd"></path></svg></span>
-                </a>
-              <% end %>
-
-              <% if path_to_next_page(@locations).blank? %>
-                <button class="Polaris-Pagination__Button" aria-label="Next" disabled=""><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M17.707 9.293l-5-5a.999.999 0 1 0-1.414 1.414L14.586 9H3a1 1 0 1 0 0 2h11.586l-3.293 3.293a.999.999 0 1 0 1.414 1.414l5-5a.999.999 0 0 0 0-1.414" fill-rule="evenodd"></path></svg></span>
-                </button>
-              <% else %>
-                <a class="Polaris-Pagination__Button" aria-label="Next" href="<%= path_to_next_page @locations %>" disabled="<%= path_to_next_page(@locations).blank? %>"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M17.707 9.293l-5-5a.999.999 0 1 0-1.414 1.414L14.586 9H3a1 1 0 1 0 0 2h11.586l-3.293 3.293a.999.999 0 1 0 1.414 1.414l5-5a.999.999 0 0 0 0-1.414" fill-rule="evenodd"></path></svg></span>
-                </a>
-              <% end %>
-
-            </nav>
-          </div>
-        </div>
+        <%= render partial: 'layouts/partials/polaris_pagination', locals: {items: @locations} %>
       <% end %>
 
     <% else %>
@@ -143,15 +120,10 @@
 
 
 <!--Edit Modal-->
-<div id="edit_location_modal"></div>
-
-<!-- Button trigger modal-->
-<!--<button class="btn btn-success" data-toggle="modal" data-target="#locationModal">-->
-<!--  Add New Location-->
-<!--</button>-->
+<div id="edit_location_modal" style="display:none;"></div>
 
 <!-- Modal -->
-<%= render partial: 'modal', locals: { id: 'locationModal', action: 'New', location: :location }   %>
+<%= render partial: 'modal', locals: {action: 'New', location: :location} %>
 
 
 

@@ -8,5 +8,5 @@ var polarisTableHeaderHeightFix = function(){
 polarisTableHeaderHeightFix();
 
 $('.location-modal-display').on('click', function () {
-    $('div#locationModal-container').show();
+    $('div#location-New-container').show();
 });

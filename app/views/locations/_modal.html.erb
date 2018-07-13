@@ -1,57 +1,8 @@
-<!-- Modal -->
-<!--<div class="modal fade" id=<%#= id %> tabindex="-1" role="dialog" aria-labelledby="locationModalLabel" aria-hidden="true">-->
-<!--  <div class="modal-dialog">-->
-<!--    <div class="modal-content">-->
-      <%#= form_for location, html: {class: 'form-group', id: 'locationForm'} do |f| %>
-<!--        <div class="modal-header">-->
-<!--          <h4 class="modal-title"><%#= action %> Location</h4>-->
-<!--          <button type="button" class="close" data-dismiss="modal">-->
-<!--            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>-->
-<!--        </div>-->
-<!--        <div class="modal-body">-->
-          <%#= f.label :name %>
-          <%#= f.text_field :name, class: 'form-control', required: true %>
-
-          <%#= f.label :address %>
-          <%#= f.text_field :address, class: 'form-control' %>
-
-          <%#= f.label :country %>
-          <%#= f.text_field :country, class: 'form-control' %>
-
-          <%#= f.label :state %>
-          <%#= f.text_field :state, class: 'form-control' %>
-
-          <%#= f.label :city %>
-          <%#= f.text_field :city, class: 'form-control' %>
-
-          <%#= f.label :email %>
-          <%#= f.text_field :email, class: 'form-control', required: true, 'data-parsley-type': 'email' %>
-
-          <%#= f.label :phone %>
-          <%#= f.text_field :phone, class: 'form-control' %>
-<!--        </div>-->
-<!--        <div class="modal-footer">-->
-<!--          <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>-->
-          <%#= f.submit 'Save', class: 'btn btn-primary' %>
-      <%# end %>
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
-
-<!--Parsley form validation-->
-<!--<script>-->
-<!--    $('#locationForm').parsley();-->
-<!--</script>-->
-
-
-
-
-<div id="<%= id %>-container" style="display:none;">
+<div id="location-<%= action %>-container" style="display:none;">
   <div>
     <div class="Polaris-Modal-Dialog__Container" data-polaris-layer="true" data-polaris-overlay="true">
       <div>
-        <div class="Polaris-Modal-Dialog__Modal" role="dialog" aria-labelledby="modal-header9" tabindex="-1">
+        <div class="Polaris-Modal-Dialog__Modal" role="dialog" aria-labelledby="modal-header" tabindex="-1">
 
           <div class="Polaris-Modal-Header">
             <div class="Polaris-Stack Polaris-Stack--alignmentCenter">
@@ -60,7 +11,7 @@
                   <h2 class="Polaris-DisplayText Polaris-DisplayText--sizeSmall"><%= action %> Reservation</h2></div>
               </div>
               <div class="Polaris-Stack__Item">
-                <button class="Polaris-Modal-Header__CloseButton <%= id %>-close">
+                <button class="Polaris-Modal-Header__CloseButton location-<%= action %>-close">
                   <span class="Polaris-Icon Polaris-Icon--colorInkLighter Polaris-Icon--isColored"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M11.414 10l6.293-6.293a.999.999 0 1 0-1.414-1.414L10 8.586 3.707 2.293a.999.999 0 1 0-1.414 1.414L8.586 10l-6.293 6.293a.999.999 0 1 0 1.414 1.414L10 11.414l6.293 6.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L11.414 10z" fill-rule="evenodd"></path></svg></span>
                 </button>
               </div>
@@ -71,7 +22,7 @@
 
             <div class="Polaris-Modal__Body Polaris-Scrollable Polaris-Scrollable--vertical" data-polaris-scrollable="true" polaris="[object Object]">
               <section class="Polaris-Modal-Section">
-                <%= form_for location, html: {class: 'Polaris-FormLayout', id: "#{id}-form"} do |f| %>
+                <%= form_for location, html: {class: 'Polaris-FormLayout', id: "location-#{action}-form"} do |f| %>
 
                   <div class="Polaris-FormLayout__Item">
                     <div class="Polaris-Labelled__LabelWrapper">
@@ -168,11 +119,11 @@
                 <div class="Polaris-Stack__Item">
                   <div class="Polaris-ButtonGroup">
                     <div class="Polaris-ButtonGroup__Item">
-                      <button type="button" class="Polaris-Button <%= id %>-close">
+                      <button type="button" class="Polaris-Button location-<%= action %>-close">
                         <span class="Polaris-Button__Content"><span>Cancel</span></span></button>
                     </div>
                     <div class="Polaris-ButtonGroup__Item">
-                      <button type="submit" class="Polaris-Button Polaris-Button--primary" id="<%= id %>-submit">
+                      <button type="submit" class="Polaris-Button Polaris-Button--primary" id="location-<%= action %>-submit">
                         <span class="Polaris-Button__Content"><span>Save</span></span></button>
                     </div>
                   </div>
@@ -191,28 +142,27 @@
 
 <!--Parsley form validation-->
 <script>
-    $('.<%= id %>-close').on('click', function () {
-        $('div#<%= id %>-container').hide();
+    $('.location-<%= action %>-close').on('click', function () {
+        $('div#location-<%= action %>-container').hide();
     });
-    var $form = $("#<%= id %>-form");
+    var $form = $("#location-<%= action %>-form");
     // $('#locationCreateForm').parsley();
-    $('#<%= id %>-submit').on('click', function () {
+    $('#location-<%= action %>-submit').on('click', function () {
         if ($form[0].checkValidity()) {
             $form.submit();
-            $('div#<%= id %>-container').hide();
+            $('div#location-<%= action %>-container').hide();
         } else {
             // $form.submit();
             $form[0].reportValidity();
         }
     });
 
-    $("#<%= id %>-container").on('click', function (event) {
+    $("#location-<%= action %>-container").on('click', function (event) {
         if (!$(event.target).closest('.Polaris-Modal-Dialog__Modal').length) {
-            if ($('div#<%= id %>-container').is(":visible")) {
-                $('div#<%= id %>-container').hide();
+            if ($('div#location-<%= action %>-container').is(":visible")) {
+                $('div#location-<%= action %>-container').hide();
             }
         }
     });
-
 
 </script>

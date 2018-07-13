@@ -1,8 +1,4 @@
 <!--Insert the form into the index page and show the modal-->
-$('#edit_location_modal').html("<%= escape_javascript( render partial: 'modal', locals: { action: 'Edit', location: @location } ) %>").show();
-$('#location-Edit-container').show();
-console.log('get here');
-
-
-
+$('#location-edit-modal').html("<%= escape_javascript( render partial: 'modal', locals: { action: 'edit', location: @location } ) %>").show();
+$('#location-edit-container').show();
 

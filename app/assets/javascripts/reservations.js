@@ -1,4 +1,5 @@
 polarisTableHeaderHeightFix();
+console.log("reservation.js");
 
 $('.reservation-modal-display').on('click', function () {
     $('div#reservation-modal-container').show();

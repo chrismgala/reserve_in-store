@@ -1,8 +1,5 @@
-polarisTableHeaderHeightFix();
+console.log("location.js");
 
-$('.location-modal-display').on('click', function () {
-    $('div#location-new-container').show();
-});
 
 
 /**
@@ -12,19 +9,17 @@ $('.location-modal-display').on('click', function () {
 var LocationModal = function (action) {
     // this.opts = opts;
     // this.$form = opts.form;
-    var self = this;
+    var $modalContainer = $('div#location-' + action + '-container');
 
     this.init = function () {
+        console.log("init");
         this.bindForm();
+        this.setCloseConditions();
 
     };
 
-    this.bindForm = function (){
-        console.log("bindform");
-        $('.location-' + action + '-close').on('click', function () {
-            $('div#location-' + action + '-container').hide();
-        });
-        var $form = $('#location-'+action+'-form');
+    this.bindForm = function () {
+        var $form = $('#location-' + action + '-form');
 
         $('#location-' + action + '-submit').on('click', function () {
             if ($form[0].checkValidity()) {
@@ -34,18 +29,20 @@ var LocationModal = function (action) {
                 $form[0].reportValidity();
             }
         });
-
-        $('#location-'+action+'-container').on('click', function (event) {
-            if (!$(event.target).closest('.Polaris-Modal-Dialog__Modal').length) {
-                if ($('div#location-' + action + '-container').is(":visible")) {
-                    $('div#location-' + action + '-container').hide();
-                }
-            }
-        });
     };
 
-    this.getCurrentState = function () {
+    this.setCloseConditions = function () {
+        $('.location-' + action + '-close').on('click', function () {
+            $('div#location-' + action + '-container').hide();
+        });
 
+        // $modalContainer.on('click', function (event) {
+        //     if (!$(event.target).closest('.Polaris-Modal-Dialog__Modal').length) {
+        //     //     if ($modalContainer.is(":visible")) {
+        //             $modalContainer.hide();
+        //     //     }
+        //     }
+        // });
     };
 
     this.init();

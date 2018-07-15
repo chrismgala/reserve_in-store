@@ -110,7 +110,7 @@
           </p>
         </div>
         <div class="Polaris-Stack__Item">
-          <button type="button" class="Polaris-Button Polaris-Button--primary" id="location-modal-display">
+          <button type="button" class="Polaris-Button Polaris-Button--primary location-modal-display">
             <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>
         </div>
       </div>
@@ -126,4 +126,10 @@
 <%= render partial: 'modal', locals: {action: 'new', location: :location} %>
 
 
+<script>
+    polarisTableHeaderHeightFix();
 
+    $('.location-modal-display').on('click', function () {
+        $('div#location-new-container').show();
+    });
+</script>

@@ -1,6 +1,6 @@
 /**
  * Make the Polaris modal interactive, perform HTML 5 validation before submit
- * @param {object} opts Specific classes and IDs related to current modal, used to select elements and attach event handlers
+ * @param {object} opts Classes and IDs related to current modal, used to select elements and attach event handlers
  *                 (including showClass, containerID, formID, closeClass and submitBtnID)
  */
 var PolarisModal = function (opts) {

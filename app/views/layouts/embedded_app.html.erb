@@ -30,8 +30,6 @@
   </ul>
 </div>
 
-<%= javascript_include_tag params[:controller] %>
-
 <!-- Main section-->
 <div class="app-wrapper">
   <div class="app-content">
@@ -54,6 +52,7 @@
     });
 </script>
 
+<%#= javascript_include_tag params[:controller] %>
 
 <% if content_for?(:javascript) %>
   <div id="ContentForJavascript" data-turbolinks-temporary>

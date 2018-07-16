@@ -15,7 +15,7 @@
       <div class="Polaris-Stack">
         <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
         <div class="Polaris-Stack__Item">
-          <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-display">
+          <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-show">
             <span class="Polaris-Button__Content"><span>Add New Reservation</span></span></button>
         </div>
       </div>
@@ -127,7 +127,7 @@
           </p>
         </div>
         <div class="Polaris-Stack__Item">
-          <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-display">
+          <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-show">
             <span class="Polaris-Button__Content"><span>Add New Reservation</span></span></button>
         </div>
       </div>
@@ -140,5 +140,12 @@
 
 <script>
     polarisTableHeaderHeightFix();
-</script>
 
+    var reservationModal = new PolarisModal({
+        showClass: "reservation-modal-show",
+        containerID: "reservation-modal-container",
+        formID: "reservationCreateForm",
+        closeClass: "reservation-modal-close",
+        submitBtnID: "reservation-modal-submit"
+    });
+</script>

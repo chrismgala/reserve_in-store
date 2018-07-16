@@ -30,11 +30,15 @@
         <%= f.label :email %>
         <%= f.email_field :customer_email, required: true %>
 
-        <%= f.label :phone %>
-        <%= f.text_field :customer_phone %>
+        <% if @store.show_phone %>
+          <%= f.label :phone %>
+          <%= f.text_field :customer_phone %>
+        <% end %>
 
-        <%= f.label 'Questions/Comments' %>
-        <%= f.text_field :comments %>
+        <% if @store.show_comments %>
+          <%= f.label 'Questions/Comments' %>
+          <%= f.text_field :comments %>
+        <% end %>
       <% end %>
     </div>
 

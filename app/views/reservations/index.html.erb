@@ -1,14 +1,3 @@
-<!--not sure what to set to-->
-<!--leave it here for now-->
-<% content_for :javascript do %>
-  <script type="text/javascript">
-      ShopifyApp.ready(function () {
-          ShopifyApp.Bar.initialize({title: "Home"});
-      });
-  </script>
-<% end %>
-<!--END-->
-
 <div class="Polaris-Page">
   <div class="Polaris-Page__Content">
     <% if @reservations.any? %>

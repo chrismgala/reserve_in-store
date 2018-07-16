@@ -1,3 +1,8 @@
+/**
+ * Make the Polaris modal interactive, perform HTML 5 validation before submit
+ * @param {object} opts Specific classes and IDs related to current modal, used to select elements and attach event handlers
+ *                 (including showClass, containerID, formID, closeClass and submitBtnID)
+ */
 var PolarisModal = function (opts) {
     opts = opts || {};
     var $form, $modalContainer;
@@ -11,6 +16,9 @@ var PolarisModal = function (opts) {
 
     };
 
+    /**
+     * When click on the "Add New bleh" Button, show the modal
+     */
     this.bindShowBtn = function () {
         if (opts.showClass) {
             $('.' + opts.showClass).on('click', function () {
@@ -19,6 +27,10 @@ var PolarisModal = function (opts) {
         }
     };
 
+    /**
+     * When attempting to submit the form, check if it has been validated
+     * If it fails the validation, show html 5 validation errors
+     */
     this.bindForm = function () {
         $('#' + opts.submitBtnID).on('click', function () {
             if ($form[0].checkValidity()) {
@@ -30,6 +42,9 @@ var PolarisModal = function (opts) {
         });
     };
 
+    /**
+     * Set close conditions to the modal: click on the "x", "Cancel" or anywhere outside of the modal
+     */
     this.setCloseConditions = function () {
         $('.' + opts.closeClass).on('click', function () {
             console.log($modalContainer);

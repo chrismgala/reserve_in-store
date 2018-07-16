@@ -13,7 +13,7 @@
 
 <!-- top navigation tabs -->
 <!--TODO Sticky-top -->
-<div class="Polaris-Card">
+<div class="Polaris-Card top_navbar">
   <ul role="tablist" class="Polaris-Tabs">
     <li role="presentation" class="Polaris-Tabs__TabContainer">
       <a class="Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if controller?('stores') %>" href="<%= stores_settings_path %>">
@@ -51,8 +51,6 @@
         forceRedirect: true
     });
 </script>
-
-<%#= javascript_include_tag params[:controller] %>
 
 <% if content_for?(:javascript) %>
   <div id="ContentForJavascript" data-turbolinks-temporary>

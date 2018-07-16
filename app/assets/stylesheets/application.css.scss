@@ -12,6 +12,7 @@
  *
  *= require_tree .
  *= require_self
+ *= require custom/top_navbar
  */
 // Import Shopify Polaris components
 @import '@shopify/polaris/styles.css';

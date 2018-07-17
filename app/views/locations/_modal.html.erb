@@ -33,77 +33,102 @@
                 </div>
               </div>
 
-              <div class="Polaris-FormLayout__Item">
-                <div class="Polaris-Labelled__LabelWrapper">
-                  <div class="Polaris-Label">
-                    <%= f.label :address, class: 'Polaris-Label__Text' %>
+              <div role="group" class="Polaris-FormLayout--condensed">
+                <div class="Polaris-FormLayout__Items">
+                  <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label :email, class: 'Polaris-Label__Text' %>
+                      </div>
+                    </div>
+                    <div class="Polaris-TextField">
+                      <%= f.email_field :email, class: 'Polaris-TextField__Input', required: true, 'data-parsley-type': 'email' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
                   </div>
-                </div>
-                <div class="Polaris-TextField">
-                  <%= f.text_field :address, class: 'Polaris-TextField__Input' %>
-                  <div class="Polaris-TextField__Backdrop"></div>
+
+                  <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label :phone, class: 'Polaris-Label__Text' %>
+                      </div>
+                    </div>
+                    <div class="Polaris-TextField">
+                      <%= f.text_field :phone, class: 'Polaris-TextField__Input' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="Polaris-FormLayout__Item">
-                <div class="Polaris-Labelled__LabelWrapper">
-                  <div class="Polaris-Label">
-                    <%= f.label :country, class: 'Polaris-Label__Text' %>
+              <div role="group" class="Polaris-FormLayout--condensed">
+                <div class="Polaris-FormLayout__Items">
+                  <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label :address, class: 'Polaris-Label__Text' %>
+                      </div>
+                    </div>
+                    <div class="Polaris-TextField">
+                      <%= f.text_field :address, class: 'Polaris-TextField__Input' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
                   </div>
-                </div>
-                <div class="Polaris-TextField">
-                  <%= f.text_field :country, class: 'Polaris-TextField__Input' %>
-                  <div class="Polaris-TextField__Backdrop"></div>
+
+                  <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label :city, class: 'Polaris-Label__Text' %>
+                      </div>
+                    </div>
+                    <div class="Polaris-TextField">
+                      <%= f.text_field :city, class: 'Polaris-TextField__Input' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="Polaris-FormLayout__Item">
-                <div class="Polaris-Labelled__LabelWrapper">
-                  <div class="Polaris-Label">
-                    <%= f.label :state, class: 'Polaris-Label__Text' %>
+              <div role="group" class="Polaris-FormLayout--condensed">
+                <div class="Polaris-FormLayout__Items">
+                  <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label :country, class: 'Polaris-Label__Text' %>
+                      </div>
+                    </div>
+                    <div class="Polaris-TextField">
+                      <%= f.text_field :country, class: 'Polaris-TextField__Input' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
                   </div>
-                </div>
-                <div class="Polaris-TextField">
-                  <%= f.text_field :state, class: 'Polaris-TextField__Input' %>
-                  <div class="Polaris-TextField__Backdrop"></div>
+
+                  <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label :state, class: 'Polaris-Label__Text' %>
+                      </div>
+                    </div>
+                    <div class="Polaris-TextField">
+                      <%= f.text_field :state, class: 'Polaris-TextField__Input' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
+                  </div>
+
+                  <div class="Polaris-FormLayout__Item">
+                    <div class="Polaris-Labelled__LabelWrapper">
+                      <div class="Polaris-Label">
+                        <%= f.label 'Postal / ZIP Code', class: 'Polaris-Label__Text' %>
+                      </div>
+                    </div>
+                    <div class="Polaris-TextField">
+                      <%= f.text_field :zip, class: 'Polaris-TextField__Input' %>
+                      <div class="Polaris-TextField__Backdrop"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div class="Polaris-FormLayout__Item">
-                <div class="Polaris-Labelled__LabelWrapper">
-                  <div class="Polaris-Label">
-                    <%= f.label :city, class: 'Polaris-Label__Text' %>
-                  </div>
-                </div>
-                <div class="Polaris-TextField">
-                  <%= f.text_field :city, class: 'Polaris-TextField__Input' %>
-                  <div class="Polaris-TextField__Backdrop"></div>
-                </div>
-              </div>
-
-              <div class="Polaris-FormLayout__Item">
-                <div class="Polaris-Labelled__LabelWrapper">
-                  <div class="Polaris-Label">
-                    <%= f.label :email, class: 'Polaris-Label__Text' %>
-                  </div>
-                </div>
-                <div class="Polaris-TextField">
-                  <%= f.email_field :email, class: 'Polaris-TextField__Input', required: true, 'data-parsley-type': 'email' %>
-                  <div class="Polaris-TextField__Backdrop"></div>
-                </div>
-              </div>
-
-              <div class="Polaris-FormLayout__Item">
-                <div class="Polaris-Labelled__LabelWrapper">
-                  <div class="Polaris-Label">
-                    <%= f.label :phone, class: 'Polaris-Label__Text' %>
-                  </div>
-                </div>
-                <div class="Polaris-TextField">
-                  <%= f.text_field :phone, class: 'Polaris-TextField__Input' %>
-                  <div class="Polaris-TextField__Backdrop"></div>
-                </div>
-              </div>
             <% end %>
           </section>
         </div>
@@ -142,7 +167,7 @@
     };
     // attach a event handler to the "Add New Location" button
     <% if action == 'new' %>
-        opts.showClass = "location-modal-show";
+    opts.showClass = "location-modal-show";
     <% end %>
     var locationModal = new PolarisModal(opts);
 </script>

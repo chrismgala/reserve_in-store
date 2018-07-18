@@ -1,4 +1,4 @@
-module ApplicationHelper
+module LoggedInHelper
 
   def controller?(*controller)
     controller.include?(params[:controller])

@@ -1,70 +1,122 @@
-<!--not sure what to set to-->
-<!--leave it here for now-->
-<% content_for :javascript do %>
-  <script type="text/javascript">
-      ShopifyApp.ready(function(){
-          ShopifyApp.Bar.initialize({ title: "Home" });
-      });
-  </script>
-<% end %>
-<!--END-->
+<div class="Polaris-Page">
+  <div class="Polaris-Page__Content">
+    <% if @locations.any? %>
+      <div class="Polaris-Stack">
+        <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
+        <div class="Polaris-Stack__Item">
+          <button type="button" class="Polaris-Button Polaris-Button--primary location-modal-show">
+            <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>
+        </div>
+      </div>
+      <br>
 
-<% if @locations.any? %>
-  <p>
-    Showing <%= pluralize(@locations.count, 'location') %>.
-  </p>
-  <table class="table table-responsive table-striped">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th>
-      <th>Address</th>
-      <th>Country</th>
-      <th>State</th>
-      <th>City</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th></th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @locations.each do |location| %>
-      <tr>
-        <td><%= location.id %></td>
-        <td><%= location.name %></td>
-        <td><%= location.address %></td>
-        <td><%= location.country %></td>
-        <td><%= location.state %></td>
-        <td><%= location.city %></td>
-        <td><%= location.email %></td>
-        <td><%= location.phone %></td>
-        <td>
-          <%= link_to 'Edit', edit_location_path(location), class: 'btn btn-info btn-xs', remote: true %>
-        </td>
-        <td>
-          <%= link_to 'Delete', location, method: :delete, class: 'btn btn-danger btn-xs', data: { confirm: "Are you sure? Deleting this location will also delete all its reservations." } %>
-        </td>
-      </tr>
+      <div class="Polaris-Card">
+        <div class="">
+          <div class="Polaris-DataTable Polaris-DataTable--hasFooter">
+            <div class="Polaris-DataTable__ScrollContainer">
+              <table class="Polaris-DataTable__Table">
+                <thead>
+                <tr>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header" scope="col" aria-disabled="true">
+                    ID
+                  </th>
+                  <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header"></th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Name
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Address
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Country
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    State
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    City
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Postal / ZIP Code
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Email
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Phone
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @locations.each do |location| %>
+                  <tr class="Polaris-DataTable__TableRow">
+                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row"><%= location.id %></th>
+                    <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.name %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.address %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.country %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.state %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.city %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.zip %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.email %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.phone %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim', remote: true %>
+                    </td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: {confirm: "Are you sure? Deleting this location will also delete all its locations."} %>
+                    </td>
+                  </tr>
+                <% end %>
+                </tbody>
+                <tfoot class="Polaris-DataTable__TableFoot">
+                <tr>
+                  <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--footer">
+                    <p>
+                      Showing <%= @locations.count %>
+                      of <%= pluralize(@current_store.locations.count, 'location') %>.
+                    </p>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <% if @locations.count < @current_store.locations.count %>
+        <%= render partial: 'layouts/partials/polaris_pagination', locals: {items: @locations} %>
+      <% end %>
+
+    <% else %>
+      <div class="Polaris-Stack">
+        <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
+          <p>
+            You haven't add any location yet.
+          </p>
+        </div>
+        <div class="Polaris-Stack__Item">
+          <button type="button" class="Polaris-Button Polaris-Button--primary location-modal-show">
+            <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>
+        </div>
+      </div>
     <% end %>
-    </tbody>
-  </table>
+  </div>
+</div>
 
-  <%= paginate @locations %>
-
-<% else %>
-<p>
-  You haven't add any location yet.
-</p>
-<% end %>
 
 <!--Edit Modal-->
-<div id="edit_location_modal"></div>
-
-<!-- Button trigger modal-->
-<button class="btn btn-success" data-toggle="modal" data-target="#locationModal">
-  Add New Location
-</button>
+<div id="location-edit-modal" style="display:none;"></div>
 
 <!-- Modal -->
-<%= render partial: 'modal', locals: { id: 'locationModal', action: 'New', location: :location }   %>
+<%= render partial: 'modal', locals: {action: 'new', location: :location} %>
+
+<script>
+    polarisTableHeaderHeightFix();
+</script>

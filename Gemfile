@@ -15,9 +15,7 @@ gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease, not really being used.
 gem 'shopify_app' # Shopify Application Rails engine and generator
 gem 'shopify_api', '~> 4.11.0'
 gem 'jquery-rails', '~> 4.3', '>= 4.3.3' # Use jquery as the JavaScript library
-gem 'bootstrap', '~> 4.1', '>= 4.1.1' # Right now it's only for the navbar
 gem 'kaminari', '~> 1.1', '>= 1.1.1' # Pagination such as `Product.all.page(params[:page])`
-gem "parsley-rails", '~> 2.7.0'
 gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (CORS) serve public assets
 
 

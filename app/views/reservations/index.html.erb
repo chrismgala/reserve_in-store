@@ -1,85 +1,140 @@
-<!--not sure what to set to-->
-<!--leave it here for now-->
-<% content_for :javascript do %>
-  <script type="text/javascript">
-      ShopifyApp.ready(function () {
-          ShopifyApp.Bar.initialize({title: "Home"});
-      });
-  </script>
-<% end %>
-<!--END-->
-<% if @reservations.any? %>
-  <p>
-    Showing <%= pluralize(@reservations.count, 'reservation') %>.
-  </p>
-  <table class="table table-responsive table-striped">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Location</th>
-      <th>Customer Name</th>
-      <th>Customer Email</th>
-      <th>Customer Phone</th>
-      <th>Product</th>
-      <th>Variant</th> <%# For testing %>
-      <th>Comments</th>
-      <th>Status</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @reservations.each do |reservation| %>
-      <tr>
-        <td><%= reservation.id %></td>
-        <td><%= reservation.location.name %></td>
-        <td><%= reservation.customer_name %></td>
-        <td><%= reservation.customer_email %></td>
-        <td><%= reservation.customer_phone %></td>
-        <td>
-          <% if reservation.shopify_product.present? %>
-            <%= reservation.shopify_product.title %>
-          <% else %>
-            Product not found.
-          <% end %>
-        </td>
-        <td>
-          <% if reservation.shopify_variant.present? %>
-            <%= reservation.shopify_variant.title %>
-          <% else %>
-            Variant not found.
-          <% end %>
-        </td>
-        <td><%= reservation.comments %></td>
-        <td>
-          <% if reservation.fulfilled? %>
-            Fulfilled
-          <% else %>
-            <%= form_for :reservation, url: reservation_path(reservation), method: :put do |f| %>
-              <%= f.hidden_field :fulfilled, value: true %>
-              <%= f.submit 'Fulfill', class: 'btn btn-primary btn-sm' %>
-            <% end %>
-          <% end %>
-        </td>
-        <td>
-          <%= link_to 'Delete', reservation, method: :delete, class: 'btn btn-danger btn-sm', data: {confirm: "Are you sure?"} %>
-        </td>
-      </tr>
+<div class="Polaris-Page">
+  <div class="Polaris-Page__Content">
+    <% if @reservations.any? %>
+      <div class="Polaris-Stack">
+        <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
+        <div class="Polaris-Stack__Item">
+          <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-show">
+            <span class="Polaris-Button__Content"><span>Add New Reservation</span></span></button>
+        </div>
+      </div>
+      <br>
+
+      <div class="Polaris-Card">
+        <div class="">
+          <div class="Polaris-DataTable Polaris-DataTable--hasFooter">
+            <div class="Polaris-DataTable__ScrollContainer">
+              <table class="Polaris-DataTable__Table">
+                <thead>
+                <tr>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header" scope="col" aria-disabled="true">
+                    ID
+                  </th>
+                  <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header"></th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Location
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Customer Name
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Customer Email
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Customer Phone
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Product
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Variant
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Comments
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Status
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                  </th>
+                </tr>
+                </thead>
+                <tbody>
+                <% @reservations.each do |reservation| %>
+                  <tr class="Polaris-DataTable__TableRow">
+                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row"><%= reservation.id %></th>
+                    <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.location.name %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_email %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_phone %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <% if reservation.shopify_product.present? %>
+                        <%= reservation.shopify_product.title %>
+                      <% else %>
+                        Product not found.
+                      <% end %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <% if reservation.shopify_variant.present? %>
+                        <%= reservation.shopify_variant.title %>
+                      <% else %>
+                        Variant not found.
+                      <% end %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.comments %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <% if reservation.fulfilled? %>
+                        Fulfilled
+                      <% else %>
+                        <%= form_for :reservation, url: reservation_path(reservation), method: :put do |f| %>
+                          <%= f.hidden_field :fulfilled, value: true %>
+                          <button type="submit" class="Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim">
+                            <span class="Polaris-Button__Content"><span>Fulfill</span></span></button>
+                        <% end %>
+                      <% end %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <%= link_to 'Delete', reservation, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: {confirm: "Are you sure?"} %>
+                    </td>
+                  </tr>
+                <% end %>
+                </tbody>
+                <tfoot class="Polaris-DataTable__TableFoot">
+                <tr>
+                  <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--footer">
+                    <p>
+                      Showing <%= @reservations.count %>
+                      of <%= pluralize(@current_store.reservations.count, 'reservation') %>.
+                    </p>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <% if @reservations.count < @current_store.reservations.count %>
+        <%= render partial: 'layouts/partials/polaris_pagination', locals: {items: @reservations} %>
+      <% end %>
+
+    <% else %>
+      <div class="Polaris-Stack">
+        <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
+          <p>
+            There are no reservations yet.
+          </p>
+        </div>
+        <div class="Polaris-Stack__Item">
+          <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-show">
+            <span class="Polaris-Button__Content"><span>Add New Reservation</span></span></button>
+        </div>
+      </div>
     <% end %>
-    </tbody>
-  </table>
-
-  <%= paginate @reservations %>
-
-<% else %>
-  <p>
-    There are no reservations yet.
-  </p>
-<% end %>
-
-<!-- Button trigger modal-->
-<button class="btn btn-success" data-toggle="modal" data-target="#reservationModal">
-  Add New Reservation
-</button>
+  </div>
+</div>
 
 <!-- Modal -->
 <%= render partial: 'new_reservation_modal' %>
+
+<script>
+    polarisTableHeaderHeightFix();
+
+    var reservationModal = new PolarisModal({
+        showClass: "reservation-modal-show",
+        containerID: "reservation-modal-container",
+        formID: "reservationCreateForm",
+        closeClass: "reservation-modal-close",
+        submitBtnID: "reservation-modal-submit"
+    });
+</script>

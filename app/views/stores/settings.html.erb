@@ -1,29 +1,148 @@
-<!--not sure what to set to-->
-<!--leave it here for now-->
-<% content_for :javascript do %>
-  <script type="text/javascript">
-      ShopifyApp.ready(function () {
-          ShopifyApp.Bar.initialize({title: "Home"});
-      });
-  </script>
-<% end %>
-<!--END-->
+<div class="Polaris-Page">
+  <div class="Polaris-Page__Content">
+    <%= form_for @current_store, url: {action: 'save_settings'} do |f| %>
+      <div class="Polaris-Layout">
 
-<%= form_for @current_store, url: {action: 'save_settings'}, html: {class: 'form-group'} do |f| %>
-  <%= f.label 'Message on top of the window:' %><br>
-  <%= f.text_area :top_msg, class: 'form-control' %><br>
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Reservation popup</h2>
+                <p>Customize the style of your reserve in-store popup</p>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label 'Message on top of the window', class: 'Polaris-Label__Text' %>
+                        </div>
+                      </div>
+                      <div class="Polaris-TextField">
+                        <%= f.text_area :top_msg, class: 'Polaris-TextField__Input' %>
+                        <div class="Polaris-TextField__Backdrop"></div>
+                      </div>
+                    </div>
 
-  <%= f.label 'Fields to collect:' %><br>
-  <%= f.check_box :show_phone %>
-  <%= f.label 'Phone' %><br>
-  <%= f.check_box :show_comments %>
-  <%= f.label 'Comments' %><br>
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label 'Fields to collect', class: 'Polaris-Label__Text' %>
+                        </div>
+                      </div>
+                      <fieldset class="Polaris-ChoiceList">
+                        <ul class="Polaris-ChoiceList__Choices">
+                          <li>
+                            <label class="Polaris-Choice" for="store_show_phone">
+                              <div class="Polaris-Choice__Control">
+                                <div class="Polaris-Checkbox">
+                                  <%= f.check_box :show_phone, class: 'Polaris-Checkbox__Input' %>
+                                  <div class="Polaris-Checkbox__Backdrop"></div>
+                                  <div class="Polaris-Checkbox__Icon">
+                                  <span class="Polaris-Icon">
+                                    <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
+                                      <g fill-rule="evenodd">
+                                        <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
+                                      </g>
+                                    </svg>
+                                  </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="Polaris-Choice__Label">Phone</div>
+                            </label>
+                          </li>
+                          <li>
+                            <label class="Polaris-Choice" for="store_show_comments">
+                              <div class="Polaris-Choice__Control">
+                                <div class="Polaris-Checkbox">
+                                  <%= f.check_box :show_comments, class: 'Polaris-Checkbox__Input' %>
+                                  <div class="Polaris-Checkbox__Backdrop"></div>
+                                  <div class="Polaris-Checkbox__Icon">
+                                  <span class="Polaris-Icon">
+                                    <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
+                                      <g fill-rule="evenodd">
+                                        <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
+                                      </g>
+                                    </svg>
+                                  </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="Polaris-Choice__Label">Comments</div>
+                            </label>
+                          </li>
+                        </ul>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-  <%= f.label 'Success message' %><br>
-  <%= f.text_area :success_msg, class: 'form-control' %><br>
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Notifications</h2>
+                <p>Customize the messages we displayed after new reservation has been placed.</p>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label 'Success message', class: 'Polaris-Label__Text' %>
+                        </div>
+                      </div>
+                      <div class="Polaris-TextField">
+                        <%= f.text_area :success_msg, class: 'Polaris-TextField__Input' %>
+                        <div class="Polaris-TextField__Backdrop"></div>
+                      </div>
+                      <div class="Polaris-Labelled__HelpText" id="TextField6HelpText">
+                        <span>We’ll display this message in the confirmation popup, after customers create new reservations.</span>
+                      </div>
+                    </div>
 
-  <%= f.label 'Email template' %><br>
-  <%= f.text_area :email_template, class: 'form-control' %><br>
-  <%= f.submit 'Save', class: 'btn btn-primary'%>
-<% end %>
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label 'Email template', class: 'Polaris-Label__Text' %>
+                        </div>
+                      </div>
+                      <div class="Polaris-TextField">
+                        <%= f.text_area :email_template, class: 'Polaris-TextField__Input' %>
+                        <div class="Polaris-TextField__Backdrop"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="Polaris-Layout__Section">
+          <div class="Polaris-PageActions">
+            <div class="Polaris-Stack Polaris-Stack--spacingTight Polaris-Stack--distributionTrailing">
+              <div class="Polaris-Stack__Item">
+                <button type="submit" class="Polaris-Button Polaris-Button--primary">
+                  <span class="Polaris-Button__Content"><span>Save</span></span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
 

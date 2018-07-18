@@ -47,7 +47,6 @@ var PolarisModal = function (opts) {
      */
     this.setCloseConditions = function () {
         $('.' + opts.closeClass).on('click', function () {
-            console.log($modalContainer);
             $modalContainer.hide();
         });
         $modalContainer.on('click', function (event) {

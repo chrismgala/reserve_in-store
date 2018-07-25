@@ -22,6 +22,12 @@ gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+group :production do
+  # solves the problem of production environment requests for assets (eg: application.css) returning a 404
+  # because they do not contain a digest (eg: application-1c8db23293725a8857e5132d59211909.css).
+  gem 'smart_assets', '~> 0.4.0'
+end
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

@@ -204,6 +204,9 @@ GEM
       omniauth-shopify-oauth2 (~> 1.2.0)
       rails (>= 5.0.0)
       shopify_api (>= 4.3.5)
+    smart_assets (0.4.0)
+      rails (>= 4.0, < 6)
+      sprockets-rails (>= 2, < 4)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -258,6 +261,7 @@ DEPENDENCIES
   selenium-webdriver
   shopify_api (~> 4.11.0)
   shopify_app
+  smart_assets (~> 0.4.0)
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
@@ -269,4 +273,4 @@ RUBY VERSION
    ruby 2.3.3p222
 
 BUNDLED WITH
-   1.16.1
+   1.16.3

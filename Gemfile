@@ -17,15 +17,13 @@ gem 'shopify_api', '~> 4.11.0'
 gem 'jquery-rails', '~> 4.3', '>= 4.3.3' # Use jquery as the JavaScript library
 gem 'kaminari', '~> 1.1', '>= 1.1.1' # Pagination such as `Product.all.page(params[:page])`
 gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (CORS) serve public assets
-
+gem 'non-stupid-digest-assets', '~> 1.0.9' # used for compiling both digest and non-digest assets in production
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
 group :production do
-  # solves the problem of production environment requests for assets (eg: application.css) returning a 404
-  # because they do not contain a digest (eg: application-1c8db23293725a8857e5132d59211909.css).
-  gem 'smart_assets', '~> 0.4.0'
+  gem 'sendgrid-ruby', '~> 5.2.0' # For sending email in production only
 end
 
 group :development, :test do

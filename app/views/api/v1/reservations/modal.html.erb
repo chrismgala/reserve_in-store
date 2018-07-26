@@ -4,11 +4,11 @@
       <span class="close reserveInStore-reserve-close">&times;</span>
       <h4 class="modal-title reserveInStore-modal-title"><%= @store.top_msg %><br>
         <% if @product_title.present? %>
-          Thank you for reserving product <%= @product_title %>
+          Fill out this form, and the product <%= @product_title %>
           <% if @variant_title.present? && @variant_title != 'Default Title' %>
             (<%= @variant_title %>)
           <% end %>
-          in store.
+          will be reserved for you at selected location.
         <% end %>
       </h4>
     </div>

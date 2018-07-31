@@ -1,6 +1,6 @@
 class Store < ActiveRecord::Base
   include ShopifyApp::SessionStorage
-  has_many :locations
+  has_many :locations, dependent: :destroy
   has_many :reservations
 
   before_create :generate_keys

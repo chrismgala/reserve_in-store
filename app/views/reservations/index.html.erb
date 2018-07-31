@@ -40,7 +40,7 @@
                     Variant
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Comments
+                    Instructions from customer
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Status
@@ -70,7 +70,7 @@
                       <% else %>
                         Variant not found.
                       <% end %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.comments %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.instructions_from_customer %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <% if reservation.fulfilled? %>
                         Fulfilled

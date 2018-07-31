@@ -28,10 +28,10 @@
         <td><%= @variant.title %></td>
       </tr>
     <% end %>
-    <% if @reservation.comments.present? %>
+    <% if @reservation.instructions_from_customer.present? %>
       <tr>
-        <th>Comments</th>
-        <td><%= @reservation.comments %></td>
+        <th>Instructions From Customer</th>
+        <td><%= @reservation.instructions_from_customer %></td>
       </tr>
     <% end %>
   </table>

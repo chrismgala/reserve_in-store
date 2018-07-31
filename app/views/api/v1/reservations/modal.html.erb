@@ -35,9 +35,9 @@
           <%= f.text_field :customer_phone %>
         <% end %>
 
-        <% if @store.show_comments %>
-          <%= f.label 'Questions/Comments' %>
-          <%= f.text_field :comments %>
+        <% if @store.show_instructions_from_customer %>
+          <%= f.label 'WHAT DATA/TIME WOULD YOU LIKE IT HELD FOR?' %>
+          <%= f.text_field :instructions_from_customer %>
         <% end %>
       <% end %>
     </div>

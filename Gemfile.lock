@@ -273,7 +273,7 @@ DEPENDENCIES
   selenium-webdriver
   sendgrid-ruby (~> 5.2.0)
   shopify_api (~> 4.11.0)
-  shopify_app
+  shopify_app (~> 8.2.6)
   spring
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)

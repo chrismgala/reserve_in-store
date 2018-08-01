@@ -17,16 +17,16 @@ ReserveInStore.ReservationCreator = function (opts) {
 
     /**
      * Set Product ID/Title and Variant Id/Title
-     * @returns {object} Product and variant titles, in the form of {product_title: "bleh", variant_title: "bleh"}
+     * @returns {object} Product title, variant title and price, in the form of {product_title: "bleh", variant_title: "bleh", price: "bleh"}
      */
     self.setProductAndVariantId = function () {
         setVariantID();
         variantId = variantId || opts.product.variants[0].id;
-        var variantTitle = $.grep(opts.product.variants, function (obj) {
+        var variant = $.grep(opts.product.variants, function (obj) {
             return obj.id === variantId;
-        })[0].title;
+        })[0];
         productId = opts.product.id;
-        return {product_title: opts.product.title, variant_title: variantTitle};
+        return {product_title: opts.product.title, variant_title: variant.title, price: variant.price};
     };
 
     /**

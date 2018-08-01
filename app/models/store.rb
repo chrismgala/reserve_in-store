@@ -5,6 +5,14 @@ class Store < ActiveRecord::Base
 
   before_create :generate_keys
 
+  ##
+  # TODO rdoc
+  def price(money_amount)
+    ShopifyAPI::Session.temp(shopify_domain, shopify_token) {
+      ShopifyAPI::Shop.current.attributes['money_format'].gsub('{{amount}}', money_amount);
+    }
+  end
+
   private
 
   ##

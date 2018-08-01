@@ -4,4 +4,10 @@ class Location < ActiveRecord::Base
 
   validates :name, :email, presence: true
   validates_associated :store
+
+  ##
+  # TODO rdoc
+  def google_map_url
+    'https://www.google.com/maps/search/?api=1&query=' + URI.encode(address+' '+city+' '+state+' '+country+' '+zip)
+  end
 end

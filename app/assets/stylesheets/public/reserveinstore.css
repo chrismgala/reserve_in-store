@@ -12,7 +12,7 @@
     display: block; /* Hidden by default */
     opacity: 100;
     position: fixed; /* Stay in place */
-    z-index: 2; /* Sit on top */
+    z-index: 1000; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
@@ -25,18 +25,205 @@
 
 /*Modal Content */
 .reserveInStore-reserve-modal {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Open Sans', sans-serif;
     position: relative;
     background-color: #fefefe;
-    margin: auto;
-    padding: 0;
     border: 1px solid #888;
-    width: 400px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -webkit-animation-name: reserveInStore-animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: reserveInStore-animatetop;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
+    padding: 10px;
+    max-width: 1560px;
+    width: 93%;
+    margin: 20px auto;
+}
+
+.reserveInStore-reserve-modal * {
+    box-sizing: border-box;
+    margin: 0;
+    color: #000000;
+}
+
+.reserveInStore-reserve-modal .ris-columns {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    margin: 5px 0;
+}
+
+.reserveInStore-reserve-modal .ris-column {
+    flex: 1;
+    margin: 2px;
+    padding: 30px;
+}
+
+.reserveInStore-reserve-modal .ris-column:first-child {
+    margin-left: 0;
+}
+
+.reserveInStore-reserve-modal .ris-column:last-child {
+    margin-right: 0;
+}
+
+@media screen and (max-width: 980px) {
+    .ris-columns .ris-column {
+        margin-bottom: 5px;
+        flex-basis: 40%;
+    }
+
+    .ris-columns .ris-column:nth-last-child(2) {
+        margin-right: 0;
+    }
+
+    .ris-columns .ris-column:last-child {
+        flex-basis: 100%;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width: 680px) {
+    .ris-columns .ris-column {
+        flex-basis: 100%;
+        margin: 0 0 5px 0;
+    }
+}
+
+/*Not sure if this is useful TODO*/
+.reserveInStore-reserve-modal header {
+    padding: 0 15px;
+}
+
+/*Not sure if this is useful TODO*/
+.reserveInStore-reserve-modal footer {
+    padding: 0 15px;
+}
+
+.reserveInStore-reserve-modal .ris-main-header {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    text-align: center;
+    font-size: 39px;
+    padding-top: 40px;
+}
+
+.reserveInStore-reserve-modal .ris-instruction {
+    text-align: center;
+    padding-bottom: 20px;
+    color: grey;
+}
+
+.reserveInStore-reserve-modal .ris-header-text {
+    font-family: 'Roboto', sans-serif;
+    color: #000000;
+    text-transform: uppercase;
+    border-bottom: 1px solid grey;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    font-size: larger;
+}
+
+.reserveInStore-reserve-modal .ris-location-block {
+    margin-bottom: 2em;
+}
+
+.reserveInStore-reserve-modal .ris-location-block:last-child {
+    margin-bottom: 0;
+}
+
+.reserveInStore-reserve-modal .ris-location-label {
+    display: inline-block;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    margin-left: 7px;
+    margin-bottom: 15px;
+}
+
+.reserveInStore-reserve-modal .ris-location-description {
+    padding-left: 20px;
+}
+
+.reserveInStore-reserve-modal .ris-view-on-map {
+    margin-top: 2em;
+    text-align: center;
+    font-size: 12px;
+    float: right;
+}
+
+.reserveInStore-reserve-modal .ris-view-on-map img {
+    display: block;
+    margin: 0px auto;
+    width: 3em;
+}
+
+.reserveInStore-reserve-modal .ris-view-on-map a {
+    text-decoration: underline;
+    color: #adadad;
+}
+
+.reserveInStore-reserve-modal .ris-contact-field {
+    margin-bottom: 15px;
+}
+
+.reserveInStore-reserve-modal .ris-contact-field:last-child {
+    margin-bottom: 0;
+}
+
+.reserveInStore-reserve-modal .ris-contact-field label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.reserveInStore-reserve-modal .ris-contact-field input {
+    margin-bottom: 15px;
+    border: 1px solid #323232;
+    background-color: white;
+    width: 100%;
+}
+
+.reserveInStore-reserve-modal .ris-contact-field input:last-child {
+    margin-bottom: 0;
+}
+
+.reserveInStore-reserve-modal .ris-product-detail {
+    background-color: #e2e2e2;
+    padding: 30px;
+    margin-bottom: 18px;
+}
+
+.reserveInStore-reserve-modal .ris-product-detail .ris-product-price {
+    font-size: 1.5em;
+    float: right;
+    line-height: 2.3em;
+}
+
+.reserveInStore-form-submit {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    width: 100%;
+    background-color: #333333;
+    color: white;
+    box-shadow: 3px 3px #dddddd;
+    font-size: 1.5em;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+}
+
+.reserveInStore-reserve-modal .ris-text-small {
+    font-size: 1em;
+}
+
+.reserveInStore-reserve-modal .ris-text-medium {
+    font-size: 1.2em;
+}
+
+.reserveInStore-reserve-modal .ris-text-block {
+    margin: 20px 0;
 }
 
 /* Add Animation */
@@ -64,7 +251,7 @@
 
 /*The Close Button */
 .reserveInStore-reserve-close {
-    color: white;
+    color: #000000;
     float: right;
     font-size: 28px;
     font-weight: bold;
@@ -75,36 +262,6 @@
     color: #000;
     text-decoration: none;
     cursor: pointer;
-}
-
-.reserveInStore-modal-header {
-    padding: 2px 16px;
-    background-color: #c8c8c8;
-    color: #ffffff;
-}
-
-.reserveInStore-modal-title {
-    text-transform: none;
-}
-
-.reserveInStore-modal-body {
-    padding: 2px 16px;
-    margin-left: 20px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.reserveInStore-modal-footer {
-    padding: 2px 16px;
-    background-color: #b3b3b3;
-    color: white;
-    text-align: center;
-}
-
-.reserveInStore-form-submit {
-    margin-top: 12px;
-    margin-bottom: 12px;
-    width: 80%;
 }
 
 /* HTML 5 form validation error display */
@@ -118,14 +275,14 @@
 
 /* Server side form validation error display */
 .reserveInStore-error-ul {
-    font-size: 80%;
+    font-size: 100%;
     color: #D8000C;
     background-color: #FFD2D2;
     margin: 10px 0px;
     padding: 5px;
 }
 
-/* Success modal after submitting an In-Store reservation */
+/*Success modal after submitting an In-Store reservation*/
 .reserveInStore-success-modal {
     width: 350px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

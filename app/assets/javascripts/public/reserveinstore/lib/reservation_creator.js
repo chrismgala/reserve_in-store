@@ -144,7 +144,7 @@ ReserveInStore.ReservationCreator = function (opts) {
         } else {
             errorMessages += "<li>An unknown error occurred.</li>";
         }
-        $form.find(".reserveInStore-error-ul").html(errorMessages).show();
+        $reserveModal.find(".reserveInStore-error-ul").html(errorMessages).show();
     };
 
     /**

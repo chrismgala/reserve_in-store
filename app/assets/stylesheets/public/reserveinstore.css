@@ -132,7 +132,7 @@
     margin-bottom: 0;
 }
 
-.reserveInStore-reserve-modal .ris-location-label {
+.ris-location-label {
     display: inline-block;
     text-transform: uppercase;
     font-weight: bold;
@@ -141,24 +141,24 @@
     margin-bottom: 15px;
 }
 
-.reserveInStore-reserve-modal .ris-location-description {
+.ris-location-description {
     padding-left: 20px;
 }
 
-.reserveInStore-reserve-modal .ris-view-on-map {
+.ris-view-on-map {
     margin-top: 2em;
     text-align: center;
     font-size: 12px;
     float: right;
 }
 
-.reserveInStore-reserve-modal .ris-view-on-map img {
+.ris-view-on-map img {
     display: block;
     margin: 0px auto;
     width: 3em;
 }
 
-.reserveInStore-reserve-modal .ris-view-on-map a {
+.ris-view-on-map a {
     text-decoration: underline;
     color: #adadad;
 }

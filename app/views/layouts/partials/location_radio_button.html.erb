@@ -1,0 +1,13 @@
+<%= f.collection_radio_buttons :location_id, @store.locations, :id, :name, {}, required: true do |b| %>
+  <div class="ris-location-block">
+    <%= b.radio_button %><%= b.label(class: 'ris-location-label') %>
+    <div class="ris-view-on-map">
+      <img class="img-responsive" src="<%= image_url('map_pin') %>">
+      <a href="<%= b.object.google_map_url %>" target="_blank">View on map</a>
+    </div>
+    <div class="ris-location-description">
+      <p><%= b.object.address %><br>
+        <%= b.object.city %>, <%= b.object.state %>, <%= b.object.country %>, <%= b.object.zip %></p>
+    </div>
+  </div>
+<% end %>

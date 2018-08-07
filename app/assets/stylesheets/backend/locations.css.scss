@@ -1,0 +1,31 @@
+/*
+ Gets loaded on all backend system pages
+ *= require public/reserveinstore
+*/
+
+.modal-nav-tab {
+  border-bottom: 0;
+}
+
+.modal-nav-tab .Polaris-Tabs__Title {
+  padding: 2.5rem 0 1.9rem 0;
+}
+
+.modal-tab-header {
+  padding: 0 2rem;
+}
+
+.location-preview-box {
+  font-family: 'Open Sans', sans-serif;
+  border: 1px solid black;
+  float: right;
+  width: 360px;
+  padding: 0.3rem;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.location_html_editor {
+  height: 500px;
+  width: 580px;
+}

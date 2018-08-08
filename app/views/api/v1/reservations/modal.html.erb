@@ -24,8 +24,11 @@
                   <a href="<%= b.object.google_map_url %>" target="_blank">View on map</a>
                 </div>
                 <div class="ris-location-description">
-                  <p><%= b.object.address %><br>
-                    <%= b.object.city %>, <%= b.object.state %>, <%= b.object.country %>, <%= b.object.zip %></p>
+                  <div class="ris-row">
+                    <p><%= b.object.address %><br>
+                      <%= b.object.formatted_address %></p>
+                  </div>
+                  <%= b.object.custom_html.html_safe %>
                 </div>
               </div>
             <% end %>

@@ -8,6 +8,11 @@ class LocationsController < LoggedInController
   end
 
   ##
+  # GET /locations/new
+  def new
+  end
+
+  ##
   # POST /locations
   def create
     @location = Location.new(location_params.merge(store: @current_store))

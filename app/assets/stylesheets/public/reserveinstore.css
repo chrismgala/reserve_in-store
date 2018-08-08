@@ -125,7 +125,7 @@
 }
 
 .reserveInStore-reserve-modal .ris-location-block {
-    margin-bottom: 2em;
+    margin-bottom: 1.6em;
 }
 
 .reserveInStore-reserve-modal .ris-location-block:last-child {
@@ -146,7 +146,7 @@
 }
 
 .ris-view-on-map {
-    margin-top: 2em;
+    margin-top: 1.6em;
     text-align: center;
     font-size: 12px;
     float: right;
@@ -456,3 +456,41 @@
     }
 }
 
+.ris-location-block ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* For default custom html code */
+.ris-location-block .ris-weekDays ul li:first-child {
+    padding-left: 0px;
+}
+
+.ris-location-block .ris-weekDays ul li:not(:last-child) {
+    border-right: thin solid black;
+}
+
+.ris-location-block .ris-weekDays ul li {
+    float: left;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.ris-location-block p {
+    font-size: 11px;
+    text-transform: uppercase;
+    line-height: 1.6em;
+}
+
+.ris-location-block .ris-row {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+/*// Clearfix, in case of user input floated elements*/
+.ris-location-block .ris-row:after {
+    content: " ";
+    display: block;
+    clear: both;
+}

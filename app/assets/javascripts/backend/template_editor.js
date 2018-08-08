@@ -1,31 +1,3 @@
-// var TemplateEditor = function (opts) {
-//     opts = opts || {};
-//
-//     var init = function () {
-//         initAce();
-//         // $(opts.submissionButtonSelector).click(updateFormField);
-//         // $(opts.resetButtonSelector).on('click', resetFields);
-//         // if (opts.previewContainerSelector) {
-//         //     $previewContainer = $(opts.previewContainerSelector);
-//         //     $(opts.updateButtonSelector).click(updatePreview);
-//         //     updatePreview();
-//         // }
-//         console.log("init");
-//     };
-//
-//     var initAce = function () {
-//         templateEditor = ace.edit('ace_location_editor');
-//         templateEditor.setTheme("ace/theme/monokai");
-//         templateEditor.getSession().setMode("ace/mode/html");
-//         templateEditor.getSession().setValue('<p>hello world!</p>');
-//         //stops an annoying console error
-//         templateEditor.$blockScrolling = Infinity;
-//         console.log("initAce");
-//     };
-//
-//     init();
-// };
-
 /**
  * This class utilizes ace editors for liquid template modification, and
  * implements rendering the liquid back as a view in-page
@@ -34,7 +6,7 @@
  * {string} templateFormFieldSelector, selector for the form field we will submit
  * {string} aceEditorId, selector for the ace editor field
  * {string} resetButtonSelector, selector for the reset button
- // * {string} defaultTemplateSelector, selector for the field which has .val() as the default template
+ * {string} defaultTemplateSelector, selector for the field which has .val() as the default template
  * {string} submissionButtonSelector, selector for the submit button
  * All three of these hash keys are required if you want previews, otherwise none of them are:
  * {string} [previewContainerSelector], selector for the preview container
@@ -46,7 +18,7 @@
 var TemplateEditor = function (opts) {
     opts = opts || {};
     var $templateFormField = $(opts.templateFormFieldSelector);
-    // var defaultTemplate = $(opts.defaultTemplateSelector).val();
+    var defaultTemplate = $(opts.defaultTemplateSelector).val();
     var templateEditor;
     var $previewContainer;
 

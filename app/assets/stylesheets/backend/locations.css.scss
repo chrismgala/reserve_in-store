@@ -18,14 +18,25 @@
 .location-preview-box {
   font-family: 'Open Sans', sans-serif;
   border: 1px solid black;
-  float: right;
-  width: 360px;
-  padding: 0.3rem;
+  width: 365px;
+  padding: 0.8rem;
   margin-bottom: 15px;
   border-radius: 8px;
 }
 
 .location_html_editor {
-  height: 500px;
-  width: 580px;
+  height: 250px;
 }
+
+// Clearfix, in case of user input floated elements
+#location_custom_html_preview:after {
+  content: " ";
+  display: block;
+  clear: both;
+}
+
+// Change this later, doesn't seem to be right TODO
+input[type="radio"]{
+  margin:0;
+}
+

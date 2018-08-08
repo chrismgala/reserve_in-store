@@ -10,22 +10,22 @@ var PolarisModal = function (opts) {
     this.init = function () {
         $modalContainer = $('div#' + opts.containerID);
         $form = $('#' + opts.formID);
-        this.bindShowBtn();
+        // this.bindShowBtn();
         this.bindForm();
         this.setCloseConditions();
 
     };
 
-    /**
-     * When click on the "Add New bleh" Button, show the modal
-     */
-    this.bindShowBtn = function () {
-        if (opts.showClass) {
-            $('.' + opts.showClass).on('click', function () {
-                $modalContainer.show();
-            });
-        }
-    };
+    // /**
+    //  * When click on the "Add New bleh" Button, show the modal
+    //  */
+    // this.bindShowBtn = function () {
+    //     if (opts.showClass) {
+    //         $('.' + opts.showClass).on('click', function () {
+    //             $modalContainer.show();
+    //         });
+    //     }
+    // };
 
     /**
      * When attempting to submit the form, check if it has been validated

@@ -1,13 +1,12 @@
 <div class="modal reserveInStore-modal-background">
   <div class="reserveInStore-reserve-modal">
     <div class="">
-      <link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto:300" rel="stylesheet">
+
 
       <header>
         <span class="close reserveInStore-reserve-close">&times;</span>
         <h1 class="ris-main-header">Reserve In-store</h1>
-        <p class="ris-instruction">Fill out the form below and we'll reserve the product at the
-          location you specify.</p>
+        <p class="ris-instruction"><%= @store.top_msg %></p>
         <ul class="reserveInStore-error-ul" style="display:none;"></ul>
       </header>
 
@@ -65,11 +64,18 @@
             <h2 class="ris-header-text">3. CONFIRM YOUR RESERVATION</h2>
 
             <div class="ris-product-detail">
-              <div class="ris-product-price"><%= @price %></div>
-              <div>
-                <p class="ris-text-medium"><%= @product_title %></p>
-                <p class="ris-text-small"><%= @variant_title %></p>
-              </div>
+              <% if @variant_title.present? && @variant_title != 'Default Title' %>
+                <div class="ris-product-price"><%= @price %></div>
+                <div>
+                  <p class="ris-text-medium"><%= @product_title %></p>
+                  <p class="ris-text-small"><%= @variant_title %></p>
+                </div>
+              <% else %>
+                <div class="ris-product-price" style="line-height:1.2em"><%= @price %></div>
+                <div>
+                  <p class="ris-text-medium"><%= @product_title %></p>
+                </div>
+              <% end %>
             </div>
             <p>You will receive a confirmation email after you submit your reservation.</p>
             <button type="button" class="btn reserveInStore-form-submit">Reserve now</button>

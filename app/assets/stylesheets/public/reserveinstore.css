@@ -90,13 +90,7 @@
     }
 }
 
-/*Not sure if this is useful TODO*/
 .reserveInStore-reserve-modal header {
-    padding: 0 15px;
-}
-
-/*Not sure if this is useful TODO*/
-.reserveInStore-reserve-modal footer {
     padding: 0 15px;
 }
 
@@ -122,6 +116,7 @@
     margin-bottom: 20px;
     padding-bottom: 8px;
     font-size: larger;
+    font-weight: 400;
 }
 
 .reserveInStore-reserve-modal .ris-location-block {
@@ -132,7 +127,7 @@
     margin-bottom: 0;
 }
 
-.ris-location-label {
+.ris-location-block .ris-location-label {
     display: inline-block;
     text-transform: uppercase;
     font-weight: bold;
@@ -141,26 +136,65 @@
     margin-bottom: 15px;
 }
 
-.ris-location-description {
+.ris-location-block .ris-location-description {
     padding-left: 20px;
 }
 
-.ris-view-on-map {
+.ris-location-block .ris-view-on-map {
     margin-top: 1.6em;
     text-align: center;
     font-size: 12px;
     float: right;
 }
 
-.ris-view-on-map img {
+.ris-location-block .ris-view-on-map img {
     display: block;
     margin: 0px auto;
     width: 3em;
 }
 
-.ris-view-on-map a {
+.ris-location-block.ris-view-on-map a {
     text-decoration: underline;
     color: #adadad;
+}
+
+.ris-location-block ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* For custom html code */
+.ris-location-block .ris-weekDays ul li:first-child {
+    padding-left: 0px;
+}
+
+.ris-location-block .ris-weekDays ul li:not(:last-child) {
+    border-right: thin solid black;
+}
+
+.ris-location-block .ris-weekDays ul li {
+    float: left;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.ris-location-block p {
+    font-size: 11px;
+    text-transform: uppercase;
+    line-height: 1.6em;
+}
+
+.ris-location-block .ris-row {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+/* Clearfix, in case user inputs floated elements */
+.ris-location-block .ris-row:after {
+    content: " ";
+    display: block;
+    clear: both;
 }
 
 .reserveInStore-reserve-modal .ris-contact-field {
@@ -199,7 +233,7 @@
 .reserveInStore-reserve-modal .ris-product-detail .ris-product-price {
     font-size: 1.5em;
     float: right;
-    line-height: 2.3em;
+    line-height: 2.4em;
 }
 
 .reserveInStore-form-submit {
@@ -282,7 +316,7 @@
     padding: 5px;
 }
 
-/*Success modal after submitting an In-Store reservation*/
+/* Success modal after submitting an In-Store reservation */
 .reserveInStore-success-modal {
     width: 350px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -456,41 +490,3 @@
     }
 }
 
-.ris-location-block ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-/* For default custom html code */
-.ris-location-block .ris-weekDays ul li:first-child {
-    padding-left: 0px;
-}
-
-.ris-location-block .ris-weekDays ul li:not(:last-child) {
-    border-right: thin solid black;
-}
-
-.ris-location-block .ris-weekDays ul li {
-    float: left;
-    padding-left: 14px;
-    padding-right: 14px;
-}
-
-.ris-location-block p {
-    font-size: 11px;
-    text-transform: uppercase;
-    line-height: 1.6em;
-}
-
-.ris-location-block .ris-row {
-    margin-top: 0;
-    margin-bottom: 8px;
-}
-
-/*// Clearfix, in case of user input floated elements*/
-.ris-location-block .ris-row:after {
-    content: " ";
-    display: block;
-    clear: both;
-}

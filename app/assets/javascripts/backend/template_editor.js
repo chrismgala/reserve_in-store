@@ -1,6 +1,6 @@
 /**
- * This class utilizes ace editors for liquid template modification, and
- * implements rendering the liquid back as a view in-page
+ * This class utilizes ace editors for HTML template modification, and
+ * implements rendering the HTML back as a view in-page
  *
  * Construct with the following hash:
  * {string} templateFormFieldSelector, selector for the form field we will submit
@@ -26,11 +26,11 @@ var TemplateEditor = function (opts) {
      */
     var init = function () {
         initAce();
-        $(opts.submissionButtonSelector).click(updateFormField); // TODO change to jQuery on click
+        $(opts.submissionButtonSelector).on('click', updateFormField);
         $(opts.resetButtonSelector).on('click', resetFields);
         if (opts.previewContainerSelector) {
             $previewContainer = $(opts.previewContainerSelector);
-            $(opts.updateButtonSelector).click(updatePreview); // TODO change to jQuery on click
+            $(opts.updateButtonSelector).on('click', updatePreview);
             updatePreview();
         }
     };
@@ -70,7 +70,7 @@ var TemplateEditor = function (opts) {
     var resetFields = function (e) {
         //needed to stop link from doing anything
         e.preventDefault();
-        templateEditor.getSession().setValue(defaultTemplate, -1); // TODO reset default Template value
+        templateEditor.getSession().setValue(defaultTemplate, -1);
         updatePreview();
     };
 

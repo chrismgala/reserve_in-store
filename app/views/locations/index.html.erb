@@ -4,9 +4,7 @@
       <div class="Polaris-Stack">
         <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
         <div class="Polaris-Stack__Item">
-<!--          <button type="button" class="Polaris-Button Polaris-Button--primary">-->
-            <%= link_to 'Add New Location', new_location_path, class: 'Polaris-Button Polaris-Button--primary' %>
-<!--            <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>-->
+          <%= link_to 'Add New Location', new_location_path, class: 'Polaris-Button Polaris-Button--primary' %>
         </div>
       </div>
       <br>
@@ -103,19 +101,12 @@
           </p>
         </div>
         <div class="Polaris-Stack__Item">
-<!--          TODO Test this!!-->
-<!--          <button type="button" class="Polaris-Button Polaris-Button--primary location-modal-show">-->
-<!--            <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>-->
           <%= link_to 'Add New Location', new_location_path, class: 'Polaris-Button Polaris-Button--primary' %>
         </div>
       </div>
     <% end %>
   </div>
 </div>
-
-
-<!-- TODO Modal -->
-<%#= render partial: 'modal', locals: {action: 'new', location: :location} %>
 
 <script>
     polarisTableHeaderHeightFix();

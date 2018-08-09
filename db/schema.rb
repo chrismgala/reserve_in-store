@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_07_200804) do
+ActiveRecord::Schema.define(version: 2018_08_09_203420) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 2018_08_07_200804) do
     t.string "public_key"
     t.string "secret_key"
     t.string "name"
-    t.text "top_msg"
+    t.text "top_msg", default: "Fill out the form below and we'll reserve the product at the location you specify."
     t.text "success_msg"
     t.text "email_template"
     t.boolean "show_phone", default: true

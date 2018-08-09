@@ -11,12 +11,12 @@ ReserveInStore.ReservationCreator = function (opts) {
      * Get product id/title and variant id/title, then make API call and display the modal
      */
     self.displayModal = function () {
-        var productVariantTitles = self.setProductAndVariantId();
-        api.getModal(productVariantTitles, self.insertModal);
+        var selectedProductInfo = self.setProductAndVariantId();
+        api.getModal(selectedProductInfo, self.insertModal);
     };
 
     /**
-     * Set Product ID/Title and Variant Id/Title
+     * Set Product ID and Variant Id, return product title, variant title and price to be used in modal
      * @returns {object} Product title, variant title and price, in the form of {product_title: "bleh", variant_title: "bleh", price: "bleh"}
      */
     self.setProductAndVariantId = function () {

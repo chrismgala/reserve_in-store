@@ -5,20 +5,17 @@ class Location < ActiveRecord::Base
   validates :name, :email, presence: true
   validates_associated :store
 
+  PERMITTED_PARAMS = [:name, :email, :address, :country, :state, :city, :phone, :zip, :custom_html]
+
   ##
-  # TODO rdoc
+  # @return [String] Google Map url searching for current store's location
   def google_map_url
     'https://www.google.com/maps/search/?api=1&query=' + URI.encode(address + ' ' + city + ' ' + state + ' ' + country + ' ' + zip)
   end
 
   ##
-  # TODO rdoc
-  def self.default_custom_html
-    ''
-  end
-
-  ##
-  # TODO rdoc
+  # Filter out empty address fields, and returns a string containing city, state, country and postal code.
+  # @return [String] in the form of 'City, State, Country, ZIP/Postal code'
   def formatted_address
     [city, state, country, zip].reject { |c| c.empty? }.join(', ')
   end

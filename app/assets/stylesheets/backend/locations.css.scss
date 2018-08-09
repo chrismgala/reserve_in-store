@@ -1,19 +1,8 @@
 /*
- Gets loaded on all backend system pages
+ To style the preview modal TODO may seperate the CSS related to radio button
+ *= require_self
  *= require public/reserveinstore
 */
-
-.modal-nav-tab {
-  border-bottom: 0;
-}
-
-.modal-nav-tab .Polaris-Tabs__Title {
-  padding: 2.5rem 0 1.9rem 0;
-}
-
-.modal-tab-header {
-  padding: 0 2rem;
-}
 
 .location-preview-box {
   font-family: 'Open Sans', sans-serif;
@@ -22,6 +11,12 @@
   padding: 0.8rem;
   margin-bottom: 15px;
   border-radius: 8px;
+}
+
+.location-preview-box * {
+  box-sizing: border-box;
+  margin: 0;
+  color: #000000;
 }
 
 .location_html_editor {
@@ -33,10 +28,5 @@
   content: " ";
   display: block;
   clear: both;
-}
-
-// Change this later, doesn't seem to be right TODO
-input[type="radio"]{
-  margin:0;
 }
 

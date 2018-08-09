@@ -66,7 +66,7 @@ class LocationsController < LoggedInController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def location_params
-    params.fetch(:location, {}).permit(:name, :email, :address, :country, :state, :city, :phone, :zip, :custom_html)
+    params.fetch(:location, {}).permit(Location::PERMITTED_PARAMS)
   end
 
 end

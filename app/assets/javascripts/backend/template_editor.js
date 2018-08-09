@@ -11,7 +11,6 @@
  * All three of these hash keys are required if you want previews, otherwise none of them are:
  * {string} [previewContainerSelector], selector for the preview container
  * {string} [updateButtonSelector], selector for the preview update button
- // * {hash} [templateRenderParameters], hash which contains the parameters for rendering the liquid into the preview
  *
  * @param {object} [opts] - An optional hash used for setup, as described above.
  */
@@ -57,20 +56,13 @@ var TemplateEditor = function (opts) {
     };
 
     /**
-     * Update our preview by first validating the liquid, then rendering it into the preview container
+     * Update our preview by render the HTML into the preview container
      */
     var updatePreview = function () {
         updateFormField();
-        // $templateFormField.parsley().validate(); // TODO not validating
-        if (true || $templateFormField.parsley().isValid()) {
-            // TODO delete later this regex gsub, cuz we are not using Liquid
-            // Need to regex out the whitespace removal delimiter because liquid.js doesn't like them.
-            // var templateHTML = $templateFormField.val().replace(new RegExp(/\s*({%-)/g, 'g'), '{%').replace(new RegExp(/(-%})\s*/, 'g'), '%}');
-            var templateHTML = $templateFormField.val();
-            // $previewContainer.html(Liquid.parse(templateHTML).render(opts.templateRenderParameters)); // TODO Ummm not sure what to do
-            $previewContainer.html(templateHTML);
-        }
+        $previewContainer.html($templateFormField.val());
     };
+
 
     /**
      * Shove the default template into the template editor, then update the preview to match it

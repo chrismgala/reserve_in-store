@@ -22,7 +22,7 @@
                         </div>
                       </div>
                       <div class="Polaris-TextField">
-                        <%= f.text_area :top_msg, class: 'Polaris-TextField__Input' %>
+                        <textarea class="Polaris-TextField__Input" name="store[top_msg]" id="store_top_msg" placeholder="Default to &quot;Fill out the form below and we'll reserve the product at the location you specify.&quot;"><%= f.object.attributes['top_msg'] %></textarea>
                         <div class="Polaris-TextField__Backdrop"></div>
                       </div>
                     </div>

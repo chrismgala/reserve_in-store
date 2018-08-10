@@ -7,6 +7,10 @@ class Store < ActiveRecord::Base
 
   PERMITTED_PARAMS = [:top_msg, :success_msg, :email_template, :show_phone, :show_instructions_from_customer]
 
+  def top_msg
+    attributes['top_msg'].presence || "Fill out the form below and we'll reserve the product at the location you specify."
+  end
+
   ##
   # Display a product's price, check which currency the store is using, and render a string
   #

@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 2018_08_07_200804) do
     t.string "public_key"
     t.string "secret_key"
     t.string "name"
-    t.text "top_msg", default: "Fill out the form below and we'll reserve the product at the location you specify."
+    t.text "top_msg"
     t.text "success_msg"
     t.text "email_template"
     t.boolean "show_phone", default: true

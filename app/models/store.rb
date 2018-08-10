@@ -8,7 +8,7 @@ class Store < ActiveRecord::Base
   PERMITTED_PARAMS = [:top_msg, :success_msg, :email_template, :show_phone, :show_instructions_from_customer]
 
   ##
-  # Display a product's price, check which currency the store is using, and then render a string
+  # Display a product's price, check which currency the store is using, and render a string
   #
   # @param [String] money_amount "10.00"
   # @return [String] Price in the form of "$10.00"

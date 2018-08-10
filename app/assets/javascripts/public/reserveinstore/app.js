@@ -32,6 +32,9 @@ ReserveInStore.App = function(opts) {
 
             var $reserveBtnContainer = $addToCartBtn.parent().find('.reserveInStore-btn-container');
 
+            // TODO not sure
+            $reserveBtnContainer.find('.reserveInStore-btn').addClass($addToCartBtn.attr('class'));
+
             setButtonWidth($reserveBtnContainer.find('.reserveInStore-btn'), $addToCartBtn);
 
             $reserveBtnContainer.on('click', function(event) {

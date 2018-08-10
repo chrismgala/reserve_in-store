@@ -229,6 +229,7 @@
     border: 1px solid #323232;
     background-color: white;
     width: 100%;
+    padding: 8px 20px;
 }
 
 .reserveInStore-reserve-modal .ris-contact-field input:last-child {
@@ -267,6 +268,10 @@
 
 .reserveInStore-reserve-modal .ris-text-medium {
     font-size: 1.1em;
+}
+
+.reserveInStore-reserve-modal .ris-text-large {
+    font-size: 1.2em;
 }
 
 .reserveInStore-reserve-modal .ris-text-block {

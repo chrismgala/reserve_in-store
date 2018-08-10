@@ -54,13 +54,13 @@
             <% if @variant_title.present? && @variant_title != 'Default Title' %>
               <div class="ris-product-price"><%= @price %></div>
               <div>
-                <p class="ris-text-medium"><%= @product_title %></p>
-                <p class="ris-text-small"><%= @variant_title %></p>
+                <p class="ris-text-large"><%= @product_title %></p>
+                <p class="ris-text-medium"><%= @variant_title %></p>
               </div>
             <% else %>
               <div class="ris-product-price" style="line-height:1.2em"><%= @price %></div>
               <div>
-                <p class="ris-text-medium"><%= @product_title %></p>
+                <p class="ris-text-large"><%= @product_title %></p>
               </div>
             <% end %>
           </div>

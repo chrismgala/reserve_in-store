@@ -1,0 +1,257 @@
+<div class="Polaris-Page">
+  <div class="Polaris-Page__Header Polaris-Page__Header--hasPagination Polaris-Page__Header--hasBreadcrumbs Polaris-Page__Header--hasRollup Polaris-Page__Header--hasSecondaryActions">
+    <div class="Polaris-Page__Navigation">
+      <nav role="navigation">
+        <a class="Polaris-Breadcrumbs__Breadcrumb" data-polaris-unstyled="true" href="<%= locations_path %>"><span class="Polaris-Breadcrumbs__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M12 16a.997.997 0 0 1-.707-.293l-5-5a.999.999 0 0 1 0-1.414l5-5a.999.999 0 1 1 1.414 1.414L8.414 10l4.293 4.293A.999.999 0 0 1 12 16" fill-rule="evenodd"></path></svg></span></span><span class="Polaris-Breadcrumbs__Content">Locations</span></a>
+      </nav>
+    </div>
+    <div class="Polaris-Page__MainContent">
+      <div class="Polaris-Page__TitleAndActions">
+        <div class="Polaris-Page__Title">
+          <h1 class="Polaris-DisplayText Polaris-DisplayText--sizeLarge"><%= action == 'update' ? 'Edit' : 'Add' %>
+            location</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="Polaris-Page__Content">
+    <%= form_for location, url: {action: action}, html: {id: "location-form"} do |f| %>
+      <div class="Polaris-Layout">
+
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Location overview</h2>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label :name, class: 'Polaris-Label__Text' %>
+                        </div>
+                      </div>
+                      <div class="Polaris-TextField">
+                        <%= f.text_field :name, class: 'Polaris-TextField__Input', required: true %>
+                        <div class="Polaris-TextField__Backdrop"></div>
+                      </div>
+                    </div>
+
+                    <div role="group" class="Polaris-FormLayout--condensed">
+                      <div class="Polaris-FormLayout__Items">
+                        <div class="Polaris-FormLayout__Item">
+                          <div class="Polaris-Labelled__LabelWrapper">
+                            <div class="Polaris-Label">
+                              <%= f.label :email, class: 'Polaris-Label__Text' %>
+                            </div>
+                          </div>
+                          <div class="Polaris-TextField">
+                            <%= f.email_field :email, class: 'Polaris-TextField__Input', required: true, 'data-parsley-type': 'email' %>
+                            <div class="Polaris-TextField__Backdrop"></div>
+                          </div>
+                        </div>
+                        <div class="Polaris-FormLayout__Item">
+                          <div class="Polaris-Labelled__LabelWrapper">
+                            <div class="Polaris-Label">
+                              <%= f.label :phone, 'Phone number', class: 'Polaris-Label__Text' %>
+                            </div>
+                          </div>
+                          <div class="Polaris-TextField">
+                            <%= f.text_field :phone, class: 'Polaris-TextField__Input' %>
+                            <div class="Polaris-TextField__Backdrop"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Address</h2>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label :address, class: 'Polaris-Label__Text' %>
+                        </div>
+                      </div>
+                      <div class="Polaris-TextField">
+                        <%= f.text_field :address, class: 'Polaris-TextField__Input' %>
+                        <div class="Polaris-TextField__Backdrop"></div>
+                      </div>
+                    </div>
+
+                    <div role="group" class="Polaris-FormLayout--condensed">
+                      <div class="Polaris-FormLayout__Items">
+                        <div class="Polaris-FormLayout__Item">
+                          <div class="Polaris-Labelled__LabelWrapper">
+                            <div class="Polaris-Label">
+                              <%= f.label :city, class: 'Polaris-Label__Text' %>
+                            </div>
+                          </div>
+                          <div class="Polaris-TextField">
+                            <%= f.text_field :city, class: 'Polaris-TextField__Input' %>
+                            <div class="Polaris-TextField__Backdrop"></div>
+                          </div>
+                        </div>
+                        <div class="Polaris-FormLayout__Item">
+                          <div class="Polaris-Labelled__LabelWrapper">
+                            <div class="Polaris-Label">
+                              <%= f.label :zip, 'ZIP/Postal code', class: 'Polaris-Label__Text' %>
+                            </div>
+                          </div>
+                          <div class="Polaris-TextField">
+                            <%= f.text_field :zip, class: 'Polaris-TextField__Input' %>
+                            <div class="Polaris-TextField__Backdrop"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div role="group" class="Polaris-FormLayout--condensed">
+                      <div class="Polaris-FormLayout__Items">
+                        <div class="Polaris-FormLayout__Item">
+                          <div class="Polaris-Labelled__LabelWrapper">
+                            <div class="Polaris-Label">
+                              <%= f.label :country, class: 'Polaris-Label__Text' %>
+                            </div>
+                          </div>
+                          <div class="Polaris-Select">
+                            <select class="Polaris-Select__Input crs-country" data-region-id="location-region-select" data-default-value="<%= location.country if action == 'update' %>" required="required" name="location[country]"></select>
+                            <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
+                            </div>
+                            <div class="Polaris-Select__Backdrop"></div>
+                          </div>
+                        </div>
+                        <div class="Polaris-FormLayout__Item">
+                          <div class="Polaris-Labelled__LabelWrapper">
+                            <div class="Polaris-Label">
+                              <%= f.label :state, class: 'Polaris-Label__Text' %>
+                            </div>
+                          </div>
+                          <div class="Polaris-Select">
+                            <select class="Polaris-Select__Input" id="location-region-select" data-default-value="<%= location.state if action == 'update' %>" required="required" name="location[state]"></select>
+                            <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
+                            </div>
+                            <div class="Polaris-Select__Backdrop"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Edit display</h2>
+                <p>Customize the appearance of your location select radio button using HTML/CSS.</p>
+                <div>
+                  <button id="location_editor_update_btn" type="button" class="Polaris-Button">Update Preview</button>
+                </div>
+                <div>
+                  <a href="#" id="location_editor_reset_btn">Reset</a>
+                </div>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label :custom_html_preview, class: 'Polaris-Label__Text' do %>
+                            Radio button preview
+                          <% end %>
+                        </div>
+                      </div>
+                      <div class="location-preview-box">
+                        <% if location.is_a? Symbol %>
+                          <%= render partial: 'layouts/partials/location_radio_button', locals: {input_radio_button: '<input type="radio" value="0" name="reservation[location_id]" id="reservation_location_id_0">'.html_safe,
+                                                                                                 name: 'Example location', map_url: 'https://www.google.ca/maps/', address: 'Example Address',
+                                                                                                 formatted_address: 'City, State, Country, ZIP/Postal code', custom_html: '<div id="location_custom_html_preview"></div>'} %>
+                        <% else %>
+                          <%= render partial: 'layouts/partials/location_radio_button', locals: {input_radio_button: '<input type="radio" value="0" name="reservation[location_id]" id="reservation_location_id_0">'.html_safe,
+                                                                                                 name: location.name, map_url: location.google_map_url, address: location.address,
+                                                                                                 formatted_address: location.formatted_address, custom_html: '<div id="location_custom_html_preview"></div>'} %>
+                        <% end %>
+                      </div>
+                    </div>
+
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label :custom_html, class: "Polaris-Label__Text" do %>
+                            HTML/CSS Editor
+                          <% end %>
+                        </div>
+                      </div>
+                      <div id="ace_location_editor" class="location_html_editor"></div>
+                      <textarea style="display: none" id="default_location_html"></textarea>
+                      <%= f.text_area :custom_html, {style: "display: none;"} %>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="Polaris-Layout__Section">
+          <div class="Polaris-PageActions">
+            <div class="Polaris-Stack Polaris-Stack--spacingTight Polaris-Stack--distributionTrailing">
+              <div class="Polaris-Stack__Item">
+                <button type="submit" class="Polaris-Button Polaris-Button--primary" id="location-submit">
+                  <span class="Polaris-Button__Content"><span>Save</span></span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+
+  <script>
+      window.crs.init();
+      var locationHtmlEditor = new TemplateEditor({
+          templateFormFieldSelector: '#location_custom_html',
+          aceEditorId: 'ace_location_editor',
+          resetButtonSelector: '#location_editor_reset_btn',
+          updateButtonSelector: '#location_editor_update_btn',
+          defaultTemplateSelector: "#default_location_html",
+          previewContainerSelector: '#location_custom_html_preview',
+          submissionButtonSelector: '#location-submit'
+      });
+  </script>
+</div>

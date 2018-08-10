@@ -11,22 +11,22 @@ ReserveInStore.ReservationCreator = function (opts) {
      * Get product id/title and variant id/title, then make API call and display the modal
      */
     self.displayModal = function () {
-        var productVariantTitles = self.setProductAndVariantId();
-        api.getModal(productVariantTitles, self.insertModal);
+        var selectedProductInfo = self.setProductAndVariantId();
+        api.getModal(selectedProductInfo, self.insertModal);
     };
 
     /**
-     * Set Product ID/Title and Variant Id/Title
-     * @returns {object} Product and variant titles, in the form of {product_title: "bleh", variant_title: "bleh"}
+     * Set Product ID and Variant Id, return product title, variant title and price to be used in modal
+     * @returns {object} Product title, variant title and price, in the form of {product_title: "bleh", variant_title: "bleh", price: "bleh"}
      */
     self.setProductAndVariantId = function () {
         setVariantID();
         variantId = variantId || opts.product.variants[0].id;
-        var variantTitle = $.grep(opts.product.variants, function (obj) {
+        var variant = $.grep(opts.product.variants, function (obj) {
             return obj.id === variantId;
-        })[0].title;
+        })[0];
         productId = opts.product.id;
-        return {product_title: opts.product.title, variant_title: variantTitle};
+        return {product_title: opts.product.title, variant_title: variant.title, price: variant.price};
     };
 
     /**
@@ -144,7 +144,7 @@ ReserveInStore.ReservationCreator = function (opts) {
         } else {
             errorMessages += "<li>An unknown error occurred.</li>";
         }
-        $form.find(".reserveInStore-error-ul").html(errorMessages).show();
+        $reserveModal.find(".reserveInStore-error-ul").html(errorMessages).show();
     };
 
     /**

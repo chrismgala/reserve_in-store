@@ -60,8 +60,7 @@ class ReservationsController < LoggedInController
   # Never trust parameters from the scary internet, only allow the white list through.
   def reservation_params
     # params.fetch(:reservation, {}).require(:name, :email).permit(:address, :country, :state, :city, :phone)
-    params.fetch(:reservation, {}).permit(:customer_name, :customer_email, :customer_phone, :location_id,
-                                          :platform_product_id, :platform_variant_id, :comments, :fulfilled)
+    params.fetch(:reservation, {}).permit(Reservation::PERMITTED_PARAMS)
   end
 
 end

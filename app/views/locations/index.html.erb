@@ -4,8 +4,7 @@
       <div class="Polaris-Stack">
         <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
         <div class="Polaris-Stack__Item">
-          <button type="button" class="Polaris-Button Polaris-Button--primary location-modal-show">
-            <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>
+          <%= link_to 'Add New Location', new_location_path, class: 'Polaris-Button Polaris-Button--primary' %>
         </div>
       </div>
       <br>
@@ -65,7 +64,7 @@
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.email %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.phone %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim', remote: true %>
+                      <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim' %>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: {confirm: "Are you sure? Deleting this location will also delete all its locations."} %>
@@ -102,20 +101,12 @@
           </p>
         </div>
         <div class="Polaris-Stack__Item">
-          <button type="button" class="Polaris-Button Polaris-Button--primary location-modal-show">
-            <span class="Polaris-Button__Content"><span>Add New Location</span></span></button>
+          <%= link_to 'Add New Location', new_location_path, class: 'Polaris-Button Polaris-Button--primary' %>
         </div>
       </div>
     <% end %>
   </div>
 </div>
-
-
-<!--Edit Modal-->
-<div id="location-edit-modal" style="display:none;"></div>
-
-<!-- Modal -->
-<%= render partial: 'modal', locals: {action: 'new', location: :location} %>
 
 <script>
     polarisTableHeaderHeightFix();

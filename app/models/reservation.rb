@@ -6,6 +6,9 @@ class Reservation < ActiveRecord::Base
   validates_associated :store, :location
   validates :customer_email, format: /\A[^@\s]+@[^@\s]+\z/
 
+  PERMITTED_PARAMS = [:customer_name, :customer_email, :customer_phone, :location_id,
+                      :platform_product_id, :platform_variant_id, :instructions_from_customer, :fulfilled]
+
   ##
   # @return [ShopifyAPI::Product|NilClass] nil if not product available, otherwise the shopify product model
   def shopify_product

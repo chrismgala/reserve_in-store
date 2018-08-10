@@ -5,6 +5,23 @@ class Store < ActiveRecord::Base
 
   before_create :generate_keys
 
+  PERMITTED_PARAMS = [:top_msg, :success_msg, :email_template, :show_phone, :show_instructions_from_customer]
+
+  def top_msg
+    attributes['top_msg'].presence || "Fill out the form below and we'll reserve the product at the location you specify."
+  end
+
+  ##
+  # Display a product's price, check which currency the store is using, and render a string
+  #
+  # @param [String] money_amount "10.00"
+  # @return [String] Price in the form of "$10.00"
+  def price(money_amount)
+    ShopifyAPI::Session.temp(shopify_domain, shopify_token) {
+      ShopifyAPI::Shop.current.attributes['money_format'].gsub('{{amount}}', money_amount);
+    }
+  end
+
   private
 
   ##

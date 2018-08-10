@@ -1,50 +1,90 @@
 <div class="modal reserveInStore-modal-background">
   <div class="reserveInStore-reserve-modal">
-    <div class="modal-header reserveInStore-modal-header">
+
+    <header>
       <span class="close reserveInStore-reserve-close">&times;</span>
-      <h4 class="modal-title reserveInStore-modal-title"><%= @store.top_msg %><br>
-        <% if @product_title.present? %>
-          Fill out this form, and the product <%= @product_title %>
-          <% if @variant_title.present? && @variant_title != 'Default Title' %>
-            (<%= @variant_title %>)
+      <h1 class="ris-main-header">Reserve In-store</h1>
+      <p class="ris-instruction"><%= @store.top_msg %></p>
+      <ul class="reserveInStore-error-ul" style="display:none;"></ul>
+    </header>
+
+    <%= form_for :reservation, remote: true, html: {class: 'reserveInStore-reservation-form'} do |f| %>
+      <section class="ris-columns">
+
+        <div class="ris-column">
+          <h2 class="ris-header-text">1. SELECT A LOCATION:</h2>
+          <%= f.collection_radio_buttons :location_id, @store.locations, :id, :name, {}, required: true do |b| %>
+            <%= render partial: 'layouts/partials/location_radio_button', locals: {input_radio_button: b.radio_button,
+                                      name: b.object.name, map_url: b.object.google_map_url, address: b.object.address,
+                                      formatted_address: b.object.formatted_address, custom_html: b.object.custom_html} %>
           <% end %>
-          will be reserved for you at selected location.
-        <% end %>
-      </h4>
-    </div>
+        </div>
 
-    <div class="modal-body reserveInStore-modal-body">
-      <%= form_for :reservation, remote: true, html: {class: 'reserveInStore-reservation-form'} do |f| %>
-        <ul class="reserveInStore-error-ul" style="display:none;"></ul>
-        <%= f.label :location %>
-        <% if @store.locations.count == 1 %>
-          <%= f.hidden_field :location_id, :value => @store.locations.first.id %>
-          <input value="<%= @store.locations.first.name %>" readonly="readonly" type="text">
-        <% else %>
-          <%= f.select :location_id, @store.locations.collect {|p| [p.name, p.id]}, {include_blank: true}, required: true %>
-        <% end %>
+        <div class="ris-column">
+          <h2 class="ris-header-text">2. ENTER YOUR CONTACT INFO</h2>
+          <div class="ris-contact-field">
+            <%= f.label 'Your email' %>
+            <%= f.email_field :customer_email, required: true %>
+          </div>
 
-        <%= f.label :name %>
-        <%= f.text_field :customer_name, required: true %>
+          <div class="ris-contact-field">
+            <%= f.label 'Your name' %>
+            <%= f.text_field :customer_name, required: true %>
+          </div>
 
-        <%= f.label :email %>
-        <%= f.email_field :customer_email, required: true %>
+          <% if @store.show_phone %>
+            <div class="ris-contact-field">
+              <%= f.label 'Your contact number' %>
+              <%= f.text_field :customer_phone %>
+            </div>
+          <% end %>
 
-        <% if @store.show_phone %>
-          <%= f.label :phone %>
-          <%= f.text_field :customer_phone %>
-        <% end %>
+          <% if @store.show_instructions_from_customer %>
+            <div class="ris-contact-field">
+              <%= f.label 'What data/time would you like it held for?' %>
+              <%= f.text_field :instructions_from_customer %>
+            </div>
+          <% end %>
+        </div>
 
-        <% if @store.show_comments %>
-          <%= f.label 'Questions/Comments' %>
-          <%= f.text_field :comments %>
-        <% end %>
-      <% end %>
-    </div>
+        <div class="ris-column">
+          <h2 class="ris-header-text">3. CONFIRM YOUR RESERVATION</h2>
 
-    <div class="modal-footer reserveInStore-modal-footer">
-      <button type="button" class="btn reserveInStore-form-submit">Reserve</button>
-    </div>
+          <div class="ris-product-detail">
+            <% if @variant_title.present? && @variant_title != 'Default Title' %>
+              <div class="ris-product-price"><%= @price %></div>
+              <div>
+                <p class="ris-text-large"><%= @product_title %></p>
+                <p class="ris-text-medium"><%= @variant_title %></p>
+              </div>
+            <% else %>
+              <div class="ris-product-price" style="line-height:1.2em"><%= @price %></div>
+              <div>
+                <p class="ris-text-large"><%= @product_title %></p>
+              </div>
+            <% end %>
+          </div>
+          <p>You will receive a confirmation email after you submit your reservation.</p>
+          <button type="button" class="reserveInStore-form-submit">Reserve now</button>
+          <br>
+          <div class="ris-text-block">
+            <p class="ris-text-medium">FREQUENTLY ASKED QUESTIONS:</p>
+          </div>
+          <div class="ris-text-block">
+            <p class="ris-text-medium">How does reserve in-store work?</p>
+            <p class="ris-text-small">Reserve and Pick Up allows you to put your product on hold with ease! No
+              hassles, no commitments! You should receive an email confirmation within 24 hours.</p>
+          </div>
+          <div class="ris-text-block">
+            <p class="ris-text-medium">What happens if I don't pick up my item?</p>
+            <p class="ris-text-small">If you do not pickup your product within the time specified in this reservation
+              then it may be sold to another customer. We recommend you give the store location a call to let them
+              know that you need more time or if you need to cancel your reservation.</p>
+          </div>
+        </div>
+
+      </section>
+    <% end %>
   </div>
 
   <div class="reserveInStore-success-modal reserveInStore-center" style="display: none;">

@@ -1,0 +1,32 @@
+/*
+ To style the preview radio button
+ *= require_self
+ *= require public/reserveinstore
+*/
+
+.location-preview-box {
+  font-family: 'Open Sans', sans-serif;
+  border: 1px solid black;
+  width: 365px;
+  padding: 0.8rem;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.location-preview-box * {
+  box-sizing: border-box;
+  margin: 0;
+  color: #000000;
+}
+
+.location_html_editor {
+  height: 250px;
+}
+
+// Clearfix, in case of user input floated elements
+#location_custom_html_preview:after {
+  content: " ";
+  display: block;
+  clear: both;
+}
+

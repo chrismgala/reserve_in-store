@@ -8,6 +8,11 @@ class LocationsController < LoggedInController
   end
 
   ##
+  # GET /locations/new
+  def new
+  end
+
+  ##
   # POST /locations
   def create
     @location = Location.new(location_params.merge(store: @current_store))
@@ -61,7 +66,7 @@ class LocationsController < LoggedInController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def location_params
-    params.fetch(:location, {}).permit(:name, :email, :address, :country, :state, :city, :phone, :zip)
+    params.fetch(:location, {}).permit(Location::PERMITTED_PARAMS)
   end
 
 end

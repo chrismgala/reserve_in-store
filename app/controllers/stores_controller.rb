@@ -26,7 +26,7 @@ class StoresController < LoggedInController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def store_params
-    params.fetch(:store, {}).permit(:top_msg, :success_msg, :email_template, :show_phone, :show_comments)
+    params.fetch(:store, {}).permit(Store::PERMITTED_PARAMS)
   end
 
 end

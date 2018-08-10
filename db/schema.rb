@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_17_190619) do
+ActiveRecord::Schema.define(version: 2018_08_07_200804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_190619) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "zip"
+    t.text "custom_html"
     t.index ["store_id"], name: "index_locations_on_store_id"
   end
 
@@ -38,7 +39,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_190619) do
     t.string "customer_phone"
     t.string "platform_product_id"
     t.string "platform_variant_id"
-    t.text "comments"
+    t.text "instructions_from_customer"
     t.boolean "fulfilled", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -59,7 +60,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_190619) do
     t.text "success_msg"
     t.text "email_template"
     t.boolean "show_phone", default: true
-    t.boolean "show_comments", default: true
+    t.boolean "show_instructions_from_customer", default: true
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

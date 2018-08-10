@@ -8,6 +8,7 @@ module Api
       def modal
         @product_title = params[:product_title]
         @variant_title = params[:variant_title]
+        @price = @store.price('%.2f' % (params[:price].to_f / 100))
       end
 
       ##
@@ -24,8 +25,7 @@ module Api
       private
 
       def reservation_params
-        params.fetch(:reservation, {}).permit(:customer_name, :customer_email, :customer_phone, :location_id,
-                                                                     :platform_product_id, :platform_variant_id, :comments, :fulfilled)
+        params.fetch(:reservation, {}).permit(Reservation::PERMITTED_PARAMS - [:fulfilled])
       end
 
     end

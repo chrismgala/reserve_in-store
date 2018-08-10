@@ -22,7 +22,7 @@
                         </div>
                       </div>
                       <div class="Polaris-TextField">
-                        <%= f.text_area :top_msg, class: 'Polaris-TextField__Input' %>
+                        <textarea class="Polaris-TextField__Input" name="store[top_msg]" id="store_top_msg" placeholder="Default to &quot;Fill out the form below and we'll reserve the product at the location you specify.&quot;"><%= f.object.attributes['top_msg'] %></textarea>
                         <div class="Polaris-TextField__Backdrop"></div>
                       </div>
                     </div>
@@ -52,14 +52,14 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="Polaris-Choice__Label">Phone</div>
+                              <div class="Polaris-Choice__Label">Phone number</div>
                             </label>
                           </li>
                           <li>
-                            <label class="Polaris-Choice" for="store_show_comments">
+                            <label class="Polaris-Choice" for="store_show_instructions_from_customer">
                               <div class="Polaris-Choice__Control">
                                 <div class="Polaris-Checkbox">
-                                  <%= f.check_box :show_comments, class: 'Polaris-Checkbox__Input' %>
+                                  <%= f.check_box :show_instructions_from_customer, class: 'Polaris-Checkbox__Input' %>
                                   <div class="Polaris-Checkbox__Backdrop"></div>
                                   <div class="Polaris-Checkbox__Icon">
                                   <span class="Polaris-Icon">
@@ -72,7 +72,7 @@
                                   </div>
                                 </div>
                               </div>
-                              <div class="Polaris-Choice__Label">Comments</div>
+                              <div class="Polaris-Choice__Label">Preferred date & time</div>
                             </label>
                           </li>
                         </ul>

@@ -196,9 +196,13 @@
                       </div>
                       <div class="location-preview-box">
                         <% if location.is_a? Symbol %>
-                          <%= render partial: 'layouts/partials/location_radio_button', locals: {name: 'Example location', map_url: 'https://www.google.ca/maps/', address: 'Example Address', formatted_address: 'City, State, Country, ZIP/Postal code'} %>
+                          <%= render partial: 'layouts/partials/location_radio_button', locals: {input_radio_button: '<input type="radio" value="0" name="reservation[location_id]" id="reservation_location_id_0">'.html_safe,
+                                                                                                 name: 'Example location', map_url: 'https://www.google.ca/maps/', address: 'Example Address',
+                                                                                                 formatted_address: 'City, State, Country, ZIP/Postal code', custom_html: '<div id="location_custom_html_preview"></div>'} %>
                         <% else %>
-                          <%= render partial: 'layouts/partials/location_radio_button', locals: {name: location.name, map_url: location.google_map_url, address: location.address, formatted_address: location.formatted_address} %>
+                          <%= render partial: 'layouts/partials/location_radio_button', locals: {input_radio_button: '<input type="radio" value="0" name="reservation[location_id]" id="reservation_location_id_0">'.html_safe,
+                                                                                                 name: location.name, map_url: location.google_map_url, address: location.address,
+                                                                                                 formatted_address: location.formatted_address, custom_html: '<div id="location_custom_html_preview"></div>'} %>
                         <% end %>
                       </div>
                     </div>

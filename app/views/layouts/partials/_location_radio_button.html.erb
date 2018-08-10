@@ -1,7 +1,7 @@
 <div class="ris-location-block">
-  <input type="radio" value="0" name="reservation[location_id]" id="reservation_location_id_0"><label class="ris-location-label" for="reservation_location_id_0"><%= name %></label>
+  <%= input_radio_button %><label class="ris-location-label" for="reservation_location_id_0"><%= name %></label>
   <div class="ris-view-on-map">
-    <img class="img-responsive" src="<%= image_path('map_pin') %>">
+    <img class="img-responsive" src="<%= image_url('map_pin') %>">
     <a href="<%= map_url %>" target="_blank">View on map</a>
   </div>
   <div class="ris-location-description">
@@ -9,7 +9,7 @@
       <p><%= address %><br>
         <%= formatted_address %></p>
     </div>
-    <div id="location_custom_html_preview"></div>
+    <%= custom_html.html_safe %>
   </div>
 </div>
 

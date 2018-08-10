@@ -31,11 +31,10 @@ ReserveInStore.App = function(opts) {
             var reservationCreator = new ReserveInStore.ReservationCreator(opts);
 
             var $reserveBtnContainer = $addToCartBtn.parent().find('.reserveInStore-btn-container');
+            var $reserveBtn = $reserveBtnContainer.find('.reserveInStore-btn');
 
-            // TODO not sure
-            $reserveBtnContainer.find('.reserveInStore-btn').addClass($addToCartBtn.attr('class'));
-
-            setButtonWidth($reserveBtnContainer.find('.reserveInStore-btn'), $addToCartBtn);
+            $reserveBtn.addClass($addToCartBtn.attr('class'));
+            setButtonWidth($reserveBtn, $addToCartBtn);
 
             $reserveBtnContainer.on('click', function(event) {
                 event.preventDefault();

@@ -12,6 +12,7 @@ gem 'puma', '~> 3.11' # Use Puma as the app server
 gem 'uglifier', '>= 1.3.0' # Use Uglifier as compressor for JavaScript assets
 gem 'turbolinks', '~> 5' # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease, not really being used.
+gem "sentry-raven", '~> 2.7.4' # For bug tracking
 gem 'shopify_app', '~> 8.2.6' # Shopify Application Rails engine and generator
 gem 'shopify_api', '~> 4.11.0'
 gem 'jquery-rails', '~> 4.3', '>= 4.3.3' # Use jquery as the JavaScript library

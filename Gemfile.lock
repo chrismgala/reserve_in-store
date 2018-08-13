@@ -207,6 +207,8 @@ GEM
     sendgrid-ruby (5.2.0)
       ruby_http_client (~> 3.2)
       sinatra (>= 1.4.7, < 3)
+    sentry-raven (2.7.4)
+      faraday (>= 0.7.6, < 1.0)
     shopify_api (4.11.0)
       activeresource (>= 3.0.0)
       rack
@@ -274,6 +276,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   selenium-webdriver
   sendgrid-ruby (~> 5.2.0)
+  sentry-raven (~> 2.7.4)
   shopify_api (~> 4.11.0)
   shopify_app (~> 8.2.6)
   spring

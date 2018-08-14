@@ -17,26 +17,11 @@
                 <thead>
                 <tr>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header" scope="col" aria-disabled="true">
-                    ID
+                    Name
                   </th>
                   <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header"></th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Name
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Address
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Country
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    State
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    City
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Postal / ZIP Code
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Email
@@ -53,14 +38,10 @@
                 <tbody>
                 <% @locations.each do |location| %>
                   <tr class="Polaris-DataTable__TableRow">
-                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row"><%= location.id %></th>
+                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row"><%= location.name %></th>
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.name %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.address %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.country %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.state %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.city %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.zip %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.address %><br>
+                    <%= location.formatted_address %><br><%= location.country %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.email %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.phone %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">

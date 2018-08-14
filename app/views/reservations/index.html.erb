@@ -34,6 +34,9 @@
                     Customer Phone
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Created Time
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Product
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
@@ -58,6 +61,7 @@
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_email %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_phone %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= local_time(reservation.created_at) %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <% if reservation.shopify_product.present? %>
                         <%= reservation.shopify_product.title %>

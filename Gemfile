@@ -9,6 +9,7 @@ gem 'dotenv-rails', '~> 2.4.0' # Adds the `ENV['BLEH']` ability to access enviro
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease, not really being used.
 gem 'jquery-rails', '~> 4.3', '>= 4.3.3' # Use jquery as the JavaScript library
 gem 'kaminari', '~> 1.1', '>= 1.1.1' # Pagination such as `Product.all.page(params[:page])`
+gem 'local_time', '~> 2.0.1' # For admin and merchant-facing pretty time.
 gem 'non-stupid-digest-assets', '~> 1.0.9' # used for compiling both digest and non-digest assets in production
 gem 'pg', '~> 0.20.0' # Use postgresql as the database for Active Record
 gem 'puma', '~> 3.11' # Use Puma as the app server

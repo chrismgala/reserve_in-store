@@ -31,7 +31,7 @@
                     Customer Details
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Instructions from customer
+                    Notes
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Status
@@ -58,6 +58,13 @@
                           <%= reservation.shopify_variant.title %>
                         <% else %>
                           Variant not found.
+                        <% end %>
+                        <% if reservation.line_item.present? %>
+                          <% eval(reservation.line_item).each do |line_item| %>
+                            <% if line_item[1].present? %>
+                              <p class="ris-text-small"><%= line_item[0] %>: <%= line_item[1] %></p>
+                            <% end %>
+                          <% end %>
                         <% end %>
                       </div>
                     </td>

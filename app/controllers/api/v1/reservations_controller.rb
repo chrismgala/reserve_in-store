@@ -8,6 +8,7 @@ module Api
       def modal
         @product_title = params[:product_title]
         @variant_title = params[:variant_title]
+        @line_item = params[:line_item]
         @price = @store.price('%.2f' % (params[:price].to_f / 100))
       end
 

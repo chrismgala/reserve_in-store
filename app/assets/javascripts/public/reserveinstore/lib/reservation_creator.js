@@ -1,7 +1,7 @@
 ReserveInStore.ReservationCreator = function (opts) {
     var self = this;
     opts = opts || {};
-    var api, $modalBackground, $reserveModal, $successModal, $form, productId, variantId;
+    var api, $modalBackground, $reserveModal, $successModal, $form, productId, variantId, formDataArray, lineItem = {};
 
     var init = function () {
         api = new ReserveInStore.Api(opts);
@@ -11,29 +11,35 @@ ReserveInStore.ReservationCreator = function (opts) {
      * Get product id/title and variant id/title, then make API call and display the modal
      */
     self.displayModal = function () {
-        var selectedProductInfo = self.setProductAndVariantId();
+        var selectedProductInfo = self.setProductInfo();
         api.getModal(selectedProductInfo, self.insertModal);
     };
 
     /**
-     * Set Product ID and Variant Id, return product title, variant title and price to be used in modal
+     * Set Product ID, Variant Id, and line item properties JSON, return product title, variant title, line item properties and price to be used in modal
      * @returns {object} Product title, variant title and price, in the form of {product_title: "bleh", variant_title: "bleh", price: "bleh"}
      */
-    self.setProductAndVariantId = function () {
+    self.setProductInfo = function () {
+        formDataArray = $('form[action~="/cart/add"]').serializeArray();
         setVariantID();
-        variantId = variantId || opts.product.variants[0].id;
+        setLineItem();
         var variant = $.grep(opts.product.variants, function (obj) {
             return obj.id === variantId;
         })[0];
         productId = opts.product.id;
-        return {product_title: opts.product.title, variant_title: variant.title, price: variant.price};
+        return {
+            product_title: opts.product.title,
+            variant_title: variant.title,
+            price: variant.price,
+            line_item: lineItem
+        };
     };
 
     /**
      * Get variant ID from the add to cart form, if failed, try parsing the URL to get variant ID
      */
     var setVariantID = function () {
-        var variantIdEntry = $('form[action~="/cart/add"]').serializeArray().find(function (obj) {
+        var variantIdEntry = formDataArray.find(function (obj) {
             return obj.name === "id";
         });
 
@@ -42,6 +48,8 @@ ReserveInStore.ReservationCreator = function (opts) {
         } else {
             tryGetVariantIdFromURL()
         }
+
+        variantId = variantId || opts.product.variants[0].id;
     };
 
     /**
@@ -56,6 +64,19 @@ ReserveInStore.ReservationCreator = function (opts) {
     };
 
     /**
+     * Set line item properties
+     */
+    var setLineItem = function () {
+        var re_lineItem = /properties\[(.*?)\]/;
+        formDataArray.find(function (obj) {
+            var matchLineItem = obj.name.match(re_lineItem);
+            if (matchLineItem) {
+                lineItem[matchLineItem[1]] = obj.value;
+            }
+        });
+    };
+
+    /**
      * Insert the HTML code of two modals into the container:
      * $reserveModal is for creating new reservation, collecting customer's information
      * $successModal is to be displayed after new reservation is created
@@ -67,10 +88,18 @@ ReserveInStore.ReservationCreator = function (opts) {
         $modalBackground = opts.$modalContainer.find('.reserveInStore-modal-background');
         $reserveModal = $modalBackground.find('.reserveInStore-reserve-modal');
         $successModal = $modalBackground.find('.reserveInStore-success-modal');
+        centerPriceDiv();
         setCloseConditions();
-
         $form = $reserveModal.find(".reserveInStore-reservation-form");
         setSubmitConditions();
+    };
+
+    /**
+     * Center the price
+     */
+    var centerPriceDiv = function () {
+        var $priceDiv = $reserveModal.find('.ris-product-price');
+        $priceDiv.css('padding-top', ($reserveModal.find('.ris-product-detail').height()-$priceDiv.height())*0.5 + 'px');
     };
 
     /**
@@ -155,6 +184,7 @@ ReserveInStore.ReservationCreator = function (opts) {
         var data = $form.serializeArray();
         data.push({name: "reservation[platform_product_id]", value: productId});
         data.push({name: "reservation[platform_variant_id]", value: variantId});
+        data.push({name: "reservation[line_item]", value: JSON.stringify(lineItem)});
         return data;
     };
 

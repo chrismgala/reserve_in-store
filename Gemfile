@@ -20,6 +20,7 @@ gem 'kaminari', '~> 1.1', '>= 1.1.1' # Pagination such as `Product.all.page(para
 gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (CORS) serve public assets
 gem 'non-stupid-digest-assets', '~> 1.0.9' # used for compiling both digest and non-digest assets in production
 gem 'ace-rails-ap', '~> 4.1.4' # For making HTML editors look pretty
+gem 'liquid', '~> 4.0.0' # For rendering liquid templates that we use to theme the displays. We allow them to customize our liquid templates.
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false

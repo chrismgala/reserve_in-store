@@ -6,11 +6,11 @@ class LocationMailer < ApplicationMailer
   # @param [object] product - The product object being reserved
   # @param [object] variant - The variant object being reserved
   # @returns [Mail::Message]
-  def new_reservation(store, reservation, product, variant)
+  def new_reservation(store, reservation, product_title, variant_title)
     @store = store
     @reservation = reservation
-    @product = product
-    @variant = variant
+    @product_title = product_title
+    @variant_title = variant_title
     staged_mail(to: to_location, subject: "A new reservation request has been submitted", from: from_system)
   end
 

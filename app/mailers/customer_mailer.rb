@@ -6,12 +6,19 @@ class CustomerMailer < ApplicationMailer
   # @param [object] product - The product object being reserved
   # @param [object] variant - The variant object being reserved
   # @returns [Mail::Message]
-  def reserve_confirmation(store, reservation, product, variant)
+  #
+  #
+  #
+  # truely needs:
+  # store
+  # reservation
+  # product_title
+  #
+  def reserve_confirmation(store:, reservation:, rendered_liquid:, product_title:)
     @store = store
     @reservation = reservation
-    @product = product
-    @variant = variant
-    subject = @product.present? ? "Your reservation of #{@product.title}" : "Your reservation at #{@store.name}"
+    @rendered_email_template = rendered_liquid
+    subject = product_title != "Unknown Product" ? "Your reservation of #{product_title}" : "Your reservation at #{@store.name}"
     staged_mail(to: to_customer, subject: subject, from: from_system, reply_to: reply_to_location)
   end
 

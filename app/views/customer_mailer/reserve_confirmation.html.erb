@@ -1,12 +1,1 @@
-<div style="font-family: 'Source Sans Pro', sans-serif;">
-  <h3>Hello <%= @reservation.customer_first_name %>, </h3>
-  <p>Your product
-    <% if @product.present? %>
-      <%= @product.title %>
-      <% if @variant.present? && @variant.title != 'Default Title' %>
-        (<%= @variant.title %>)
-      <% end %>
-    <% end %>
-    will be held at <%= @reservation.location.name %>.
-    The address is <%= @reservation.location.address %>, <%= @reservation.location.city %>, <%= @reservation.location.state %>, <%= @reservation.location.country %>.</p>
-</div>
+<%= @rendered_email_template %>

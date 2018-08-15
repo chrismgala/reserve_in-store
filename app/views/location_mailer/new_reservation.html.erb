@@ -16,16 +16,16 @@
         <td><%= @reservation.customer_phone %></td>
       </tr>
     <% end %>
-    <% if @product.present? %>
+    <% if @product_title.present? %>
       <tr>
         <th>Product</th>
-        <td><%= @product.title %></td>
+        <td><%= @product_title %></td>
       </tr>
     <% end %>
-    <% if @variant.present? && @variant.title != 'Default Title' %>
+    <% if @variant_title.present? && @variant_title != 'Default Title' %>
       <tr>
         <th>Variant</th>
-        <td><%= @variant.title %></td>
+        <td><%= @variant_title %></td>
       </tr>
     <% end %>
     <% if @reservation.instructions_from_customer.present? %>

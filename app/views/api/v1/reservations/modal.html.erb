@@ -13,10 +13,10 @@
 
         <div class="ris-column">
           <h2 class="ris-header-text">1. SELECT A LOCATION:</h2>
-          <%= f.collection_radio_buttons :location_id, @store.locations, :id, :name, {}, required: true do |b| %>
-            <%= render partial: 'layouts/partials/location_radio_button', locals: {input_radio_button: b.radio_button,
-                                                                                   name: b.object.name, map_url: b.object.google_map_url, address: b.object.address,
-                                                                                   formatted_address: b.object.formatted_address, country: b.object.country, custom_html: b.object.custom_html} %>
+          <% @store.locations.each do |location| %>
+            <%#= f.collection_radio_buttons :location_id, @store.locations, :id, :name, {}, required: true do |b| %>
+            <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: location.id, name: location.name, map_url: location.google_map_url, address: location.address,
+                                                                                   formatted_address: location.formatted_address, country: location.country, custom_html: location.custom_html} %>
           <% end %>
         </div>
 

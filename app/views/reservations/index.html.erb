@@ -54,10 +54,8 @@
                         Product not found.
                       <% end %>
                       <div style="font-size:smaller">
-                        <% if reservation.shopify_variant.present? %>
+                        <% if reservation.shopify_variant.present? && reservation.shopify_variant.title != 'Default Title' %>
                           <%= reservation.shopify_variant.title %>
-                        <% else %>
-                          Variant not found.
                         <% end %>
                         <% if reservation.line_item.present? %>
                           <% eval(reservation.line_item).each do |line_item| %>

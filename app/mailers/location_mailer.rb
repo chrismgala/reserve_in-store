@@ -3,8 +3,8 @@ class LocationMailer < ApplicationMailer
   # Generate email to tell the store owner that a new reservation request has been submitted and provide all the details of the request.
   # @param [object] store - The store object that got a new reservation
   # @param [object] reservation - The reservation object that just been created
-  # @param [object] product - The product object being reserved
-  # @param [object] variant - The variant object being reserved
+  # @param [object] product_title - The product title
+  # @param [object] variant_title - The variant title
   # @returns [Mail::Message]
   def new_reservation(store:, reservation:, product_title:, variant_title:)
     @store = store

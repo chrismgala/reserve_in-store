@@ -1,19 +1,11 @@
 class CustomerMailer < ApplicationMailer
   ##
   # Generate reservation confirmation email to be sent to the customer
-  # @param [object] store - The store object that got a new reservation
-  # @param [object] reservation - The reservation object that just been created
-  # @param [object] product - The product object being reserved
-  # @param [object] variant - The variant object being reserved
+  # @param [Store] store - The store object that got a new reservation
+  # @param [Reservation] reservation - The reservation object that just been created
+  # @param [String] rendered_liquid - The rendered liquid to be placed in our view
+  # @param [String] product_title - The product title
   # @returns [Mail::Message]
-  #
-  #
-  #
-  # truely needs:
-  # store
-  # reservation
-  # product_title
-  #
   def reserve_confirmation(store:, reservation:, rendered_liquid:, product_title:)
     @store = store
     @reservation = reservation

@@ -18,29 +18,17 @@
                 <thead>
                 <tr>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header" scope="col" aria-disabled="true">
-                    ID
+                    Placed at
                   </th>
                   <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header"></th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Location
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Customer Name
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Customer Email
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Customer Phone
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Created Time
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Product
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Variant
+                    Customer Details
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Instructions from customer
@@ -55,25 +43,26 @@
                 <tbody>
                 <% @reservations.each do |reservation| %>
                   <tr class="Polaris-DataTable__TableRow">
-                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row"><%= reservation.id %></th>
+                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row"><%= local_time(reservation.created_at) %></th>
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
+
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.location.name %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_email %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_phone %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= local_time(reservation.created_at) %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <% if reservation.shopify_product.present? %>
                         <%= reservation.shopify_product.title %>
                       <% else %>
                         Product not found.
-                      <% end %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <% if reservation.shopify_variant.present? %>
-                        <%= reservation.shopify_variant.title %>
-                      <% else %>
-                        Variant not found.
-                      <% end %></td>
+                      <% end %>
+                      <div style="font-size:smaller">
+                        <% if reservation.shopify_variant.present? %>
+                          <%= reservation.shopify_variant.title %>
+                        <% else %>
+                          Variant not found.
+                        <% end %>
+                      </div>
+                    </td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %>
+                      <br><%= reservation.customer_email %><br><%= reservation.customer_phone %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.instructions_from_customer %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <% if reservation.fulfilled? %>

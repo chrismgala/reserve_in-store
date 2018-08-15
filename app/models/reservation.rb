@@ -46,7 +46,7 @@ class Reservation < ActiveRecord::Base
   end
 
   ##
-  # @return [ShopifyAPI::Variant|NilClass] nil if not product available, otherwise the shopify variant model
+  # @return [ShopifyAPI::Variant|NilClass] nil if not variant available, otherwise the shopify variant model
   def shopify_variant
     if @shopify_variant_checked
       @shopify_variant
@@ -84,7 +84,7 @@ class Reservation < ActiveRecord::Base
   # Send emails to confirm with the customer and notify the store owner
   def send_notification_emails
     CustomerMailer.reserve_confirmation({store: store, reservation: self, rendered_liquid: rendered_email_template, product_title: shopify_product_variant_combined_title}).deliver_later
-    LocationMailer.new_reservation(store, self, shopify_product_title, shopify_variant_title).deliver_later
+    LocationMailer.new_reservation({store: store, reservation: self, product_title: shopify_product_title, variant_title: shopify_variant_title}).deliver_later
   end
 
   ##

@@ -6,7 +6,7 @@ class LocationMailer < ApplicationMailer
   # @param [object] product - The product object being reserved
   # @param [object] variant - The variant object being reserved
   # @returns [Mail::Message]
-  def new_reservation(store, reservation, product_title, variant_title)
+  def new_reservation(store:, reservation:, product_title:, variant_title:)
     @store = store
     @reservation = reservation
     @product_title = product_title

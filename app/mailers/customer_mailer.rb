@@ -18,7 +18,7 @@ class CustomerMailer < ApplicationMailer
     @store = store
     @reservation = reservation
     @rendered_email_template = rendered_liquid
-    subject = product_title != "Unknown Product" ? "Your reservation of #{product_title}" : "Your reservation at #{@store.name}"
+    subject = (product_title != "Unknown Product" ? "Your reservation of #{product_title}" : "Your reservation at #{@store.name}")
     staged_mail(to: to_customer, subject: subject, from: from_system, reply_to: reply_to_location)
   end
 

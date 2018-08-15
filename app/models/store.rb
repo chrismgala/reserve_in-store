@@ -19,10 +19,14 @@ class Store < ActiveRecord::Base
   ##
   # @return [Hash] - liquid params used by JS email previewer
   def preview_email_liquid_params
-    {'store_name' => name,
-     'customer_first_name' => 'John',
-     'customer_last_name' => 'Doe',
-     'order_number' => "<a href='#' class='disabled-link'>Order #1234</a>"}.to_json.html_safe
+    {'customer_first_name' => "John",
+     'customer_last_name' => "Doe",
+     'product_title' => "Apple (Red)",
+     'location_name' => "Store 3",
+     'location_address' => "1234 Test St.",
+     'location_city' => "City",
+     'location_state' => "State",
+     'location_country' => "Country"}.to_json.html_safe
   end
 
   ##

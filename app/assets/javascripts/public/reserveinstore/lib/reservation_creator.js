@@ -16,7 +16,7 @@ ReserveInStore.ReservationCreator = function (opts) {
     };
 
     /**
-     * Set Product ID, Variant Id and line item properties object, return product title, variant title, line item properties and price to be used in modal
+     * Set Product Id, Variant Id and line item properties object, return product title, variant title, line item properties and price to be used in modal
      * @returns {object} Product title, variant title and price, in the form of {product_title: "bleh", variant_title: "bleh", price: "bleh"}
      */
     self.setProductInfo = function () {

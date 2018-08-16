@@ -199,7 +199,7 @@
                           <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: 0, name: 'Example location', map_url: 'https://www.google.ca/maps/', address: 'Example Address',
                                                                                                  formatted_address: 'City, State, ZIP/Postal code', country: 'Country', custom_html: '<div id="location_custom_html_preview"></div>'} %>
                         <% else %>
-                          <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: location.id, name: location.name, map_url: location.google_map_url, address: location.address,
+                          <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: 0, name: location.name, map_url: location.google_map_url, address: location.address,
                                                                                                  formatted_address: location.formatted_address, country: location.country, custom_html: '<div id="location_custom_html_preview"></div>'} %>
                         <% end %>
                       </div>

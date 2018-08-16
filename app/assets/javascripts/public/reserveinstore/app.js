@@ -23,14 +23,14 @@ ReserveInStore.App = function(opts) {
         $addToCartBtns.each(function() {
             var $addToCartBtn = $(this);
 
-            if ($addToCartBtn.parent().find('[data-reserveInStoreBtn=true]').length <= 0 ){
+            if (!$addToCartBtn.next().attr('data-reserveInStoreBtn')){
                 $addToCartBtn.after('<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>');
                 opts.$modalContainer = $('<div class="reserveInStore-modal-container" style="display:none;"></div>').appendTo('body');
             }
 
             var reservationCreator = new ReserveInStore.ReservationCreator(opts);
 
-            var $reserveBtnContainer = $addToCartBtn.parent().find('.reserveInStore-btn-container');
+            var $reserveBtnContainer = $addToCartBtn.next();
             var $reserveBtn = $reserveBtnContainer.find('.reserveInStore-btn');
 
             $reserveBtn.addClass($addToCartBtn.attr('class'));

@@ -1,4 +1,5 @@
 class Reservation < ActiveRecord::Base
+  serialize :line_item
   belongs_to :store
   belongs_to :location
 
@@ -6,8 +7,8 @@ class Reservation < ActiveRecord::Base
   validates_associated :store, :location
   validates :customer_email, format: /\A[^@\s]+@[^@\s]+\z/
 
-  PERMITTED_PARAMS = [:customer_name, :customer_email, :customer_phone, :location_id,
-                      :platform_product_id, :platform_variant_id, :instructions_from_customer, :fulfilled]
+  PERMITTED_PARAMS = [:customer_name, :customer_email, :customer_phone, :location_id, :platform_product_id,
+                      :platform_variant_id, :instructions_from_customer, :fulfilled, :line_item]
 
   ##
   # @return [ShopifyAPI::Product|NilClass] nil if not product available, otherwise the shopify product model

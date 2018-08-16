@@ -13,10 +13,9 @@
 
         <div class="ris-column">
           <h2 class="ris-header-text">1. SELECT A LOCATION:</h2>
-          <%= f.collection_radio_buttons :location_id, @store.locations, :id, :name, {}, required: true do |b| %>
-            <%= render partial: 'layouts/partials/location_radio_button', locals: {input_radio_button: b.radio_button,
-                                      name: b.object.name, map_url: b.object.google_map_url, address: b.object.address,
-                                      formatted_address: b.object.formatted_address, custom_html: b.object.custom_html} %>
+          <% @store.locations.each do |location| %>
+            <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: location.id, name: location.name, map_url: location.google_map_url, address: location.address,
+                                                                                   formatted_address: location.formatted_address, country: location.country, custom_html: location.custom_html} %>
           <% end %>
         </div>
 
@@ -41,7 +40,7 @@
 
           <% if @store.show_instructions_from_customer %>
             <div class="ris-contact-field">
-              <%= f.label 'What data/time would you like it held for?' %>
+              <%= f.label 'Pick up date & time' %>
               <%= f.text_field :instructions_from_customer %>
             </div>
           <% end %>
@@ -51,18 +50,20 @@
           <h2 class="ris-header-text">3. CONFIRM YOUR RESERVATION</h2>
 
           <div class="ris-product-detail">
-            <% if @variant_title.present? && @variant_title != 'Default Title' %>
-              <div class="ris-product-price"><%= @price %></div>
-              <div>
-                <p class="ris-text-large"><%= @product_title %></p>
-                <p class="ris-text-medium"><%= @variant_title %></p>
-              </div>
-            <% else %>
-              <div class="ris-product-price" style="line-height:1.2em"><%= @price %></div>
-              <div>
-                <p class="ris-text-large"><%= @product_title %></p>
-              </div>
-            <% end %>
+            <div class="ris-product-price"><%= @price %></div>
+            <div>
+              <p class="ris-text-large"><%= @product_title %></p>
+              <% if @variant_title.present? && @variant_title != 'Default Title' %>
+                <p class="ris-text-small"><%= @variant_title %></p>
+              <% end %>
+              <% if @line_item.present? %>
+                <% @line_item.each do |line_item| %>
+                  <% if line_item[1].present? %>
+                    <p class="ris-text-small"><%= line_item[0] %>: <%= line_item[1] %></p>
+                  <% end %>
+                <% end %>
+              <% end %>
+            </div>
           </div>
           <p>You will receive a confirmation email after you submit your reservation.</p>
           <button type="button" class="reserveInStore-form-submit">Reserve now</button>

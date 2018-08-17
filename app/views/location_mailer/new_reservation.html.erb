@@ -16,6 +16,13 @@
           </tr>
           <tr style="margin-top: 20px">
             <td>
+              <% if @reservation.instructions_from_customer.present? %>
+                <h4>Date for Reservation</h4>
+                <p>
+                  <%= @reservation.instructions_from_customer %>
+                </p>
+                <hr style="max-width: 100px;">
+              <% end %>
               <h4>Contact Information</h4>
               <p>
                 <%= @reservation.customer_email %>
@@ -23,13 +30,6 @@
                   <br><%= number_to_phone(@reservation.customer_phone) %>
                 <% end %>
               </p>
-              <% if @reservation.instructions_from_customer.present? %>
-                <hr style="max-width: 100px;">
-                <h4>Instructions From Customer</h4>
-                <p>
-                  <%= @reservation.instructions_from_customer %>
-                </p>
-              <% end %>
               <hr style="max-width: 100px;">
               <h4>Store Location</h4>
               <p>

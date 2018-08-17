@@ -7,11 +7,12 @@
 </p>
 
 <p>
-  Your reservation for {{ product_link }} has been received with the following details:
-</p>
-
-<p>
-  {{ reservation_details }}
+  Your reservation for {{ product_link }} has been received
+  {% if reservation_time %}
+    for the following date:
+    <br>
+    {{ reservation_details }}
+  {% endif %}
 </p>
 
 <hr>

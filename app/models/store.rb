@@ -28,7 +28,7 @@ class Store < ActiveRecord::Base
      'location_state' => "State",
      'location_country' => "Country",
      'store_link' => "<a href=#>Store 3</a>",
-     "reservation_details" => "I dont know what this would say yet"}.to_json.html_safe
+     "reservation_time" => "Monday at 5:30pm"}.to_json.html_safe
   end
 
   ##

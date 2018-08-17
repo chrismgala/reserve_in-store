@@ -120,6 +120,6 @@ class Reservation < ActiveRecord::Base
      'location_state' => location.state,
      'location_country' => location.country,
      'store_link' => "<a href='https://#{store.shopify_domain}'>#{store.name}</a>",
-     'reservation_details' => instructions_from_customer}
+     'reservation_time' => instructions_from_customer}
   end
 end

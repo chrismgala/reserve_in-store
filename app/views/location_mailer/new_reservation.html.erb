@@ -1,38 +1,55 @@
-<div style="font-family: 'Source Sans Pro', sans-serif;">
-  <h3>Hello <%= @reservation.location.name %>, </h3>
-  <p>A new reservation request has been submitted. Details are listed below:</p>
-  <table style="width:100%">
-    <tr>
-      <th>Customer Name</th>
-      <td><%= @reservation.customer_name %></td>
-    </tr>
-    <tr>
-      <th>Customer Email</th>
-      <td><%= @reservation.customer_email %></td>
-    </tr>
-    <% if @reservation.customer_phone.present? %>
-      <tr>
-        <th>Customer Phone Number</th>
-        <td><%= @reservation.customer_phone %></td>
-      </tr>
-    <% end %>
-    <% if @product_title.present? %>
-      <tr>
-        <th>Product</th>
-        <td><%= @product_title %></td>
-      </tr>
-    <% end %>
-    <% if @variant_title.present? && @variant_title != 'Default Title' %>
-      <tr>
-        <th>Variant</th>
-        <td><%= @variant_title %></td>
-      </tr>
-    <% end %>
-    <% if @reservation.instructions_from_customer.present? %>
-      <tr>
-        <th>Instructions From Customer</th>
-        <td><%= @reservation.instructions_from_customer %></td>
-      </tr>
-    <% end %>
-  </table>
-</div>
+<table class="body-wrap" bgcolor="#f6f6f6">
+  <tr>
+    <td></td>
+    <td class="container" bgcolor="#FFFFFF">
+
+      <!-- content -->
+      <div class="content">
+        <table>
+          <tr>
+            <td>
+              <%= render partial: 'shared_mailer/fera_header', locals: {title: @reservation.location.name} %>
+              <p>
+                <%= "#{@reservation.customer_name} has submitted a new reservation request for #{@reservation.shopify_product_link}" %>
+              </p>
+            </td>
+          </tr>
+          <tr style="margin-top: 20px">
+            <td>
+              <h4>Contact Information</h4>
+              <p>
+                <%= @reservation.customer_email %>
+                <% if @reservation.customer_phone.present? %>
+                  <br><%= number_to_phone(@reservation.customer_phone) %>
+                <% end %>
+              </p>
+              <% if @reservation.instructions_from_customer.present? %>
+                <hr style="max-width: 100px;">
+                <h4>Instructions From Customer</h4>
+                <p>
+                  <%= @reservation.instructions_from_customer %>
+                </p>
+              <% end %>
+              <hr style="max-width: 100px;">
+              <h4>Store Location</h4>
+              <p>
+                <%= @reservation.location.name %><br>
+                <%= @reservation.location.address %><br>
+                <%= "#{@reservation.location.city} #{@reservation.location.state}" %><br>
+                <%= @reservation.location.country %>
+              </p>
+            </td>
+          </tr>
+          <tr style="margin-top: 20px">
+            <td>
+              <p>Cheers,</p>
+              <%= render partial: 'shared_mailer/team_signature' %>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- /content -->
+
+    </td>
+  </tr>
+</table>

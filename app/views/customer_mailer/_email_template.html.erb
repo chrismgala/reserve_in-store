@@ -1,15 +1,37 @@
-<h3>Hello {{ customer_first_name }} {{ customer_last_name }}, </h3>
-<p>Your product {{ product_title }} will be held at {{ location_name }}.
-  The address is {{ location_address }}, {{ location_city }}, {{ location_state }}, {{ location_country }}.</p>
-
 <h2>
-  New Reservation With {{store_name}}
+  New Reservation With {{ store_link }}
 </h2>
 
-<p>Hello {{customer_first_name}} {{customer_last_name}},</p>
-
 <p>
-  Your reservation for {{ product_title }} has been received!
+  Hello {{ customer_first_name }} {{ customer_last_name }},
 </p>
 
-<p>It will be held at the </p>
+<p>
+  Your reservation for {{ product_link }} has been received with the following details:
+</p>
+
+<p>
+  {{ reservation_details }}
+</p>
+
+<hr>
+
+<p>
+  It will be held at:
+</p>
+
+<p>
+  {{ location_name }}
+  <br>
+  {{ location_address }}
+  <br>
+  {{ location_city }} {{ location_state }}
+  <br>
+  {{ location_country }}
+</p>
+
+<hr>
+
+<p>
+  See you soon!
+</p>

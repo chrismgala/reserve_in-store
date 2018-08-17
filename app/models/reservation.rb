@@ -17,6 +17,18 @@ class Reservation < ActiveRecord::Base
     shopify_variant.present? ? shopify_variant.title : nil
   end
 
+  def shopify_product_link
+    if shopify_product_title
+      if shopify_variant_title && shopify_variant_title != 'Default Title'
+        "<a href='https://#{store.shopify_domain}/product/#{shopify_product.handle}'>#{shopify_product_title} (#{shopify_variant_title})</a>"
+      else
+        "<a href='https://#{store.shopify_domain}/product/#{shopify_product.handle}'>#{shopify_product_title}</a>"
+      end
+    else
+      "Unknown Product"
+    end
+  end
+
   def shopify_product_variant_combined_title
     if shopify_product_title
       if shopify_variant_title && shopify_variant_title != 'Default Title'
@@ -101,11 +113,13 @@ class Reservation < ActiveRecord::Base
   def email_liquid_params
     {'customer_first_name' => customer_first_name,
      'customer_last_name' => customer_last_name,
-     'product_title' => shopify_product_variant_combined_title,
+     'product_link' => shopify_product_link,
      'location_name' => location.name,
      'location_address' => location.address,
      'location_city' => location.city,
      'location_state' => location.state,
-     'location_country' => location.country}
+     'location_country' => location.country,
+     'store_link' => "<a href='https://#{store.shopify_domain}'>#{store.name}</a>",
+     'reservation_details' => instructions_from_customer}
   end
 end

@@ -21,12 +21,14 @@ class Store < ActiveRecord::Base
   def preview_email_liquid_params
     {'customer_first_name' => "John",
      'customer_last_name' => "Doe",
-     'product_title' => "Apple (Red)",
+     'product_link' => "<a href=#>Apple (Red)</a>",
      'location_name' => "Store 3",
      'location_address' => "1234 Test St.",
      'location_city' => "City",
      'location_state' => "State",
-     'location_country' => "Country"}.to_json.html_safe
+     'location_country' => "Country",
+     'store_link' => "<a href=#>Store 3</a>",
+     "reservation_details" => "I dont know what this would say yet"}.to_json.html_safe
   end
 
   ##

@@ -6,11 +6,11 @@ class CustomerMailer < ApplicationMailer
   # @param [String] rendered_liquid - The rendered liquid to be placed in our view
   # @param [String] product_title - The product title
   # @returns [Mail::Message]
-  def reserve_confirmation(store:, reservation:, rendered_liquid:, product_title:)
+  def reserve_confirmation(store:, reservation:, shopify_product_link:)
     @store = store
     @reservation = reservation
-    @rendered_email_template = rendered_liquid
-    subject = (product_title != "Unknown Product" ? "Your reservation of #{product_title}" : "Your reservation at #{@store.name}")
+    @rendered_email_template = @reservation.rendered_email_template(shopify_product_link)
+    subject = "Your reservation with #{@store.name}"
     staged_mail(to: to_customer, subject: subject, from: from_system, reply_to: reply_to_location)
   end
 

@@ -6,11 +6,10 @@ class LocationMailer < ApplicationMailer
   # @param [String] product_title - The product title
   # @param [String] variant_title - The variant title
   # @returns [Mail::Message]
-  def new_reservation(store:, reservation:, product_title:, variant_title:)
+  def new_reservation(store:, reservation:, shopify_product_link:)
     @store = store
     @reservation = reservation
-    @product_title = product_title
-    @variant_title = variant_title
+    @shopify_product_link = shopify_product_link
     staged_mail(to: to_location, subject: "A new reservation request has been submitted", from: from_system)
   end
 

@@ -11,6 +11,7 @@ gem 'jquery-rails', '~> 4.3', '>= 4.3.3' # Use jquery as the JavaScript library
 gem 'kaminari', '~> 1.1', '>= 1.1.1' # Pagination such as `Product.all.page(params[:page])`
 gem 'local_time', '~> 2.0.1' # For admin and merchant-facing pretty time.
 gem 'non-stupid-digest-assets', '~> 1.0.9' # used for compiling both digest and non-digest assets in production
+gem 'liquid', '~> 4.0.0' # For rendering liquid templates that we use to theme the displays. We allow them to customize our liquid templates.
 gem 'pg', '~> 0.20.0' # Use postgresql as the database for Active Record
 gem 'puma', '~> 3.11' # Use Puma as the app server
 gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (CORS) serve public assets

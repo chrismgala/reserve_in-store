@@ -14,7 +14,7 @@
  *
  * @param {object} [opts] - An optional hash used for setup, as described above.
  */
-var TemplateEditor = function (opts) {
+var HTMLTemplateEditor = function (opts) {
     opts = opts || {};
     var $templateFormField = $(opts.templateFormFieldSelector);
     var defaultTemplate = $(opts.defaultTemplateSelector).val();

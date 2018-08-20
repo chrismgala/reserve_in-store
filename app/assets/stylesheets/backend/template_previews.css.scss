@@ -1,0 +1,85 @@
+.preview-text-fix {
+    max-height: 250px;
+    color: black;
+    cursor: auto;
+}
+
+.preview-box-fix {
+    /* Need important to override Polaris since they always
+    win specificity 1 with Polaris-TextField__Backdrop */
+    border-color: black !important;
+    background: #f4f6f8 !important;
+}
+
+.parsley-danger-text {
+    color: #dc3545;
+}
+
+.ace-editor-stylings {
+    height: 250px;
+    border-radius: 3px;
+}
+
+/* Repair the headers that polaris overwrites for our previews */
+
+.preview-text-fix h1 {
+    font-weight:300;
+    font-size:40px;
+    margin-top:12px;
+    margin-bottom:12px;
+}
+
+.preview-text-fix h2 {
+    font-weight: 300;
+    font-size: 28px;
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+.preview-text-fix h3 {
+    font-size:22px;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-weight: bold;
+}
+
+.preview-text-fix h4 {
+    font-size: 1em;
+    margin-top: 1.33em;
+    margin-bottom: 1.33em;
+    font-weight: bold;
+}
+
+.preview-text-fix h5 {
+    font-size: .83em;
+    margin-top: 1.67em;
+    margin-bottom: 1.67em;
+    font-weight: bold;
+}
+
+.preview-text-fix h6 {
+    font-size: .67em;
+    margin-top: 2.33em;
+    margin-bottom: 2.33em;
+    font-weight: bold;
+}
+
+.preview-text-fix p {
+    font-size: 14px;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.preview-text-fix .cta-btn {
+    background-color: #ffde19;
+    color: black;
+    text-decoration: none;
+    padding: 12px 24px;
+    margin: 12px 0;
+    display: inline-block;
+}
+
+.preview-text-fix .disabled-link {
+    pointer-events: none;
+    color: #007ACE;
+}

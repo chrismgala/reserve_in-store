@@ -1,6 +1,6 @@
 <div class="Polaris-Page">
   <div class="Polaris-Page__Content">
-    <%= form_for @current_store, url: {action: 'save_settings'} do |f| %>
+    <%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
       <div class="Polaris-Layout">
 
         <div class="Polaris-Layout__AnnotatedSection">
@@ -89,8 +89,8 @@
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Notifications</h2>
-                <p>Customize the messages we displayed after new reservation has been placed.</p>
+                <h2 class="Polaris-Heading">Success Message</h2>
+                <p>We’ll display this message in the confirmation popup, after customers create new reservations</p>
               </div>
             </div>
             <div class="Polaris-Layout__AnnotationContent">
@@ -107,21 +107,63 @@
                         <%= f.text_area :success_msg, class: 'Polaris-TextField__Input' %>
                         <div class="Polaris-TextField__Backdrop"></div>
                       </div>
-                      <div class="Polaris-Labelled__HelpText" id="TextField6HelpText">
-                        <span>We’ll display this message in the confirmation popup, after customers create new reservations.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Edit Reservation Email Templates</h2>
+                <p>Customize the appearance of your reservation emails using Liquid/HTML</p>
+                <%= button_tag id: "email_template_update_btn", class: "Polaris-Button", type: "button" do %>
+                  <span class="Polaris-Button__Content"><span>Update Preview</span></span>
+                <% end %>
+                <div>
+                  <a class="Polaris-Button Polaris-Button--plain" id="email_template_reset_btn" href="#">
+                    <span class="Polaris-Button__Content"><span>Reset to Default Template</span></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label :email_template_preview, class: "Polaris-Label__Text" do %>
+                            Email Preview
+                          <% end %>
+                        </div>
+                      </div>
+                      <div class="Polaris-TextField Polaris-TextField--multiline">
+                        <div class="Polaris-TextField__Input preview-text-fix">
+                          <div id="fera_email_template"></div>
+                        </div>
+                        <div class="Polaris-TextField__Backdrop preview-box-fix"></div>
                       </div>
                     </div>
 
                     <div class="Polaris-FormLayout__Item">
                       <div class="Polaris-Labelled__LabelWrapper">
                         <div class="Polaris-Label">
-                          <%= f.label 'Email template', class: 'Polaris-Label__Text' %>
+                          <%= f.label :email_template, class: "Polaris-Label__Text" do %>
+                            Liquid/HTML Editor
+                          <% end %>
                         </div>
                       </div>
-                      <div class="Polaris-TextField">
-                        <%= f.text_area :email_template, class: 'Polaris-TextField__Input' %>
-                        <div class="Polaris-TextField__Backdrop"></div>
-                      </div>
+                      <div id="parsley_email_template_errors" class="parsley-danger-text"></div>
+                      <div id="ace_email_editor" class="ace-editor-stylings"></div>
+                      <textarea style="display: none" id="default_email_template"><%= Store::default_email_template %></textarea>
+                      <%= f.text_area :email_template, {style: "display: none;", data: {'parsley-liquid': '', 'parsley-errors-container': '#parsley_email_template_errors'}, value: @current_store.email_template_in_use} %>
                     </div>
                   </div>
                 </div>
@@ -134,7 +176,7 @@
           <div class="Polaris-PageActions">
             <div class="Polaris-Stack Polaris-Stack--spacingTight Polaris-Stack--distributionTrailing">
               <div class="Polaris-Stack__Item">
-                <button type="submit" class="Polaris-Button Polaris-Button--primary">
+                <button id="submission_button" type="submit" class="Polaris-Button Polaris-Button--primary">
                   <span class="Polaris-Button__Content"><span>Save</span></span></button>
               </div>
             </div>
@@ -146,3 +188,21 @@
   </div>
 </div>
 
+<% content_for(:javascript) do %>
+  <script>
+      var emailTemplateEditor = new LiquidTemplateEditor({
+          templateFormFieldSelector: '#store_email_template',
+          aceEditorId: 'ace_email_editor',
+          resetButtonSelector: '#email_template_reset_btn',
+          updateButtonSelector: '#email_template_update_btn',
+          defaultTemplateSelector: "#default_email_template",
+          previewContainerSelector: '#fera_email_template',
+          templateRenderParameters: <%= @current_store.preview_email_liquid_params %>,
+          submissionButtonSelector: '#submission_button'
+      });
+      var parsleyBinder = new ParsleyBinder({
+          btnSelector: '#submission_button',
+          formSelector: '#store_settings_form'
+      });
+  </script>
+<% end %>

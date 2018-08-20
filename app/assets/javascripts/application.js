@@ -14,5 +14,3 @@
 //= require activestorage
 //= require turbolinks
 //= require jquery
-//= require ace-rails-ap
-

@@ -20,10 +20,23 @@ class StoreIntegrator
   # @return [Boolean] True if integrated properly, false otherwise.
   def integrated?
     footer = load_asset('snippets/reserveinstore_footer.liquid')
-      @store.platform_store_id.present? &&
-      footer.present? &&
-      footer.value.include?(RESERVE_IN_STORE_CODE) &&
-      load_asset('layout/theme.liquid').value.include?("{% include 'reserveinstore_footer' %}")
+    unless @store.platform_store_id.present?
+      puts "INTEGRATION CHECK @store.platform_store_id.present? == false"
+      return false
+    end
+    unless footer.present?
+      puts "INTEGRATION CHECK 'snippets/reserveinstore_footer.liquid' is not present"
+      return false
+    end
+    unless footer.value.include?(RESERVE_IN_STORE_CODE)
+      puts "INTEGRATION CHECK code inside 'snippets/reserveinstore_footer.liquid' is not what we want"
+      return false
+    end
+    unless load_asset('layout/theme.liquid').value.include?("{% include 'reserveinstore_footer' %}")
+      puts "INTEGRATION CHECK 'layout/theme.liquid' does not include '{% include 'reserveinstore_footer' %}'"
+      return false
+    end
+    true
   end
 
   ##

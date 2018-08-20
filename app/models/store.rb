@@ -12,8 +12,8 @@ class Store < ActiveRecord::Base
   end
 
   ##
-  # Return all products information associated with a list of reservations
-  # @return [ShopifyAPI::Product|NilClass] nil if not product available, otherwise the shopify product model
+  # Return all products information associated with a store
+  # @return [Array] empty array if no available products, otherwise an array of ShopifyAPI::Product
   def related_products
     product_ids = self.reservations.map {|r| r.platform_product_id}
     product_ids = product_ids.uniq.in_groups_of(250, false)
@@ -25,7 +25,8 @@ class Store < ActiveRecord::Base
   end
 
   ##
-  # @return [ShopifyAPI::Product|NilClass] nil if not product available, otherwise the shopify product model
+  # @param [Hash] params, including ids, limit, etc
+  # @return [ShopifyAPI::Product|NilClass] nil if no available products, otherwise a collection of Shopify products
   def shopify_products(params)
     puts "Shopify Api fetch products " + params.to_s
     ShopifyAPI::Product.where(params)
@@ -43,6 +44,9 @@ class Store < ActiveRecord::Base
     money_format.gsub('{{amount}}', money_amount)
   end
 
+  ##
+  # Get store's money format from cache, hit Shopify Api if cache is missing
+  # @return [String] Money format in the form of "${{amount}}"
   def money_format
     Rails.cache.fetch("stores/#{id}/money_format", expires_in: 1.month) do
       ShopifyAPI::Session.temp(shopify_domain, shopify_token) {

@@ -1,4 +1,5 @@
 module LoggedInHelper
+  include LocalTimeHelper
 
   def controller?(*controller)
     controller.include?(params[:controller])

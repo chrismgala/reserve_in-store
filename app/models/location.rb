@@ -14,10 +14,10 @@ class Location < ActiveRecord::Base
   end
 
   ##
-  # Filter out empty address fields, and returns a string containing city, state, country and postal code.
-  # @return [String] in the form of 'City, State, Country, ZIP/Postal code'
+  # Filter out empty address fields, and returns a string containing city, state and postal code.
+  # @return [String] in the form of 'City, State, ZIP/Postal code'
   def formatted_address
-    [city, state, country, zip].reject { |c| c.empty? }.join(', ')
+    [city, state, zip].reject { |c| c.empty? }.join(', ')
   end
 
 end

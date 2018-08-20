@@ -60,6 +60,7 @@ Rails.application.configure do
   # Setting this so we can catch emails in mailcatcher
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {address: 'localhost', port: 1025}
+  config.action_mailer.asset_host = ENV["BASE_APP_URL"]
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.

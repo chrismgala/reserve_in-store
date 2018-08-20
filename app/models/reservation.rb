@@ -28,6 +28,14 @@ class Reservation < ActiveRecord::Base
     true
   end
 
+  ##
+  # @param [String] shopify_product_link - the link to put in our liquid params
+  # @return [Text] - rendered email template
+  def rendered_email_template(shopify_product_link)
+    email_template = store.email_template || Store::default_email_template
+    Liquid::Template.parse(email_template).render(email_liquid_params(shopify_product_link)).html_safe
+  end
+
   private
 
   ##
@@ -81,14 +89,6 @@ class Reservation < ActiveRecord::Base
   def send_notification_emails
     CustomerMailer.reserve_confirmation({store: store, reservation: self, shopify_product_link: shopify_product_link!}).deliver_later
     LocationMailer.new_reservation({store: store, reservation: self, shopify_product_link: shopify_product_link!}).deliver_later
-  end
-
-  ##
-  # @param [String] shopify_product_link - the link to put in our liquid params
-  # @return [Text] - rendered email template
-  def rendered_email_template(shopify_product_link)
-    email_template = store.email_template || Store::default_email_template
-    Liquid::Template.parse(email_template).render(email_liquid_params(shopify_product_link)).html_safe
   end
 
   ##

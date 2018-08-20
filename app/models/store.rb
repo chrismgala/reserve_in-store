@@ -60,6 +60,10 @@ class Store < ActiveRecord::Base
     }
   end
 
+  def shopify_link
+    "<a href='https://#{shopify_domain}'>#{name}</a>"
+  end
+
   private
 
   ##

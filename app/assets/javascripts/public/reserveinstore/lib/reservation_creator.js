@@ -1,7 +1,7 @@
 ReserveInStore.ReservationCreator = function (opts) {
     var self = this;
     opts = opts || {};
-    var api, $modalBackground, $reserveModal, $successModal, $form, productId, variantId, formDataArray, lineItem = {};
+    var api, $modalBackground, $reserveModal, $successModal, $form, variant, productId, variantId, formDataArray, lineItem = {};
 
     var init = function () {
         api = new ReserveInStore.Api(opts);
@@ -23,7 +23,7 @@ ReserveInStore.ReservationCreator = function (opts) {
         formDataArray = $('form[action~="/cart/add"]').serializeArray();
         setVariantID();
         setLineItem();
-        var variant = $.grep(opts.product.variants, function (obj) {
+        variant = $.grep(opts.product.variants, function (obj) {
             return obj.id === variantId;
         })[0];
         productId = opts.product.id;
@@ -186,6 +186,9 @@ ReserveInStore.ReservationCreator = function (opts) {
         data.push({name: "reservation[platform_product_id]", value: productId});
         data.push({name: "reservation[platform_variant_id]", value: variantId});
         data.push({name: "reservation[line_item]", value: JSON.stringify(lineItem)});
+        data.push({name: "product_title", value: opts.product.title});
+        data.push({name: "product_handle", value: opts.product.handle});
+        data.push({name: "variant_title", value: variant.title});
         return data;
     };
 

@@ -10,7 +10,8 @@
             <td>
               <%= render partial: 'shared_mailer/fera_header', locals: {title: @reservation.location.name} %>
               <p>
-                <%= "#{@reservation.customer_name} has submitted a new reservation request for #{@shopify_product_link}" %>
+                <%= "#{@reservation.customer_name} has submitted a new reservation request for "%>
+                <%= @shopify_product_link.html_safe %>
               </p>
             </td>
           </tr>

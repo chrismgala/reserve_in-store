@@ -12,14 +12,45 @@ class Store < ActiveRecord::Base
   end
 
   ##
+  # Return all products information associated with a list of reservations
+  # @return [ShopifyAPI::Product|NilClass] nil if not product available, otherwise the shopify product model
+  def related_products
+    product_ids = self.reservations.map {|r| r.platform_product_id}
+    product_ids = product_ids.uniq.in_groups_of(250, false)
+    @related_products = Array.new
+    product_ids.each do |max_250_ids|
+        @related_products += shopify_products({ids: max_250_ids.join(','), limit: 250}).to_a
+    end
+    @related_products
+  end
+
+  ##
+  # @return [ShopifyAPI::Product|NilClass] nil if not product available, otherwise the shopify product model
+  def shopify_products(params)
+    puts "Shopify Api fetch products " + params.to_s
+    ShopifyAPI::Product.where(params)
+  rescue => e
+    Rails.logger.error(e)
+    nil
+  end
+
+  ##
   # Display a product's price, check which currency the store is using, and render a string
   #
   # @param [String] money_amount "10.00"
   # @return [String] Price in the form of "$10.00"
   def price(money_amount)
-    ShopifyAPI::Session.temp(shopify_domain, shopify_token) {
-      ShopifyAPI::Shop.current.attributes['money_format'].gsub('{{amount}}', money_amount);
-    }
+    money_format.gsub('{{amount}}', money_amount)
+  end
+
+  def money_format
+    Rails.cache.fetch("stores/#{id}/money_format", expires_in: 1.month) do
+      ShopifyAPI::Session.temp(shopify_domain, shopify_token) {
+        format = ShopifyAPI::Shop.current.attributes['money_format']
+        puts " >>> `HIT SHOPIFY API (ShopifyAPI::Shop.current)"
+        format
+      }
+    end
   end
 
   private

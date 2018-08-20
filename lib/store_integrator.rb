@@ -11,7 +11,6 @@ class StoreIntegrator
   ##
   # Integrate the app into current store
   def integrate!
-    install_script_tag!("#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js")
     install_footer!
     set_platform_data
   end
@@ -20,19 +19,11 @@ class StoreIntegrator
   # @param store [Store] The store that you want to check if has been integrated properly
   # @return [Boolean] True if integrated properly, false otherwise.
   def integrated?
-    ShopifyAPI::ScriptTag.all.any? &&
+    footer = load_asset('snippets/reserveinstore_footer.liquid')
       @store.platform_store_id.present? &&
-      load_asset('snippets/reserveinstore_footer.liquid').present? &&
-      load_asset('snippets/reserveinstore_footer.liquid').value.include?(RESERVE_IN_STORE_CODE) &&
+      footer.present? &&
+      footer.value.include?(RESERVE_IN_STORE_CODE) &&
       load_asset('layout/theme.liquid').value.include?("{% include 'reserveinstore_footer' %}")
-  end
-
-  ##
-  # @param [Object] src Source of the script tag to install
-  def install_script_tag!(src)
-    return true if ShopifyAPI::ScriptTag.all.any? # There should only be one
-
-    ShopifyAPI::ScriptTag.create(src: src, event: 'onload')
   end
 
   ##
@@ -48,6 +39,7 @@ class StoreIntegrator
   # @param [Object] path Path of the asset to load
   # @return [ShopifyAPI::Asset] The Shopify asset object if successful, raise an error otherwise.
   def asset(path)
+    puts "Shopify API load asset " + path
     ShopifyAPI::Asset.find(path)
   end
 
@@ -55,6 +47,7 @@ class StoreIntegrator
   # Set current store's name and platform id
   # @return [Boolean] True if successful, false otherwise.
   def set_platform_data
+    puts "Shopify API load store data"
     platform_data = ShopifyAPI::Shop.current.attributes
     @store.platform_store_id = platform_data['id']
     @store.name = platform_data['name']
@@ -70,11 +63,13 @@ class StoreIntegrator
     snippet = load_asset(snippet_path)
 
     if snippet.blank?
+      puts "Shopify API create asset " + snippet_path
       snippet = ShopifyAPI::Asset.new(key: snippet_path)
     end
 
     # Update content with latest footer script
     snippet.value = snippet_content
+    puts "Shopify API update asset " + snippet_path
     snippet.save
   end
 
@@ -105,6 +100,7 @@ class StoreIntegrator
       true
     else
       theme_template.value = theme_template.value.gsub('</body>', "#{include_code}\n</body>")
+      puts "Shopify API update asset 'layout/theme.liquid'"
       theme_template.save
     end
   end

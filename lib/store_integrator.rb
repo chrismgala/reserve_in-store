@@ -13,6 +13,7 @@ class StoreIntegrator
   def integrate!
     install_footer!
     set_platform_data
+    integrated?
   end
 
   ##

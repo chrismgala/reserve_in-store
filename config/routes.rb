@@ -1,8 +1,6 @@
 Rails.application.routes.draw do
   resources :reservations
   resources :locations
-  # TODO This routes is not in use right now
-  # get 'setup/integrate'
   get 'stores/settings'
   match 'stores/settings' => 'stores#save_settings', via: [:post, :patch]
 

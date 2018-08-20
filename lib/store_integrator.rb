@@ -19,11 +19,11 @@ class StoreIntegrator
   # @param store [Store] The store that you want to check if has been integrated properly
   # @return [Boolean] True if integrated properly, false otherwise.
   def integrated?
-    footer = load_asset('snippets/reserveinstore_footer.liquid')
     unless @store.platform_store_id.present?
       puts "INTEGRATION CHECK @store.platform_store_id.present? == false"
       return false
     end
+    footer = load_asset('snippets/reserveinstore_footer.liquid')
     unless footer.present?
       puts "INTEGRATION CHECK 'snippets/reserveinstore_footer.liquid' is not present"
       return false

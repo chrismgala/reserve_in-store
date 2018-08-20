@@ -16,7 +16,7 @@ class ReservationsController < LoggedInController
 
     respond_to do |format|
       if @reservation.save
-        format.html { redirect_to reservations_path, notice: 'reservation was successfully created.' }
+        format.html { redirect_to reservations_path, notice: 'Reservation was successfully created.' }
         format.json { render :reservations, status: :ok }
       else
         format.html { redirect_to reservations_path, flash: { error: @reservation.errors.full_messages.join("\n") } }
@@ -30,7 +30,7 @@ class ReservationsController < LoggedInController
   def update
     respond_to do |format|
       if @reservation.update(reservation_params)
-        format.html { redirect_to reservations_path, notice: 'reservation was successfully updated.' }
+        format.html { redirect_to reservations_path, notice: 'Reservation was successfully updated.' }
         format.json { render :show, status: :ok, reservation: @reservation }
       else
         format.html { redirect_to reservations_path, flash: { error: @reservation.errors.full_messages.join("\n") } }

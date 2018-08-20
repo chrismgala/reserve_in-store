@@ -1,16 +1,15 @@
 class LocationMailer < ApplicationMailer
   ##
   # Generate email to tell the store owner that a new reservation request has been submitted and provide all the details of the request.
-  # @param [object] store - The store object that got a new reservation
-  # @param [object] reservation - The reservation object that just been created
-  # @param [object] product - The product object being reserved
-  # @param [object] variant - The variant object being reserved
+  # @param [Store] store - The store object that got a new reservation
+  # @param [Reservation] reservation - The reservation object that just been created
+  # @param [String] product_title - The product title
+  # @param [String] variant_title - The variant title
   # @returns [Mail::Message]
-  def new_reservation(store, reservation, product, variant)
+  def new_reservation(store:, reservation:, shopify_product_link:)
     @store = store
     @reservation = reservation
-    @product = product
-    @variant = variant
+    @shopify_product_link = shopify_product_link
     staged_mail(to: to_location, subject: "A new reservation request has been submitted", from: from_system)
   end
 

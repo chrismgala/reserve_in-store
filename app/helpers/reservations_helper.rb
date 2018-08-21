@@ -11,7 +11,7 @@ module ReservationsHelper
   # @param [Hash] params, including ids, limit, etc
   # @return [ShopifyAPI::Product|NilClass] nil if no available products, otherwise a collection of Shopify products
   def shopify_products(params)
-    puts "Shopify Api fetch products " + params.to_s
+    ForcedLogger.log("Shopify Api fetch products " + params.to_s)
     ShopifyAPI::Product.where(params)
   rescue => e
     Rails.logger.error(e)

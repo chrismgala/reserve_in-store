@@ -13,7 +13,9 @@ class StoreIntegrator
   def integrate!
     install_footer!
     set_platform_data
-    integrated?
+    unless integrated?
+      ForcedLogger.error("Failed to integrate", sentry: true)
+    end
   end
 
   ##

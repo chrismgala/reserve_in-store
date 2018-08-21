@@ -23,20 +23,20 @@ class StoreIntegrator
   # @return [Boolean] True if integrated properly, false otherwise.
   def integrated?
     unless @store.platform_store_id.present?
-      ForcedLogger.log("INTEGRATION CHECK @store.platform_store_id.present? == false")
+      ForcedLogger.log("INTEGRATION CHECK @store.platform_store_id.present? == false", store: @store.try(:id))
       return false
     end
     footer = load_asset('snippets/reserveinstore_footer.liquid')
     unless footer.present?
-      ForcedLogger.log("INTEGRATION CHECK 'snippets/reserveinstore_footer.liquid' is not present")
+      ForcedLogger.log("INTEGRATION CHECK 'snippets/reserveinstore_footer.liquid' is not present", store: @store.try(:id))
       return false
     end
     unless footer.value.include?(RESERVE_IN_STORE_CODE)
-      ForcedLogger.log("INTEGRATION CHECK code inside 'snippets/reserveinstore_footer.liquid' is not what we want")
+      ForcedLogger.log("INTEGRATION CHECK code inside 'snippets/reserveinstore_footer.liquid' is not what we want", store: @store.try(:id))
       return false
     end
     unless load_asset('layout/theme.liquid').value.include?("{% include 'reserveinstore_footer' %}")
-      ForcedLogger.log("INTEGRATION CHECK 'layout/theme.liquid' does not include '{% include 'reserveinstore_footer' %}'")
+      ForcedLogger.log("INTEGRATION CHECK 'layout/theme.liquid' does not include '{% include 'reserveinstore_footer' %}'", store: @store.try(:id))
       return false
     end
     true
@@ -56,7 +56,7 @@ class StoreIntegrator
   # @param [Object] path Path of the asset to load
   # @return [ShopifyAPI::Asset] The Shopify asset object if successful, raise an error otherwise.
   def asset(path)
-    ForcedLogger.log("Shopify API load asset " + path)
+    ForcedLogger.log("Shopify API load asset " + path, store: @store.try(:id))
     ShopifyAPI::Asset.find(path)
   end
 
@@ -64,7 +64,7 @@ class StoreIntegrator
   # Set current store's name and platform id
   # @return [Boolean] True if successful, false otherwise.
   def set_platform_data
-    ForcedLogger.log("Shopify API load store data")
+    ForcedLogger.log("Shopify API load store data", store: @store.try(:id))
     platform_data = ShopifyAPI::Shop.current.attributes
     @store.platform_store_id = platform_data['id']
     @store.name = platform_data['name']
@@ -80,13 +80,13 @@ class StoreIntegrator
     snippet = load_asset(snippet_path)
 
     if snippet.blank?
-      ForcedLogger.log("Shopify API create asset " + snippet_path)
+      ForcedLogger.log("Shopify API create asset " + snippet_path, store: @store.try(:id))
       snippet = ShopifyAPI::Asset.new(key: snippet_path)
     end
 
     # Update content with latest footer script
     snippet.value = snippet_content
-    ForcedLogger.log("Shopify API update asset " + snippet_path)
+    ForcedLogger.log("Shopify API update asset " + snippet_path, store: @store.try(:id))
     snippet.save
   end
 
@@ -117,7 +117,7 @@ class StoreIntegrator
       true
     else
       theme_template.value = theme_template.value.gsub('</body>', "#{include_code}\n</body>")
-      ForcedLogger.log("Shopify API update asset 'layout/theme.liquid'")
+      ForcedLogger.log("Shopify API update asset 'layout/theme.liquid'", store: @store.try(:id))
       theme_template.save
     end
   end

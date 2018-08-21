@@ -67,11 +67,11 @@
                         </div>
                       <% else %>
                         <%= reservation.platform_product_id %>
-                        <div style="font-size:smaller">
-                          <% if reservation.platform_variant_id.present? %>
+                        <% if reservation.platform_variant_id.present? %>
+                          <div style="font-size:smaller">
                             <%= reservation.platform_variant_id %>
-                          <% end %>
-                        </div>
+                          </div>
+                        <% end %>
                       <% end %>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %>

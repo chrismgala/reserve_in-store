@@ -11,10 +11,10 @@ module ReservationsHelper
   # @param [Hash] params, including ids, limit, etc
   # @return [ShopifyAPI::Product|NilClass] nil if no available products, otherwise a collection of Shopify products
   def shopify_products(params)
-    ForcedLogger.log("Shopify Api fetch products " + params.to_s)
+    ForcedLogger.log("Shopify Api fetch products " + params.to_s, store: @current_store.try(:id))
     ShopifyAPI::Product.where(params)
   rescue => e
-    ForcedLogger.error("Failed to load Shopify products where #{params}, #{e}", sentry: true, store: @store.try(:id))
+    ForcedLogger.error("Failed to load Shopify products where #{params}, #{e}", sentry: true, store: @current_store.try(:id))
     nil
   end
 

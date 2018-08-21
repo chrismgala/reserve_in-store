@@ -1,5 +1,6 @@
 class Reservation < ActiveRecord::Base
   serialize :line_item
+  attr_accessor :product_info
   belongs_to :store
   belongs_to :location
 
@@ -19,17 +20,10 @@ class Reservation < ActiveRecord::Base
   end
 
   ##
-  # Set product_info as an instance variable
-  # @return [Hash] [:product_title, :product_handle, :variant_title]
-  def product_info(params = {})
-    @product_info ||= params
-  end
-
-  ##
   # Save the reservation, and send notification emails to the customer and the store owner
   # @return [Boolean] save result
   def save_and_email(product_info)
-    product_info(product_info)
+    self.product_info = product_info
     return false unless save
     send_notification_emails
     true

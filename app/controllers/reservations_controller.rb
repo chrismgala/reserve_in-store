@@ -6,7 +6,6 @@ class ReservationsController < LoggedInController
   def index
     @reservations = @current_store.reservations.order(id: :asc).page params[:page]
     @reservation = Reservation.new
-    @products = @current_store.related_products
   end
 
   ##

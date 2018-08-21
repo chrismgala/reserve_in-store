@@ -41,6 +41,7 @@
                 </tr>
                 </thead>
                 <tbody>
+                <% @products = related_products(@reservations) %>
                 <% @reservations.each do |reservation| %>
                   <tr class="Polaris-DataTable__TableRow">
                     <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row"><%= local_time(reservation.created_at) %></th>
@@ -48,7 +49,7 @@
 
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.location.name %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <% product = @products.select {|p| p.id.to_s == reservation.platform_product_id} %>
+                      <% product = @products.select {|p| p.id.to_s == reservation.platform_product_id} if @products.present? %>
                       <% if product.present? %>
                         <%= product.first.title %>
                         <div style="font-size:smaller">
@@ -65,7 +66,12 @@
                           <% end %>
                         </div>
                       <% else %>
-                        Product not found.
+                        <%= reservation.platform_product_id %>
+                        <div style="font-size:smaller">
+                          <% if reservation.platform_variant_id.present? %>
+                            <%= reservation.platform_variant_id %>
+                          <% end %>
+                        </div>
                       <% end %>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %>

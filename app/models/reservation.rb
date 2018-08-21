@@ -1,6 +1,5 @@
 class Reservation < ActiveRecord::Base
   serialize :line_item
-  attr_accessor :product_info
   belongs_to :store
   belongs_to :location
 
@@ -23,7 +22,7 @@ class Reservation < ActiveRecord::Base
   # Save the reservation, and send notification emails to the customer and the store owner
   # @return [Boolean] save result
   def save_and_email(product_info)
-    self.product_info = product_info
+    @product_info = product_info
     return false unless save
     send_notification_emails
     true
@@ -43,8 +42,8 @@ class Reservation < ActiveRecord::Base
   # Creates a link for the reservation's product
   # @return [String] HTML link to the shopify product OR a raw "unknown product" string
   def shopify_product_link!
-    if product_info.present?
-      "<a href='https://#{store.shopify_domain}/product/#{product_info[:product_handle]}'>#{shopify_product_variant_title!}</a>"
+    if @product_info.present?
+      "<a href='https://#{store.shopify_domain}/product/#{@product_info[:product_handle]}'>#{shopify_product_variant_title!}</a>"
     else
       "Unknown Product"
     end
@@ -54,11 +53,11 @@ class Reservation < ActiveRecord::Base
   # Creates the product variant title
   # @return [String] title of the product variant
   def shopify_product_variant_title!
-    if product_info[:product_title].present?
-      if product_info[:variant_title].present? && product_info[:variant_title] != 'Default Title'
-        "#{product_info[:product_title]} (#{product_info[:variant_title]})"
+    if @product_info[:product_title].present?
+      if @product_info[:variant_title].present? && @product_info[:variant_title] != 'Default Title'
+        "#{@product_info[:product_title]} (#{@product_info[:variant_title]})"
       else
-        product_info[:product_title]
+        @product_info[:product_title]
       end
     else
       "Unknown Product"

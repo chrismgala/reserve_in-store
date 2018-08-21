@@ -14,7 +14,7 @@ module ReservationsHelper
     ForcedLogger.log("Shopify Api fetch products " + params.to_s)
     ShopifyAPI::Product.where(params)
   rescue => e
-    ForcedLogger.error("Failed to load Shopify products where #{params}, #{e}", sentry: true)
+    ForcedLogger.error("Failed to load Shopify products where #{params}, #{e}", sentry: true, store: @store.try(:id))
     nil
   end
 

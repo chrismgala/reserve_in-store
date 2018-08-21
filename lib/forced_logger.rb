@@ -23,14 +23,10 @@ class ForcedLogger
   # @param context[:log] [String] If set, message will be sent to the log but not sent to sentry.
   def self.error(msg, context = {})
     if msg.is_a?(Exception)
-      pd("ForcedLogger.error Exception: #{msg}\n", '=', :top, 1)
-      pd(msg.backtrace[0..9].join("\n"), '=', :bottom, 1)
-
       context[:sentry] = true if context[:sentry].nil?
       Raven.capture_exception(msg, { extra: context.except(:sentry, :trace, :log) }) if context[:sentry]
       msg = msg.to_s
     else
-      pd("ForcedLogger.error #{msg}", '=', 2)
       Raven.capture_message(msg, { extra: context.except(:sentry, :trace, :log) }) if context[:sentry]
     end
     Rails.logger.error(log_string(msg, context))

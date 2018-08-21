@@ -14,7 +14,7 @@ class StoreIntegrator
     install_footer!
     set_platform_data
     unless integrated?
-      ForcedLogger.error("Failed to integrate", sentry: true)
+      ForcedLogger.error("Failed to integrate", sentry: true, store: @store.try(:id))
     end
   end
 
@@ -48,7 +48,7 @@ class StoreIntegrator
   def load_asset(asset_path)
     asset(asset_path)
   rescue ActiveResource::ResourceNotFound => e
-    ForcedLogger.error("Failed to load Shopify asset #{asset_path}, #{e}", sentry: true)
+    ForcedLogger.error("Failed to load Shopify asset #{asset_path}, #{e}", sentry: true, store: @store.try(:id))
     nil
   end
 

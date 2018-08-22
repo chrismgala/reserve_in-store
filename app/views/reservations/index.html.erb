@@ -41,6 +41,7 @@
                 </tr>
                 </thead>
                 <tbody>
+                <% @products = related_products(@reservations) %>
                 <% @reservations.each do |reservation| %>
                   <tr class="Polaris-DataTable__TableRow">
                     <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row"><%= local_time(reservation.created_at) %></th>
@@ -48,23 +49,30 @@
 
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.location.name %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <% if reservation.shopify_product.present? %>
-                        <%= reservation.shopify_product.title %>
-                      <% else %>
-                        Product not found.
-                      <% end %>
-                      <div style="font-size:smaller">
-                        <% if reservation.shopify_variant.present? && reservation.shopify_variant.title != 'Default Title' %>
-                          <%= reservation.shopify_variant.title %>
-                        <% end %>
-                        <% if reservation.line_item.present? %>
-                          <% eval(reservation.line_item).each do |line_item| %>
-                            <% if line_item[1].present? %>
-                              <p class="ris-text-small"><%= line_item[0] %>: <%= line_item[1] %></p>
+                      <% product = @products.select {|p| p.id.to_s == reservation.platform_product_id} if @products.present? %>
+                      <% if product.present? %>
+                        <%= product.first.title %>
+                        <div style="font-size:smaller">
+                          <% variant = product.first.variants.select {|p| p.id.to_s == reservation.platform_variant_id} %>
+                          <% if variant.present? && variant.first.title != 'Default Title' %>
+                            <%= variant.first.title %>
+                          <% end %>
+                          <% if reservation.line_item.present? %>
+                            <% eval(reservation.line_item).each do |line_item| %>
+                              <% if line_item[1].present? %>
+                                <p class="ris-text-small"><%= line_item[0] %>: <%= line_item[1] %></p>
+                              <% end %>
                             <% end %>
                           <% end %>
+                        </div>
+                      <% else %>
+                        <%= reservation.platform_product_id %>
+                        <% if reservation.platform_variant_id.present? %>
+                          <div style="font-size:smaller">
+                            <%= reservation.platform_variant_id %>
+                          </div>
                         <% end %>
-                      </div>
+                      <% end %>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %>
                       <br><%= reservation.customer_email %><br><%= reservation.customer_phone %></td>

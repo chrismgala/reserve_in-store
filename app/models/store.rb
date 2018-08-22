@@ -55,9 +55,18 @@ class Store < ActiveRecord::Base
   # @param [String] money_amount "10.00"
   # @return [String] Price in the form of "$10.00"
   def price(money_amount)
-    ShopifyAPI::Session.temp(shopify_domain, shopify_token) {
-      ShopifyAPI::Shop.current.attributes['money_format'].gsub('{{amount}}', money_amount);
-    }
+    money_format.gsub('{{amount}}', money_amount)
+  end
+
+  ##
+  # Get store's money format from cache, hit Shopify Api if cache is missing
+  # @return [String] Money format in the form of "${{amount}}"
+  def money_format
+    Rails.cache.fetch("stores/#{id}/money_format", expires_in: 1.month) do
+      ShopifyAPI::Session.temp(shopify_domain, shopify_token) {
+        ShopifyAPI::Shop.current.attributes['money_format']
+      }
+    end
   end
 
   def shopify_link

@@ -1,9 +1,19 @@
 class LoggedInController < ShopifyApp::AuthenticatedController
   before_action :load_current_store
+  before_action :set_raven_context
 
   private
 
   def load_current_store
     @current_store ||= Store.find_by(shopify_domain: current_shopify_domain)
+  end
+
+  ##
+  # Sets the raven context to make debugging easier.
+  # TODO: In the future as we grow we will have to remove the PII data here like email, name, store URL and store name but for now it's just more convenient to include it.
+  def set_raven_context
+    if @current_store.present?
+      Raven.user_context(store_id: @current_store.try(:id), store_domain: @current_store.try(:shopify_domain), store_name: @current_store.try(:name) )
+    end
   end
 end

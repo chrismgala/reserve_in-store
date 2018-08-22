@@ -19,11 +19,10 @@ class Reservation < ActiveRecord::Base
   end
 
   ##
-  # Save the reservation, hit ShopifyAPI to get product and variant information
-  # and send notification emails to the customer and the store owner
-  #
+  # Save the reservation, and send notification emails to the customer and the store owner
   # @return [Boolean] save result
-  def save_and_email
+  def save_and_email(product_info)
+    @product_info = product_info
     return false unless save
     send_notification_emails
     true
@@ -40,49 +39,29 @@ class Reservation < ActiveRecord::Base
   private
 
   ##
-  # Creates and utilizes a shopifyAPI instance to return a link for the reservation's product
+  # Creates a link for the reservation's product
   # @return [String] HTML link to the shopify product OR a raw "unknown product" string
   def shopify_product_link!
-    if shopify_product!.present?
-      "<a href='https://#{store.shopify_domain}/product/#{shopify_product!.handle}'>#{shopify_product_variant_title!}</a>"
+    if @product_info.present?
+      "<a href='https://#{store.shopify_domain}/product/#{@product_info[:product_handle]}'>#{shopify_product_variant_title!}</a>"
     else
       "Unknown Product"
     end
   end
 
   ##
-  # Creates and utilizes a shopifyAPI instance to return the product variant title
+  # Creates the product variant title
   # @return [String] title of the product variant
   def shopify_product_variant_title!
-    if shopify_product!.present?
-      if shopify_variant!.present? && shopify_variant!.title != 'Default Title'
-        "#{shopify_product!.title} (#{shopify_variant!.title})"
+    if @product_info[:product_title].present?
+      if @product_info[:variant_title].present? && @product_info[:variant_title] != 'Default Title'
+        "#{@product_info[:product_title]} (#{@product_info[:variant_title]})"
       else
-        shopify_product!.title
+        @product_info[:product_title]
       end
     else
       "Unknown Product"
     end
-  end
-
-  ##
-  # ! Dangerous method since if we do not check .present? we will query the API way too much !
-  # @return [ShopifyAPI::Product|NilClass] nil if not product available, otherwise the shopify product model
-  def shopify_product!
-    @shopify_product ||= ShopifyAPI::Product.find(platform_product_id)
-  rescue => e
-    Rails.logger.error(e)
-    nil
-  end
-
-  ##
-  # ! Dangerous method since if we do not check .present? we will query the API way too much !
-  # @return [ShopifyAPI::Variant|NilClass] nil if not variant available, otherwise the shopify variant model
-  def shopify_variant!
-    @shopify_variant ||= ShopifyAPI::Variant.find(platform_variant_id)
-  rescue => e
-    Rails.logger.error(e)
-    nil
   end
 
   ##

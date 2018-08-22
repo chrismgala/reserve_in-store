@@ -31,28 +31,16 @@
                 <div class="Polaris-Card__Section">
                   <div class="Polaris-FormLayout">
 
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-Labelled__LabelWrapper">
-                        <div class="Polaris-Label">
-                          <%= f.label :name, class: 'Polaris-Label__Text' %>
-                        </div>
-                      </div>
-                      <div class="Polaris-TextField">
-                        <%= f.text_field :name, class: 'Polaris-TextField__Input', required: true %>
-                        <div class="Polaris-TextField__Backdrop"></div>
-                      </div>
-                    </div>
-
                     <div role="group" class="Polaris-FormLayout--condensed">
                       <div class="Polaris-FormLayout__Items">
                         <div class="Polaris-FormLayout__Item">
                           <div class="Polaris-Labelled__LabelWrapper">
                             <div class="Polaris-Label">
-                              <%= f.label :email, class: 'Polaris-Label__Text' %>
+                              <%= f.label :name, class: 'Polaris-Label__Text' %>
                             </div>
                           </div>
                           <div class="Polaris-TextField">
-                            <%= f.email_field :email, class: 'Polaris-TextField__Input', required: true, 'multiple': '' %>
+                            <%= f.text_field :name, class: 'Polaris-TextField__Input', required: true %>
                             <div class="Polaris-TextField__Backdrop"></div>
                           </div>
                         </div>
@@ -67,6 +55,22 @@
                             <div class="Polaris-TextField__Backdrop"></div>
                           </div>
                         </div>
+                      </div>
+                    </div>
+
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label :email, class: 'Polaris-Label__Text' %>
+                        </div>
+                      </div>
+                      <div class="Polaris-TextField">
+                        <input class="Polaris-TextField__Input" required="required" type="email" multiple="multiple" name="location[email]" id="location_email" value="<%=f.object.attributes['email'] if f.object.present?  %>">
+                        <div class="Polaris-TextField__Backdrop"></div>
+                      </div>
+                      <div class="Polaris-Labelled__HelpText">
+                        The administration email which we will forward reservation information to.<br>
+                        If you want to send notifications to multiple email addresses, input a comma-separated list like "jane@example.com, nick@example.com".
                       </div>
                     </div>
 

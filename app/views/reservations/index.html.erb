@@ -44,7 +44,8 @@
                 <% @products = related_products(@reservations) %>
                 <% @reservations.each do |reservation| %>
                   <tr class="Polaris-DataTable__TableRow">
-                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row"><%= local_time(reservation.created_at) %></th>
+                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row">
+                      <p class="polaris-header-text"><%= local_time(reservation.created_at) %></p></th>
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
 
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.location.name %></td>
@@ -134,7 +135,7 @@
 <%= render partial: 'new_reservation_modal' %>
 
 <script>
-    polarisTableHeaderHeightFix();
+    polarisTableHeaderFix();
 
     var reservationModal = new PolarisModal({
         showClass: "reservation-modal-show",

@@ -4,7 +4,7 @@ class ReservationsController < LoggedInController
   ##
   # GET /reservations
   def index
-    @reservations = @current_store.reservations.order(id: :asc).page params[:page]
+    @reservations = @current_store.reservations.order(id: :asc).page(params[:page]).includes(:location)
     @reservation = Reservation.new
   end
 
@@ -57,7 +57,6 @@ class ReservationsController < LoggedInController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def reservation_params
-    # params.fetch(:reservation, {}).require(:name, :email).permit(:address, :country, :state, :city, :phone)
     params.fetch(:reservation, {}).permit(Reservation::PERMITTED_PARAMS)
   end
 

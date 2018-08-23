@@ -134,14 +134,19 @@
 <!-- Modal -->
 <%= render partial: 'new_reservation_modal' %>
 
-<script>
-    polarisTableHeaderFix();
+<% content_for(:javascript) do %>
+  <script>
+      ShopifyApp.ready(function () {
+          ShopifyApp.Bar.initialize({title: "Reservations", icon: "<%= image_url('reserve_32x32.png') %>"});
+      });
+      polarisTableHeaderFix();
 
-    var reservationModal = new PolarisModal({
-        showClass: "reservation-modal-show",
-        containerID: "reservation-modal-container",
-        formID: "reservationCreateForm",
-        closeClass: "reservation-modal-close",
-        submitBtnID: "reservation-modal-submit"
-    });
-</script>
+      var reservationModal = new PolarisModal({
+          showClass: "reservation-modal-show",
+          containerID: "reservation-modal-container",
+          formID: "reservationCreateForm",
+          closeClass: "reservation-modal-close",
+          submitBtnID: "reservation-modal-submit"
+      });
+  </script>
+<% end %>

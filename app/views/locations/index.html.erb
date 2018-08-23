@@ -36,11 +36,17 @@
                 <tbody>
                 <% @locations.each do |location| %>
                   <tr class="Polaris-DataTable__TableRow">
-                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row"><%= location.name %></th>
+                    <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row">
+                      <p class="polaris-header-text"><%= location.name %></p></th>
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.address %><br>
-                    <%= location.formatted_address %><br><%= location.country %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.email %></td>
+                      <%= location.formatted_address %><br><%= location.country %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <% if location.email.present? %>
+                        <% location.email.split(',').each do |email| %>
+                          <p><%= email %></p>
+                        <% end %>
+                      <% end %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.phone %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim button-margin-right' %>
@@ -86,5 +92,5 @@
 </div>
 
 <script>
-    polarisTableHeaderHeightFix();
+    polarisTableHeaderFix();
 </script>

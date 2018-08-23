@@ -18,7 +18,8 @@ class LocationMailer < ApplicationMailer
   end
 
   def to_location
-    "#{@reservation.location.name} <#{@reservation.location.email}>"
+    @store.name.present? ? @reservation.location.email.split(',').map{|email| "#{@store.name} - #{@reservation.location.name} <#{email}>"}
+        : @reservation.location.email.split(',').map{|email| "#{@reservation.location.name} <#{email}>"}
   end
 
 end

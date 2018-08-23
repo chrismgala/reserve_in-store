@@ -20,7 +20,8 @@ class CustomerMailer < ApplicationMailer
   end
 
   def reply_to_location
-    @store.name.present? ? "#{@store.name} <#{@reservation.location.email}>" : @reservation.location.email
+    @store.name.present? ? @reservation.location.email.split(',').map {|email| "#{@store.name} - #{@reservation.location.name} <#{email}>"}
+        : @reservation.location.email.split(',').map {|email| "#{@reservation.location.name} <#{email}>"}
   end
 
   def to_customer

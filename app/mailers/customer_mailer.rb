@@ -20,7 +20,6 @@ class CustomerMailer < ApplicationMailer
   end
 
   def reply_to_location
-    byebug
     @store.name.present? ? @reservation.location.email.split(',').map {|email| "#{@store.name} - #{@reservation.location.name} <#{email}>"}
         : @reservation.location.email.split(',').map {|email| "#{@reservation.location.name} <#{email}>"}
   end

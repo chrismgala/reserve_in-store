@@ -23,6 +23,9 @@ class StoreIntegrator
       true
     else
       ForcedLogger.error("Failed to integrate", sentry: true, store: @store.try(:id))
+      add_error("Failed to integrate the embedded components automatically into your store due " + \
+                  "to an unknown error. Our engineers have been informed about the issue. Please contact our " + \
+                  "support team for help with getting set up.")
       false
     end
   end
@@ -146,11 +149,11 @@ class StoreIntegrator
     end
   end
 
-  private
-
   def has_errors?
     @errors.to_a.any?
   end
+
+  private
 
 
   def add_error(message)

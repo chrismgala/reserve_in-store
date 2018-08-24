@@ -3,9 +3,14 @@ class StoresController < LoggedInController
   ##
   # GET /stores/settings
   def settings
-    unless StoreIntegrator.new(@current_store).integrated?
-      StoreIntegrator.new(@current_store).integrate!
-    end
+    integrator = StoreIntegrator.new(@current_store)
+
+    return if integrator.integrated?
+
+    return if integrator.integrate!
+
+    # integration was not successful:
+    show_integration_errors!(integrator)
   end
 
   ##
@@ -28,5 +33,16 @@ class StoresController < LoggedInController
   def store_params
     params.fetch(:store, {}).permit(Store::PERMITTED_PARAMS)
   end
+
+  def show_integration_errors!(integrator)
+    if integrator.has_errors?
+      flash.now[:error] = integrator.errors.join("\n")
+    else
+      flash.now[:error] = "Failed to integrate the embedded components automatically into your store due " + \
+                  "to an unknown error. Our engineers have been informed about the issue. Please contact our " + \
+                  "support team for help with getting set up."
+    end
+  end
+
 
 end

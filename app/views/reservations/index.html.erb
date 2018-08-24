@@ -17,12 +17,12 @@
               <table class="Polaris-DataTable__Table">
                 <thead>
                 <tr>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header" scope="col" aria-disabled="true">
-                    Placed at
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
+                    <%= sortable('created_at', 'Placed at') %>
                   </th>
                   <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header"></th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Location
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
+                    <%= sortable('location_id', 'Location') %>
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Product
@@ -33,8 +33,8 @@
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Notes
                   </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Status
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
+                    <%= sortable('fulfilled', 'Status') %>
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                   </th>
@@ -134,14 +134,19 @@
 <!-- Modal -->
 <%= render partial: 'new_reservation_modal' %>
 
-<script>
-    polarisTableHeaderFix();
+<% content_for(:javascript) do %>
+  <script>
+      ShopifyApp.ready(function () {
+          ShopifyApp.Bar.initialize({title: "Reservations", icon: "<%= image_url('reserve_32x32.png') %>"});
+      });
+      polarisTableHeaderFix();
 
-    var reservationModal = new PolarisModal({
-        showClass: "reservation-modal-show",
-        containerID: "reservation-modal-container",
-        formID: "reservationCreateForm",
-        closeClass: "reservation-modal-close",
-        submitBtnID: "reservation-modal-submit"
-    });
-</script>
+      var reservationModal = new PolarisModal({
+          showClass: "reservation-modal-show",
+          containerID: "reservation-modal-container",
+          formID: "reservationCreateForm",
+          closeClass: "reservation-modal-close",
+          submitBtnID: "reservation-modal-submit"
+      });
+  </script>
+<% end %>

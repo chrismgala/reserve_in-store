@@ -1,4 +1,6 @@
 module ReservationsHelper
+  include SortableHelper
+
   ##
   # @param [Reservation] reservations reservations displayed on current page
   # @return [ShopifyAPI::Product|NilClass] nil if no available products, otherwise a collecFtion of Shopify products

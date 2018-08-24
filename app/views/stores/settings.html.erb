@@ -190,6 +190,9 @@
 
 <% content_for(:javascript) do %>
   <script>
+      ShopifyApp.ready(function () {
+          ShopifyApp.Bar.initialize({title: "Settings", icon: "<%= image_url('reserve_32x32.png') %>"});
+      });
       var emailTemplateEditor = new LiquidTemplateEditor({
           templateFormFieldSelector: '#store_email_template',
           aceEditorId: 'ace_email_editor',

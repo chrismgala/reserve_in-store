@@ -7,8 +7,8 @@
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Reservation popup</h2>
-                <p>Customize the style of your reserve in-store popup</p>
+                <h2 class="Polaris-Heading">Edit Reservation Pop-up</h2>
+                <p>Customize the header message and data fields of your "Reserve In Store" pop-up</p>
               </div>
             </div>
             <div class="Polaris-Layout__AnnotationContent">
@@ -18,11 +18,11 @@
                     <div class="Polaris-FormLayout__Item">
                       <div class="Polaris-Labelled__LabelWrapper">
                         <div class="Polaris-Label">
-                          <%= f.label 'Message on top of the window', class: 'Polaris-Label__Text' %>
+                          <%= f.label 'Header Message', class: 'Polaris-Label__Text' %>
                         </div>
                       </div>
                       <div class="Polaris-TextField">
-                        <textarea class="Polaris-TextField__Input" name="store[top_msg]" id="store_top_msg" placeholder="Default to &quot;Fill out the form below and we'll reserve the product at the location you specify.&quot;"><%= f.object.attributes['top_msg'] %></textarea>
+                        <textarea class="Polaris-TextField__Input" name="store[top_msg]" id="store_top_msg" placeholder="Defaults to &quot;Fill out the form below and we'll reserve the product at the location you specify&quot;"><%= f.object.attributes['top_msg'] %></textarea>
                         <div class="Polaris-TextField__Backdrop"></div>
                       </div>
                     </div>
@@ -89,8 +89,8 @@
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Success Message</h2>
-                <p>We’ll display this message in the confirmation popup, after customers create new reservations</p>
+                <h2 class="Polaris-Heading">Edit Success Message</h2>
+                <p>Customize the message that is displayed when customers place new reservations</p>
               </div>
             </div>
             <div class="Polaris-Layout__AnnotationContent">
@@ -120,7 +120,7 @@
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
                 <h2 class="Polaris-Heading">Edit Reservation Email Templates</h2>
-                <p>Customize the appearance of your reservation emails using Liquid/HTML</p>
+                <p>Customize the reservation email that gets sent to customers using HTML</p>
                 <%= button_tag id: "email_template_update_btn", class: "Polaris-Button", type: "button" do %>
                   <span class="Polaris-Button__Content"><span>Update Preview</span></span>
                 <% end %>
@@ -156,7 +156,7 @@
                       <div class="Polaris-Labelled__LabelWrapper">
                         <div class="Polaris-Label">
                           <%= f.label :email_template, class: "Polaris-Label__Text" do %>
-                            Liquid/HTML Editor
+                            HTML Editor
                           <% end %>
                         </div>
                       </div>

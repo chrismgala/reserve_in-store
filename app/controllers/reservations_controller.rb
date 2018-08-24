@@ -1,10 +1,12 @@
 class ReservationsController < LoggedInController
+  include HasSortableColumns
+
   before_action :set_reservation, only: [:show, :edit, :update, :destroy]
 
   ##
   # GET /reservations
   def index
-    @reservations = @current_store.reservations.order(id: :asc).page(params[:page]).includes(:location)
+    @reservations = @current_store.reservations.order(column_sort_query).page(params[:page]).includes(:location)
     @reservation = Reservation.new
   end
 
@@ -60,4 +62,10 @@ class ReservationsController < LoggedInController
     params.fetch(:reservation, {}).permit(Reservation::PERMITTED_PARAMS)
   end
 
+  ##
+  # Only allow the order table to be sorted by whitelisted columns
+  # @return [Array] - Array of strings of appropriate column names
+  def sortable_columns
+    ['created_at', 'fulfilled', 'location_id']
+  end
 end

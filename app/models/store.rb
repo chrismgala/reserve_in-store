@@ -62,12 +62,21 @@ class Store < ActiveRecord::Base
   # Get store's money format from cache, hit Shopify Api if cache is missing
   # @return [String] Money format in the form of "${{amount}}"
   def money_format
-    Rails.cache.fetch("stores/#{id}/money_format", expires_in: 1.month) do
-      ShopifyAPI::Session.temp(shopify_domain, shopify_token) {
-        ShopifyAPI::Shop.current.attributes['money_format']
-      }
-    end
+    shopify_settings['money_format']
   end
+
+  def shopify_settings
+    Rails.cache.fetch("stores/#{id}/shopify_settings", expires_in: 1.week) do
+      ShopifyAPI::Session.temp(shopify_domain, shopify_token) {
+        ShopifyAPI::Shop.current.attributes
+      }
+    end.with_indifferent_access
+  end
+
+  def with_shopify_session
+    ShopifyAPI::Session.temp(shopify_domain, shopify_token) { yield(self) }
+  end
+
 
   def shopify_link
     "<a href='https://#{shopify_domain}'>#{name}</a>"

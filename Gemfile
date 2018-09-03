@@ -14,6 +14,7 @@ gem 'non-stupid-digest-assets', '~> 1.0.9' # used for compiling both digest and 
 gem 'liquid', '~> 4.0.0' # For rendering liquid templates that we use to theme the displays. We allow them to customize our liquid templates.
 gem 'pg', '~> 0.20.0' # Use postgresql as the database for Active Record
 gem 'puma', '~> 3.11' # Use Puma as the app server
+gem "intercom-rails", '~> 0.4.0' # For live chat, support and knowledgebase
 gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (CORS) serve public assets
 gem 'rails', '~> 5.2.0' # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets

@@ -12,13 +12,13 @@
 
 
 # Introduction
-This repository is for the Reserve In-Store Shopify app.
+This repository is for the In-Store Reserver Shopify app.
 
 
 ## Application Overview
 
 #### Why do merchants need this?
-When customers comes in to your online store, they either make the purchases right away or they leaves. Especially when it comes to high-priced items, many people won't place their orders online. Let customers actually see the products will clearly increase their chance of buying. Reserve In-Store is a simple application that adds a "reserve in store" option in your online store. By adding this feature, you will have the chance to make more deals when customers comes into your store in person.
+When customers comes in to your online store, they either make the purchases right away or they leaves. Especially when it comes to high-priced items, many people won't place their orders online. Let customers actually see the products will clearly increase their chance of buying. In-Store Reserver is a simple application that adds a "reserve in store" option in your online store. By adding this feature, you will have the chance to make more deals when customers comes into your store in person.
 
 #### How do merchants start using the app?
 ** TODO: PLEASE FILL THIS OUT **
@@ -55,7 +55,7 @@ You'll want to run this on another port other than 3000, so you don't conflict w
 If everything ran properly you should be able to see a standard Rails Getting Started when you got to http://localhost:3003 (or whatever your port is) in your browser.
 
 ## Setup the Platform API (Shopify, BigCommerce, etc)
-If you want to test installing Reserve In-Store App store you will need to create a development app in Shopify (or BigCommerce or whatever platform you're working in). Here's how to do it:
+If you want to test installing In-Store Reserver App store you will need to create a development app in Shopify (or BigCommerce or whatever platform you're working in). Here's how to do it:
 
 #### 1. Setup ngrok.io
 Signup at `ngrok.io` and/or install the app into your computer. Then just run it with `ngrok http 3000` if your port number is `3000` for your rails app. The default port for rails apps is `3000`. 
@@ -165,12 +165,12 @@ A few key things to note:
 #### Use our theme whenever possible.
 Please use the theme to find user interface controls and the appropriate color palette.  Documentation can be found [here](https://angle-on-rails.herokuapp.com/dashboard/dashboard_v1). 
 
-#### Be responsive.
+#### Be responsive.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 Our app is used via mobile phone, tablet and Desktop.  Every view should be responsive.  Leverage Bootstrap to do this. 
 
 In the frontend for customers and visitors (customers of our merchants) everything MUST Be mobile responsive and work perfectly in mobile views 300px wide and up.
 
-In the app dashboard (where merchants log in to manage their Reserve In-Store App account) you don't have to support mobile views 100%, but it is highly recommended.
+In the app dashboard (where merchants log in to manage their In-Store Reserver App account) you don't have to support mobile views 100%, but it is highly recommended.
 
 #### Use Bootstrap
 It's important to understand Bootstrap's column layout in order to be effective with it.

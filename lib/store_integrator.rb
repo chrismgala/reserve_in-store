@@ -142,22 +142,23 @@ class StoreIntegrator
       if theme_template.value.to_s.include?('</body>')
         theme_template.value = theme_template.value.gsub('</body>', "#{include_code}\n</body>")
         log("Shopify API update asset 'layout/theme.liquid'")
-        theme_template.save
-        # @kadukia commented below code.
-        #unless theme_template.save
-        #  add_error("Failed to edit your theme file because of an error received from the Shopify server. " + \
-        #          "Please consult our support team for help. Until you do this, the integrated components may " + \
-        #          "not show in your store.")
-        #end
+        unless theme_template.save
+          add_error("Failed to edit your theme file because of an error received from the Shopify server. " + \
+                  "Please consult our support team for help. Until you do this, the integrated components may " + \
+                  "not show in your store.")
+        else
+          return true
+        end
+
       else
         add_error("We could not integrate the embedded components in your store because your theme is missing an ending " + \
                   "body tag in the layout/theme.liquid file. This means that your themes HTML is invalid and may render " + \
                   "incorrectly in many browser, and may also be penalized by search engines. Please consult your developer, " + \
                   "or reach out to our support team for help with fixing this problem on your store. Once it is fixed you " + \
                   "will be able to try installing this app again.")
-        has_errors?
       end
 
+      has_errors?
     end
 
   end

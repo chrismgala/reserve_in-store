@@ -146,6 +146,8 @@ class StoreIntegrator
           add_error("Failed to edit your theme file because of an error received from the Shopify server. " + \
                   "Please consult our support team for help. Until you do this, the integrated components may " + \
                   "not show in your store.")
+        else
+          return true
         end
 
       else

@@ -156,10 +156,10 @@ class StoreIntegrator
                   "will be able to try installing this app again.")
       end
 
-      has_errors?
+      !has_errors?
     end
-    
-    true
+
+    !has_errors?
   end
 
   def has_errors?

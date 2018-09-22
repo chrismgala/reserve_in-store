@@ -159,7 +159,7 @@ class StoreIntegrator
       has_errors?
     end
     
-    has_errors?
+    true
   end
 
   def has_errors?

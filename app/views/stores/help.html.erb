@@ -1,0 +1,42 @@
+<div class="Polaris-Page">
+  <div class="Polaris-Page__Content">
+    <div class="Polaris-Layout">
+
+      <div class="Polaris-Layout__AnnotatedSection">
+        <div class="Polaris-Layout__AnnotationWrapper">
+          <div class="Polaris-Layout__Annotation">
+            <div class="Polaris-TextContainer">
+              <h2 class="Polaris-Heading">How Reserve In-Store Works:</h2>
+              <p>A tutorial explaining our interactions with your customers</p>
+            </div>
+          </div>
+          <div class="Polaris-Layout__AnnotationContent">
+            <div class="Polaris-Card">
+              <div class="Polaris-Card__Section">
+                <div class="Polaris-CalloutCard">
+                  <div class="Polaris-CalloutCard__Content">
+                    <div class="Polaris-CalloutCard__Title Polaris-TextContainer--spacingLoose">
+                      <h1 class="Polaris-Heading">Reserve In-Store helps your customers put items on hold</h1>
+                      <p>After installation, each product in your store will have have a new "reserve in-store" button.</p>
+                      <p>If a customer clicks this button, they will be greeted with a form to provide you their name, email, phone-number, as well as when/where they want the item held.</p>
+                      <p>You will automatically receive an email detailing their reservation request, and the customer will receive a reservation receipt detailing what they put on hold.</p>
+                      <p>You can customize what locations are available for in-store holds and personalize each message the customer will see.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for(:javascript) do %>
+  <script>
+      ShopifyApp.ready(function () {
+          ShopifyApp.Bar.initialize({title: "Help", icon: "<%= image_url('reserve_32x32.png') %>"});
+      });
+  </script>
+<% end %>

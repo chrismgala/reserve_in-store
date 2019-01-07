@@ -6,7 +6,9 @@ class Store < ActiveRecord::Base
   before_create :generate_keys
   before_save :nil_default_templates
 
-  PERMITTED_PARAMS = [:top_msg, :success_msg, :email_template, :show_phone, :show_instructions_from_customer]
+  PERMITTED_PARAMS = [:top_msg, :success_msg, :email_template, :show_phone, :show_instructions_from_customer, :active]
+
+  validate :active, :active_changed_validation, :if => :active_changed?
 
   ##
   # @return [Text] - default, un-rendered email template
@@ -96,6 +98,24 @@ class Store < ActiveRecord::Base
   # @return [String] generated key based on time and random number
   def generate_key(prefix = "")
     prefix.to_s + Digest::SHA256.hexdigest(prefix.to_s + Time.current.to_f.to_s + rand(99999).to_s)
+  end
+
+  def active_changed_validation
+    begin
+      script_tags = ShopifyAPI::ScriptTag.all
+      if active && script_tags.empty?
+        ShopifyAPI::ScriptTag.create({event:'onload', src: "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"})
+      elsif !active && script_tags.present?
+        ShopifyAPI::ScriptTag.delete(ShopifyAPI::ScriptTag.first.id)
+      end
+    rescue StandardError => e
+      ForcedLogger.error("Failed ScriptTag update for store id #{@scheduled_theme_update.id}", store: id)
+      errors.add(:active, "Issue modifying your storefront. Try again / contact support so we can help you.")
+      self.active = !active
+    end
+
+
+
   end
 
 end

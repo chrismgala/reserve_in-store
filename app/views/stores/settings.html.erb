@@ -1,5 +1,5 @@
 
-<% if @integrator.has_errors? %>
+<% if @integrator.present? && @integrator.has_errors? %>
   <div class="Polaris-Banner Polaris-Banner--statusCritical Polaris-Banner--withinPage" tabindex="0" role="alert" aria-live="polite" aria-labelledby="Banner3Heading" aria-describedby="Banner3Content">
     <div class="Polaris-Banner__Ribbon"><span class="Polaris-Icon Polaris-Icon--colorRedDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><g fill-rule="evenodd"><circle fill="currentColor" cx="10" cy="10" r="9"></circle><path d="M2 10c0-1.846.635-3.543 1.688-4.897l11.209 11.209A7.954 7.954 0 0 1 10 18c-4.411 0-8-3.589-8-8m14.312 4.897L5.103 3.688A7.954 7.954 0 0 1 10 2c4.411 0 8 3.589 8 8a7.952 7.952 0 0 1-1.688 4.897M0 10c0 5.514 4.486 10 10 10s10-4.486 10-10S15.514 0 10 0 0 4.486 0 10"></path></g></svg></span></div>
     <div>
@@ -13,10 +13,41 @@
   </div>
 <% end %>
 
+<%= render partial: 'layouts/partials/error_banner', locals: {item: @current_store} %>
+
 <div class="Polaris-Page">
   <div class="Polaris-Page__Content">
     <%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
       <div class="Polaris-Layout">
+
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Storefront Visibility</h2>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-SettingAction">
+                    <% if @current_store.active? %>
+                      <div class="Polaris-SettingAction__Setting">We are currently <span class="text-success">enabled</span> on your storefront.</div>
+                      <div class="Polaris-SettingAction__Action">
+                        <%= f.button("Disable Us", name: "store[active]", value: false, class: "Polaris-Button Polaris-Button--destructive", data: ({confirm: "Are you sure you want to disable us?"} if @current_store.active?) )%>
+                      </div>
+                    <% else %>
+                      <div class="Polaris-SettingAction__Setting">We are currently <span class="text-danger">disabled</span> on your storefront. Customers will not be able to reserve products until we are enabled.</div>
+                      <div class="Polaris-SettingAction__Action">
+                        <%= f.button("Enable Us", name: "store[active]", value: true, class: "Polaris-Button Polaris-Button--primary")%>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="Polaris-Layout__AnnotatedSection">
           <div class="Polaris-Layout__AnnotationWrapper">

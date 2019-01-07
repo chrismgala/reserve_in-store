@@ -1,6 +1,11 @@
 class StoresController < LoggedInController
 
   ##
+  # GET /stores/help
+  def help
+  end
+
+  ##
   # GET /stores/settings
   def settings
     @integrator = StoreIntegrator.new(@current_store)

@@ -83,11 +83,14 @@ class Store < ActiveRecord::Base
   end
 
   ##
-  # Ensure that the scripts we are injecting has validity with our active state
+  # Ensure that the scripts we are injecting have validity with our active state
   # This method is exclusively used by the stores/save_settings controller
   # This method can modify the errors array
+  # @return [Bool] If we pass validation or not
   def validate_active_and_save!
-    active_validation! if active_changed?
+    if active_changed?
+      return false unless active_validation!
+    end
     self.save
   end
 
@@ -112,6 +115,7 @@ class Store < ActiveRecord::Base
   # If we are active, then our scripttags must be in the api
   # If we are not active, then our scripttags must not be in the api
   # Modify the errors array and flip our active state if we have issues with the APIs.
+  # @return [Bool] If we pass validation or not
   def active_validation!
     begin
       script_tags = ShopifyAPI::ScriptTag.all
@@ -124,7 +128,9 @@ class Store < ActiveRecord::Base
       ForcedLogger.error("Failed ScriptTag update for store id #{id}", store: id)
       errors.add(:active, "Issue modifying your storefront. Try again / contact support so we can help you.")
       self.active = !active
+      return false
     end
+    true
   end
 
 end

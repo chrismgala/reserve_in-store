@@ -22,7 +22,8 @@ class StoresController < LoggedInController
   # PUT/PATCH /stores/settings
   def save_settings
     respond_to do |format|
-      if @current_store.update(store_params)
+      @current_store.assign_attributes(store_params)
+      if @current_store.validate_active_and_save!
         format.html { redirect_to stores_settings_url, notice: 'Store settings were successfully updated.' }
         format.json { render :settings, status: :ok }
       else

@@ -8,8 +8,6 @@ class Store < ActiveRecord::Base
 
   PERMITTED_PARAMS = [:top_msg, :success_msg, :email_template, :show_phone, :show_instructions_from_customer, :active]
 
-  validate :active, :active_changed_validation, :if => :active_changed?
-
   ##
   # @return [Text] - default, un-rendered email template
   def self.default_email_template
@@ -84,6 +82,11 @@ class Store < ActiveRecord::Base
     "<a href='https://#{shopify_domain}'>#{name}</a>"
   end
 
+  def validate_active_and_save!
+    active_validation if active_changed?
+    self.save
+  end
+
   private
 
   ##
@@ -100,7 +103,7 @@ class Store < ActiveRecord::Base
     prefix.to_s + Digest::SHA256.hexdigest(prefix.to_s + Time.current.to_f.to_s + rand(99999).to_s)
   end
 
-  def active_changed_validation
+  def active_validation
     begin
       script_tags = ShopifyAPI::ScriptTag.all
       if active && script_tags.empty?
@@ -109,13 +112,10 @@ class Store < ActiveRecord::Base
         ShopifyAPI::ScriptTag.delete(ShopifyAPI::ScriptTag.first.id)
       end
     rescue StandardError => e
-      ForcedLogger.error("Failed ScriptTag update for store id #{@scheduled_theme_update.id}", store: id)
+      ForcedLogger.error("Failed ScriptTag update for store id #{id}", store: id)
       errors.add(:active, "Issue modifying your storefront. Try again / contact support so we can help you.")
       self.active = !active
     end
-
-
-
   end
 
 end

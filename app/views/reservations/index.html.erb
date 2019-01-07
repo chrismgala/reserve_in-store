@@ -1,3 +1,5 @@
+<%= render partial: 'layouts/partials/error_banner', locals: {item: @reservations} %>
+
 <div class="Polaris-Page">
   <div class="Polaris-Page__Content">
     <% if @reservations.any? %>

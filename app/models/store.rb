@@ -82,8 +82,12 @@ class Store < ActiveRecord::Base
     "<a href='https://#{shopify_domain}'>#{name}</a>"
   end
 
+  ##
+  # Ensure that the scripts we are injecting has validity with our active state
+  # This method is exclusively used by the stores/save_settings controller
+  # This method can modify the errors array
   def validate_active_and_save!
-    active_validation if active_changed?
+    active_validation! if active_changed?
     self.save
   end
 
@@ -103,7 +107,12 @@ class Store < ActiveRecord::Base
     prefix.to_s + Digest::SHA256.hexdigest(prefix.to_s + Time.current.to_f.to_s + rand(99999).to_s)
   end
 
-  def active_validation
+  ##
+  # Ensure our Shopify ScriptTags:
+  # If we are active, then our scripttags must be in the api
+  # If we are not active, then our scripttags must not be in the api
+  # Modify the errors array and flip our active state if we have issues with the APIs.
+  def active_validation!
     begin
       script_tags = ShopifyAPI::ScriptTag.all
       if active && script_tags.empty?

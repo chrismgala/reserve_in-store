@@ -88,10 +88,7 @@ class Store < ActiveRecord::Base
   # This method can modify the errors array
   # @return [Bool] If we pass validation or not
   def validate_active_and_save!
-    if active_changed?
-      return false unless active_validation!
-    end
-    self.save
+    (active_changed? && active_validation!) || save
   end
 
   private
@@ -119,15 +116,15 @@ class Store < ActiveRecord::Base
   def active_validation!
     begin
       script_tags = ShopifyAPI::ScriptTag.all
-      if active && script_tags.empty?
+      if active? && script_tags.empty?
         ShopifyAPI::ScriptTag.create({event:'onload', src: "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"})
       elsif !active && script_tags.present?
         ShopifyAPI::ScriptTag.delete(ShopifyAPI::ScriptTag.first.id)
       end
     rescue StandardError => e
-      ForcedLogger.error("Failed ScriptTag update for store id #{id}", store: id)
+      ForcedLogger.error(e, store: id)
       errors.add(:active, "Issue modifying your storefront. Try again / contact support so we can help you.")
-      self.active = !active
+      self.active = false
       return false
     end
     true

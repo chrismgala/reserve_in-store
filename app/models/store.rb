@@ -95,7 +95,7 @@ class Store < ActiveRecord::Base
   # Ask Shopify for each location attached to this store
   # Ask Shopify for the store's email as well, to use as the default email for each location
   # Convert them into a Location instance, and save it to this store if it has an address
-  def populateLocationsFromAPI!
+  def populateLocationsFromApi!
     store_email = ShopifyAPI::Shop.current.attributes[:email].to_s
 
     ShopifyAPI::Location.all.each do |shopify_loc|

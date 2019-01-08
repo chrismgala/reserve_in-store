@@ -6,7 +6,7 @@ class Store < ActiveRecord::Base
   before_create :generate_keys
   before_save :nil_default_templates
 
-  PERMITTED_PARAMS = [:top_msg, :success_msg, :email_template, :show_phone, :show_instructions_from_customer]
+  PERMITTED_PARAMS = [:top_msg, :success_msg, :email_template, :show_phone, :show_instructions_from_customer, :active]
 
   ##
   # @return [Text] - default, un-rendered email template
@@ -82,6 +82,15 @@ class Store < ActiveRecord::Base
     "<a href='https://#{shopify_domain}'>#{name}</a>"
   end
 
+  ##
+  # Ensure that the scripts we are injecting have validity with our active state
+  # This method is exclusively used by the stores/save_settings controller
+  # This method can modify the errors array
+  # @return [Bool] If we pass validation or not
+  def validate_active_and_save!
+    (active_changed? && active_validation!) || save
+  end
+
   private
 
   ##
@@ -96,6 +105,29 @@ class Store < ActiveRecord::Base
   # @return [String] generated key based on time and random number
   def generate_key(prefix = "")
     prefix.to_s + Digest::SHA256.hexdigest(prefix.to_s + Time.current.to_f.to_s + rand(99999).to_s)
+  end
+
+  ##
+  # Ensure our Shopify ScriptTags:
+  # If we are active, then our scripttags must be in the api
+  # If we are not active, then our scripttags must not be in the api
+  # Modify the errors array and flip our active state if we have issues with the APIs.
+  # @return [Bool] If we pass validation or not
+  def active_validation!
+    begin
+      script_tags = ShopifyAPI::ScriptTag.all
+      if active? && script_tags.empty?
+        ShopifyAPI::ScriptTag.create({event:'onload', src: "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"})
+      elsif !active && script_tags.present?
+        ShopifyAPI::ScriptTag.delete(ShopifyAPI::ScriptTag.first.id)
+      end
+    rescue StandardError => e
+      ForcedLogger.error(e, store: id)
+      errors.add(:active, "Issue modifying your storefront. Try again / contact support so we can help you.")
+      self.active = false
+      return false
+    end
+    true
   end
 
 end

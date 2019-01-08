@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_15_184534) do
+ActiveRecord::Schema.define(version: 2019_01_07_163906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 2018_08_15_184534) do
     t.text "email_template"
     t.boolean "show_phone", default: true
     t.boolean "show_instructions_from_customer", default: true
+    t.boolean "active", default: true
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

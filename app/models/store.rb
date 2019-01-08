@@ -88,7 +88,7 @@ class Store < ActiveRecord::Base
   # This method can modify the errors array
   # @return [Bool] If we pass validation or not
   def validate_active_and_save!
-    (active_changed? && active_validation!) || save
+    (!active_changed? || active_validation!) && save
   end
 
   private

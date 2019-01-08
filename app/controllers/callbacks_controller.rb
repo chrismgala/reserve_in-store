@@ -4,24 +4,16 @@ class CallbacksController < ShopifyApp::SessionsController
 
   ##
   # Overwriting login_shop to also make it populate locations via ShopifyAPI
-  # @return [Boolean] - whether current_store.save is successful
   def login_shop
     super
-    current_store = Store.find_by(shopify_domain: current_shopify_domain)
+    store = Store.find_by(shopify_domain: current_shopify_domain)
+
     new_session = ShopifyAPI::Session.new(shop_name, token)
     ShopifyAPI::Base.activate_session(new_session)
-    store_attributes = ShopifyAPI::Shop.current.attributes
-    if current_store.locations.empty?
-      ShopifyAPI::Location.all.each do |shopify_loc|
-        loc_attr = shopify_loc.attributes
-        loc_attr.transform_values!(&:to_s)
-        loc_attr[:address] = loc_attr[:address1] + " " + loc_attr[:address2]
-        loc_attr[:state] = loc_attr[:province]
-        loc_attr[:email] = store_attributes[:email]
-        Location.create(loc_attr.slice(*Location::PERMITTED_PARAMS).merge(store_id: current_store.id)) if loc_attr[:address].present?
-      end
+
+    if store.locations.empty?
+      store.populateLocationsFromAPI!
     end
-    current_store.save
   end
 
   ##

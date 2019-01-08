@@ -8,11 +8,9 @@ class CallbacksController < ShopifyApp::SessionsController
   def login_shop
     super
     current_store = Store.find_by(shopify_domain: current_shopify_domain)
-
     new_session = ShopifyAPI::Session.new(shop_name, token)
     ShopifyAPI::Base.activate_session(new_session)
     store_attributes = ShopifyAPI::Shop.current.attributes
-    current_store.save
     if current_store.locations.empty?
       ShopifyAPI::Location.all.each do |shopify_loc|
         loc_attr = shopify_loc.attributes
@@ -23,6 +21,7 @@ class CallbacksController < ShopifyApp::SessionsController
         Location.create(loc_attr.slice(*Location::PERMITTED_PARAMS).merge(store_id: current_store.id)) if loc_attr[:address].present?
       end
     end
+    current_store.save
   end
 
   ##

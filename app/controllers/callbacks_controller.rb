@@ -3,7 +3,7 @@ class CallbacksController < ShopifyApp::SessionsController
   private
 
   ##
-  # Overwriting login_shop to also make it populate the Store model via ShopifyAPI
+  # Overwriting login_shop to also make it populate locations via ShopifyAPI
   # @return [Boolean] - whether current_store.save is successful
   def login_shop
     super

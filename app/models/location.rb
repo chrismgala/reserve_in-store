@@ -21,6 +21,8 @@ class Location < ActiveRecord::Base
   end
 
   ##
+  # Create a new Location object from a Shopify::Location object
+  # This object is invalid until it is provided a store_id (save with .update(store_id: id))
   # @param [Shopify::Location] shopify_loc A Shopify Location object
   # @return [Location] a new Location object made from the Shopify::Location
   def self.newFromShopify(shopify_loc)

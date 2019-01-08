@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2019_01_07_163906) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "zip"
-    t.text "custom_html", default: "", null: false
+    t.text "custom_html"
     t.index ["store_id"], name: "index_locations_on_store_id"
   end
 

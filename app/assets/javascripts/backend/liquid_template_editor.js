@@ -40,7 +40,7 @@ var LiquidTemplateEditor = function (opts) {
      * Initialize the ace editor by setting the theme, mode, and default contents
      */
     var initAce = function () {
-        templateEditor = ace.edit(opts.aceEditorId, {passive: false});
+        templateEditor = ace.edit(opts.aceEditorId);
         //stops an annoying console error
         templateEditor.$blockScrolling = Infinity;
         templateEditor.setTheme("ace/theme/monokai");

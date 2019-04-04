@@ -19,35 +19,9 @@
   <div class="Polaris-Page__Content">
     <%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
       <div class="Polaris-Layout">
-
-        <div class="Polaris-Layout__AnnotatedSection">
-          <div class="Polaris-Layout__AnnotationWrapper">
-            <div class="Polaris-Layout__Annotation">
-              <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Storefront Visibility</h2>
-              </div>
-            </div>
-            <div class="Polaris-Layout__AnnotationContent">
-              <div class="Polaris-Card">
-                <div class="Polaris-Card__Section">
-                  <div class="Polaris-SettingAction">
-                    <% if @current_store.active? %>
-                      <div class="Polaris-SettingAction__Setting">We are currently <span class="text-success">enabled</span> on your storefront.</div>
-                      <div class="Polaris-SettingAction__Action">
-                        <%= f.button("Disable Us", name: "store[active]", value: false, class: "Polaris-Button Polaris-Button--destructive", data: ({confirm: "Are you sure you want to disable us?"} if @current_store.active?) )%>
-                      </div>
-                    <% else %>
-                      <div class="Polaris-SettingAction__Setting">We are currently <span class="text-danger">disabled</span> on your storefront. Customers will not be able to reserve products until we are enabled.</div>
-                      <div class="Polaris-SettingAction__Action">
-                        <%= f.button("Enable Us", name: "store[active]", value: true, class: "Polaris-Button Polaris-Button--primary")%>
-                      </div>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <% if @current_store.created_at > 7.days.ago %>
+          <%= render partial: "stores/settings/status", locals: {f: f} %>
+        <% end %>
 
         <div class="Polaris-Layout__AnnotatedSection">
           <div class="Polaris-Layout__AnnotationWrapper">
@@ -135,8 +109,8 @@
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Edit Success Message</h2>
-                <p>Customize the message that is displayed when customers place new reservations</p>
+                <h2 class="Polaris-Heading">Edit Additional Success Message</h2>
+                <p>Customize the message that is displayed when customers place new reservations. This will appear after the default.</p>
               </div>
             </div>
             <div class="Polaris-Layout__AnnotationContent">
@@ -150,7 +124,7 @@
                         </div>
                       </div>
                       <div class="Polaris-TextField">
-                        <%= f.text_area :success_msg, class: 'Polaris-TextField__Input' %>
+                        <%= f.text_area :success_msg, class: 'Polaris-TextField__Input', placeholder: "[Default message will display first]" %>
                         <div class="Polaris-TextField__Backdrop"></div>
                       </div>
                     </div>
@@ -217,6 +191,10 @@
             </div>
           </div>
         </div>
+
+        <% if @current_store.created_at <= 7.days.ago %>
+          <%= render partial: "stores/settings/status", locals: {f: f} %>
+        <% end %>
 
         <div class="Polaris-Layout__Section">
           <div class="Polaris-PageActions">

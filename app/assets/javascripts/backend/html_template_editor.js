@@ -40,11 +40,11 @@ var HTMLTemplateEditor = function (opts) {
      */
     var initAce = function () {
         templateEditor = ace.edit(opts.aceEditorId);
+        //stops an annoying console error
+        templateEditor.$blockScrolling = Infinity;
         templateEditor.setTheme("ace/theme/monokai");
         templateEditor.getSession().setMode("ace/mode/html");
         templateEditor.getSession().setValue($templateFormField.val(), -1);
-        //stops an annoying console error
-        templateEditor.$blockScrolling = Infinity;
     };
 
     /**

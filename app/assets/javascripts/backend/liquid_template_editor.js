@@ -41,11 +41,11 @@ var LiquidTemplateEditor = function (opts) {
      */
     var initAce = function () {
         templateEditor = ace.edit(opts.aceEditorId);
+        //stops an annoying console error
+        templateEditor.$blockScrolling = Infinity;
         templateEditor.setTheme("ace/theme/monokai");
         templateEditor.getSession().setMode("ace/mode/liquid");
         templateEditor.getSession().setValue($templateFormField.val(), -1);
-        //stops an annoying console error
-        templateEditor.$blockScrolling = Infinity;
     };
 
     /**

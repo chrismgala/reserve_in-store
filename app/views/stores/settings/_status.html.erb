@@ -1,0 +1,49 @@
+<div class="Polaris-Layout__AnnotatedSection">
+  <div class="Polaris-Layout__AnnotationWrapper">
+    <div class="Polaris-Layout__Annotation">
+      <div class="Polaris-TextContainer">
+        <h2 class="Polaris-Heading">Status</h2>
+      </div>
+    </div>
+    <div class="Polaris-Layout__AnnotationContent">
+      <div class="Polaris-Card">
+        <div class="Polaris-Card__Section">
+          <div class="Polaris-SettingAction">
+            <% if @current_store.active? %>
+              <div class="Polaris-SettingAction__Setting" style="color: green; font-size: 18px; margin-top: 23px;">
+                          <span class="Polaris-Icon Polaris-Icon--colorGreenDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop" style="vertical-align: middle; display: inline-block; top: -2px; margin-right: 10px;">
+                            <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
+                              <circle fill="currentColor" cx="10" cy="10" r="9"></circle>
+                              <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m2.293-10.707L9 10.586 7.707 9.293a1 1 0 1 0-1.414 1.414l2 2a.997.997 0 0 0 1.414 0l4-4a1 1 0 1 0-1.414-1.414"></path>
+                            </svg>
+                          </span>
+                ON
+              </div>
+              <div class="Polaris-SettingAction__Action">
+                <%= f.button("Turn Off", name: "store[active]", value: false, class: "Polaris-Button Polaris-Button--destructive", data: ({confirm: "Are you sure you want to disable us?"} if @current_store.active?) )%>
+              </div>
+              <div class="Polaris-SettingAction__Setting">
+                <p>Reserve In-Store is showing to your customers.</p>
+              </div>
+            <% else %>
+              <div class="Polaris-SettingAction__Setting" style="color: red; font-size: 18px; margin-top: 23px;">
+                          <span class="Polaris-Icon Polaris-Icon--colorRedDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop" style="vertical-align: middle; display: inline-block; top: -2px; margin-right: 10px;">
+                            <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
+                              <circle fill="currentColor" cx="10" cy="10" r="9"></circle>
+                              <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-13a1 1 0 0 0-1 1v4a1 1 0 1 0 2 0V6a1 1 0 0 0-1-1m0 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2"></path>
+                            </svg>
+                          </span>OFF
+              </div>
+              <div class="Polaris-SettingAction__Action">
+                <%= f.button("Turn On", name: "store[active]", value: true, class: "Polaris-Button Polaris-Button--primary")%>
+              </div>
+              <div class="Polaris-SettingAction__Setting">
+                <p>The Reserve In-Store modal is not currently showing to your shoppers. Click the "Turn On" button to make it start showing.</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -42,7 +42,7 @@
                         ON
                       </div>
                       <div class="Polaris-SettingAction__Action">
-                        <%= f.button("Disable Us", name: "store[active]", value: false, class: "Polaris-Button Polaris-Button--destructive", data: ({confirm: "Are you sure you want to disable us?"} if @current_store.active?) )%>
+                        <%= f.button("Turn Off", name: "store[active]", value: false, class: "Polaris-Button Polaris-Button--destructive", data: ({confirm: "Are you sure you want to disable us?"} if @current_store.active?) )%>
                       </div>
                       <div class="Polaris-SettingAction__Setting">
                         <p>Reserve In-Store is showing to your customers.</p>
@@ -156,8 +156,8 @@
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Edit Success Message</h2>
-                <p>Customize the message that is displayed when customers place new reservations</p>
+                <h2 class="Polaris-Heading">Edit Additional Success Message</h2>
+                <p>Customize the message that is displayed when customers place new reservations. This will appear after the default.</p>
               </div>
             </div>
             <div class="Polaris-Layout__AnnotationContent">
@@ -171,7 +171,7 @@
                         </div>
                       </div>
                       <div class="Polaris-TextField">
-                        <%= f.text_area :success_msg, class: 'Polaris-TextField__Input' %>
+                        <%= f.text_area :success_msg, class: 'Polaris-TextField__Input', placeholder: "[Default message will display first]" %>
                         <div class="Polaris-TextField__Backdrop"></div>
                       </div>
                     </div>

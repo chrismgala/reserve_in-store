@@ -40,12 +40,12 @@ var LiquidTemplateEditor = function (opts) {
      * Initialize the ace editor by setting the theme, mode, and default contents
      */
     var initAce = function () {
-        templateEditor = ace.edit(opts.aceEditorId);
+        templateEditor = ace.edit(opts.aceEditorId, {passive: false});
+        //stops an annoying console error
+        templateEditor.$blockScrolling = Infinity;
         templateEditor.setTheme("ace/theme/monokai");
         templateEditor.getSession().setMode("ace/mode/liquid");
         templateEditor.getSession().setValue($templateFormField.val(), -1);
-        //stops an annoying console error
-        templateEditor.$blockScrolling = Infinity;
     };
 
     /**

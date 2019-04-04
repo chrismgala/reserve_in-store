@@ -9,7 +9,4 @@ ShopifyApp.configure do |config|
   config.webhooks = [
       {topic: 'app/uninstalled', address: "#{ENV['BASE_APP_URL']}/webhooks/app_uninstalled", format: 'json'},
   ]
-  config.scripttags = [
-      {event:'onload', src: "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"}
-  ]
 end

@@ -55,7 +55,8 @@ class Store < ActiveRecord::Base
   # @param [String] money_amount "10.00"
   # @return [String] Price in the form of "$10.00"
   def price(money_amount)
-    money_format.gsub('{{amount}}', money_amount)
+    money_format.gsub(/{{[ ]?amount[ ]?}}/, ActionController::Base.helpers.number_with_precision(money_amount, precision: 2, delimeter: ','))
+        .gsub(/{{[ ]?amount_with_comma_separator[ ]?}}/, ActionController::Base.helpers.number_with_precision(money_amount, precision: 2, separator: ','))
   end
 
   ##

@@ -75,6 +75,7 @@ GEM
       nokogiri (~> 1.8)
     concurrent-ruby (1.0.5)
     crass (1.0.4)
+    dalli (2.7.6)
     dotenv (2.4.0)
     dotenv-rails (2.4.0)
       dotenv (= 2.4.0)
@@ -267,6 +268,7 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15, < 4.0)
   chromedriver-helper
+  dalli (~> 2.7.6)
   dotenv-rails (~> 2.4.0)
   intercom-rails (~> 0.4.0)
   jbuilder (~> 2.5)
@@ -294,7 +296,7 @@ DEPENDENCIES
   web-console (>= 3.3.0)
 
 RUBY VERSION
-   ruby 2.3.3p222
+   ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.3
+   1.16.6

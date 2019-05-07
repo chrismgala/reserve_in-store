@@ -69,16 +69,15 @@ BASE_APP_URL="https://reserve_in-store.ngrok.io"
 #### 2. Create Draft/Private App
 To do this for Shopify simply go to your partner dashboard and create a new private (or draft) app. The same thing applies for BigCommerce.
 
-Here's what the setup looks like for Shopify after you're done setting up your draft app: ![](https://monosnap.com/file/Ds9YMn2hkCgBYWonWJDwZH64IfIjQS.png)
+Here's what the setup looks like for Shopify after you're done setting up your draft app: ![](<img src="https://monosnap.com/image/fXPIUvzfILzDza1JGYzgLZVJgJXjNx.png">)
 
-Replace the ngrok URLs you see in the screenshot with your own ngrok domains (IE instead of `bananastand.ngrok.io` use your own ngrok domain)
+Replace the ngrok URLs you see in the screenshot with your own ngrok domains (IE instead of `reserveinstore.ngrok.io` use your own ngrok domain)
 
 #### 3. Update your `.env` file
 Update the following values in your `.env` file then restart your rails server:
 ```
 SHOPIFY_API_KEY=""
 SHOPIFY_API_SECRET=""
-SHOPIFY_API_REFRESH_TOKEN=""
 ```
 
 ## Create a test store
@@ -131,8 +130,8 @@ To contribute to the repository:
 1. Fork the repository.
 2. Clone the forked repository locally.
 3. Create a branch descriptive of your work. For example "my_new_feature_xyz".
-4. When you're done work, push up that branch to **your own forked repository** (not the bananastandio/reserve_in-store one).
-5. Visit https://github.com/bananastandio/reserve_in-store and you'll see an option to create a pull request from your forked branch to the master. Create a pull request.
+4. When you're done work, push up that branch to **your own forked repository** (not the feracommerce/reserve_in-store one).
+5. Visit https://github.com/feracommerce/reserve_in-store and you'll see an option to create a pull request from your forked branch to the master. Create a pull request.
 6. Fill out the pull request template with everything it asks for and assign the pull request to someone to review.
 7. Set the reviewee as yourself and the requested reviewer as whomever you want to review your PR.
 8. Once the PR merges into master then it is ready for production and should be treated as such. It will be deployed to staging within minutes.

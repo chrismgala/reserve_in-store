@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.3.3'
+ruby '2.5.1'
 
 gem 'ace-rails-ap', '~> 4.1.4' # For making HTML editors look pretty
 gem 'bootsnap', '>= 1.1.0', require: false # Reduces boot times through caching; required in config/boot.rb
 gem 'dotenv-rails', '~> 2.4.0' # Adds the `ENV['BLEH']` ability to access environment variables
+gem 'dalli', '~> 2.7.6' # For memcached caching in production only
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease, not really being used.
 gem 'jquery-rails', '~> 4.3', '>= 4.3.3' # Use jquery as the JavaScript library
 gem 'kaminari', '~> 1.1', '>= 1.1.1' # Pagination such as `Product.all.page(params[:page])`

@@ -1,83 +1,85 @@
-/**
- * This class utilizes ace editors for liquid template modification, and
- * implements rendering the liquid back as a view in-page
- *
- * Construct with the following hash:
- * {string} templateFormFieldSelector, selector for the form field we will submit
- * {string} aceEditorId, selector for the ace editor field
- * {string} resetButtonSelector, selector for the reset button
- * {string} defaultTemplateSelector, selector for the field which has .val() as the default template
- * {string} submissionButtonSelector, selector for the submit button
- * All three of these hash keys are required if you want previews, otherwise none of them are:
- * {string} [previewContainerSelector], selector for the preview container
- * {string} [updateButtonSelector], selector for the preview update button
- * {hash} [templateRenderParameters], hash which contains the parameters for rendering the liquid into the preview
- *
- * @param {object} [opts] - An optional hash used for setup, as described above.
- */
-var LiquidTemplateEditor = function (opts) {
+var LiquidTemplateEditor = function(opts) {
     opts = opts || {};
-    var $templateFormField = $(opts.templateFormFieldSelector);
-    var defaultTemplate = $(opts.defaultTemplateSelector).val();
-    var templateEditor;
+    var self = this;
+
     var $previewContainer;
 
-    /**
-     * Initialize the class by setting up the ace editor and adding the event listeners
-     */
     var init = function () {
-        initAce();
-        $(opts.submissionButtonSelector).click(updateFormField);
-        $(opts.resetButtonSelector).on('click', resetFields);
-        if (opts.previewContainerSelector) {
-            $previewContainer = $(opts.previewContainerSelector);
-            $(opts.updateButtonSelector).click(updatePreview);
-            updatePreview();
+        self.$form = $('#'+ opts.attr + '_section');
+        self.liveUpdating = false;
+        $previewContainer = $('#'+ opts.attr + '_preview_pane');
+
+        setupTemplateEditor();
+
+        setupIframePreview();
+
+        $(opts.switchSelector).on('change', function() {
+            setTimeout(function() {
+                self.preview.updateHeight();
+            }, 1);
+        })
+    };
+
+
+    var setupTemplateEditor = function() {
+        if (self.$form.find('.template-editor-container').length > 0) {
+            self.liquidEditor = new CodeEditor({
+                containerSelector: self.$form.find('.template-editor-container'),
+                beautifyFunction: html_beautify,
+                language: 'liquid',
+                maximizeHeight: false
+            });
+
+            self.liquidEditor.ace.on("change", function() { self.preview.update(); });
+            self.liquidEditor.ace.on("paste", function() { self.preview.update(); });
+            self.liquidEditor.ace.on("blur", function() { self.preview.update(); });
+            self.liquidEditor.ace.getSession().on("changeAnnotation", function() { self.preview.update(); });
         }
     };
 
-    /**
-     * Initialize the ace editor by setting the theme, mode, and default contents
-     */
-    var initAce = function () {
-        templateEditor = ace.edit(opts.aceEditorId);
-        //stops an annoying console error
-        templateEditor.$blockScrolling = Infinity;
-        templateEditor.setTheme("ace/theme/monokai");
-        templateEditor.getSession().setMode("ace/mode/liquid");
-        templateEditor.getSession().setValue($templateFormField.val(), -1);
+    var setupIframePreview = function() {
+        self.preview = new IframePreviewer({
+            maxHeight: 1000,
+            frontendMode: opts.frontendMode,
+            containerClasses: opts.containerClasses,
+            iframePreviewPath: '/stores/iframe_preview',
+            $fieldsContainer: self.$form,
+            $previewPanel: $previewContainer,
+            $previewContainer: $previewContainer,
+            getPreviewVars: function() {
+                return self.getPreviewVars();
+            },
+            getCss: function() { return self.getCss(); },
+            getTemplate: function() { return self.getTemplate(); },
+            afterInit: function() {
+                self.$previewPane = self.preview.container();
+                if (opts.afterInit) opts.afterInit();
+
+                self.previewReady = true;
+            },
+            shouldPreviewBeHidden: function() {
+                if (!opts.hideWithoutCode) return false;
+
+                if (!self.liquidEditor) return false;
+                if (self.liquidEditor.hasChanged()) return false;
+                if (!self.liquidEditor.hasDefaultContent()) return false;
+
+                return true;
+            },
+            previewPageCss: opts.previewPageCss
+        });
     };
 
-    /**
-     * Shift the data from the templateEditor to the form field
-     */
-    var updateFormField = function () {
-        var newHtml = templateEditor.getSession().getValue();
-        $templateFormField.val(newHtml);
+    this.getPreviewVars = function() {
+        return opts.previewVars || {}; // TODO
+    };
+    this.getCss = function() {
+        return opts.extraCss || ''; // TODO
+    };
+    this.getTemplate = function() {
+        return self.liquidEditor.val(); // TODO
     };
 
-    /**
-     * Update our preview by first validating the liquid, then rendering it into the preview container
-     */
-    var updatePreview = function () {
-        updateFormField();
-        $templateFormField.parsley().validate();
-        if ($templateFormField.parsley().isValid()) {
-            //Need to regex out the whitespace removal delimiter because liquid.js doesn't like them.
-            var templateHTML = $templateFormField.val().replace(new RegExp(/\s*({%-)/g, 'g'), '{%').replace(new RegExp(/(-%})\s*/, 'g'), '%}');
-            $previewContainer.html(Liquid.parse(templateHTML).render(opts.templateRenderParameters));
-        }
-    };
-
-    /**
-     * Shove the default template into the template editor, then update the preview to match it
-     */
-    var resetFields = function (e) {
-        //needed to stop link from doing anything
-        e.preventDefault();
-        templateEditor.getSession().setValue(defaultTemplate, -1);
-        updatePreview();
-    };
 
     init();
 };

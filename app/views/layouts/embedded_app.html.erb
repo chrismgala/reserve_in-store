@@ -13,10 +13,37 @@
 
 <body>
 
+<!-- top navigation bar -->
+<div class="Polaris-Card top_navbar">
+  <ul role="tablist" class="Polaris-Tabs">
+    <li role="presentation" class="Polaris-Tabs__TabContainer">
+      <a class="Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'settings') %>" href="<%= stores_settings_path %>">
+        <span class="Polaris-Tabs__Title">Options</span></a>
+    </li>
+    <li role="presentation" class="Polaris-Tabs__TabContainer">
+      <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'reservations') %>" href="<%= reservations_path %>">
+        <span class="Polaris-Tabs__Title">Reservations</span></a>
+    </li>
+    <li role="presentation" class="Polaris-Tabs__TabContainer">
+      <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'locations') %>" href="<%= locations_path %>">
+        <span class="Polaris-Tabs__Title">Locations</span></a>
+    </li>
+    <li role="presentation" class="Polaris-Tabs__TabContainer">
+      <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'templates') %>" href="<%= stores_templates_path %>">
+        <span class="Polaris-Tabs__Title">Templates</span></a>
+    </li>
+    <li role="presentation" class="Polaris-Tabs__TabContainer">
+      <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'help') %>" href="<%= stores_help_path %>">
+        <span class="Polaris-Tabs__Title">Help</span></a>
+    </li>
+  </ul>
+</div>
+
 <!-- Main section-->
 <div class="app-wrapper">
   <div class="app-content">
     <main role="main">
+
       <%= yield %>
     </main>
   </div>
@@ -32,9 +59,21 @@
         apiKey: "<%= ShopifyApp.configuration.api_key %>",
         shopOrigin: "<%= "https://#{ @shop_session.url }" if @shop_session %>",
         debug: <%= Rails.env.development? %>,
-        forceRedirect: true
+        forceRedirect: true,
     });
+
+
+    ShopifyApp.ready(function(){
+        $('.display-if-enabled').displayIfEnabled();
+        $('.display-if-selected-option').displayIfSelectedValue();
+    });
+
+
+    <% if content_for?(:title) %>
+      ShopifyApp.Bar.setTitle('<%= yield :title %>');
+    <% end %>
 </script>
+
 
 <% if content_for?(:javascript) %>
   <div id="ContentForJavascript" data-turbolinks-temporary>

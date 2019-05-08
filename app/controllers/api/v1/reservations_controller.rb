@@ -6,10 +6,19 @@ module Api
       ##
       # GET /api/v1/reservations/modal
       def modal
-        @product_title = params[:product_title]
-        @variant_title = params[:variant_title]
-        @line_item = params[:line_item]
-        @price = @store.price('%.2f' % (params[:price].to_f / 100))
+        liquid_vars = @store.frontend_tpl_vars.merge({ line_items: [] })
+
+        if params[:product_title].present?
+          liquid_vars[:line_items] << {
+            title: params[:product_title],
+            variant_title: params[:variant_title],
+            price: @store.currency(params[:price].to_f/100).to_s.chomp('.00').chomp('.0')
+          }.stringify_keys
+        else
+          # todo pass line items from frontend
+        end
+
+        render html: Liquid::Template.parse(@store.reserve_product_modal_tpl_in_use).render!(liquid_vars.stringify_keys).html_safe
       end
 
       ##

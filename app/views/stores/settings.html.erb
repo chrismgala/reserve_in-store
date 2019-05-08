@@ -13,13 +13,15 @@
   </div>
 <% end %>
 
+<% content_for(:title) { 'Settings' } %>
+
 <%= render partial: 'layouts/partials/error_banner', locals: {item: @current_store} %>
 
 <div class="Polaris-Page">
   <div class="Polaris-Page__Content">
     <%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
       <div class="Polaris-Layout">
-        <% if @current_store.created_at > 7.days.ago %>
+        <% if @current_store.created_at > 1.day.ago %>
           <%= render partial: "stores/settings/status", locals: {f: f} %>
         <% end %>
 
@@ -135,64 +137,19 @@
           </div>
         </div>
 
-        <div class="Polaris-Layout__AnnotatedSection">
-          <div class="Polaris-Layout__AnnotationWrapper">
-            <div class="Polaris-Layout__Annotation">
-              <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Edit Reservation Email Templates</h2>
-                <p>Customize the reservation email that gets sent to customers using HTML</p>
-                <%= button_tag id: "email_template_update_btn", class: "Polaris-Button", type: "button" do %>
-                  <span class="Polaris-Button__Content"><span>Update Preview</span></span>
-                <% end %>
-                <div>
-                  <a class="Polaris-Button Polaris-Button--plain" id="email_template_reset_btn" href="#">
-                    <span class="Polaris-Button__Content"><span>Reset to Default Template</span></span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="Polaris-Layout__AnnotationContent">
-              <div class="Polaris-Card">
-                <div class="Polaris-Card__Section">
-                  <div class="Polaris-FormLayout">
+        <%= render partial: 'stores/shared/liquid_editor_section', locals: {
+            heading: 'FAQ',
+            subheading: 'Customize the FAQ (Frequently Asked Questions) content that shows up when a new reservation is being created by a shopper.',
+            attr: 'reserve_modal_faq_tpl',
+            enabled: @current_store.reserve_modal_faq_tpl_enabled?,
+            db_value: @current_store.reserve_modal_faq_tpl_in_use,
+            value_in_use: @current_store.reserve_modal_faq_tpl_in_use,
+            default_value: Store.default_reserve_modal_faq_tpl,
+            container_css_class: 'reserveInStore-reserve-modal',
+            frontend_mode: true
+        } %>
 
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-Labelled__LabelWrapper">
-                        <div class="Polaris-Label">
-                          <%= f.label :email_template_preview, class: "Polaris-Label__Text" do %>
-                            Email Preview
-                          <% end %>
-                        </div>
-                      </div>
-                      <div class="Polaris-TextField Polaris-TextField--multiline">
-                        <div class="Polaris-TextField__Input preview-text-fix">
-                          <div id="fera_email_template"></div>
-                        </div>
-                        <div class="Polaris-TextField__Backdrop preview-box-fix"></div>
-                      </div>
-                    </div>
-
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-Labelled__LabelWrapper">
-                        <div class="Polaris-Label">
-                          <%= f.label :email_template, class: "Polaris-Label__Text" do %>
-                            HTML Editor
-                          <% end %>
-                        </div>
-                      </div>
-                      <div id="parsley_email_template_errors" class="parsley-danger-text"></div>
-                      <div id="ace_email_editor" class="ace-editor-stylings"></div>
-                      <textarea style="display: none" id="default_email_template"><%= Store::default_email_template %></textarea>
-                      <%= f.text_area :email_template, {style: "display: none;", data: {'parsley-liquid': '', 'parsley-errors-container': '#parsley_email_template_errors'}, value: @current_store.email_template_in_use} %>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <% if @current_store.created_at <= 7.days.ago %>
+        <% if @current_store.created_at <= 1.day.ago %>
           <%= render partial: "stores/settings/status", locals: {f: f} %>
         <% end %>
 
@@ -217,16 +174,8 @@
       ShopifyApp.ready(function () {
           ShopifyApp.Bar.initialize({title: "Settings", icon: "<%= image_url('reserve_32x32.png') %>"});
       });
-      var emailTemplateEditor = new LiquidTemplateEditor({
-          templateFormFieldSelector: '#store_email_template',
-          aceEditorId: 'ace_email_editor',
-          resetButtonSelector: '#email_template_reset_btn',
-          updateButtonSelector: '#email_template_update_btn',
-          defaultTemplateSelector: "#default_email_template",
-          previewContainerSelector: '#fera_email_template',
-          templateRenderParameters: <%= @current_store.preview_email_liquid_params %>,
-          submissionButtonSelector: '#submission_button'
-      });
+
+
       var parsleyBinder = new ParsleyBinder({
           btnSelector: '#submission_button',
           formSelector: '#store_settings_form'

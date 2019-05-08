@@ -1,0 +1,107 @@
+
+<% if @integrator.present? && @integrator.has_errors? %>
+  <div class="Polaris-Banner Polaris-Banner--statusCritical Polaris-Banner--withinPage" tabindex="0" role="alert" aria-live="polite" aria-labelledby="Banner3Heading" aria-describedby="Banner3Content">
+    <div class="Polaris-Banner__Ribbon"><span class="Polaris-Icon Polaris-Icon--colorRedDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><g fill-rule="evenodd"><circle fill="currentColor" cx="10" cy="10" r="9"></circle><path d="M2 10c0-1.846.635-3.543 1.688-4.897l11.209 11.209A7.954 7.954 0 0 1 10 18c-4.411 0-8-3.589-8-8m14.312 4.897L5.103 3.688A7.954 7.954 0 0 1 10 2c4.411 0 8 3.589 8 8a7.952 7.952 0 0 1-1.688 4.897M0 10c0 5.514 4.486 10 10 10s10-4.486 10-10S15.514 0 10 0 0 4.486 0 10"></path></g></svg></span></div>
+    <div>
+      <div class="Polaris-Banner__Heading" id="Banner3Heading">
+        <p class="Polaris-Heading">Automatic Theme Integration Failed</p>
+      </div>
+      <div class="Polaris-Banner__Content" id="Banner3Content">
+        <%= @integrator.errors.map{ |error_msg| "<p>#{error_msg}</p>" }.join('').html_safe %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% content_for(:title) { 'Templates' } %>
+
+<%= render partial: 'layouts/partials/error_banner', locals: {item: @current_store} %>
+
+<div class="Polaris-Page">
+  <div class="Polaris-Page__Content">
+    <%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
+      <input type="hidden" value="<%= stores_templates_url %>" name="next_url">
+      <div class="Polaris-Layout">
+
+
+        <%= render partial: 'stores/shared/liquid_editor_section', locals: {
+            heading: 'Reservation Modal',
+            subheading: 'Customize the appearance and content of the New Reservation modal.',
+            attr: 'reserve_product_modal_tpl',
+            enabled: @current_store.reserve_product_modal_tpl_enabled?,
+            db_value: @current_store.reserve_product_modal_tpl_in_use,
+            value_in_use: @current_store.reserve_product_modal_tpl_in_use,
+            default_value: Store.default_reserve_product_modal_tpl,
+            preview_vars: @current_store.frontend_tpl_vars.merge({
+                  line_items: [
+                      {
+                          title: 'Sample Product',
+                          variant_title: "Color Blue / Size 3",
+                          price: 12.34
+                      }
+              ]
+            }),
+            container_css_class: '',
+            extra_css: '.reserveInStore-modal-background { padding-top: 8px; }',
+            frontend_mode: true
+        } %>
+
+
+        <%= render partial: 'stores/shared/liquid_editor_section', locals: {
+            heading: 'Choose Location Modal',
+            subheading: 'Customize the content of the Choose Location modal.',
+            attr: 'choose_location_modal_tpl',
+            enabled: @current_store.choose_location_modal_tpl_enabled?,
+            db_value: @current_store.choose_location_modal_tpl_in_use,
+            value_in_use: @current_store.choose_location_modal_tpl_in_use,
+            default_value: Store.default_choose_location_modal_tpl,
+            preview_vars: @current_store.frontend_tpl_vars,
+            container_css_class: '',
+            extra_css: '.reserveInStore-modal-background { padding-top: 8px; }',
+            frontend_mode: true
+        } %>
+
+
+
+        <%= render partial: 'stores/shared/liquid_editor_section', locals: {
+            heading: 'Reservation Confirmation Email',
+            enabled: @current_store.customer_confirm_email_tpl_enabled?,
+            subheading: 'Customize the reservation email that gets sent to customers using HTML.',
+            attr: 'reserve_modal_faq_tpl',
+            db_value: @current_store.customer_confirm_email_tpl_in_use,
+            value_in_use: @current_store.customer_confirm_email_tpl_in_use,
+            default_value: Store.default_customer_confirm_email_tpl,
+            preview_vars: @current_store.preview_email_liquid_params
+            # container_css_class: 'reserveInStore-reserve-modal',
+            # frontend_mode: true
+        } %>
+
+
+        <div class="Polaris-Layout__Section">
+          <div class="Polaris-PageActions">
+            <div class="Polaris-Stack Polaris-Stack--spacingTight Polaris-Stack--distributionTrailing">
+              <div class="Polaris-Stack__Item">
+                <button id="submission_button" type="submit" class="Polaris-Button Polaris-Button--primary">
+                  <span class="Polaris-Button__Content"><span>Save</span></span></button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% content_for(:javascript) do %>
+  <script>
+      ShopifyApp.ready(function () {
+          ShopifyApp.Bar.initialize({title: "Settings", icon: "<%= image_url('reserve_32x32.png') %>"});
+      });
+
+      var parsleyBinder = new ParsleyBinder({
+          btnSelector: '#submission_button',
+          formSelector: '#store_settings_form'
+      });
+  </script>
+<% end %>

@@ -1,0 +1,32 @@
+.simpleTabs-tabs {
+  li {
+    float:left;
+    width:20%;
+    background:#f7f7f7;
+    &:hover, &.active {
+      background: white;
+    }
+  }
+  a {
+    display:block;
+    text-align:center;
+    text-decoration:none;
+    text-transform:uppercase;
+    color:#888;
+    padding:20px 0;
+    border-bottom:1px solid #888;
+
+  }
+}
+
+.simpleTabs-panels {
+  div {
+    padding:30px;
+    box-shadow:0 3px 10px rgba(0,0,0,.3);
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
+}

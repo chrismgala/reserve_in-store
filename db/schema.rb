@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_07_232638) do
+ActiveRecord::Schema.define(version: 2019_05_08_130517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,10 +60,20 @@ ActiveRecord::Schema.define(version: 2019_05_07_232638) do
     t.string "name"
     t.text "top_msg"
     t.text "success_msg"
-    t.text "email_template"
+    t.text "customer_confirm_email_tpl"
     t.boolean "show_phone", default: true
     t.boolean "show_instructions_from_customer", default: true
     t.boolean "active", default: false
+    t.boolean "customer_confirm_email_tpl_enabled", default: false
+    t.boolean "reserve_product_modal_tpl_enabled", default: false
+    t.text "reserve_product_modal_tpl"
+    t.boolean "choose_location_modal_tpl_enabled", default: false
+    t.text "choose_location_modal_tpl"
+    t.string "reserve_product_btn_action", default: "auto"
+    t.string "reserve_product_btn_selector"
+    t.text "reserve_product_btn_tpl"
+    t.text "reserve_modal_faq_tpl"
+    t.boolean "reserve_modal_faq_tpl_enabled", default: false
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

@@ -3,13 +3,12 @@ class InventoryFetcher
   def initialize(store, product_id)
     @store = store
     @product_id = product_id
-    @api = CachedShopifyAPI.new(@store)
   end
 
   def inventory
     store.with_shopify_session do
       # Get Product
-      product = @api.product(product_id)
+      product = store.api.product(product_id)
 
       return {} if product.blank?
 
@@ -20,7 +19,7 @@ class InventoryFetcher
       return {} if inventory_item_ids.blank?
 
       # Get InventorLevel
-      inventory_levels = @api.inventory_levels(inventory_item_ids: inventory_item_ids)
+      inventory_levels = store.api.inventory_levels(inventory_item_ids: inventory_item_ids)
 
       result_map = {}
 

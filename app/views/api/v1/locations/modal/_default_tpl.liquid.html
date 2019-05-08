@@ -1,0 +1,36 @@
+<div class="reserveInStore-chooseLocationModal modal reserveInStore-modal-background">
+    <div class="reserveInStore-reserve-modal">
+
+        <header>
+            <span class="close reserveInStore-reserve-close">&times;</span>
+            <h2 class="ris-main-header">Choose a Location</h2>
+            <ul class="reserveInStore-error-ul" style="display:none;"></ul>
+        </header>
+
+        {% for location in locations %}
+        <div class="ris-location-block">
+            <input type="radio" value="{{ location.id }}"
+                   name="reservation[location.id]"
+                   id="reservation_location.id_{{ location.id }}"  {% if location.id != 0 %}required{% endif %}>
+            <label class="ris-location-label"
+                   for="reservation_location.id_{{ location.id }}">
+                {{ location.name }}
+            </label>
+            <div class="ris-view-on-map">
+                <img class="img-responsive" src="{{ cdn_url }}map_pin.png">
+                <a href="{{ location.google_map_url }}" target="_blank">View on map</a>
+            </div>
+            <div class="ris-location-description">
+                <div class="ris-row">
+                    <p>{{ location.address }}<br>
+                        {{ location.formatted_address }}<br>
+                        {{ location.country }}</p>
+                </div>
+                {{ location.custom_html }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+

@@ -6,6 +6,18 @@ class StoresController < LoggedInController
   end
 
   ##
+  # GET /stores/templates
+  def templates
+  end
+
+  ##
+  # Used by the skill editors to provide previews of the components that are being built.
+  # GET /stores/iframe_preview
+  def iframe_preview
+    render layout: false
+  end
+
+  ##
   # GET /stores/settings
   def settings
     @integrator = StoreIntegrator.new(@current_store)
@@ -22,9 +34,19 @@ class StoresController < LoggedInController
   # PUT/PATCH /stores/settings
   def save_settings
     respond_to do |format|
-      @current_store.assign_attributes(store_params)
+      save_params = store_params
+
+      # Ensure values are boolean if they are enabled/disabled flags
+      store_params.keys.each do |key|
+        if key.to_s =~ /.+(_enabled)/
+          store_params[key] = store_params[key].to_bool unless store_params[key].is_a?(TrueClass) || store_params[key].is_a?(FalseClass)
+        end
+      end
+
+      @current_store.assign_attributes(save_params)
+
       if @current_store.validate_active_and_save!
-        format.html { redirect_to stores_settings_url, notice: 'Store settings were successfully updated.' }
+        format.html { redirect_to params[:next_url].presence || stores_settings_url, notice: 'Store settings were successfully updated.' }
         format.json { render :settings, status: :ok }
       else
         format.html { render :settings }

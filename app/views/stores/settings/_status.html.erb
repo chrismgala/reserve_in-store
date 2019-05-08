@@ -20,7 +20,7 @@
                 ON
               </div>
               <div class="Polaris-SettingAction__Action">
-                <%= f.button("Turn Off", name: "store[active]", value: false, class: "Polaris-Button Polaris-Button--destructive", data: ({confirm: "Are you sure you want to disable us?"} if @current_store.active?) )%>
+                <%= f.button("TURN OFF", name: "store[active]", value: false, class: "Polaris-Button Polaris-Button--destructive", data: ({confirm: "Are you sure you want to disable us?"} if @current_store.active?) )%>
               </div>
               <div class="Polaris-SettingAction__Setting">
                 <p>Reserve In-Store is showing to your customers.</p>
@@ -35,10 +35,10 @@
                 </span>OFF
               </div>
               <div class="Polaris-SettingAction__Action">
-                <%= f.button("Turn On", name: "store[active]", value: true, class: "Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge", style: 'font-weight: 800; text-transform: uppercase;')%>
+                <%= f.button("TURN ON", name: "store[active]", value: true, class: "Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge", style: 'font-weight: 800; text-transform: uppercase;')%>
               </div>
               <div class="Polaris-SettingAction__Setting">
-                <p>The Reserve In-Store modal is not currently showing to your shoppers. Click the "Turn On" button to make it start showing.</p>
+                <p>The Reserve In-Store modal is not currently showing to your shoppers. Click the "TURN ON" button to make it start showing.</p>
               </div>
             <% end %>
           </div>

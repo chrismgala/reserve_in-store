@@ -1,0 +1,43 @@
+
+.editor-help-window {
+    text-shadow: 1px 1px 1px white;
+    float: left;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 19px;
+    background-color: white;
+    z-index: 10;
+    padding: 17px 24px;
+    overflow: scroll;
+    box-sizing: border-box;
+    box-shadow: 0px -2px 6px 7px #00000033;
+    min-height: 200px;
+}
+
+.editor-container {
+    position: relative;
+}
+
+.close-editor-help-window {
+    position: absolute;
+    right: 14px;
+    top: 6px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.editor-links > a.visible-sm,.editor-links > a.visible-md,.editor-links > a.visible-xs {
+    display: inline !important;
+}
+
+.editor-links > a {
+    font-size: 9px;
+}
+
+.editor-links > a:not(:first-child) {
+    margin-left: 4px;
+    padding-left: 4px;
+    border-left: 1px solid #00000033;
+}

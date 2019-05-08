@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   resources :locations
   get 'stores/settings'
   get 'stores/help'
+  get 'stores/templates'
+  get 'stores/iframe_preview'
   match 'stores/settings' => 'stores#save_settings', via: [:post, :patch]
 
   namespace :api do

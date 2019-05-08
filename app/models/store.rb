@@ -6,42 +6,41 @@ class Store < ActiveRecord::Base
   before_create :generate_keys
   before_save :nil_default_templates
 
-  PERMITTED_PARAMS = [:top_msg, :success_msg, :email_template, :show_phone, :show_instructions_from_customer, :active]
+  alias_attribute :email_template, :customer_confirm_email_tpl # Alias for reverse compatibility, can be removed probably by July 1, 2019
 
-  ##
-  # @return [Text] - default, un-rendered email template
-  def self.default_email_template
-    Rails.cache.fetch("default_email_template", expires_in: Rails.env.production? ? 1.year : 1.second) do
-      ApplicationController.new.render_to_string(partial: 'customer_mailer/email_template')
-    end
+  PERMITTED_PARAMS = [
+    :top_msg, :success_msg, :show_phone, :show_instructions_from_customer, :active,
+    :customer_confirm_email_tpl, :customer_confirm_email_tpl_enabled,
+    :reserve_product_modal_tpl, :reserve_product_modal_tpl_enabled,
+    :choose_location_modal_tpl, :choose_location_modal_tpl_enabled,
+    :reserve_modal_faq_tpl, :reserve_modal_faq_tpl_enabled,
+    :reserve_product_btn_tpl, :reserve_product_btn_selector, :reserve_product_btn_action
+  ]
+
+  def currency_template
+    shopify_settings[:money_format].presence || '${{amount}}'
   end
 
-  ##
-  # @return [Hash] - liquid params used by JS email previewer
-  def preview_email_liquid_params
-    {'customer_first_name' => "John",
-     'customer_last_name' => "Doe",
-     'product_link' => "<a href=#>Apple (Red)</a>",
-     'location_name' => "Store 3",
-     'location_address' => "1234 Test St.",
-     'location_city' => "City",
-     'location_state' => "State",
-     'location_country' => "Country",
-     'store_link' => "<a href=#>Store 3</a>",
-     "reservation_time" => "Monday at 5:30pm"}.to_json.html_safe
+  def currency(val, opts = {})
+    currency_template.gsub(/{{[ ]?amount[ ]?}}/, ActionController::Base.helpers.number_with_precision(val, precision: 2, delimeter: ','))
+      .gsub(/{{[ ]?amount_with_comma_separator[ ]?}}/, ActionController::Base.helpers.number_with_precision(val, precision: 2, separator: ','))
   end
 
-  ##
-  # @return [Text] - The template we want to use for emails for this store
-  def email_template_in_use
-    email_template || Store::default_email_template
+  def to_liquid
+    {
+      'top_msg' => top_msg,
+      'show_phone' => show_phone,
+      'show_instructions_from_customer' => show_instructions_from_customer,
+      'success_msg' => success_msg,
+      'faq' => reserve_modal_faq_tpl_in_use
+    }
   end
 
   ##
   # Swap out our template to be nil if they are defaulted
   def nil_default_templates
-    if email_template.present? && email_template.gsub(/\s+/, "") == Store::default_email_template.gsub(/\s+/, "")
-      self.email_template = nil
+    if customer_confirm_email_tpl.present? && customer_confirm_email_tpl.gsub(/\s+/, "") == Store::customer_confirm_email_tpl.gsub(/\s+/, "")
+      self.customer_confirm_email_tpl = nil
     end
   end
 
@@ -67,12 +66,12 @@ class Store < ActiveRecord::Base
     shopify_settings['money_format']
   end
 
+  def api
+    @api ||= CachedShopifyAPI.new(self)
+  end
+
   def shopify_settings
-    Rails.cache.fetch("stores/#{id}/shopify_settings", expires_in: 1.week) do
-      with_shopify_session {
-        ShopifyAPI::Shop.current.attributes
-      }
-    end.with_indifferent_access
+    api.shop.attributes.with_indifferent_access
   end
 
   def with_shopify_session
@@ -98,52 +97,141 @@ class Store < ActiveRecord::Base
   # Ask Shopify for the store's email as well, to use as the default email for each location
   # Convert them into a Location instance, and save it to this store if it has an address
   def populate_locations_from_api!
-    with_shopify_session do
-      store_email = ShopifyAPI::Shop.current.attributes[:email].to_s
+    store_email = shopify_settings[:email].to_s
 
-      ShopifyAPI::Location.all.each do |shopify_loc|
-        loc = Location.new_from_shopify(shopify_loc)
-        loc.update(store_id: id, email: store_email) if loc.address.present?
-      end
-    end
-  end
-
-  def remote_locations
-    Rails.cache.fetch("stores/#{id}/shopify_api/locations/all", expires_in: 5.minutes) do
-      ShopifyAPI::Location.all
+    api.locations.each do |shopify_loc|
+      loc = Location.new_from_shopify(shopify_loc)
+      loc.update(store_id: id, email: store_email) if loc.address.present?
     end
   end
 
   ##
   # @deprecated Temporary code and can be removed by May 31, 2019
   def fix_locations!
-    with_shopify_session do
-      new_locations = ShopifyAPI::Location.all.map do |shopify_loc|
-        Location.new_from_shopify(shopify_loc)
-      end
+    new_locations = api.locations.map do |shopify_loc|
+      Location.new_from_shopify(shopify_loc)
+    end
 
-      locations.where(platform_location_id: nil).find_each do |old_location|
-        new_locations.each do |new_location|
-          match = old_location.attributes.except('id', 'created_at', 'updated_at', 'store_id', 'email', 'platform_location_id').keys.all? do |attr_key|
-            new_location.attributes[attr_key] == old_location.attributes[attr_key]
-          end
-
-          if match
-            ForcedLogger.log("Updating location with platform ID of #{new_location.platform_location_id}...", location: old_location.id, store: id)
-            old_location.update(platform_location_id: new_location.platform_location_id)
-          end
-        end
-      end
-
-      locations.where("length(country) = 2").each do |location|
-
-        if location.update(country: Carmen::Country.coded(location.country).name)
-          ForcedLogger.log("Fixed location country code to country name.", location: location.id, store: id)
+    locations.where(platform_location_id: nil).find_each do |old_location|
+      new_locations.each do |new_location|
+        match = old_location.attributes.except('id', 'created_at', 'updated_at', 'store_id', 'email', 'platform_location_id').keys.all? do |attr_key|
+          new_location.attributes[attr_key] == old_location.attributes[attr_key]
         end
 
+        if match
+          ForcedLogger.log("Updating location with platform ID of #{new_location.platform_location_id}...", location: old_location.id, store: id)
+          old_location.update(platform_location_id: new_location.platform_location_id)
+        end
       end
     end
+
+    locations.where("length(country) = 2").each do |location|
+
+      if location.update(country: Carmen::Country.coded(location.country).name)
+        ForcedLogger.log("Fixed location country code to country name.", location: location.id, store: id)
+      end
+
+    end
   end
+
+  ######################################################
+  # For Custom Email Templates
+
+  ##
+  # @return [Text] - default, un-rendered email template
+  def self.default_customer_confirm_email_tpl
+    return @default_customer_confirm_email_tpl if @default_customer_confirm_email_tpl.present? && !Rails.env.development?
+
+    @default_customer_confirm_email_tpl = ApplicationController.new.render_to_string(partial: 'customer_mailer/customer_confirm_email_tpl')
+  end
+  def self.default_email_template; default_customer_confirm_email_tpl; end # Alias for reverse compatibility, can be removed probably by July 1, 2019
+
+  ##
+  # @return [Text] - The template we want to use for emails for this store
+  def customer_confirm_email_tpl_in_use
+    customer_confirm_email_tpl.presence || Store.default_customer_confirm_email_tpl
+  end
+  alias_method :email_template_in_use, :customer_confirm_email_tpl_in_use # Alias for reverse compatibility, can be removed probably by July 1, 2019
+
+  ##
+  # @return [Hash] - liquid params used by JS email previewer
+  def preview_email_liquid_params
+    {'customer_first_name' => "John",
+     'customer_last_name' => "Doe",
+     'product_link' => "<a href=\"#\">Apple (Red)</a>",
+     'location_name' => "Store 3",
+     'location_address' => "1234 Test St.",
+     'location_city' => "City",
+     'location_state' => "State",
+     'location_country' => "Country",
+     'store_link' => "<a href=\"#\">Store 3</a>",
+     "reservation_time" => "Monday at 5:30pm"}
+  end
+
+
+
+  ######################################################
+  # For FAQ TPL
+
+
+  def self.default_reserve_modal_faq_tpl
+    return @default_reserve_modal_faq_tpl if @default_reserve_modal_faq_tpl.present? && !Rails.env.development?
+
+    @default_reserve_modal_faq_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/faq/default_tpl.liquid.html')
+  end
+  def reserve_modal_faq_tpl_in_use
+    if reserve_modal_faq_tpl_enabled?
+      reserve_modal_faq_tpl.to_s
+    else
+      self.class.default_reserve_modal_faq_tpl
+    end
+  end
+
+
+
+  ######################################################
+  # For Reserve Modal TPL
+
+  def self.default_reserve_product_modal_tpl
+    return @default_reserve_product_modal_tpl if @default_reserve_product_modal_tpl.present? && !Rails.env.development?
+
+    @default_reserve_product_modal_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/modal/default_tpl.liquid.html')
+  end
+  def reserve_product_modal_tpl_in_use
+    if reserve_product_modal_tpl_enabled?
+      reserve_product_modal_tpl.to_s
+    else
+      self.class.default_reserve_product_modal_tpl
+    end
+  end
+
+
+  ######################################################
+  # For Locations Modal TPL
+
+  def self.default_choose_location_modal_tpl
+    return @default_choose_location_modal_tpl if @default_choose_location_modal_tpl.present? && !Rails.env.development?
+
+    @default_choose_location_modal_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/locations/modal/default_tpl.liquid.html')
+  end
+  def choose_location_modal_tpl_in_use
+    if choose_location_modal_tpl_enabled?
+      choose_location_modal_tpl.to_s
+    else
+      self.class.default_choose_location_modal_tpl
+    end
+  end
+
+  ##
+  # @return [Hash] - liquid params used by JS email previewer
+  def frontend_tpl_vars
+    {
+      locations: locations.to_a,
+      cdn_url: ENV['CDN_BASE_PATH'],
+      settings: self
+    }
+  end
+
 
   private
 
@@ -168,20 +256,21 @@ class Store < ActiveRecord::Base
   # Modify the errors array and flip our active state if we have issues with the APIs.
   # @return [Bool] If we pass validation or not
   def active_validation!
-    begin
-      script_tags = ShopifyAPI::ScriptTag.all
-      if active? && script_tags.empty?
-        ShopifyAPI::ScriptTag.create({event:'onload', src: "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"})
-      elsif !active && script_tags.present?
-        ShopifyAPI::ScriptTag.delete(ShopifyAPI::ScriptTag.first.id)
-      end
-    rescue StandardError => e
-      ForcedLogger.error(e, store: id)
-      errors.add(:active, "Issue modifying your storefront. Try again / contact support so we can help you.")
-      self.active = false
-      return false
+    script_tags = ShopifyAPI::ScriptTag.all
+
+    if active? && script_tags.empty?
+      ShopifyAPI::ScriptTag.create({event:'onload', src: "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"})
+    elsif !active && script_tags.present?
+      ShopifyAPI::ScriptTag.delete(ShopifyAPI::ScriptTag.first.id)
     end
+
     true
+  rescue StandardError => e
+    ForcedLogger.error(e, store: id)
+    errors.add(:active, "Issue modifying your storefront. Try again / contact support so we can help you.")
+    self.active = false
+
+    false
   end
 
 end

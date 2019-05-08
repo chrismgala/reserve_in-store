@@ -12,6 +12,20 @@ class Location < ActiveRecord::Base
   def google_map_url
     'https://www.google.com/maps/search/?api=1&query=' + URI.encode(address + ' ' + city + ' ' + state + ' ' + country + ' ' + zip)
   end
+  alias_method :google_maps_url, :google_map_url
+
+  def to_liquid
+    {
+      'id' => id,
+      'platform_location_id' => platform_location_id,
+      'name' => name,
+      'google_map_url' => google_map_url,
+      'address' => address,
+      'formatted_address' => formatted_address,
+      'country' => country,
+      'custom_html' => custom_html
+    }
+  end
 
   ##
   # Filter out empty address fields, and returns a string containing city, state and postal code.

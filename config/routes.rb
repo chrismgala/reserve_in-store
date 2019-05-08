@@ -10,8 +10,14 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get 'modal' => 'reservations#modal'
+      get 'locations/modal' => 'locations#modal'
+      get 'reservations/modal' => 'reservations#modal'
+      get 'inventory' => 'inventory#index'
+      post 'reservations' => 'reservations#create'
+
+      # Legacy endpoints
       post 'store_reservations' => 'reservations#create'
+      get 'modal' => 'reservations#modal'
     end
   end
 

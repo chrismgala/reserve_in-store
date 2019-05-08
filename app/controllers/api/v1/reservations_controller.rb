@@ -4,7 +4,7 @@ module Api
       protect_from_forgery with: :null_session, only: [:create]
 
       ##
-      # GET /api/v1/modal
+      # GET /api/v1/reservations/modal
       def modal
         @product_title = params[:product_title]
         @variant_title = params[:variant_title]

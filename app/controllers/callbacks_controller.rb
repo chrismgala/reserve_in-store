@@ -12,7 +12,7 @@ class CallbacksController < ShopifyApp::SessionsController
     ShopifyAPI::Base.activate_session(new_session)
 
     if store.locations.empty?
-      store.populateLocationsFromApi!
+      store.populate_locations_from_api!
     end
   end
 

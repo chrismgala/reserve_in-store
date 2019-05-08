@@ -507,3 +507,18 @@
     }
 }
 
+
+
+.reserveInStore-chooseLocationModal .ris-location-block {
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.reserveInStore-chooseLocationModal .ris-main-header {
+    margin-bottom: 24px;
+}
+
+.reserveInStore-chooseLocationModal .reserveInStore-reserve-modal {
+    max-width: 500px;
+}

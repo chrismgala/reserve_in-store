@@ -80,6 +80,10 @@ SHOPIFY_API_KEY=""
 SHOPIFY_API_SECRET=""
 ```
 
+#### 4. Set your naviation menu
+Add the navigation menu items to the embedded app like this:
+![](http://g.recordit.co/g6kfGZfISi.gif)
+
 ## Create a test store
 Use the Shopify partner dashboard to make a Shopify development store.
 

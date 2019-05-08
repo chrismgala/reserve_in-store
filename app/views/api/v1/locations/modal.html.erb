@@ -1,0 +1,17 @@
+<div class="reserveInStore-chooseLocationModal modal reserveInStore-modal-background">
+  <div class="reserveInStore-reserve-modal">
+
+    <header>
+      <span class="close reserveInStore-reserve-close">&times;</span>
+      <h2 class="ris-main-header">Choose a Location</h2>
+      <ul class="reserveInStore-error-ul" style="display:none;"></ul>
+    </header>
+
+    <% @store.locations.each do |location| %>
+      <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: location.id, name: location.name, map_url: location.google_map_url, address: location.address,
+                                                                             formatted_address: location.formatted_address, country: location.country, custom_html: location.custom_html} %>
+    <% end %>
+  </div>
+
+</div>
+

@@ -69,7 +69,7 @@ class Store < ActiveRecord::Base
 
   def shopify_settings
     Rails.cache.fetch("stores/#{id}/shopify_settings", expires_in: 1.week) do
-      ShopifyAPI::Session.temp(shopify_domain, shopify_token) {
+      with_shopify_session {
         ShopifyAPI::Shop.current.attributes
       }
     end.with_indifferent_access
@@ -97,12 +97,51 @@ class Store < ActiveRecord::Base
   # Ask Shopify for each location attached to this store
   # Ask Shopify for the store's email as well, to use as the default email for each location
   # Convert them into a Location instance, and save it to this store if it has an address
-  def populateLocationsFromApi!
-    store_email = ShopifyAPI::Shop.current.attributes[:email].to_s
+  def populate_locations_from_api!
+    with_shopify_session do
+      store_email = ShopifyAPI::Shop.current.attributes[:email].to_s
 
-    ShopifyAPI::Location.all.each do |shopify_loc|
-      loc = Location.newFromShopify(shopify_loc)
-      loc.update(store_id: id, email: store_email) if loc.address.present?
+      ShopifyAPI::Location.all.each do |shopify_loc|
+        loc = Location.new_from_shopify(shopify_loc)
+        loc.update(store_id: id, email: store_email) if loc.address.present?
+      end
+    end
+  end
+
+  def remote_locations
+    Rails.cache.fetch("stores/#{id}/shopify_api/locations/all", expires_in: 5.minutes) do
+      ShopifyAPI::Location.all
+    end
+  end
+
+  ##
+  # @deprecated Temporary code and can be removed by May 31, 2019
+  def fix_locations!
+    with_shopify_session do
+      new_locations = ShopifyAPI::Location.all.map do |shopify_loc|
+        Location.new_from_shopify(shopify_loc)
+      end
+
+      locations.where(platform_location_id: nil).find_each do |old_location|
+        new_locations.each do |new_location|
+          match = old_location.attributes.except('id', 'created_at', 'updated_at', 'store_id', 'email', 'platform_location_id').keys.all? do |attr_key|
+            new_location.attributes[attr_key] == old_location.attributes[attr_key]
+          end
+
+          if match
+            ForcedLogger.log("Updating location with platform ID of #{new_location.platform_location_id}...", location: old_location.id, store: id)
+            old_location.update(platform_location_id: new_location.platform_location_id)
+          end
+        end
+      end
+
+      locations.where("length(country) = 2").each do |location|
+
+        if location.update(country: Carmen::Country.coded(location.country).name)
+          ForcedLogger.log("Fixed location country code to country name.", location: location.id, store: id)
+        end
+
+      end
     end
   end
 

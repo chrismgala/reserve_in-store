@@ -4,18 +4,20 @@ ReserveInStore.Util = {
      * @param $el jquery element selector
      * @returns {boolean} True if it is, false otherwise
      */
-    isFullyVisible: function ($el) {
+    isFullyVisible: function($el) {
         if ($el.data('always_visible')) {
             return true;
         }
 
-        if (typeof $ !== 'undefined' && $.fn && $.fn.jquery) {
+        var usingJquery = (Object && Object.getPrototypeOf) ? Object.getPrototypeOf($el).jquery : ($ && $.zepto);
+
+        if (usingJquery) {
             if (!$el.is(':visible')) {
                 return false;
             }
         }
 
-        if (!ReserveInStore.Util.isScrolledIntoView($el)) {
+        if (!Fera.Util.isScrolledIntoView($el)) {
             return false;
         }
         if ($el.css('display') == 'none' || $el.css('visibility') == 'hidden' || $el.css('opacity') == 0) {
@@ -34,12 +36,80 @@ ReserveInStore.Util = {
     },
 
     /**
+     * Runs the callback with the result of whether the browser's incogneto mode is enabled
+     * @param {function} callback - callback(true) if incogneto mode is enabled, callback(false) otherwise.
+     * @deprecated We don't use this right now but leaving the code here in case we want to use it in the future.
+     */
+    // checkIncognetoMode: function (callback) {
+    //     var fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+    //     if (!fs) {
+    //         return callback(false);
+    //     }
+    //     fs(window.TEMPORARY, 100, function (fs) {
+    //         return callback(false);
+    //     }, function (err) {
+    //         return callback(true);
+    //     });
+    // },
+
+    /**
+     * @param {Selector} $el
+     * @returns {string}
+     */
+    outerHeight: function($el) {
+        var elmHeight, elmMargin, elm = $el.get(0);
+        if (document.all) {// IE
+            elmHeight = elm.currentStyle.height;
+            elmMargin = parseInt(elm.currentStyle.marginTop, 10) + parseInt(elm.currentStyle.marginBottom, 10) + "px";
+        } else {// Mozilla
+            elmHeight = document.defaultView.getComputedStyle(elm, '').getPropertyValue('height');
+            elmMargin = parseInt(document.defaultView.getComputedStyle(elm, '').getPropertyValue('margin-top')) + parseInt(document.defaultView.getComputedStyle(elm, '').getPropertyValue('margin-bottom')) + "px";
+        }
+        return (elmHeight + elmMargin);
+    },
+
+    /**
+     * Lets you update a URL param regardless of whether or not it is there currently or not
+     * @param url {string} - URL you want to modify
+     * @param param {string} - The name of the param to look for in the URL
+     * @param paramVal (string) - Value of the param that you want
+     * @returns {string} - The URL with the param updated
+     */
+    updateURLParameter: function(url, param, paramVal) {
+        var newAdditionalURL = "";
+        var tempArray = url.split("?");
+        var baseURL = tempArray[0];
+        var additionalURL = tempArray[1];
+        var temp = "";
+        if (additionalURL) {
+            tempArray = additionalURL.split("&");
+            for (var i = 0; i < tempArray.length; i++) {
+                if (tempArray[i].split('=')[0] != param) {
+                    newAdditionalURL += temp + tempArray[i];
+                    temp = "&";
+                }
+            }
+        }
+
+        var newUrl = baseURL + "?" + newAdditionalURL;
+
+        if (paramVal !== null) {
+            newUrl += temp + param + "=" + paramVal;
+        }
+
+        if (newUrl === baseURL + '?') return baseURL;
+
+        return newUrl;
+    },
+
+
+    /**
      * Opposite of #isFullyVisible()
      * @param $el jquery element selector
      * @returns {boolean} True if the element selector is NOT visible in any way in view.
      */
-    isFullyInvisible: function ($el) {
-        return !ReserveInStore.Util.isFullyVisible($el);
+    isFullyInvisible: function($el) {
+        return !Fera.Util.isFullyVisible($el);
     },
 
     /**
@@ -47,11 +117,11 @@ ReserveInStore.Util = {
      * @param $el jquery element selector
      * @returns {boolean} True if it is, false otherwise
      */
-    isScrolledIntoView: function ($el) {
-        var docViewTop    = $(window).scrollTop();
-        var docViewBottom = docViewTop + $(window).height();
+    isScrolledIntoView: function($el) {
+        var docViewTop = Fera.Util.$()(window).scrollTop();
+        var docViewBottom = docViewTop + Fera.Util.$()(window).height();
 
-        var elemTop    = $el.offset().top;
+        var elemTop = $el.offset().top;
         var elemBottom = elemTop + $el.height();
 
         return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
@@ -60,21 +130,25 @@ ReserveInStore.Util = {
     /**
      * Adds the Zepto library to the current document body
      */
-    addZepto: function (opts) {
-        var s   = document.createElement("script");
-        s.type  = "text/javascript";
-        s.async = !0;
-<!--        This is accessing node_modules/zepto/dist/zepto.js-->
-<!--        TODO Later may drop the .erb suffix-->
-        s.src   = "<%= ENV['BASE_APP_URL'] %>/assets/zepto/dist/zepto" + (opts.debugMode ? '' : '.min') + ".js";
-        document.body.appendChild(s);
+    addZepto: function(opts, callback) {
+        callback = callback || function() {
+        };
+        var asset = new FeraCachedAsset({
+            name: 'zepto',
+            version: '1.2.0',
+            expiresIn: opts.devMode ? 15 : (15 * 60), // Expires in 15 minutes in production, or 15 seconds in dev mode.
+            url: "https://cdn.fera.ai/js/lib/zepto" + (opts.debugMode ? '' : '.min') + ".js"
+        });
+        asset.load(callback);
     },
 
     /**
      * @returns {*} jQuery or Zepto depending on what's available
      */
-    $: function () {
+    $: function() {
         if (typeof jQuery !== 'undefined') return jQuery;
+        if (typeof $ !== 'undefined' && typeof $.fn !== 'undefined' && typeof $.fn.jquery !== 'undefined') return $;
+        if (typeof Zepto !== 'undefined') return Zepto;
         return Zepto;
     },
 
@@ -82,7 +156,7 @@ ReserveInStore.Util = {
      * @param str {string} String to capitalize the first letter of
      * @returns {string} joe => Joe
      */
-    capitalizeFirstLetter: function (str) {
+    capitalizeFirstLetter: function(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     },
 
@@ -90,11 +164,11 @@ ReserveInStore.Util = {
      * Shuffles array in place.
      * @param a {Array} a items An array containing the items.
      */
-    shuffleArray: function (a) {
+    shuffleArray: function(a) {
         var j, x, i;
         for (i = a.length - 1; i > 0; i--) {
-            j    = Math.floor(Math.random() * (i + 1));
-            x    = a[i];
+            j = Math.floor(Math.random() * (i + 1));
+            x = a[i];
             a[i] = a[j];
             a[j] = x;
         }
@@ -105,26 +179,71 @@ ReserveInStore.Util = {
      * Returns true is value is null or empty
      * @param value {*}
      */
-    isNullOrEmpty: function (value) {
+    isNullOrEmpty: function(value) {
         return (!value || value === undefined || value === "" || value.length === 0);
     },
 
+    /**
+     * Returns the browser and browser version. For example: MSIE 8
+     * @returns {string}
+     */
+    detectBrowser: function() {
+        var ua = navigator.userAgent, tem,
+            M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+        if (/trident/i.test(M[1])) {
+            tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+            return 'IE ' + (tem[1] || '');
+        }
+        if (M[1] === 'Chrome') {
+            tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+            if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+        }
+        M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+        if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+        return M.join(' ');
+    },
 
     /**
-    *  Base64 encode / decode
-    *  http://www.webtoolkit.info
-    */
+     * @returns {boolean} True if the current browser is running microsoft internet explorer
+     */
+    ie: function() {
+        return Fera.Util.detectBrowser().indexOf("IE") === 0 || Fera.Util.detectBrowser().indexOf("MSIE") !== -1;
+    },
+
+    /*
+     * Used to limit GET requests
+     * @see https://stackoverflow.com/questions/2400935/browser-detection-in-javascript#comment24686185_2401861
+     * @return {number} Max characters we can use in a GET request
+     */
+    maxGetRequestChars: function() {
+        if (Fera.Util.detectBrowser().indexOf('MSIE') !== -1) return 2000;
+        return 6000;
+    },
+
+    /**
+     * Tells you how big some params are as a string.
+     * @param params {object} - params you want to send via ajax to a server
+     * @returns {number} - number of bytes in length that the params will be when converted to a string
+     */
+    sizeOfParams: function(params) {
+        return encodeURI(Fera.Util.$().param(params)).split(/%..|./).length - 1;
+    },
+
+    /**
+     *  Base64 encode / decode
+     *  http://www.webtoolkit.info
+     */
 
     // private property
     _keyStr: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
 
     // public method for encoding
-    encode: function (input) {
+    encode: function(input) {
         var output = "";
         var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-        var i      = 0;
+        var i = 0;
 
-        input = ReserveInStore.Util._utf8_encode(input);
+        input = Fera.Util._utf8_encode(input);
 
         while (i < input.length) {
 
@@ -153,11 +272,11 @@ ReserveInStore.Util = {
     },
 
     // public method for decoding
-    decode: function (input) {
+    decode: function(input) {
         var output = "";
         var chr1, chr2, chr3;
         var enc1, enc2, enc3, enc4;
-        var i      = 0;
+        var i = 0;
 
         input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
 
@@ -183,15 +302,15 @@ ReserveInStore.Util = {
 
         }
 
-        output = ReserveInStore.Util._utf8_decode(output);
+        output = Fera.Util._utf8_decode(output);
 
         return output;
 
     },
 
     // private method for UTF-8 encoding
-    _utf8_encode: function (string) {
-        string      = string.replace(/\r\n/g, "\n");
+    _utf8_encode: function(string) {
+        string = string.replace(/\r\n/g, "\n");
         var utftext = "";
 
         for (var n = 0; n < string.length; n++) {
@@ -217,10 +336,10 @@ ReserveInStore.Util = {
     },
 
     // private method for UTF-8 decoding
-    _utf8_decode: function (utftext) {
+    _utf8_decode: function(utftext) {
         var string = "";
-        var i      = 0;
-        var c      = c1 = c2 = 0;
+        var i = 0;
+        var c = c1 = c2 = 0;
 
         while (i < utftext.length) {
 
@@ -245,6 +364,21 @@ ReserveInStore.Util = {
         }
 
         return string;
+    },
+
+    jsonHasArray: function(json) {
+        for (var key in json) {
+            if (json[key] && typeof(json[key]) === "object" && json[key].constructor === Array) {
+                return true;
+            }
+        }
+        return false;
+    },
+
+    httpMethodToUse: function(eventParams) {
+        //post if we have a shallow array since we can properly encode it that way
+        var shouldPost = Fera.Util.sizeOfParams(eventParams) > Fera.Util.maxGetRequestChars() || Fera.Util.jsonHasArray(eventParams);
+        return shouldPost ? 'POST' : 'GET';
     }
 
 };

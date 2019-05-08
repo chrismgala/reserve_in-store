@@ -1,15 +1,35 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '0.1.0.0'; // Version of the JS library.
+    this.version = '1.1.0.0'; // Version of the JS library.
     var self = this;
     opts = opts || {};
 
+    var api, product, reserveModal, chooselocationModal;
+
+    var $btnTpl;
+    var DEFAULT_BTN_SELECTOR = 'form[action~="/cart/add"]';
+    var DEFAULT_BTN_LOCATION = 'append';
+    var DEFAULT_BTN_TPL = '<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>';
+
     var init = function () {
+        ReserveInStore.logger = new ReserveInStore.Logger(opts);
+        api = new ReserveInStore.Api(opts);
 
         waitFor$(function jqueryWaitingFunction() {
             loadPushBuffer();
 
-            addReserveInStoreButton();
+            api.waitForApiConfig(function waitForApi() {
+                if (!api.checkConfig()) {
+                    return; // Skip setup because config is invalid.
+                }
+
+                reserveModal = new ReserveInStore.ReservationCreator({ api: api, product: product });
+                chooselocationModal = new ReserveInStore.ChooseLocationModal({ api: api, product: product });
+
+                $btnTpl = $('#reserveInStore-reserveBtnTemplate');
+
+                addReserveInStoreButton();
+            });
         });
     };
 
@@ -18,30 +38,45 @@ ReserveInStore.App = function(opts) {
      */
     var addReserveInStoreButton = function() {
         // detect the add to cart button
-        var $addToCartBtns = $('form[action~="/cart/add"] button[type=submit],form[action~="/cart/add"] input[type=submit],.product-form__cart-submit,.add-to-cart, .addToCart, #addToCart, #add-to-cart, .add-to-cart input.button');
+        var btnSelector = $btnTpl.data('reserveinstoreSelector') || DEFAULT_BTN_SELECTOR;
+        var insertionLocation = $btnTpl.data('reserveinstoreLocation') || DEFAULT_BTN_LOCATION;
+        var $btnContainer = $($btnTpl.html() || DEFAULT_BTN_TPL);
+        var $targets = $(btnSelector);
 
-        $addToCartBtns.each(function() {
-            var $addToCartBtn = $(this);
+        $targets.each(function() {
+            var $target = $(this);
 
-            if (!$addToCartBtn.next().attr('data-reserveInStoreBtn')){
-                $addToCartBtn.after('<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>');
-                opts.$modalContainer = $('<div class="reserveInStore-modal-container" style="display:none;"></div>').appendTo('body');
+            if (!$target.next().data('reserveInStoreBtn')){
+                if (insertionLocation === 'prepend') {
+                    $target.prepend($btnContainer);
+                } else if (insertionLocation === 'append') {
+                    $target.append($btnContainer);
+                } else if (insertionLocation === 'before') {
+                    $target.before($btnContainer);
+                } else {
+                    $target.after($btnContainer);
+                }
             }
 
-            var reservationCreator = new ReserveInStore.ReservationCreator(opts);
+            var $reserveBtn = $btnContainer.find('.reserveInStore-btn');
 
-            var $reserveBtnContainer = $addToCartBtn.next();
-            var $reserveBtn = $reserveBtnContainer.find('.reserveInStore-btn');
+            if ($reserveBtn.hasClass('reserveInStore-btn--block')) setButtonWidth($reserveBtn, $target);
 
-            $reserveBtn.addClass($addToCartBtn.attr('class'));
-            setButtonWidth($reserveBtn, $addToCartBtn);
-
-            $reserveBtnContainer.on('click', function(event) {
+            $btnContainer.on('click', function(event) {
                 event.preventDefault();
-                reservationCreator.displayModal();
+                self.showReserveModal();
                 return false;
             });
         });
+    };
+
+
+    self.showChooseLocationModal = function() {
+        chooselocationModal.show();
+    };
+
+    self.showReserveModal = function() {
+        reserveModal.show();
     };
 
     /**
@@ -74,11 +109,13 @@ ReserveInStore.App = function(opts) {
 
         if (object.action == "configure") {
             // Data should be:  { store_pk: \"#{public_key}\", api_url: \"#{ENV['BASE_APP_URL']}\" }
-            opts.storePublicKey = object.data.store_pk;
-            opts.apiUrl = object.data.api_url;
+            var config = {};
+            config.storePublicKey = object.data.store_pk;
+            config.apiUrl = object.data.api_url;
+            api.configure(config);
         } else if (object.action == "setProduct") {
             // Data should be:  { product: {id: 123, name: "bleh", ...} }
-            opts.product = object.data;
+            product = object.data;
         } else {
             console.error("Unknown action: ", object.action);
         }

@@ -25,12 +25,14 @@ class Location < ActiveRecord::Base
   # This object is invalid until it is provided a store_id (save with .update(store_id: id))
   # @param [Shopify::Location] shopify_loc A Shopify Location object
   # @return [Location] a new Location object made from the Shopify::Location
-  def self.newFromShopify(shopify_loc)
+  def self.new_from_shopify(shopify_loc)
     loc_attr = shopify_loc.attributes
     loc_attr.transform_values!(&:to_s)
     loc_attr[:address] = loc_attr[:address1] + " " + loc_attr[:address2]
     loc_attr[:state] = loc_attr[:province]
-    Location.new(loc_attr.slice(*Location::PERMITTED_PARAMS))
+    loc = Location.new(loc_attr.slice(*Location::PERMITTED_PARAMS))
+    loc.platform_location_id = shopify_loc.id
+    loc
   end
 
 end

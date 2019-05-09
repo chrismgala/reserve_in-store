@@ -34,7 +34,7 @@
                 <div id="parsley_<%= attr %>_errors" class="parsley-danger-text"></div>
 
                 <textarea class="editor-hidden-textarea" id="store_<%= attr %>_textarea" style="display: none;"
-                          name="store[<%= attr %>]"><%= db_value.to_s.html_safe %></textarea>
+                          name="store[<%= attr %>]"><%= value_in_use.to_s.html_safe %></textarea>
                 <textarea class="editor" id="store_<%= attr %>_editor"><%= value_in_use.to_s.html_safe %></textarea>
                 <textarea class="editor-default-content" style="display: none;" id="store_default_<%= attr %>_editor_textarea"><%= default_value.html_safe %></textarea>
                 <div class="editor-links">
@@ -83,7 +83,8 @@
           containerClasses: '<%= local_assigns[:container_css_class] %>',
           previewVars: <%= raw local_assigns[:preview_vars].to_h.to_json %>,
           extraCss: "<%= local_assigns[:extra_css] %>",
-          switchSelector: '#store_<%= attr %>_enabled'
+          switchSelector: '#store_<%= attr %>_enabled',
+          dontUseGlobalCustomCss: <%= local_assigns[:dont_use_global_css].to_bool %>
       });
 
   </script>

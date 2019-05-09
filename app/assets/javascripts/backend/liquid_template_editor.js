@@ -17,7 +17,19 @@ var LiquidTemplateEditor = function(opts) {
             setTimeout(function() {
                 self.preview.updateHeight();
             }, 1);
-        })
+        });
+
+        if (!opts.dontUseGlobalCustomCss) {
+            $(document).ready(function() {
+                setTimeout(function() {
+                    if (typeof customCssLiquidEditor !== 'undefined') {
+                        customCssLiquidEditor.onChange(function() {
+                            self.preview.update();
+                        });
+                    }
+                }, 100); // Give some time for the rest of the app to load to avoid race conditions
+            });
+        }
     };
 
 
@@ -71,13 +83,20 @@ var LiquidTemplateEditor = function(opts) {
     };
 
     this.getPreviewVars = function() {
-        return opts.previewVars || {}; // TODO
+        return opts.previewVars || {};
     };
     this.getCss = function() {
-        return opts.extraCss || ''; // TODO
+        var css = opts.extraCss || '';
+
+        if (!opts.dontUseGlobalCustomCss) {
+            if (typeof customCssLiquidEditor !== 'undefined') {
+                css += " \n " + customCssLiquidEditor.val();
+            }
+        }
+        return css;
     };
     this.getTemplate = function() {
-        return self.liquidEditor.val(); // TODO
+        return self.liquidEditor.val();
     };
 
 

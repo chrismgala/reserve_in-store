@@ -2,14 +2,14 @@
     <div class="reserveInStore-reserve-modal">
 
         <header>
-            <span class="close reserveInStore-reserve-close">&times;</span>
+            <span class="close reserveInStore-reserve-close">×</span>
             <h2 class="ris-main-header">Reserve In-store</h2>
             <p class="ris-instruction">{{ settings.top_msg }}</p>
             <ul class="reserveInStore-error-ul" style="display:none;"></ul>
         </header>
 
         <form class="reserveInStore-reservation-form" action="https://app.reserveinstore.com/api/v1/reservations/modal" accept-charset="UTF-8" data-remote="true" method="post">
-            <input name="utf8" type="hidden" value="&#x2713;"/>
+            <input name="utf8" type="hidden" value="✓"/>
             <section class="ris-columns">
 
                 <div class="ris-column">
@@ -60,7 +60,7 @@
 
                     {% if settings.show_instructions_from_customer %}
                     <div class="ris-contact-field">
-                        <label for="reservation_instructions_from_customer">Pick-up Date &amp; Time</label>
+                        <label for="reservation_instructions_from_customer">Pick-up Date & Time</label>
                         <input required="required" type="text" name="reservation[instructions_from_customer]" id="reservation_instructions_from_customer" />
                     </div>
                     {% endif %}
@@ -95,7 +95,7 @@
 
     <div class="reserveInStore-success-modal reserveInStore-center" style="display: none;">
         <div class="reserveInStore-modal-icon">
-            <span class="reserveInStore-center">&#10004;</span>
+            <span class="reserveInStore-center">✔</span>
         </div>
         <h1>Success!</h1>
         <p>{{ settings.success_msg }}<br>

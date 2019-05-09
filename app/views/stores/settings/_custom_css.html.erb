@@ -1,0 +1,70 @@
+<div class="Polaris-Layout__AnnotatedSection" id="custom_css_section">
+  <div class="Polaris-Layout__AnnotationWrapper">
+    <div class="Polaris-Layout__Annotation">
+      <div class="Polaris-TextContainer">
+        <h2 class="Polaris-Heading">Custom CSS</h2>
+        <p>Optionally include some custom CSS that the app will cache into your templates (for optimal speed) and load without slowing down your site.</p>
+      </div>
+    </div>
+    <div class="Polaris-Layout__AnnotationContent">
+      <div class="Polaris-Card">
+        <div class="Polaris-Card__Section">
+
+          <div class="Polaris-FormLayout template-editor-container">
+
+
+            <div class="Polaris-FormLayout__Item">
+              <div class="Polaris-Select">
+                <select id="store_custom_css_enabled" name="store[custom_css_enabled]" class="Polaris-Select__Input" aria-invalid="false">
+                  <option value="false" <%= 'selected="selected"' unless enabled %>>Don't Include Custom CSS</option>
+                  <option value="true" <%= 'selected="selected"' if enabled %>>Specify Custom CSS</option>
+                </select>
+                <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
+                </div>
+                <div class="Polaris-Select__Backdrop"></div>
+              </div>
+            </div>
+
+            <div class="display-if-selected-option"
+                 data-if_selected_option="#store_custom_css_enabled"
+                 data-selected_value="true"
+                 style="display:none">
+
+              <div class="Polaris-FormLayout__Item">
+                <div id="parsley_custom_css_errors" class="parsley-danger-text"></div>
+
+                <textarea class="editor-hidden-textarea" id="store_custom_css_textarea" style="display: none;"
+                          name="store[custom_css]"><%= db_value.to_s.html_safe %></textarea>
+                <textarea class="editor" id="store_custom_css_editor"><%= value_in_use.to_s.html_safe %></textarea>
+                <textarea class="editor-default-content" style="display: none;" id="store_default_custom_css_editor_textarea"><%= default_value.html_safe %></textarea>
+                <div class="editor-links">
+                  <a href="#" class="beautify-link">beautify code</a>
+                  <a href="#" class="expand-editor-link">expand editor</a>
+                  <a href="#" class="contract-editor-link">contract editor</a>
+                  <a href="#" class="reset-to-default">reset</a>
+                </div>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<% content_for(:javascript) do %>
+  <script>
+      var customCssLiquidEditor = new CodeEditor({
+          containerSelector: $('#custom_css_section .template-editor-container'),
+          beautifyFunction: css_beautify,
+          language: 'css',
+          maximizeHeight: false
+      });
+
+  </script>
+<% end %>

@@ -14,11 +14,20 @@ class Store < ActiveRecord::Base
     :reserve_product_modal_tpl, :reserve_product_modal_tpl_enabled,
     :choose_location_modal_tpl, :choose_location_modal_tpl_enabled,
     :reserve_modal_faq_tpl, :reserve_modal_faq_tpl_enabled,
-    :reserve_product_btn_tpl, :reserve_product_btn_selector, :reserve_product_btn_action
+    :reserve_product_btn_tpl, :reserve_product_btn_tpl_enabled, :reserve_product_btn_selector, :reserve_product_btn_action,
+    :custom_css, :custom_css_enabled
   ]
 
   def currency_template
     shopify_settings[:money_format].presence || '${{amount}}'
+  end
+
+  def integrator
+    @integrator ||= StoreIntegrator.new(self)
+  end
+
+  def url
+    "https://#{shopify_domain}"
   end
 
   def currency(val, opts = {})
@@ -39,8 +48,19 @@ class Store < ActiveRecord::Base
   ##
   # Swap out our template to be nil if they are defaulted
   def nil_default_templates
-    if customer_confirm_email_tpl.present? && customer_confirm_email_tpl.gsub(/\s+/, "") == Store::customer_confirm_email_tpl.gsub(/\s+/, "")
-      self.customer_confirm_email_tpl = nil
+    # Reset blank templates to `nil` so they don't get stuck in the DB
+    [:reserve_product_btn_tpl, :reserve_modal_faq_tpl, :choose_location_modal_tpl, :reserve_product_modal_tpl, :customer_confirm_email_tpl].each do |tpl_attr|
+      new_val = send(tpl_attr)
+      next if new_val.nil?
+
+      new_val = new_val.to_s.gsub(/\s/, '')
+      default_val = try("default_#{tpl_attr}".to_sym).gsub(/\s/, '')
+
+      if new_val.blank? || new_val == default_val
+        self.send("#{tpl_attr}=".to_sym, nil)
+
+        self.send("#{tpl_attr}_enabled=", false) if self.send("#{tpl_attr}_enabled?")
+      end
     end
   end
 
@@ -107,7 +127,7 @@ class Store < ActiveRecord::Base
 
   ##
   # @deprecated Temporary code and can be removed by May 31, 2019
-  def fix_locations!
+  def fix_old_data!
     new_locations = api.locations.map do |shopify_loc|
       Location.new_from_shopify(shopify_loc)
     end
@@ -126,12 +146,11 @@ class Store < ActiveRecord::Base
     end
 
     locations.where("length(country) = 2").each do |location|
-
       if location.update(country: Carmen::Country.coded(location.country).name)
         ForcedLogger.log("Fixed location country code to country name.", location: location.id, store: id)
       end
-
     end
+
   end
 
   ######################################################
@@ -145,11 +164,16 @@ class Store < ActiveRecord::Base
     @default_customer_confirm_email_tpl = ApplicationController.new.render_to_string(partial: 'customer_mailer/customer_confirm_email_tpl')
   end
   def self.default_email_template; default_customer_confirm_email_tpl; end # Alias for reverse compatibility, can be removed probably by July 1, 2019
+  def default_customer_confirm_email_tpl; self.class.default_customer_confirm_email_tpl; end
 
   ##
   # @return [Text] - The template we want to use for emails for this store
   def customer_confirm_email_tpl_in_use
-    customer_confirm_email_tpl.presence || Store.default_customer_confirm_email_tpl
+    if customer_confirm_email_tpl_enabled? && customer_confirm_email_tpl.present?
+      customer_confirm_email_tpl.to_s
+    else
+      self.class.default_customer_confirm_email_tpl
+    end
   end
   alias_method :email_template_in_use, :customer_confirm_email_tpl_in_use # Alias for reverse compatibility, can be removed probably by July 1, 2019
 
@@ -179,6 +203,7 @@ class Store < ActiveRecord::Base
 
     @default_reserve_modal_faq_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/faq/default_tpl.liquid.html')
   end
+  def default_reserve_modal_faq_tpl; self.class.default_reserve_modal_faq_tpl; end
   def reserve_modal_faq_tpl_in_use
     if reserve_modal_faq_tpl_enabled?
       reserve_modal_faq_tpl.to_s
@@ -197,6 +222,7 @@ class Store < ActiveRecord::Base
 
     @default_reserve_product_modal_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/modal/default_tpl.liquid.html')
   end
+  def default_reserve_product_modal_tpl; self.class.default_reserve_product_modal_tpl; end
   def reserve_product_modal_tpl_in_use
     if reserve_product_modal_tpl_enabled?
       reserve_product_modal_tpl.to_s
@@ -214,6 +240,7 @@ class Store < ActiveRecord::Base
 
     @default_choose_location_modal_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/locations/modal/default_tpl.liquid.html')
   end
+  def default_choose_location_modal_tpl; self.class.default_choose_location_modal_tpl; end
   def choose_location_modal_tpl_in_use
     if choose_location_modal_tpl_enabled?
       choose_location_modal_tpl.to_s
@@ -221,6 +248,28 @@ class Store < ActiveRecord::Base
       self.class.default_choose_location_modal_tpl
     end
   end
+
+
+
+  ######################################################
+  # Reserve Button TPL
+
+
+  def self.default_reserve_product_btn_tpl
+    return @default_reserve_product_btn_tpl if @default_reserve_product_btn_tpl.present? && !Rails.env.development?
+
+    @default_reserve_product_btn_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/btn/default_tpl.liquid.html')
+  end
+  def default_reserve_product_btn_tpl; self.class.default_reserve_product_btn_tpl; end
+  def reserve_product_btn_tpl_in_use
+    if reserve_product_btn_tpl_enabled?
+      reserve_product_btn_tpl.to_s
+    else
+      self.class.default_reserve_product_btn_tpl
+    end
+  end
+
+
 
   ##
   # @return [Hash] - liquid params used by JS email previewer
@@ -232,6 +281,21 @@ class Store < ActiveRecord::Base
     }
   end
 
+  def custom_css_in_use
+    custom_css_enabled? ? custom_css.to_s : ''
+  end
+
+  def footer_config
+    {
+      reserve_product_btn: {
+        tpl: reserve_product_btn_tpl_in_use,
+        selector: reserve_product_btn_selector,
+        action: reserve_product_btn_action
+      },
+      api_url: ENV['BASE_APP_URL'],
+      store_pk: public_key
+    }
+  end
 
   private
 

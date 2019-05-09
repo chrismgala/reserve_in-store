@@ -44,6 +44,7 @@ class Location < ActiveRecord::Base
     loc_attr.transform_values!(&:to_s)
     loc_attr[:address] = loc_attr[:address1] + " " + loc_attr[:address2]
     loc_attr[:state] = loc_attr[:province]
+    loc_attr[:country] = Carmen::Country.coded(loc_attr[:country_code]).name
     loc = Location.new(loc_attr.slice(*Location::PERMITTED_PARAMS))
     loc.platform_location_id = shopify_loc.id
     loc

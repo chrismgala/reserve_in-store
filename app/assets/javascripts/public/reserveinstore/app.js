@@ -4,11 +4,10 @@ ReserveInStore.App = function(opts) {
     var self = this;
     opts = opts || {};
 
-    var api, product, reserveModal, chooselocationModal;
+    var config, api, product, reserveModal, chooselocationModal;
 
-    var $btnTpl;
     var DEFAULT_BTN_SELECTOR = 'form[action~="/cart/add"]';
-    var DEFAULT_BTN_LOCATION = 'append';
+    var DEFAULT_BTN_ACTION = 'insert_after';
     var DEFAULT_BTN_TPL = '<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>';
 
     var init = function () {
@@ -26,8 +25,6 @@ ReserveInStore.App = function(opts) {
                 reserveModal = new ReserveInStore.ReservationCreator({ api: api, product: product });
                 chooselocationModal = new ReserveInStore.ChooseLocationModal({ api: api, product: product });
 
-                $btnTpl = $('#reserveInStore-reserveBtnTemplate');
-
                 addReserveInStoreButton();
             });
         });
@@ -38,23 +35,43 @@ ReserveInStore.App = function(opts) {
      */
     var addReserveInStoreButton = function() {
         // detect the add to cart button
-        var btnSelector = $btnTpl.data('reserveinstoreSelector') || DEFAULT_BTN_SELECTOR;
-        var insertionLocation = $btnTpl.data('reserveinstoreLocation') || DEFAULT_BTN_LOCATION;
-        var $btnContainer = $($btnTpl.html() || DEFAULT_BTN_TPL);
-        var $targets = $(btnSelector);
+        var btnSelector, btnAction, btnTpl;
+
+        if (config.reserve_product_btn && config.reserve_product_btn.action) {
+            btnAction = config.reserve_product_btn.action;
+        } else {
+            btnAction = DEFAULT_BTN_ACTION;
+        }
+
+        if (btnAction === 'manual') {
+            // Don't try to integrate
+        } else if (btnAction === 'auto') {
+            insertBtn(DEFAULT_BTN_SELECTOR, DEFAULT_BTN_ACTION);
+        } else {
+            btnSelector = (config.reserve_product_btn && config.reserve_product_btn.selector) ? config.reserve_product_btn.selector : DEFAULT_BTN_SELECTOR;
+            insertBtn(btnSelector, btnAction);
+        }
+    };
+
+    var insertBtn = function(targetSelector, orientation) {
+        var $targets = $(targetSelector);
+        var $btnContainer = $((config.reserve_product_btn && config.reserve_product_btn.tpl) ? config.reserve_product_btn.tpl : DEFAULT_BTN_TPL);
 
         $targets.each(function() {
             var $target = $(this);
 
-            if (!$target.next().data('reserveInStoreBtn')){
-                if (insertionLocation === 'prepend') {
+            if (!$target.next().data('reserveInStoreBtn')) {
+                if (orientation === 'prepend_to') {
                     $target.prepend($btnContainer);
-                } else if (insertionLocation === 'append') {
+                } else if (orientation === 'append_to') {
                     $target.append($btnContainer);
-                } else if (insertionLocation === 'before') {
+                } else if (orientation === 'insert_before') {
                     $target.before($btnContainer);
-                } else {
+                } else if (orientation === 'insert_after') {
                     $target.after($btnContainer);
+                } else { // Manual
+                    ReserveInStore.logger.error("Invalid insertion criteria: ", targetSelector, orientation, config);
+                    return false;
                 }
             }
 
@@ -109,10 +126,8 @@ ReserveInStore.App = function(opts) {
 
         if (object.action == "configure") {
             // Data should be:  { store_pk: \"#{public_key}\", api_url: \"#{ENV['BASE_APP_URL']}\" }
-            var config = {};
-            config.storePublicKey = object.data.store_pk;
-            config.apiUrl = object.data.api_url;
-            api.configure(config);
+            config = object.data;
+            api.configure({ storePublicKey: object.data.store_pk, apiUrl: object.data.api_url });
         } else if (object.action == "setProduct") {
             // Data should be:  { product: {id: 123, name: "bleh", ...} }
             product = object.data;

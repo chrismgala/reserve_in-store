@@ -12,6 +12,7 @@ class CodeEditor {
         this.beautifyFunction = opts.beautifyFunction;
         this._$editorLinks = this.$container.find('.editor-links');
         this._changed = false;
+        this._changeCallbacks = [];
 
         this._$sampleStateContainer = this.$container.find('.editor-sample-state');
         if (this._$sampleStateContainer.length > 0) {
@@ -50,19 +51,31 @@ class CodeEditor {
         return this.$textarea.val().trim();
     }
 
+    onChange(callback) {
+        this._changeCallbacks.push(callback);
+    }
+
     set(newVal) {
         var oldVal = this.$textarea.val();
 
         this.ace.getSession().setValue(newVal);
         this.$textarea.val(newVal);
 
-        if (this._opts.onChange) {
-            this._opts.onChange(oldVal, newVal);
-        }
+        this._triggerChange(oldVal, newVal);
     }
 
     hasChanged() {
         return this._changed;
+    }
+
+    _triggerChange(oldVal, newVal) {
+        if (this._opts.onChange) {
+            this._opts.onChange(oldVal, newVal);
+        }
+
+        for (var i = 0; i < this._changeCallbacks.length; i++) {
+            this._changeCallbacks[i](oldVal, newVal);
+        }
     }
 
     _setupExpandAndContractLinks() {
@@ -125,9 +138,7 @@ class CodeEditor {
             this.$textarea.val(newVal);
             this._changed = true;
 
-            if (this._opts.onChange) {
-                this._opts.onChange(oldVal, newVal);
-            }
+            this._triggerChange(oldVal, newVal);
         });
 
         this._initBeautification();

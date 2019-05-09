@@ -21,17 +21,17 @@
   <div class="Polaris-Page__Content">
     <%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
       <input type="hidden" value="<%= stores_templates_url %>" name="next_url">
-      <div class="Polaris-Layout">
 
+      <div class="Polaris-Layout">
 
         <%= render partial: 'stores/shared/liquid_editor_section', locals: {
             heading: 'Reservation Modal',
             subheading: 'Customize the appearance and content of the New Reservation modal.',
             attr: 'reserve_product_modal_tpl',
             enabled: @current_store.reserve_product_modal_tpl_enabled?,
-            db_value: @current_store.reserve_product_modal_tpl_in_use,
+            db_value: @current_store.reserve_product_modal_tpl,
             value_in_use: @current_store.reserve_product_modal_tpl_in_use,
-            default_value: Store.default_reserve_product_modal_tpl,
+            default_value: @current_store.default_reserve_product_modal_tpl,
             preview_vars: @current_store.frontend_tpl_vars.merge({
                   line_items: [
                       {
@@ -48,13 +48,26 @@
 
 
         <%= render partial: 'stores/shared/liquid_editor_section', locals: {
+            heading: 'FAQ',
+            subheading: 'Customize the FAQ (Frequently Asked Questions) content that shows up when a new reservation is being created by a shopper.',
+            attr: 'reserve_modal_faq_tpl',
+            enabled: @current_store.reserve_modal_faq_tpl_enabled?,
+            db_value: @current_store.reserve_modal_faq_tpl,
+            value_in_use: @current_store.reserve_modal_faq_tpl_in_use,
+            default_value: @current_store.default_reserve_modal_faq_tpl,
+            container_css_class: 'reserveInStore-reserve-modal',
+            frontend_mode: true
+        } %>
+
+
+        <%= render partial: 'stores/shared/liquid_editor_section', locals: {
             heading: 'Choose Location Modal',
             subheading: 'Customize the content of the Choose Location modal.',
             attr: 'choose_location_modal_tpl',
             enabled: @current_store.choose_location_modal_tpl_enabled?,
-            db_value: @current_store.choose_location_modal_tpl_in_use,
+            db_value: @current_store.choose_location_modal_tpl,
             value_in_use: @current_store.choose_location_modal_tpl_in_use,
-            default_value: Store.default_choose_location_modal_tpl,
+            default_value: @current_store.default_choose_location_modal_tpl,
             preview_vars: @current_store.frontend_tpl_vars,
             container_css_class: '',
             extra_css: '.reserveInStore-modal-background { padding-top: 8px; }',
@@ -62,18 +75,39 @@
         } %>
 
 
-
         <%= render partial: 'stores/shared/liquid_editor_section', locals: {
             heading: 'Reservation Confirmation Email',
             enabled: @current_store.customer_confirm_email_tpl_enabled?,
             subheading: 'Customize the reservation email that gets sent to customers using HTML.',
-            attr: 'reserve_modal_faq_tpl',
-            db_value: @current_store.customer_confirm_email_tpl_in_use,
+            attr: 'customer_confirm_email_tpl',
+            db_value: @current_store.customer_confirm_email_tpl,
             value_in_use: @current_store.customer_confirm_email_tpl_in_use,
-            default_value: Store.default_customer_confirm_email_tpl,
-            preview_vars: @current_store.preview_email_liquid_params
+            default_value: @current_store.default_customer_confirm_email_tpl,
+            preview_vars: @current_store.preview_email_liquid_params,
+            dont_use_global_css: true,
             # container_css_class: 'reserveInStore-reserve-modal',
             # frontend_mode: true
+        } %>
+
+        <%= render partial: 'stores/shared/liquid_editor_section', locals: {
+            heading: 'Product Page Reserve Button',
+            enabled: @current_store.reserve_product_btn_tpl_enabled?,
+            subheading: 'Customize the appearance of the "Reserve In-Store" button that appears in the product pages (if it is enabled).',
+            attr: 'reserve_product_btn_tpl',
+            db_value: @current_store.reserve_product_btn_tpl_in_use,
+            value_in_use: @current_store.reserve_product_btn_tpl_in_use,
+            default_value: @current_store.default_reserve_product_btn_tpl,
+            preview_vars: @current_store.preview_email_liquid_params,
+            extra_css: '.reserveInStore-btn-container { margin-top: 0 }',
+            frontend_mode: true
+        } %>
+
+
+        <%= render partial: 'stores/settings/custom_css', locals: {
+            enabled: @current_store.custom_css_enabled?,
+            db_value: @current_store.custom_css,
+            value_in_use: @current_store.custom_css_in_use,
+            default_value: ''
         } %>
 
 

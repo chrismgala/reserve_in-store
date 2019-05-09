@@ -34,6 +34,12 @@
 
 .editor-links > a {
     font-size: 9px;
+    text-decoration: none;
+    opacity: 0.7;
+}
+
+.editor-links > a:hover {
+    opacity: 1;
 }
 
 .editor-links > a:not(:first-child) {

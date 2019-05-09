@@ -8,10 +8,12 @@ gem 'bootsnap', '>= 1.1.0', require: false # Reduces boot times through caching;
 gem 'carmen', '~> 1.0.2' # For figuring out what the country/region names of a country code or region code are.
 gem 'dalli', '~> 2.7.6' # For memcached caching in production only
 gem 'dotenv-rails', '~> 2.4.0' # Adds the `ENV['BLEH']` ability to access environment variables
+gem 'httparty', '~> 0.13.7' # To party... and to do some really easy HTTP requests for things such as pulling the CSS content from the store for previews
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease, not really being used.
 gem 'jquery-rails', '~> 4.3', '>= 4.3.3' # Use jquery as the JavaScript library
 gem 'kaminari', '~> 1.1', '>= 1.1.1' # Pagination such as `Product.all.page(params[:page])`
 gem 'local_time', '~> 2.0.1' # For admin and merchant-facing pretty time.
+gem 'mechanize', '~> 2.7.5' # For scraping and parsing store data for the purposes of better previews (such as in StoreCrawler)
 gem 'non-stupid-digest-assets', '~> 1.0.9' # used for compiling both digest and non-digest assets in production
 gem 'liquid', '~> 4.0.0' # For rendering liquid templates that we use to theme the displays. We allow them to customize our liquid templates.
 gem 'pg', '~> 0.20.0' # Use postgresql as the database for Active Record
@@ -19,6 +21,7 @@ gem 'puma', '~> 3.11' # Use Puma as the app server
 gem "intercom-rails", '~> 0.4.0' # For live chat, support and knowledgebase
 gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (CORS) serve public assets
 gem 'rails', '~> 5.2.0' # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rainbow', '~> 3.0.0'  # Ruby gem for colorizing printed text on ANSI terminals
 gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets
 gem 'sentry-raven', '~> 2.7.4' # For bug tracking
 gem 'shopify_api', '~> 4.11.0'
@@ -44,7 +47,19 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+
+
+  unless ENV['RUBYMINE']
+    gem 'pry', '~> 0.11.3'
+    gem 'pry-byebug', '~> 3.6.0'
+    gem 'pry-rails', '~> 0.3.6'
+    gem 'pry-remote', '~> 0.1.8'
+    gem 'pry-rescue', '~> 1.4.5'
+    gem 'pry-stack_explorer', '~> 0.4.9.2'
+
+  end
 end
+
 
 group :test do
   # Adds support for Capybara system testing and selenium driver

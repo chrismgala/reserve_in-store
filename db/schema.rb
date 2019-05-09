@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_08_130517) do
+ActiveRecord::Schema.define(version: 2019_05_08_212320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,9 @@ ActiveRecord::Schema.define(version: 2019_05_08_130517) do
     t.text "reserve_product_btn_tpl"
     t.text "reserve_modal_faq_tpl"
     t.boolean "reserve_modal_faq_tpl_enabled", default: false
+    t.boolean "reserve_product_btn_tpl_enabled", default: false
+    t.text "custom_css"
+    t.boolean "custom_css_enabled", default: false
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

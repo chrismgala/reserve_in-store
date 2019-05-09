@@ -1,7 +1,10 @@
-ReserveInStore.ReservationCreator = function (opts) {
+ReserveInStore.ChooseLocationModal = function (opts) {
     var self = this;
     opts = opts || {};
+    var $ = ReserveInStore.Util.$();
     var api, $modalBackground, $reserveModal, $successModal, $form, variant, productId, variantId, formDataArray, lineItem = {};
+
+    var locationsManager = opts.locationsManager;
 
     var init = function () {
         api = opts.api;
@@ -12,9 +15,9 @@ ReserveInStore.ReservationCreator = function (opts) {
      */
     self.show = function () {
         var selectedProductInfo = self.loadProductInfo();
-        self.$modalContainer = $('<div class="reserveInStore-modal-container" style="display:none;"></div>').appendTo('body');
+        self.$modalContainer = $('<div class="reserveInStore-chooseLocationModal-container" style="display:none;"></div>').appendTo('body');
 
-        api.getModal(selectedProductInfo, self.insertModal);
+        api.getLocationsModal(selectedProductInfo, self.createModal);
     };
 
     /**
@@ -30,10 +33,8 @@ ReserveInStore.ReservationCreator = function (opts) {
         })[0];
         productId = opts.product.id;
         return {
-            product_title: opts.product.title,
-            variant_title: variant.title,
-            price: variant.price,
-            line_item: lineItem
+            product_id: opts.product.id,
+            variant_id: variant.id
         };
     };
 
@@ -84,7 +85,7 @@ ReserveInStore.ReservationCreator = function (opts) {
      * $successModal is to be displayed after new reservation is created
      * @param modalHTML {string} the HTML code of two modals
      */
-    self.insertModal = function (modalHTML) {
+    self.createModal = function (modalHTML) {
         self.$modalContainer.html(modalHTML);
         self.$modalContainer.show();
         $modalBackground = self.$modalContainer.find('.reserveInStore-modal-background');
@@ -95,6 +96,18 @@ ReserveInStore.ReservationCreator = function (opts) {
 
         $form = $reserveModal.find(".reserveInStore-reservation-form");
         setSubmitConditions();
+
+        self.$modalContainer.find('input[name="location_id"]').on('click change', function() {
+            var locationId = self.$modalContainer.find('input[name="location_id"]:checked').val();
+            locationsManager.setFavoriteLocationId(locationId);
+        });
+
+        locationsManager.whenReady(function(bestLocation) {
+            if (!bestLocation) return; // Could not determine best location
+
+            self.$modalContainer.find('input[name="location_id"][value="'+bestLocation.id+'"]').prop('checked', true);
+        });
+
     };
 
     /**

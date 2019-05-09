@@ -143,12 +143,10 @@
     text-transform: uppercase;
     font-weight: bold;
     font-size: 0.8em;
-    margin-left: 7px;
-    margin-bottom: 15px;
 }
 
 .ris-location-block .ris-location-description {
-    padding-left: 20px;
+    padding-left: 22px;
 }
 
 .ris-location-block .ris-view-on-map {
@@ -253,7 +251,7 @@
     width: 100%;
     background-color: #333333;
     color: white;
-    box-shadow: 3px 3px #dddddd;
+    box-shadow: 2px 2px 0 #dddddd;
     font-size: 1.5em;
     font-weight: 400;
     font-family: 'Roboto', sans-serif;

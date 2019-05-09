@@ -1,7 +1,10 @@
-ReserveInStore.ChooseLocationModal = function (opts) {
+ReserveInStore.ReserveModal = function (opts) {
     var self = this;
     opts = opts || {};
+    var $ = ReserveInStore.Util.$();
     var api, $modalBackground, $reserveModal, $successModal, $form, variant, productId, variantId, formDataArray, lineItem = {};
+
+    var locationsManager = opts.locationsManager;
 
     var init = function () {
         api = opts.api;
@@ -12,9 +15,9 @@ ReserveInStore.ChooseLocationModal = function (opts) {
      */
     self.show = function () {
         var selectedProductInfo = self.loadProductInfo();
-        self.$modalContainer = $('<div class="reserveInStore-chooseLocationModal-container" style="display:none;"></div>').appendTo('body');
+        self.$modalContainer = $('<div class="reserveInStore-modal-container" style="display:none;"></div>').appendTo('body');
 
-        api.getLocationsModal(selectedProductInfo, self.insertModal);
+        api.getModal(selectedProductInfo, self.insertModal);
     };
 
     /**
@@ -30,8 +33,10 @@ ReserveInStore.ChooseLocationModal = function (opts) {
         })[0];
         productId = opts.product.id;
         return {
-            product_id: opts.product.id,
-            variant_id: variant.id
+            product_title: opts.product.title,
+            variant_title: variant.title,
+            price: variant.price,
+            line_item: lineItem
         };
     };
 
@@ -93,6 +98,18 @@ ReserveInStore.ChooseLocationModal = function (opts) {
 
         $form = $reserveModal.find(".reserveInStore-reservation-form");
         setSubmitConditions();
+
+        self.$modalContainer.find('input[name="reservation[location.id]"]').on('click change', function() {
+            var locationId = self.$modalContainer.find('input[name="reservation[location.id]"]:checked').val();
+            locationsManager.setFavoriteLocationId(locationId);
+        });
+
+        locationsManager.whenReady(function(bestLocation) {
+            if (!bestLocation) return; // Could not determine best location
+
+            self.$modalContainer.find('input[name="reservation[location.id]"][value="'+bestLocation.id+'"]').prop('checked', true);
+        });
+
     };
 
     /**

@@ -14,6 +14,13 @@ module Api
                        .html_safe
       end
 
+
+      ##
+      # GET /api/v1/locations.json
+      def index
+        render json: @store.locations.to_a
+      end
+
       private
 
 

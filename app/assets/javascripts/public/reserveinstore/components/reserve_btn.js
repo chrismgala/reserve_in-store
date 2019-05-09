@@ -54,7 +54,7 @@ ReserveInStore.ReserveBtn = function (opts) {
 
             $btnContainer.on('click', function(event) {
                 event.preventDefault();
-                self.showReserveModal();
+                opts.onClick();
                 return false;
             });
         });

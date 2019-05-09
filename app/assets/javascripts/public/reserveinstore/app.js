@@ -4,15 +4,22 @@ ReserveInStore.App = function(opts) {
     var self = this;
     opts = opts || {};
 
-    var config, api, product, reserveModal, chooselocationModal;
+    var config, api, storage, product, reserveModal, chooselocationModal;
 
-    var btn;
+    var btn, locationsManager;
 
     var init = function () {
+        self.debugMode = opts.debugMode;
         ReserveInStore.logger = new ReserveInStore.Logger(opts);
-        api = new ReserveInStore.Api(opts);
 
         ReserveInStore.Util.waitFor$(function jqueryWaitingFunction() {
+            api = new ReserveInStore.Api(opts);
+            storage = new ReserveInStore.LocalStorage(opts);
+
+            if (window.location.toString().indexOf('clear_cache') !== -1) {
+                storage.clear();
+            }
+
             loadPushBuffer();
 
             api.waitForApiConfig(function waitForApi() {
@@ -26,10 +33,26 @@ ReserveInStore.App = function(opts) {
     };
 
     var load = function() {
-        reserveModal = new ReserveInStore.ReservationCreator({ api: api, product: product });
-        chooselocationModal = new ReserveInStore.ChooseLocationModal({ api: api, product: product });
+        locationsManager = new ReserveInStore.LocationsManager({
+            api: api,
+            storage: storage
+        });
 
-        btn = new ReserveInStore.ReserveBtn({ config: config.reserve_product_btn || {} });
+        reserveModal = new ReserveInStore.ReserveModal({
+            api: api,
+            product: product,
+            locationsManager: locationsManager
+        });
+
+        chooselocationModal = new ReserveInStore.ChooseLocationModal({
+            api: api,
+            product: product,
+            locationsManager: locationsManager
+        });
+
+        btn = new ReserveInStore.ReserveBtn({
+            config: config.reserve_product_btn || {},
+            onClick: self.showReserveModal });
     };
 
     self.showChooseLocationModal = function() {

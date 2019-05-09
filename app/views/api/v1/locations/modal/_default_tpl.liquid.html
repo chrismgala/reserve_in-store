@@ -9,11 +9,12 @@
 
         {% for location in locations %}
         <div class="ris-location-block">
-            <input type="radio" value="{{ location.id }}"
-                   name="reservation[location.id]"
-                   id="reservation_location.id_{{ location.id }}"  {% if location.id != 0 %}required{% endif %}>
+            <input type="radio"
+                   value="{{ location.id }}"
+                   name="location_id"
+                   id="location_id-{{ location.id }}"  {% if location.id != 0 %}required{% endif %}>
             <label class="ris-location-label"
-                   for="reservation_location.id_{{ location.id }}">
+                   for="location_id-{{ location.id }}">
                 {{ location.name }}
             </label>
             <div class="ris-view-on-map">

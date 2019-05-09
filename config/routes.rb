@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'locations/modal' => 'locations#modal'
+      get 'locations' => 'locations#index'
       get 'reservations/modal' => 'reservations#modal'
       get 'inventory' => 'inventory#index'
       post 'reservations' => 'reservations#create'

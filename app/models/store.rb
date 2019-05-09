@@ -15,6 +15,7 @@ class Store < ActiveRecord::Base
     :choose_location_modal_tpl, :choose_location_modal_tpl_enabled,
     :reserve_modal_faq_tpl, :reserve_modal_faq_tpl_enabled,
     :reserve_product_btn_tpl, :reserve_product_btn_tpl_enabled, :reserve_product_btn_selector, :reserve_product_btn_action,
+    :stock_status_tpl, :stock_status_tpl_enabled, :stock_status_selector, :stock_status_action, :stock_status_behavior_when_stock_unknown, :stock_status_behavior_when_no_location_selected, :stock_status_behavior_when_no_nearby_locations_and_no_location,
     :custom_css, :custom_css_enabled
   ]
 
@@ -51,7 +52,7 @@ class Store < ActiveRecord::Base
   # Swap out our template to be nil if they are defaulted
   def nil_default_templates
     # Reset blank templates to `nil` so they don't get stuck in the DB
-    [:reserve_product_btn_tpl, :reserve_modal_faq_tpl, :choose_location_modal_tpl, :reserve_product_modal_tpl, :customer_confirm_email_tpl].each do |tpl_attr|
+    [:stock_status_tpl, :reserve_product_btn_tpl, :reserve_modal_faq_tpl, :choose_location_modal_tpl, :reserve_product_modal_tpl, :customer_confirm_email_tpl].each do |tpl_attr|
       new_val = send(tpl_attr)
       next if new_val.nil?
 
@@ -272,6 +273,25 @@ class Store < ActiveRecord::Base
   end
 
 
+  ######################################################
+  # Stock Status TPL
+
+
+  def self.default_stock_status_tpl
+    return @default_stock_status_tpl if @default_stock_status_tpl.present? && !Rails.env.development?
+
+    @default_stock_status_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/stock_status/default_tpl.liquid.html')
+  end
+  def default_stock_status_tpl; self.class.default_stock_status_tpl; end
+  def stock_status_tpl_in_use
+    if stock_status_tpl_enabled?
+      stock_status_tpl.to_s
+    else
+      self.class.default_stock_status_tpl
+    end
+  end
+
+
 
   ##
   # @return [Hash] - liquid params used by JS email previewer
@@ -293,6 +313,16 @@ class Store < ActiveRecord::Base
         tpl: reserve_product_btn_tpl_in_use,
         selector: reserve_product_btn_selector,
         action: reserve_product_btn_action
+      },
+      stock_status: {
+        tpl: stock_status_tpl_in_use,
+        selector: stock_status_selector,
+        action: stock_status_action,
+        behavior_when: {
+          stock_unknown: stock_status_behavior_when_stock_unknown,
+          no_location_selected: stock_status_behavior_when_no_location_selected,
+          no_nearby_locations_and_no_location: stock_status_behavior_when_no_nearby_locations_and_no_location,
+        }
       },
       api_url: ENV['BASE_APP_URL'],
       store_pk: public_key

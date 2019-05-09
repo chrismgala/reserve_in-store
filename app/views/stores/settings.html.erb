@@ -123,7 +123,7 @@
                       <div class="Polaris-Labelled__LabelWrapper">
                         <div class="Polaris-Label">
                           <%= f.label :success_msg, class: 'Polaris-Label__Text' do %>
-                            Additional success message
+                            Additional success message:
                           <% end %>
                         </div>
                       </div>
@@ -140,12 +140,11 @@
         </div>
 
 
-
         <div class="Polaris-Layout__AnnotatedSection">
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Product Page Button</h2>
+                <h2 class="Polaris-Heading">Product Page "Reserve" Button</h2>
                 <p>Define how we should integrate the product page reservation button that will trigger the modal.</p>
               </div>
             </div>
@@ -153,34 +152,53 @@
               <div class="Polaris-Card">
                 <div class="Polaris-Card__Section">
                   <div class="Polaris-FormLayout">
+                    <%= render partial: "stores/settings/integration_option", locals: {
+                        f: f,
+                        attr: :reserve_product_btn,
+                        store: @current_store
+                    } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Product Page Stock Status Indicator</h2>
+                <p>Define how we should integrate the product page stock status component that tells shoppers the status of inventory for the currently being viewed product (if available).</p>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+                    <%= render partial: "stores/settings/integration_option", locals: {
+                        f: f,
+                        attr: :stock_status,
+                        store: @current_store,
+                        dont_show_not_showing_msg: true
+                    } %>
+
                     <div class="Polaris-FormLayout__Item">
                       <div class="Polaris-Labelled__LabelWrapper">
                         <div class="Polaris-Label">
-                          <%= f.label :reserve_product_btn_action, class: 'Polaris-Label__Text' do %>
-                            Integration Mode
+                          <%= f.label :stock_status_behavior_when_stock_unknown, class: 'Polaris-Label__Text' do %>
+                            If stock level is unknown...
                           <% end %>
                         </div>
                       </div>
                       <div class="Polaris-Select">
-                        <select id="store_reserve_product_btn_action" name="store[reserve_product_btn_action]" class="Polaris-Select__Input" aria-invalid="false">
-                          <option value="auto" <%= 'selected="selected"' if @current_store.reserve_product_btn_action.blank? ||  @current_store.reserve_product_btn_action == 'auto'%>>
-                            Automatic (Default)
+                        <select id="store_stock_status_behavior_when_stock_unknown" name="store[stock_status_behavior_when_stock_unknown]" class="Polaris-Select__Input" aria-invalid="false">
+                          <option value="show" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown.blank? || @current_store.stock_status_behavior_when_stock_unknown == 'show' %>>
+                            Show as "In Stock" (Default)
                           </option>
-
-                          <option value="manual" <%= 'selected="selected"' if @current_store.reserve_product_btn_action == 'manual'%>>
-                           Manual (No Automatic Integration)
-                          </option>
-                          <option value="insert_after" <%= 'selected="selected"' if @current_store.reserve_product_btn_action == 'insert_after'%>>
-                            Custom - Insert After...
-                          </option>
-                          <option value="insert_before" <%= 'selected="selected"' if @current_store.reserve_product_btn_action == 'insert_before'%>>
-                            Custom - Insert Before...
-                          </option>
-                          <option value="append_to" <%= 'selected="selected"' if @current_store.reserve_product_btn_action == 'append_to'%>>
-                            Custom - Append To...
-                          </option>
-                          <option value="prepend_to" <%= 'selected="selected"' if @current_store.reserve_product_btn_action == 'prepend_to'%>>
-                            Custom - Prepend To...
+                          <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown == 'hide' %>>
+                            Don't Show
                           </option>
                         </select>
                         <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
@@ -189,57 +207,54 @@
 
                       </div>
 
-
-                      <div class="display-if-selected-option"
-                           data-if_selected_option="#store_reserve_product_btn_action"
-                           data-selected_value="auto"
-                           style="display:none; margin-top: 12px;">
-
-                        <div style="--top-bar-background:#00848e; --top-bar-color:#f9fafb; --top-bar-background-lighter:#1d9ba4;">
-                          <div class="Polaris-Banner Polaris-Banner--statusInfo Polaris-Banner--hasDismiss Polaris-Banner--withinPage" tabindex="0" role="status" aria-live="polite" aria-labelledby="Banner5Heading" aria-describedby="Banner5Content">
-                            <div class="Polaris-Banner__Ribbon"><span class="Polaris-Icon Polaris-Icon--colorTealDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop"><svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
-                                                        <circle cx="10" cy="10" r="9" fill="currentColor"></circle>
-                                                        <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m1-5v-3a1 1 0 0 0-1-1H9a1 1 0 1 0 0 2v3a1 1 0 0 0 1 1h1a1 1 0 1 0 0-2m-1-5.9a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2"></path>
-                                                      </svg></span></div>
-                            <div>
-                              <div class="Polaris-Banner__Heading" id="Banner5Heading">
-                                <p class="Polaris-Heading">Not Showing?</p>
-                              </div>
-                              <div class="Polaris-Banner__Content" id="Banner5Content">
-                                <p>If the reserve in-store button doesn't show, then try the Manual or Custom integration methods and consult your web developer (or our support team) for help.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
+                    </div>
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label :stock_status_behavior_when_no_location_selected, class: 'Polaris-Label__Text' do %>
+                            If no location is selected...
+                          <% end %>
                         </div>
                       </div>
-
-
+                      <div class="Polaris-Select">
+                        <select id="store_stock_status_behavior_when_no_location_selected" name="store[stock_status_behavior_when_no_location_selected]" class="Polaris-Select__Input" aria-invalid="false">
+                          <option value="use_nearby" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_location_selected.blank? || @current_store.stock_status_behavior_when_no_location_selected == 'use_nearby' %>>
+                            Use Nearby Location
+                          </option>
+                          <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_location_selected == 'hide' %>>
+                            Don't Show
+                          </option>
+                        </select>
+                        <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
+                        </div>
+                        <div class="Polaris-Select__Backdrop"></div>
+                      </div>
                     </div>
-
-
-                    <div class="display-if-selected-option"
-                         data-if_selected_option="#store_reserve_product_btn_action"
-                         data-selected_values="insert_after,insert_before,append_to,prepend_to"
+                    <div class="Polaris-FormLayout__Item display-if-selected-option"
+                         data-if_selected_option="#store_stock_status_behavior_when_no_location_selected"
+                         data-selected_value="use_nearby"
                          style="display:none; margin-top: 12px;">
-
-                      <div class="Polaris-FormLayout__Item">
-                        <div class="Polaris-Labelled__LabelWrapper">
-                          <div class="Polaris-Label">
-                            <%= f.label :reserve_product_btn_selector, class: 'Polaris-Label__Text' do %>
-                              CSS Selector
-                            <% end %>
-                          </div>
-                        </div>
-                        <div class="Polaris-TextField">
-                          <%= f.text_field :reserve_product_btn_selector, class: 'Polaris-TextField__Input', placeholder: "Example: form #addtoCartButton" %>
-                          <div class="Polaris-TextField__Backdrop"></div>
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label :stock_status_behavior_when_no_nearby_locations_and_no_location, class: 'Polaris-Label__Text' do %>
+                            If no location is nearby AND no location is selected...
+                          <% end %>
                         </div>
                       </div>
-
+                      <div class="Polaris-Select">
+                        <select id="store_stock_status_behavior_when_no_nearby_locations_and_no_location" name="store[stock_status_behavior_when_no_nearby_locations_and_no_location]" class="Polaris-Select__Input" aria-invalid="false">
+                          <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_nearby_locations_and_no_location.blank? || @current_store.stock_status_behavior_when_no_nearby_locations_and_no_location == 'hide' %>>
+                            Don't Show
+                          </option>
+                          <option value="show_first_available" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_nearby_locations_and_no_location == 'show_first_available' %>>
+                            Use First Available Location
+                          </option>
+                        </select>
+                        <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
+                        </div>
+                        <div class="Polaris-Select__Backdrop"></div>
+                      </div>
                     </div>
-
-
 
                   </div>
                 </div>
@@ -247,7 +262,6 @@
             </div>
           </div>
         </div>
-
 
         <% if @current_store.created_at <= 1.day.ago %>
           <%= render partial: "stores/settings/status", locals: {f: f} %>

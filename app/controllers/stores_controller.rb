@@ -45,7 +45,7 @@ class StoresController < LoggedInController
 
       @current_store.assign_attributes(save_params)
 
-      needs_footer_reinstall = @current_store.changed_attributes.keys.any?{ |attr| attr.to_s =~ /reserve_product_btn.*|custom_css.*/i }
+      needs_footer_reinstall = @current_store.changed_attributes.keys.any?{ |attr| attr.to_s =~ /reserve_product_btn.*|custom_css.*|stock_status.*/i }
 
       if @current_store.validate_active_and_save!
 

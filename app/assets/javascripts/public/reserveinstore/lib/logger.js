@@ -25,7 +25,7 @@ ReserveInStore.Logger = function(opts) {
     self.logWarning = function() {
         if (opts.debugMode && window.console && !ReserveInStore.Util.ie()) {
             if (typeof arguments[0] === 'string') arguments[0] = "[ReserveInStore] " + arguments[0];
-            console.apply(this, arguments);
+            console.warn.apply(this, arguments);
         }
     };
 

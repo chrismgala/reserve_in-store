@@ -89,6 +89,7 @@ class StoreIntegrator
   def install_footer!
     store.with_shopify_session do
       footer_script = "
+{% if product and product.available %}
 <!-- // BEGIN // #{RESERVE_IN_STORE_CODE} - DO NOT MODIFY // -->
 <script type=\"application/javascript\">
 (function(){
@@ -101,6 +102,7 @@ class StoreIntegrator
 <link href=\"https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto:300\" rel=\"stylesheet\">
 #{cached_css}
 <!-- // END // #{RESERVE_IN_STORE_CODE} // -->
+{% endif %}
     "
 
       ensure_snippet!("snippets/reserveinstore_footer.liquid", footer_script)

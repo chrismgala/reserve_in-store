@@ -2,61 +2,37 @@ ReserveInStore.ReserveBtn = function (opts) {
     var self = this;
     var $ = ReserveInStore.Util.$();
     opts = opts || {};
-    var config;
+    var config, component;
 
-    var DEFAULT_BTN_SELECTOR = 'form[action~="/cart/add"]';
-    var DEFAULT_BTN_ACTION = 'insert_after';
-    var DEFAULT_BTN_TPL = '<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>';
+    var DEFAULT_SELECTOR = 'form[action~="/cart/add"]';
+    var DEFAULT_ACTION = 'insert_after';
+    var DEFAULT_TPL = '<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>';
 
     var init = function () {
         config = opts.config || {};
 
-        // detect the add to cart button
-        var btnSelector, btnAction, btnTpl;
-
-        btnAction = config.action || DEFAULT_BTN_ACTION;
-
-        if (btnAction === 'manual') {
-            // Don't try to integrate
-        } else if (btnAction === 'auto') {
-            insertBtn(DEFAULT_BTN_SELECTOR, DEFAULT_BTN_ACTION);
-        } else {
-            btnSelector = config.selector || DEFAULT_BTN_SELECTOR;
-            insertBtn(btnSelector, btnAction);
-        }
+        component = new ReserveInStore.IntegratedComponent({
+            dataKey: 'reserveInStore-reserveBtn',
+            defaults: {
+                tpl: DEFAULT_TPL,
+                action: DEFAULT_ACTION,
+                selector: DEFAULT_SELECTOR
+            },
+            config: config,
+            afterInsert: afterInsert
+        });
     };
 
-    var insertBtn = function(targetSelector, orientation) {
-        var $targets = $(targetSelector);
-        var $btnContainer = $(config.tpl || DEFAULT_BTN_TPL);
 
-        $targets.each(function() {
-            var $target = $(this);
+    var afterInsert = function($container, $target) {
+        var $reserveBtn = $container.find('.reserveInStore-btn');
 
-            if (!$target.next().data('reserveInStoreBtn')) {
-                if (orientation === 'prepend_to') {
-                    $target.prepend($btnContainer);
-                } else if (orientation === 'append_to') {
-                    $target.append($btnContainer);
-                } else if (orientation === 'insert_before') {
-                    $target.before($btnContainer);
-                } else if (orientation === 'insert_after') {
-                    $target.after($btnContainer);
-                } else { // Manual
-                    ReserveInStore.logger.error("Invalid insertion criteria: ", targetSelector, orientation, config);
-                    return false;
-                }
-            }
+        if ($reserveBtn.hasClass('reserveInStore-btn--block')) setButtonWidth($reserveBtn, $target);
 
-            var $reserveBtn = $btnContainer.find('.reserveInStore-btn');
-
-            if ($reserveBtn.hasClass('reserveInStore-btn--block')) setButtonWidth($reserveBtn, $target);
-
-            $btnContainer.on('click', function(event) {
-                event.preventDefault();
-                opts.onClick();
-                return false;
-            });
+        $container.on('click', function(event) {
+            event.preventDefault();
+            opts.onClick();
+            return false;
         });
     };
 

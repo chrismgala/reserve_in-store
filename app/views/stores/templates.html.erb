@@ -97,11 +97,21 @@
             db_value: @current_store.reserve_product_btn_tpl_in_use,
             value_in_use: @current_store.reserve_product_btn_tpl_in_use,
             default_value: @current_store.default_reserve_product_btn_tpl,
-            preview_vars: @current_store.preview_email_liquid_params,
             extra_css: '.reserveInStore-btn-container { margin-top: 0 }',
             frontend_mode: true
         } %>
 
+        <%= render partial: 'stores/shared/liquid_editor_section', locals: {
+            heading: 'Product Page Stock Status Indicator',
+            enabled: @current_store.stock_status_tpl_enabled?,
+            subheading: 'Customize the appearance of the "in stock @ location" stock status indicator for when it is enabled and active.',
+            attr: 'stock_status_tpl',
+            db_value: @current_store.stock_status_tpl_in_use,
+            value_in_use: @current_store.stock_status_tpl_in_use,
+            default_value: @current_store.default_stock_status_tpl,
+            # extra_css: '.reserveInStore-btn-container { margin-top: 0 }',
+            frontend_mode: true
+        } %>
 
         <%= render partial: 'stores/settings/custom_css', locals: {
             enabled: @current_store.custom_css_enabled?,

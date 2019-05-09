@@ -2,7 +2,7 @@ ReserveInStore.ReserveModal = function (opts) {
     var self = this;
     opts = opts || {};
     var $ = ReserveInStore.Util.$();
-    var api, $modalBackground, $reserveModal, $successModal, $form, variant, productId, variantId, formDataArray, lineItem = {};
+    var api, $modalBackground, $reserveModal, $successModal, $form, formDataArray, lineItem = {};
 
     var locationsManager = opts.locationsManager;
 
@@ -14,10 +14,17 @@ ReserveInStore.ReserveModal = function (opts) {
      * Get product id/title and variant id/title, then make API call and display the modal
      */
     self.show = function () {
+
         var selectedProductInfo = self.loadProductInfo();
-        self.$modalContainer = $('<div class="reserveInStore-modal-container" style="display:none;"></div>').appendTo('body');
+
+        self.$modalContainer = $('#reserveInStore-reserveModalContainer');
+        if (self.$modalContainer.length < 1) {
+            self.$modalContainer = $('<div class="reserveInStore-modal-container" id="reserveInStore-reserveModalContainer" style="display:none;"></div>').appendTo('body');
+        }
 
         api.getModal(selectedProductInfo, self.insertModal);
+
+        opts.app.trigger('reserve_modal.show reserve_modal.open', self);
     };
 
     /**
@@ -26,52 +33,19 @@ ReserveInStore.ReserveModal = function (opts) {
      */
     self.loadProductInfo = function () {
         formDataArray = $('form[action~="/cart/add"]').serializeArray();
-        setVariantID();
-        setLineItem();
-        variant = $.grep(opts.product.variants, function (obj) {
-            return obj.id === variantId;
-        })[0];
-        productId = opts.product.id;
+        loadLineItem();
         return {
-            product_title: opts.product.title,
-            variant_title: variant.title,
-            price: variant.price,
+            product_title: opts.app.getProduct().title,
+            variant_title: opts.app.getVariant().title,
+            price: opts.app.getVariant().price,
             line_item: lineItem
         };
     };
 
     /**
-     * Get variant ID from the add to cart form, if failed, try parsing the URL to get variant ID
-     */
-    var setVariantID = function () {
-        var variantIdEntry = formDataArray.find(function (obj) {
-            return obj.name === "id";
-        });
-
-        if (variantIdEntry) {
-            variantId = parseInt(variantIdEntry.value);
-        } else {
-            tryGetVariantIdFromURL()
-        }
-
-        variantId = variantId || opts.product.variants[0].id;
-    };
-
-    /**
-     * If variant id is in url's query string, set variant ID
-     */
-    var tryGetVariantIdFromURL = function () {
-        var re_variant = /variant=(.*?)(&|$)/,
-            matchVariantId = window.location.href.match(re_variant);
-        if (matchVariantId) {
-            variantId = parseInt(matchVariantId[1]);
-        }
-    };
-
-    /**
      * Set line item properties
      */
-    var setLineItem = function () {
+    var loadLineItem = function () {
         var re_lineItem = /properties\[(.*?)\]/;
         formDataArray.find(function (obj) {
             var matchLineItem = obj.name.match(re_lineItem);
@@ -110,6 +84,30 @@ ReserveInStore.ReserveModal = function (opts) {
             self.$modalContainer.find('input[name="reservation[location.id]"][value="'+bestLocation.id+'"]').prop('checked', true);
         });
 
+        adjustModalHeight();
+    };
+
+    self.hide = self.close = function() {
+        self.$modalContainer.hide();
+
+        opts.app.trigger('reserve_modal.close reserve_modal.hide', self);
+    };
+
+    var adjustModalHeight = function() {
+        var $fit = self.$modalContainer.find('.reserveInStore-modal--fitContents');
+        if ($fit.length < 1) return; // No fitting needed.
+
+        var totalHeight = 80;
+        $fit.children().each(function() {
+            var $el = $(this);
+            totalHeight += $el.height();
+            if ($el.css('padding-top')) totalHeight += parseInt($el.css('padding-top'));
+            if ($el.css('padding-bottom')) totalHeight += parseInt($el.css('padding-bottom'));
+            if ($el.css('margin-top')) totalHeight += parseInt($el.css('margin-top'));
+            if ($el.css('margin-bottom')) totalHeight += parseInt($el.css('margin-bottom'));
+        });
+
+        $fit.css('max-height', totalHeight);
     };
 
     /**
@@ -126,12 +124,12 @@ ReserveInStore.ReserveModal = function (opts) {
     var setCloseConditions = function () {
         var $span = $modalBackground.find(".reserveInStore-reserve-close, .reserveInStore-success-close");
         $span.on('click', function () {
-            self.$modalContainer.hide();
+            self.hide();
         });
 
         $(document).on('click', function (event) {
             if (!$(event.target).closest('.reserveInStore-reserve-modal, .reserveInStore-success-modal', $modalBackground).length) {
-                self.$modalContainer.hide();
+                self.hide();
             }
         });
     };
@@ -173,6 +171,8 @@ ReserveInStore.ReserveModal = function (opts) {
      * Display a nice modal to say "thank you... etc" and whatever is configured to display via the store settings
      */
     self.displaySuccessModal = function () {
+        opts.app.trigger('reserve_modal.submit', self);
+
         $reserveModal.hide();
         $successModal.show();
     };
@@ -199,12 +199,15 @@ ReserveInStore.ReserveModal = function (opts) {
      * @returns {object} Array of all information needed to generate new reservation
      */
     var serializeFormData = function () {
+        var product = opts.app.getProduct();
+        var variant = opts.app.getVariant();
+
         var data = $form.serializeArray();
-        data.push({name: "reservation[platform_product_id]", value: productId});
-        data.push({name: "reservation[platform_variant_id]", value: variantId});
+        data.push({name: "reservation[platform_product_id]", value: product.id});
+        data.push({name: "reservation[platform_variant_id]", value: variant.id});
         data.push({name: "reservation[line_item]", value: JSON.stringify(lineItem)});
-        data.push({name: "product_title", value: opts.product.title});
-        data.push({name: "product_handle", value: opts.product.handle});
+        data.push({name: "product_title", value: product.title});
+        data.push({name: "product_handle", value: product.handle});
         data.push({name: "variant_title", value: variant.title});
         return data;
     };

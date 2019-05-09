@@ -13,20 +13,24 @@
     opacity: 100;
     position: fixed; /* Stay in place */
     z-index: 1000; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    /* Location of the box */
     left: 0;
     top: 0;
+    bottom: 0;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
+    overflow: hidden; /* Enable scroll if needed */
     background-color: rgb(0, 0, 0); /* Fallback color */
     background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    -ms-transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
 }
 
 /*Modal Content */
 .reserveInStore-reserve-modal {
     font-family: 'Open Sans', sans-serif;
-    position: relative;
+    position: absolute;
     background-color: #fefefe;
     border: 1px solid #888;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -35,9 +39,14 @@
     animation-name: reserveInStore-animatetop;
     animation-duration: 0.4s;
     padding: 10px;
-    max-width: 1560px;
+    max-width: 1200px;
     width: 93%;
-    margin: 20px auto;
+    margin: auto;
+    overflow: scroll;
+    bottom: 27px;
+    left: 0;
+    right: 0;
+    top: 40px;
 }
 
 .reserveInStore-reserve-modal * {
@@ -143,6 +152,7 @@
     text-transform: uppercase;
     font-weight: bold;
     font-size: 0.8em;
+    margin-left: 4px;
 }
 
 .ris-location-block .ris-location-description {
@@ -260,11 +270,11 @@
 }
 
 .reserveInStore-reserve-modal .ris-text-small {
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 
 .reserveInStore-reserve-modal .ris-text-medium {
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 .reserveInStore-reserve-modal .ris-text-large {
@@ -506,7 +516,6 @@
 }
 
 
-
 .reserveInStore-chooseLocationModal .ris-location-block {
     max-width: 350px;
     margin-left: auto;
@@ -519,4 +528,26 @@
 
 .reserveInStore-chooseLocationModal .reserveInStore-reserve-modal {
     max-width: 500px;
+}
+
+.reserveInStore-stockStatus {
+    margin-top: 12px;
+    font-size: 12px;
+}
+
+.reserveInStore-stockStatus-status--inStock {
+    color: green;
+}
+
+.reserveInStore-stockStatus-status--outOfStock {
+    color: #c50000;
+}
+
+.reserveInStore-stockStatus-status--lowStock {
+    color: #ca8500;
+}
+
+.reserveInStore-stockStatus-locationName {
+    text-decoration: underline;
+    text-decoration-color: #c5c5c5;
 }

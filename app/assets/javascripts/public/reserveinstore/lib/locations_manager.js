@@ -23,11 +23,15 @@ ReserveInStore.LocationsManager = function (opts) {
         var readyCheck = function() {
             if (ready) {
                 clearInterval(readyWaiter);
-                then(self.getBestLocation());
+                then(self.getBestLocation(), favoriteLocation);
             }
         };
         var readyWaiter = setInterval(readyCheck, 1);
         readyCheck();
+    };
+
+    self.getLocations = function() {
+        return locations;
     };
 
     self.setFavoriteLocationId = function(locationId) {
@@ -38,8 +42,13 @@ ReserveInStore.LocationsManager = function (opts) {
     };
 
     self.setFavoriteLocation = function(location) {
+        var originalLocation = favoriteLocation;
         favoriteLocation = location;
         storage.setItem('LocationsManager.favoriteLocation', location, 1000*60*60*24*365); // Save for 1 year.
+
+        if (originalLocation !== location) {
+            opts.app.trigger('location.change', { old: originalLocation, new: location, original: originalLocation });
+        }
     };
 
     self.getBestLocation = function() {
@@ -47,7 +56,7 @@ ReserveInStore.LocationsManager = function (opts) {
             return favoriteLocation;
         }
 
-        return self.findNearestLocation();
+        return null; //self.findNearestLocation();
     };
 
     self.findNearestLocation = function() {

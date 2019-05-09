@@ -1,0 +1,112 @@
+
+<%
+  action_key = "#{attr}_action".to_sym
+  selector_key = "#{attr}_selector".to_sym
+  action_val = store.send(action_key)
+%>
+
+
+<div class="Polaris-FormLayout__Item">
+  <div class="Polaris-Labelled__LabelWrapper">
+    <div class="Polaris-Label">
+      <%= f.label action_key, class: 'Polaris-Label__Text' do %>
+        Status/Integration:
+      <% end %>
+    </div>
+  </div>
+  <div class="Polaris-Select">
+    <select id="store_<%= action_key %>" name="store[<%= action_key %>]" class="Polaris-Select__Input" aria-invalid="false">
+      <option value="auto" <%= 'selected="selected"' if action_val.blank? ||  action_val == 'auto'%>>
+        ON - Automatic Integration (Default)
+      </option>
+      <option value="insert_after" <%= 'selected="selected"' if action_val == 'insert_after'%>>
+        ON - Custom Integration - Insert After...
+      </option>
+      <option value="insert_before" <%= 'selected="selected"' if action_val == 'insert_before'%>>
+        ON - Custom Integration - Insert Before...
+      </option>
+      <option value="append_to" <%= 'selected="selected"' if action_val == 'append_to'%>>
+        ON - Custom Integration - Append To...
+      </option>
+      <option value="prepend_to" <%= 'selected="selected"' if action_val == 'prepend_to'%>>
+        ON - Custom Integration - Prepend To...
+      </option>
+      <option value="manual" <%= 'selected="selected"' if action_val == 'manual'%>>
+        OFF - Manual Integration
+      </option>
+    </select>
+    <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
+    </div>
+    <div class="Polaris-Select__Backdrop"></div>
+
+  </div>
+
+  <% unless local_assigns[:dont_show_not_showing_msg] %>
+    <div class="display-if-selected-option"
+         data-if_selected_option="#store_<%= action_key %>"
+         data-selected_value="auto"
+         style="display:none; margin-top: 12px;">
+
+      <div style="--top-bar-background:#00848e; --top-bar-color:#f9fafb; --top-bar-background-lighter:#1d9ba4;">
+        <div class="Polaris-Banner Polaris-Banner--statusInfo Polaris-Banner--hasDismiss Polaris-Banner--withinPage" tabindex="0" role="status" aria-live="polite" aria-labelledby="Banner5Heading" aria-describedby="Banner5Content">
+          <div class="Polaris-Banner__Ribbon"><span class="Polaris-Icon Polaris-Icon--colorTealDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop"><svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
+                                              <circle cx="10" cy="10" r="9" fill="currentColor"></circle>
+                                              <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m1-5v-3a1 1 0 0 0-1-1H9a1 1 0 1 0 0 2v3a1 1 0 0 0 1 1h1a1 1 0 1 0 0-2m-1-5.9a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2"></path>
+                                            </svg></span></div>
+          <div>
+            <div class="Polaris-Banner__Heading" id="Banner5Heading">
+              <p class="Polaris-Heading">Not Showing?</p>
+            </div>
+            <div class="Polaris-Banner__Content" id="Banner5Content">
+              <p>
+                If this component doesn't show, then try the Manual or Custom integration methods and
+                consult your web developer (or our support team) for help.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+
+</div>
+
+
+<div class="display-if-selected-option"
+     data-if_selected_option="#store_<%= action_key %>"
+     data-selected_values="insert_after,insert_before,append_to,prepend_to"
+     style="display:none; margin-top: 12px;">
+
+  <div class="Polaris-FormLayout__Item">
+    <div class="Polaris-Labelled__LabelWrapper">
+      <div class="Polaris-Label">
+        <%= f.label selector_key, class: 'Polaris-Label__Text' do %>
+          <span class="display-if-selected-option"
+               data-if_selected_option="#store_<%= action_key %>"
+               data-selected_value="insert_after"
+               style="display:none;">Insert After</span>
+          <span class="display-if-selected-option"
+                data-if_selected_option="#store_<%= action_key %>"
+                data-selected_value="insert_before"
+                style="display:none;">Insert Before</span>
+          <span class="display-if-selected-option"
+                data-if_selected_option="#store_<%= action_key %>"
+                data-selected_value="prepend_to"
+                style="display:none;">Prepend To</span>
+          <span class="display-if-selected-option"
+                data-if_selected_option="#store_<%= action_key %>"
+                data-selected_value="append_to"
+                style="display:none;">Append To</span>
+          CSS Selector:
+        <% end %>
+      </div>
+    </div>
+    <div class="Polaris-TextField">
+      <%= f.text_field selector_key, class: 'Polaris-TextField__Input', placeholder: "Example: form #addtoCartButton" %>
+      <div class="Polaris-TextField__Backdrop"></div>
+    </div>
+  </div>
+
+</div>
+

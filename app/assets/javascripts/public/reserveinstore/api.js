@@ -68,7 +68,27 @@ ReserveInStore.Api = function (opts) {
     };
 
     /**
-     * Request modal via the API /api/v1/modal
+     * Request modal via the API /api/v1/inventory.json
+     * @param params URL params to send with the GET request.
+     * @param successCallback {function} (optional) Callback to run if the request is successful. This will not be called if the request fails.
+     * @param errorCallback {function} (optional) Callback to run if the request failed.
+     */
+    self.getInventory = function (params, successCallback, errorCallback) {
+        successCallback = successCallback || function () { };
+
+        $.ajax({
+            url: self.urlPath("inventory.json") + "&" + $.param(params),
+            success: function (data, textStatus, jqXHR) {
+                successCallback(data, textStatus, jqXHR);
+            },
+            error: function (response) {
+                if (errorCallback) errorCallback(response);
+            }
+        });
+    };
+
+    /**
+     * Request modal via the API /api/v1/locations.json
      * @param params URL params to send with the GET request.
      * @param successCallback {function} (optional) Callback to run if the request is successful. This will not be called if the request fails.
      * @param errorCallback {function} (optional) Callback to run if the request failed.

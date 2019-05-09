@@ -41,7 +41,7 @@ class InventoryFetcher
         inventory_caption = if stock_levels[variant_id][platform_location_id] > 15
                               'in_stock'
                             elsif stock_levels[variant_id][platform_location_id] > 0
-                              'low_in_stock'
+                              'low_stock'
                             else
                               'out_of_stock'
                             end

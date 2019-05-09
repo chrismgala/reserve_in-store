@@ -4,9 +4,25 @@ ReserveInStore.App = function(opts) {
     var self = this;
     opts = opts || {};
 
-    var config, api, storage, product, reserveModal, chooselocationModal;
+    var config, api, storage, product, variant, reserveModal, chooselocationModal, variantLoader;
 
     var btn, locationsManager;
+
+    var eventListeners = {
+        "reserve_modal.show": [],
+        "reserve_modal.open": [],
+        "reserve_modal.submit": [],
+        "reserve_modal.close": [],
+        "reserve_modal.hide": [],
+        "choose_location_modal.show": [],
+        "choose_location_modal.open": [],
+        "choose_location_modal.close": [],
+        "choose_location_modal.hide": [],
+        "variant.change": [],
+        "product.change": [],
+        "location.change": [],
+        "init": []
+    };
 
     var init = function () {
         self.debugMode = opts.debugMode;
@@ -28,34 +44,49 @@ ReserveInStore.App = function(opts) {
                 }
 
                 load();
+
+                self.trigger('init', self);
             });
         });
     };
 
     var load = function() {
-        locationsManager = new ReserveInStore.LocationsManager({
+        var componentOpts = {
             api: api,
-            storage: storage
-        });
+            storage: storage,
+            app: self
+        };
 
-        reserveModal = new ReserveInStore.ReserveModal({
-            api: api,
-            product: product,
-            locationsManager: locationsManager
-        });
+        variantLoader = new ReserveInStore.VariantLoader(componentOpts);
 
-        chooselocationModal = new ReserveInStore.ChooseLocationModal({
-            api: api,
-            product: product,
-            locationsManager: locationsManager
-        });
+        locationsManager = new ReserveInStore.LocationsManager(componentOpts);
+        componentOpts.locationsManager = locationsManager;
+
+        reserveModal = new ReserveInStore.ReserveModal(componentOpts);
+        chooselocationModal = new ReserveInStore.ChooseLocationModal(componentOpts);
 
         btn = new ReserveInStore.ReserveBtn({
             config: config.reserve_product_btn || {},
-            onClick: self.showReserveModal });
+            onClick: self.showReserveModal,
+            app: self
+        });
+
+        btn = new ReserveInStore.StockStatusIndicator({
+            config: config.stock_status || {},
+            onLocationClick: function(e) {
+                self.showChooseLocationModal()
+            },
+            api: api,
+            product: product,
+            variant: variant,
+            app: self
+        });
     };
 
-    self.showChooseLocationModal = function() {
+    self.showChooseLocationModal = function(e) {
+        if (typeof e !== 'undefined' && e.constructor === Event) {
+            e.preventDefault();
+        }
         chooselocationModal.show();
     };
 
@@ -69,7 +100,71 @@ ReserveInStore.App = function(opts) {
     };
 
     self.setProduct = function(_product) {
+        var original = product;
+
         product = _product;
+
+        if (original !== variant) {
+            self.trigger('product.change', { old: original, new: variant, original: original });
+        }
+
+        ReserveInStore.logger.log("Loaded product: ", product)
+    };
+
+    self.setVariant = function(_variant) {
+        var original = variant;
+
+        variant = _variant;
+
+        if (original && original !== variant) {
+            self.trigger('variant.change', { old: original, new: variant, original: original });
+        }
+
+        ReserveInStore.logger.log("Loaded variant: ", variant)
+    };
+
+    self.getLocation = function(callback) {
+        return locationsManager.whenReady(callback);
+    };
+
+    self.getLocations = function(callback) {
+        return locationsManager.whenReady(function() {
+            callback(locationsManager.getLocations())
+        });
+    };
+
+    self.getProduct = function() { return product; };
+    self.getVariant = function() { return variant; };
+
+    self.trigger = function(codes, data) {
+        codes = codes.split(' ');
+
+        for (var ci = 0; ci < codes.length; ci++) {
+            var code = codes[ci];
+
+            var listeners = eventListeners[code] || [];
+
+            ReserveInStore.logger.log("Event triggered ", code, data, listeners);
+
+            for (var i = 0; i < listeners.length; i++) {
+                listeners[i](data);
+            }
+        }
+    };
+
+    self.on = function(eventCodes, callback) {
+        eventCodes = eventCodes.split(' ');
+        for (var i = 0; i < eventCodes.length; i++) {
+            var eventCode = eventCodes[i].trim();
+            if (!eventListeners[eventCode]) {
+                var validEventCodes = Object.keys(eventListeners).join(", ");
+                throw "Invalid event code requested: '"+eventCode+"'. Valid event codes are: " + validEventCodes;
+            }
+
+            ReserveInStore.logger.log("Event listener attached", eventCode, callback);
+
+            eventListeners[eventCode].push(callback);
+        }
     };
 
 
@@ -91,6 +186,7 @@ ReserveInStore.App = function(opts) {
             }
         }
     };
+
 
     /**
      * Runs a method on the app using the push.

@@ -63,18 +63,39 @@ class StoreIntegrator
 
 
   ##
+  # Run `uglifyjs --mangle -- app/assets/javascripts/public/bananastand/lib/cached_asset.js` from your console to generate this.
+  # @version 0.2.0
+  def cached_asset_min_js
+    'var ReserveInStoreCachedAsset=function(r){var n=this;var a=r.name||r.url.split("?")[0].split("#")[0];var o="ReserveInStore.AssetCache."+a;var i=(new Date).getTime()/1e3;var c=r.type||(r.url.indexOf(".html")!==-1?"text/template":"text/javascript");n.load=function(t){t=t||function(){};if(n.content){return t(n.content)}if(!e()){s(r.url,function(e){n.content=e;u(e);n.save(e);t(e)})}else{t(n.content)}return true};n.save=function(e){var t=i+(r.expiresIn||900);if(!l()){return false}var n={name:a,url:r.url,expires:t,content:e};window.localStorage.setItem(o,JSON.stringify(n));return true};n.clear=function(){window.localStorage.removeItem(o);return false};var e=function(){if(!l())return false;var e=window.localStorage.getItem(o);if(!e||typeof e!=="string"){return null}var t=JSON.parse(e);if(t.expires<i||t.url!==r.url){return n.clear()}n.content=t.content;u(n.content);return true};var u=function(e){if(document.getElementById(o))return;var t=document.createElement("script");t.type=c;t.id=o;t.async=!0;t.innerHTML=e;document.body.appendChild(t)};var s=function(e,t){var n=new XMLHttpRequest;n.async=true;n.onreadystatechange=function(){if(this.readyState==4&&this.status<300){t(this.responseText)}};n.open("GET",e,true);n.send()};var l=function(){var e="test";try{window.localStorage.setItem(e,"t");window.localStorage.removeItem(e);return 1}catch(e){return 0}}};'
+  end
+
+  def cached_asset_js_expiry_time
+    Rails.env.development? ? 1.second : 15.minutes
+  end
+
+  ##
+  # This preloading JS will add the JS script tag in the top immediately if it is not yet there.
+  # By default Shopify will wait for the whole page to load first before adding scripts, so doing this
+  # speeds up the initial Fera.ai load speed quite a bit.
+  def js_preloader(checkout_mode = false)
+    cached_asset_code =  "#{cached_asset_min_js}" + \
+        " new ReserveInStoreCachedAsset({ name: 'reserveinstore.js', expiresIn: #{cached_asset_js_expiry_time}, url: window.reserveInStoreJsUrl || \"#{Store::JS_SCRIPT_PATH}\"}).load();"
+    return cached_asset_code if checkout_mode
+    'var headSrcUrls = document.getElementsByTagName("head")[0].innerHTML.match(/var urls = \[.*\]/);if (headSrcUrls && window.reserveInStore) { if (JSON.parse(headSrcUrls[0].replace("var urls = ", "")).find(function(url) {return url.indexOf("reserveinstore.js") !== -1 && (window.reserveInStoreJsUrl = url)})) { ' + cached_asset_code + ' } }'
+  end
+
+  ##
   # @return [Boolean] True if successful, raise an error otherwise.
   def install_footer!
     store.with_shopify_session do
-      public_key = @store.public_key
       footer_script = "
 <!-- // BEGIN // #{RESERVE_IN_STORE_CODE} - DO NOT MODIFY // -->
 <script type=\"application/javascript\">
 (function(){
-  window.__reserveInStore = window.__reserveInStore || [];
-  window.__reserveInStore.push({ action: \"configure\", data: #{store.footer_config.to_json} });
-  window.__reserveInStore.push({ action: \"setProduct\", data: {{ product | json }} });
-  var headSrcUrls=document.getElementsByTagName(\"head\")[0].innerHTML.match(/var urls = \[.*\]/);if(headSrcUrls&&window.__reserveInStore){window.__reserveInStore.jsUrl=JSON.parse(headSrcUrls[0].replace(\"var urls = \",\"\")).find(function(url){return url.indexOf(\"reserveinstore.js\")!==-1});if(window.__reserveInStore.jsUrl){var s=document.createElement(\"script\");s.type=\"text/javascript\";s.async=!0;s.src=window.__reserveInStore.jsUrl;document.body.appendChild(s)}}
+  window.reserveInStore = window.reserveInStore || window.__reserveInStore || [];
+  window.reserveInStore.push('configure', #{store.footer_config.to_json});
+  window.reserveInStore.push('setProduct', {{ product | json }});
+  #{js_preloader}
 })();</script>
 <link crossorigin=\"anonymous\" media=\"all\" rel=\"stylesheet\" href=\"#{ENV['CDN_JS_BASE_PATH']}reserveinstore.css\">
 <link href=\"https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto:300\" rel=\"stylesheet\">

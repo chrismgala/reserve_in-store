@@ -17,7 +17,7 @@ ReserveInStore.Util = {
             }
         }
 
-        if (!Fera.Util.isScrolledIntoView($el)) {
+        if (!this.isScrolledIntoView($el)) {
             return false;
         }
         if ($el.css('display') == 'none' || $el.css('visibility') == 'hidden' || $el.css('opacity') == 0) {
@@ -109,7 +109,7 @@ ReserveInStore.Util = {
      * @returns {boolean} True if the element selector is NOT visible in any way in view.
      */
     isFullyInvisible: function($el) {
-        return !Fera.Util.isFullyVisible($el);
+        return !this.isFullyVisible($el);
     },
 
     /**
@@ -118,8 +118,8 @@ ReserveInStore.Util = {
      * @returns {boolean} True if it is, false otherwise
      */
     isScrolledIntoView: function($el) {
-        var docViewTop = Fera.Util.$()(window).scrollTop();
-        var docViewBottom = docViewTop + Fera.Util.$()(window).height();
+        var docViewTop = this.$()(window).scrollTop();
+        var docViewBottom = docViewTop + this.$()(window).height();
 
         var elemTop = $el.offset().top;
         var elemBottom = elemTop + $el.height();
@@ -175,6 +175,47 @@ ReserveInStore.Util = {
         return a;
     },
 
+    waitFor$: function(callback, opts) {
+        var waitSoFar = 0, checkInterval = 10, warningThreshold = 100, loadingZepto = false;
+        opts = opts || {};
+
+        // If we're in standalone mode then don't wait for jQuery to load slowly, just load our own immediately if one is not already present.
+        // This is useful in scenarios where loading high-speed is paramount (like the checkout), and can be used if we already
+        // know that jQuery or Zepto are not going to be pre-loaded.
+        if (opts.standaloneMode) {
+            this.addZepto(opts);
+            loadingZepto = true;
+            warningThreshold += 1000; // Give us some time to load Zepto if it needs to be loaded
+            checkInterval = 1; // Speed up the check interval
+        } else {
+            if (window.jQuery || window.Zepto || window.$) return callback();
+        }
+
+        if (opts.logger) logger.log("Waiting for jQuery or Zepto to load...");
+
+        var self = this;
+
+        var jqTimer = setInterval(function() {
+            if (window.jQuery || window.Zepto || window.$) {
+                clearInterval(jqTimer);
+                callback();
+            }
+            waitSoFar += checkInterval;
+
+            if (waitSoFar === warningThreshold) {
+                if (!loadingZepto) {
+                    warningThreshold += 1000; // Give it another 60 seconds to load zepto from the CDN
+                    self.addZepto(opts);
+                    loadingZepto = true;
+                    if (opts.logger) logger.log("Loading Zepto library because jQuery was not found within " + warningThreshold + " milliseconds.");
+                } else {
+                    clearInterval(jqTimer);
+                    throw "jQuery or Zepto are required and neither were found or able to be dynamically loaded.";
+                }
+            }
+        }, checkInterval);
+    },
+
     /**
      * Returns true is value is null or empty
      * @param value {*}
@@ -207,7 +248,7 @@ ReserveInStore.Util = {
      * @returns {boolean} True if the current browser is running microsoft internet explorer
      */
     ie: function() {
-        return Fera.Util.detectBrowser().indexOf("IE") === 0 || Fera.Util.detectBrowser().indexOf("MSIE") !== -1;
+        return this.detectBrowser().indexOf("IE") === 0 || this.detectBrowser().indexOf("MSIE") !== -1;
     },
 
     /*
@@ -216,7 +257,7 @@ ReserveInStore.Util = {
      * @return {number} Max characters we can use in a GET request
      */
     maxGetRequestChars: function() {
-        if (Fera.Util.detectBrowser().indexOf('MSIE') !== -1) return 2000;
+        if (this.detectBrowser().indexOf('MSIE') !== -1) return 2000;
         return 6000;
     },
 
@@ -226,7 +267,7 @@ ReserveInStore.Util = {
      * @returns {number} - number of bytes in length that the params will be when converted to a string
      */
     sizeOfParams: function(params) {
-        return encodeURI(Fera.Util.$().param(params)).split(/%..|./).length - 1;
+        return encodeURI(this.$().param(params)).split(/%..|./).length - 1;
     },
 
     /**
@@ -243,7 +284,7 @@ ReserveInStore.Util = {
         var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
         var i = 0;
 
-        input = Fera.Util._utf8_encode(input);
+        input = this._utf8_encode(input);
 
         while (i < input.length) {
 
@@ -302,7 +343,7 @@ ReserveInStore.Util = {
 
         }
 
-        output = Fera.Util._utf8_decode(output);
+        output = this._utf8_decode(output);
 
         return output;
 
@@ -377,7 +418,7 @@ ReserveInStore.Util = {
 
     httpMethodToUse: function(eventParams) {
         //post if we have a shallow array since we can properly encode it that way
-        var shouldPost = Fera.Util.sizeOfParams(eventParams) > Fera.Util.maxGetRequestChars() || Fera.Util.jsonHasArray(eventParams);
+        var shouldPost = this.sizeOfParams(eventParams) > this.maxGetRequestChars() || this.jsonHasArray(eventParams);
         return shouldPost ? 'POST' : 'GET';
     }
 

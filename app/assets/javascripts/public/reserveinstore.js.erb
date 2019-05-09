@@ -3,9 +3,13 @@
 <% unless Rails.env.development? %>
 try {
     <% end %>
-    if (! (window.__reserveInStore && window.__reserveInStore.version)) {
-        window.__reserveInStore = new ReserveInStore.App({
-            pushBuffer: window.__reserveInStore,
+    if (! (window.reserveInStore && window.reserveInStore.version)) {
+        if (!window.reserveInStore && window.__reserveInStore) {
+            window.reserveInStore = window.__reserveInStore;
+        }
+
+        window.reserveInStore = window.__reserveInStore = new ReserveInStore.App({
+            pushBuffer: window.reserveInStore || window.__reserveInStore,
             debugMode: <%= Rails.env.development?.to_s %>
         });
     }

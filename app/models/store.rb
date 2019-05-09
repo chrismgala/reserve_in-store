@@ -18,6 +18,8 @@ class Store < ActiveRecord::Base
     :custom_css, :custom_css_enabled
   ]
 
+  JS_SCRIPT_PATH = "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"
+
   def currency_template
     shopify_settings[:money_format].presence || '${{amount}}'
   end
@@ -320,15 +322,17 @@ class Store < ActiveRecord::Base
   # Modify the errors array and flip our active state if we have issues with the APIs.
   # @return [Bool] If we pass validation or not
   def active_validation!
-    script_tags = ShopifyAPI::ScriptTag.all
+    with_shopify_session do
+      script_tags = ShopifyAPI::ScriptTag.all
 
-    if active? && script_tags.empty?
-      ShopifyAPI::ScriptTag.create({event:'onload', src: "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"})
-    elsif !active && script_tags.present?
-      ShopifyAPI::ScriptTag.delete(ShopifyAPI::ScriptTag.first.id)
+      if active? && script_tags.empty?
+        ShopifyAPI::ScriptTag.create({event:'onload', src: JS_SCRIPT_PATH})
+      elsif !active && script_tags.present?
+        ShopifyAPI::ScriptTag.delete(ShopifyAPI::ScriptTag.first.id)
+      end
+
+      true
     end
-
-    true
   rescue StandardError => e
     ForcedLogger.error(e, store: id)
     errors.add(:active, "Issue modifying your storefront. Try again / contact support so we can help you.")

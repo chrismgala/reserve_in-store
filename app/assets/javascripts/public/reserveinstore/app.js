@@ -6,15 +6,13 @@ ReserveInStore.App = function(opts) {
 
     var config, api, product, reserveModal, chooselocationModal;
 
-    var DEFAULT_BTN_SELECTOR = 'form[action~="/cart/add"]';
-    var DEFAULT_BTN_ACTION = 'insert_after';
-    var DEFAULT_BTN_TPL = '<div class="reserveInStore-btn-container" data-reserveInStoreBtn="true"><button class="btn reserveInStore-btn"><span>Reserve In Store</span></button></div>';
+    var btn;
 
     var init = function () {
         ReserveInStore.logger = new ReserveInStore.Logger(opts);
         api = new ReserveInStore.Api(opts);
 
-        waitFor$(function jqueryWaitingFunction() {
+        ReserveInStore.Util.waitFor$(function jqueryWaitingFunction() {
             loadPushBuffer();
 
             api.waitForApiConfig(function waitForApi() {
@@ -22,71 +20,17 @@ ReserveInStore.App = function(opts) {
                     return; // Skip setup because config is invalid.
                 }
 
-                reserveModal = new ReserveInStore.ReservationCreator({ api: api, product: product });
-                chooselocationModal = new ReserveInStore.ChooseLocationModal({ api: api, product: product });
-
-                addReserveInStoreButton();
+                load();
             });
         });
     };
 
-    /**
-     * Add the reserve-in-store button
-     */
-    var addReserveInStoreButton = function() {
-        // detect the add to cart button
-        var btnSelector, btnAction, btnTpl;
+    var load = function() {
+        reserveModal = new ReserveInStore.ReservationCreator({ api: api, product: product });
+        chooselocationModal = new ReserveInStore.ChooseLocationModal({ api: api, product: product });
 
-        if (config.reserve_product_btn && config.reserve_product_btn.action) {
-            btnAction = config.reserve_product_btn.action;
-        } else {
-            btnAction = DEFAULT_BTN_ACTION;
-        }
-
-        if (btnAction === 'manual') {
-            // Don't try to integrate
-        } else if (btnAction === 'auto') {
-            insertBtn(DEFAULT_BTN_SELECTOR, DEFAULT_BTN_ACTION);
-        } else {
-            btnSelector = (config.reserve_product_btn && config.reserve_product_btn.selector) ? config.reserve_product_btn.selector : DEFAULT_BTN_SELECTOR;
-            insertBtn(btnSelector, btnAction);
-        }
+        btn = new ReserveInStore.ReserveBtn({ config: config.reserve_product_btn || {} });
     };
-
-    var insertBtn = function(targetSelector, orientation) {
-        var $targets = $(targetSelector);
-        var $btnContainer = $((config.reserve_product_btn && config.reserve_product_btn.tpl) ? config.reserve_product_btn.tpl : DEFAULT_BTN_TPL);
-
-        $targets.each(function() {
-            var $target = $(this);
-
-            if (!$target.next().data('reserveInStoreBtn')) {
-                if (orientation === 'prepend_to') {
-                    $target.prepend($btnContainer);
-                } else if (orientation === 'append_to') {
-                    $target.append($btnContainer);
-                } else if (orientation === 'insert_before') {
-                    $target.before($btnContainer);
-                } else if (orientation === 'insert_after') {
-                    $target.after($btnContainer);
-                } else { // Manual
-                    ReserveInStore.logger.error("Invalid insertion criteria: ", targetSelector, orientation, config);
-                    return false;
-                }
-            }
-
-            var $reserveBtn = $btnContainer.find('.reserveInStore-btn');
-
-            if ($reserveBtn.hasClass('reserveInStore-btn--block')) setButtonWidth($reserveBtn, $target);
-
-            $btnContainer.on('click', function(event) {
-                event.preventDefault();
-                self.showReserveModal();
-                return false;
-            });
-        });
-    };
-
 
     self.showChooseLocationModal = function() {
         chooselocationModal.show();
@@ -96,90 +40,106 @@ ReserveInStore.App = function(opts) {
         reserveModal.show();
     };
 
+    self.configure = function(_config) {
+        config = _config;
+        api.configure({ storePublicKey: _config.store_pk, apiUrl: _config.api_url });
+    };
+
+    self.setProduct = function(_product) {
+        product = _product;
+    };
+
+
     /**
      * Run a method safely
-     * Even if ReserveInStore.App has not yet loaded it will queue up the command
+     * Even if ReserveInSdtore.App has not yet loaded it will queue up the command
      * Also it will catch any errors and only throw them back up if debug mode is not enabled
-     * @param object {object} set object.action to the action you want to run on the class
+     * @param method {string} action you want to run on the class
+     * @param data {object} parameter data you want to pass to the method
      */
-    self.push = function(object) {
+    self.push = function(method, data) {
         if (opts.debugMode) {
-            return _push(object);
+            return _push(method, data);
         } else {
             try {
-                return _push(object);
+                return _push(method, data);
             } catch(e) {
-                if (console) console.error(e);
-            }
-        }
-    };
-
-
-     /**
-     * Runs a method on the app using the push.
-     * @see self.push
-     * @param object {object} set object.action to the action you want to run on the class
-     * @private
-     */
-    var _push = function(object) {
-        var _callback = typeof object.callback === 'function' ? object.callback : (function() {});
-
-        if (object.action == "configure") {
-            // Data should be:  { store_pk: \"#{public_key}\", api_url: \"#{ENV['BASE_APP_URL']}\" }
-            config = object.data;
-            api.configure({ storePublicKey: object.data.store_pk, apiUrl: object.data.api_url });
-        } else if (object.action == "setProduct") {
-            // Data should be:  { product: {id: 123, name: "bleh", ...} }
-            product = object.data;
-        } else {
-            console.error("Unknown action: ", object.action);
-        }
-    };
-
-
-    var waitFor$ = function(callback) {
-        if (window.jQuery || window.Zepto || window.$) return callback();
-
-        var waitSoFar = 0, checkInterval = 10, warningThreshold = 100, loadingZepto = false;
-
-        var jqTimer = setInterval(function() {
-            if (window.jQuery || window.Zepto || window.$) {
-                clearInterval(jqTimer);
-                callback();
-            }
-            waitSoFar += checkInterval;
-
-            if (waitSoFar == warningThreshold) {
-                if (!loadingZepto) {
-                    warningThreshold += 1000; // Give it another 60 seconds to load zepto from the CDN
-                    ReserveInStore.Util.addZepto(opts);
-                    loadingZepto = true;
-                } else {
-                    clearInterval(jqTimer);
-                    throw "Reserve In-Store requires jQuery or Zepto and neither or found or able to be dynamically loaded.";
-                }
-            }
-        }, checkInterval);
-    };
-
-    var loadPushBuffer = function() {
-        if (typeof opts.pushBuffer === "object") {
-            for (var i = 0; i< opts.pushBuffer.length; i++) {
-                self.push(opts.pushBuffer[i]);
+                if (window.console && !Fera.Util.ie()) window.console.error(e);
             }
         }
     };
 
     /**
-     * Set the Reserve In-Store button's width to be the greater of Add To Cart button's width and its default value
+     * Runs a method on the app using the push.
+     * @see self.push
+     * @param method {string} action you want to run on the class
+     * @param data {object} parameter data you want to pass to the method
+     * @private
      */
-    var setButtonWidth = function(reserveBtn, addToCartBtn) {
-        var addToCartBtnWidth = parseInt(addToCartBtn.css("width"));
-        if (parseInt(reserveBtn.css("width")) < addToCartBtnWidth){
-            reserveBtn.css("width", addToCartBtnWidth + "px");
+    var _push = function(method, data) {
+        var object;
+        if (typeof method === 'object') {
+            object = method;
+        } else {
+            object = {
+                action: method,
+                data: data,
+                callback: typeof data === 'object' ? data.callback : undefined
+            };
+        }
+
+        if (object.action === "configure") {
+            self.configure(object.data);
+        } else if (object.action === "setProduct") {
+            self.setProduct(object.data || object.product)
+        } else {
+            ReserveInStore.logger.error("Unknown action: ", object.action);
         }
     };
 
+
+    /**
+     * Loads from the fera.push buffer of actions and data.
+     *
+     * @param filters.except {string} - (optional) if specified, will exclude all actions from the push buffer that match the specified
+     * @param filters.only {string} - (optional) if specified, will ONLY include actions from the push buffer that match the specified
+     */
+    var loadPushBuffer = function(filters) {
+        filters = filters || {};
+        var hasExclusions = typeof filters.except !== 'undefined' && filters.except;
+        var hasInclusions = typeof filters.only !== 'undefined' && filters.only;
+
+        opts.pushBuffer = opts.pushBuffer || [];
+        if (typeof opts.pushBuffer === "object" && opts.pushBuffer.length && opts.pushBuffer.length > 0) {
+            var skipNext = false;
+            for (var i = 0; i< opts.pushBuffer.length; i++) {
+                if (skipNext) {
+                    skipNext = false;
+                    continue;
+                }
+
+                var nextItem = opts.pushBuffer[i];
+                if (hasExclusions) {
+                    var shouldSkip = false;
+                    for(var q=0; q<filters.except.length; q++) {
+                        if (nextItem.action === filters.except[q]) {
+                            shouldSkip = true;
+                            break;
+                        }
+                    }
+                    if (shouldSkip) continue;
+                }
+                if (hasInclusions && nextItem.action !== filters.only) continue;
+
+                if (typeof nextItem === 'string') {
+                    self.push(nextItem, opts.pushBuffer[i+1]);
+                    skipNext = true;
+                } else {
+                    self.push(nextItem);
+                }
+            }
+        }
+    };
 
     init();
 };

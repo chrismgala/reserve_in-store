@@ -1,0 +1,13 @@
+.Polaris-Button.Polaris-Button--success {
+    background: linear-gradient(to bottom, #63c767, #61c155);
+    border-color: #4cae3f;
+    box-shadow: inset 0 1px 0 0 #67c870, 0 1px 0 0 rgba(22, 29, 37, 0.3), 0 0 0 0 transparent;
+    letter-spacing: 1px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.Polaris-Button.Polaris-Button--success:hover {
+    background: linear-gradient(to bottom, #61c45c, #49bd4d);
+    border-color: #3fae46;
+}

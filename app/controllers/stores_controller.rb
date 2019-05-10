@@ -20,10 +20,6 @@ class StoresController < LoggedInController
     end
   end
 
-  def hide_menu?
-    params[:action] == 'setup'
-  end
-
   ##
   # Used by the skill editors to provide previews of the components that are being built.
   # GET /stores/iframe_preview
@@ -49,7 +45,7 @@ class StoresController < LoggedInController
   def deactivate
     @current_store.deactivate!
 
-    render :settings, notice: 'Reserve In-store has been deactivated.'
+    redirect_to stores_settings_url, notice: 'Reserve In-store has been deactivated.'
   end
 
   ##
@@ -57,7 +53,7 @@ class StoresController < LoggedInController
   def activate
     @current_store.activate!
 
-    render :settings, notice: 'Reserve In-store has been activated.'
+    redirect_to stores_settings_url, notice: 'Reserve In-store has been activated.'
   end
 
   ##
@@ -85,6 +81,10 @@ class StoresController < LoggedInController
         format.json { render json: @store.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def hide_menu?
+    params[:action] == 'setup'
   end
 
   private

@@ -188,17 +188,17 @@
                       <div class="Polaris-Labelled__LabelWrapper">
                         <div class="Polaris-Label">
                           <%= f.label :stock_status_behavior_when_stock_unknown, class: 'Polaris-Label__Text' do %>
-                            If stock level is unknown...
+                            If stock level is available at any physical locations...
                           <% end %>
                         </div>
                       </div>
                       <div class="Polaris-Select">
                         <select id="store_stock_status_behavior_when_stock_unknown" name="store[stock_status_behavior_when_stock_unknown]" class="Polaris-Select__Input" aria-invalid="false">
-                          <option value="show" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown.blank? || @current_store.stock_status_behavior_when_stock_unknown == 'show' %>>
-                            Show as "In Stock" (Default)
+                          <option value="show" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown == 'show' %>>
+                            Show as "In Stock"
                           </option>
-                          <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown == 'hide' %>>
-                            Don't Show
+                          <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown.blank? ||  @current_store.stock_status_behavior_when_stock_unknown == 'hide' %>>
+                            Don't Show (Default)
                           </option>
                         </select>
                         <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
@@ -219,7 +219,7 @@
                       <div class="Polaris-Select">
                         <select id="store_stock_status_behavior_when_no_location_selected" name="store[stock_status_behavior_when_no_location_selected]" class="Polaris-Select__Input" aria-invalid="false">
                           <option value="use_nearby" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_location_selected.blank? || @current_store.stock_status_behavior_when_no_location_selected == 'use_nearby' %>>
-                            Use Nearby Location
+                            Use Nearby Location (Default)
                           </option>
                           <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_location_selected == 'hide' %>>
                             Don't Show
@@ -244,7 +244,7 @@
                       <div class="Polaris-Select">
                         <select id="store_stock_status_behavior_when_no_nearby_locations_and_no_location" name="store[stock_status_behavior_when_no_nearby_locations_and_no_location]" class="Polaris-Select__Input" aria-invalid="false">
                           <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_nearby_locations_and_no_location.blank? || @current_store.stock_status_behavior_when_no_nearby_locations_and_no_location == 'hide' %>>
-                            Don't Show
+                            Don't Show (Default)
                           </option>
                           <option value="show_first_available" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_nearby_locations_and_no_location == 'show_first_available' %>>
                             Use First Available Location

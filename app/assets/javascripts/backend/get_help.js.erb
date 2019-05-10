@@ -1,0 +1,27 @@
+/**
+ * Show the live chat window with the message pre-filled or if it is not available
+ * open up a mailto our support team with the message pre-filled.
+ * @param {string} msg Message to pre-fill chat or email with
+ * @returns {boolean} false
+ */
+var getHelp = function(msg) {
+    if (!msg) {
+        msg = "I need help with the Reserve In Store app.";
+    }
+
+    if (typeof Intercom !== 'undefined') {
+        Intercom('showNewMessage', msg);
+    } else {
+        window.open('mailto:<%= ENV.fetch('HELP_EMAIL', 'help@fera.ai') %>?subject=' + msg);
+    }
+
+    return false;
+};
+
+$(document).ready(function() {
+   $('[data-get-help="true"]').on('click', function(e) {
+      e.preventDefault();
+      var $el = $(this);
+      return getHelp($el.data('get-help-msg') || $el.data('get-help-subject'));
+   });
+});

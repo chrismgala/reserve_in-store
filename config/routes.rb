@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   resources :reservations
   resources :locations
+  resources :users
   get 'stores/settings'
+  get 'stores/setup'
   get 'stores/help'
   get 'stores/templates'
   get 'stores/iframe_preview'

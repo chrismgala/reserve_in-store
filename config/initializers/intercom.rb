@@ -1,7 +1,7 @@
 IntercomRails.config do |config|
   # == Intercom app_id
   #
-  config.app_id = ENV["INTERCOM_APP_ID"] || "err9lm2u"
+  config.app_id = ENV["INTERCOM_APP_ID"].presence || "err9lm2u"
 
   # == Intercom session_duration
   # make session expires after 8 hours rather than the default 3.5 days
@@ -22,13 +22,13 @@ IntercomRails.config do |config|
   # The method/variable that contains the logged in user in your controllers.
   # If it is `current_user` or `@user`, then you can ignore this
   #
-  # config.user.current = Proc.new { current_user }
+  config.user.current = Proc.new { @current_store.try(:users).try(:first) }
   # config.user.current = [Proc.new { current_user }]
 
   # == Include for logged out Users
   # If set to true, include the Intercom messenger on all pages, regardless of whether
   # The user model class (set below) is present. Only available for Apps on the Acquire plan.
-  # config.include_for_logged_out_users = true
+  config.include_for_logged_out_users = true
 
   # == User model class
   # The class which defines your user model
@@ -54,8 +54,8 @@ IntercomRails.config do |config|
   # user object, or a Proc which will be passed the current user.
   #
   config.user.custom_data = {
-    :user_id => Proc.new { |current_user| @current_user.try(:id) },
-    :user_group => Proc.new { |current_user| @current_user.try(:user_group) }
+    # :user_id => Proc.new { |current_user| @current_user.try(:id) },
+    # :user_group => Proc.new { |current_user| @current_user.try(:user_group) }
   }
 
   # == Current company method/variable
@@ -76,27 +76,27 @@ IntercomRails.config do |config|
   # This works the same as User custom data above.
   #
   config.company.custom_data = {
-    :store_id => Proc.new { |store| store.try(:id) },
-    :account_id => Proc.new { |store| store.try(:account).try(:id) },
-    :store_url => Proc.new { |store| store.try(:url) },
-    :store_name => Proc.new { |store| store.try(:name) },
-    :store_trailing_30d_rev => Proc.new { |store| store.try(:trailing_30d_rev) },
-    :store_trailing_30d_ord => Proc.new { |store| store.try(:trailing_30d_ord) },
-    :store_type => Proc.new { |store| store.try(:type_name) },
-    :review_written => Proc.new { |store| store.try(:review_written) },
+  #   :store_id => Proc.new { |store| store.try(:id) },
+  #   :account_id => Proc.new { |store| store.try(:account).try(:id) },
+    :website_url => Proc.new { |store| store.try(:url) },
+  #   :store_name => Proc.new { |store| store.try(:name) },
+  #   :store_trailing_30d_rev => Proc.new { |store| store.try(:trailing_30d_rev) },
+  #   :store_trailing_30d_ord => Proc.new { |store| store.try(:trailing_30d_ord) },
+  #   :store_type => Proc.new { |store| store.try(:type_name) },
+  #   :review_written => Proc.new { |store| store.try(:review_written) },
   }
 
   # == Company Plan name
   # This is the name of the plan a company is currently paying (or not paying) for.
   # e.g. Messaging, Free, Pro, etc.
   #
-  config.company.plan = Proc.new { |store| store.try(:subscription).try(:plan).try(:code) }
+  # config.company.plan = Proc.new { |store| store.try(:subscription).try(:plan).try(:code) }
 
   # == Company Monthly Spend
   # This is the amount the company spends each month on your app. If your company
   # has a plan, it will set the 'total value' of that plan appropriately.
   #
-  config.company.monthly_spend = Proc.new { |store| store.try(:subscription).try(:current_price) }
+  # config.company.monthly_spend = Proc.new { |store| store.try(:subscription).try(:current_price) }
 
   # == Custom Style
   # By default, Intercom will add a button that opens the messenger to

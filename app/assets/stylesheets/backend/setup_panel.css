@@ -1,0 +1,19 @@
+.setupPanel {
+    background-color: white;
+    padding: 24px;
+    margin: 24px;
+}
+
+.setupPanel h1 {
+    margin-bottom: 4px;
+}
+
+.setupPanel-actions {
+    margin-top: 24px;
+    text-align: right;
+}
+
+.setupPanel > p {
+    margin-bottom: 12px;
+    font-size: 11px;
+}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_09_150000) do
+ActiveRecord::Schema.define(version: 2019_05_10_115112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2019_05_09_150000) do
     t.string "zip"
     t.text "custom_html"
     t.string "platform_location_id"
+    t.index ["store_id", "platform_location_id"], name: "index_locations_on_store_id_and_platform_location_id"
     t.index ["store_id"], name: "index_locations_on_store_id"
   end
 
@@ -85,6 +86,24 @@ ActiveRecord::Schema.define(version: 2019_05_09_150000) do
     t.string "stock_status_behavior_when_no_location_selected", default: "use_nearby"
     t.string "stock_status_behavior_when_no_nearby_locations_and_no_location", default: "hide"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
+  end
+
+  create_table "uninstallations", force: :cascade do |t|
+    t.integer "store_id"
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.integer "store_id"
+    t.string "name"
+    t.string "email"
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email"
+    t.index ["store_id"], name: "index_users_on_store_id"
   end
 
 end

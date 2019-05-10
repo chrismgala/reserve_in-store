@@ -3,8 +3,8 @@
 //= require ace-rails-ap
 //= require ace/theme-monokai
 //= require ace/mode-liquid
-//= require parsleyjs/dist/parsley.min
-//= require liquid.js/dist/liquid.min
+//= require parsleyjs/dist/parsley
+//= require liquid.js/dist/liquid
 //= require local-time
 
 

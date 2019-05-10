@@ -26,6 +26,7 @@ gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets
 gem 'sentry-raven', '~> 2.7.4' # For bug tracking
 gem 'shopify_api', '~> 4.11.0'
 gem 'shopify_app', '~> 8.2.6' # Shopify Application Rails engine and generator
+gem "slack-notifier", '~> 2.3.2' # For sending notifications to slack
 gem 'sprockets-es6', '~> 0.9.2' # For es6 automatic compilation
 gem 'to_bool', '~> 1.0.1' # For easy parsing of boolean values in params
 gem 'turbolinks', '~> 5' # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks

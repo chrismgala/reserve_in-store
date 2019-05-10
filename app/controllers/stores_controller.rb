@@ -3,11 +3,25 @@ class StoresController < LoggedInController
   ##
   # GET /stores/help
   def help
+    redirect_to(stores_setup_url) and return unless @current_store.users.any?
   end
 
   ##
   # GET /stores/templates
   def templates
+    redirect_to(stores_setup_url) and return unless @current_store.users.any?
+  end
+
+  ##
+  # GET /stores/setup
+  def setup
+    if @current_store.users.any?
+      redirect_to action: :settings
+    end
+  end
+
+  def hide_menu?
+    params[:action] == 'setup'
   end
 
   ##
@@ -20,6 +34,8 @@ class StoresController < LoggedInController
   ##
   # GET /stores/settings
   def settings
+    redirect_to(stores_setup_url) and return unless @current_store.users.any?
+
     return if @current_store.integrator.integrated?
 
     return if @current_store.integrator.integrate!

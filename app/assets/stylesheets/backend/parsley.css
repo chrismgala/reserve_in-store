@@ -1,0 +1,5 @@
+.parsley-errors-list {
+    z-index: 99999;
+    display: inline-block;
+    float: left;
+}

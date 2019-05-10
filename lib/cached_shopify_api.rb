@@ -13,6 +13,12 @@ class CachedShopifyAPI
     end
   end
 
+  def webhooks
+    store.with_shopify_session do
+      ShopifyAPI::Webhook.all
+    end
+  end
+
 
   def inventory_levels(params = {})
     params = clean_list_params(params)

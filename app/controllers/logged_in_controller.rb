@@ -2,6 +2,12 @@ class LoggedInController < ShopifyApp::AuthenticatedController
   before_action :load_current_store
   before_action :set_raven_context
 
+  helper_method :hide_menu?
+
+  def hide_menu?
+    false
+  end
+
   private
 
   def load_current_store

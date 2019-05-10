@@ -34,19 +34,28 @@ class Location < ActiveRecord::Base
     [city, state, zip].reject { |c| c.empty? }.join(', ')
   end
 
+  def load_from_shopify(shopify_attr)
+    loc_attr = shopify_attr
+    loc_attr.transform_values!(&:to_s)
+    loc_attr[:address] = loc_attr[:address1] + " " + loc_attr[:address2]
+    loc_attr[:state] = loc_attr[:province]
+    loc_attr[:country] = Carmen::Country.coded(loc_attr[:country_code]).name
+    update_attributes(loc_attr.slice(*Location::PERMITTED_PARAMS))
+  end
+
   ##
   # Create a new Location object from a Shopify::Location object
   # This object is invalid until it is provided a store_id (save with .update(store_id: id))
   # @param [Shopify::Location] shopify_loc A Shopify Location object
   # @return [Location] a new Location object made from the Shopify::Location
-  def self.new_from_shopify(shopify_loc)
-    loc_attr = shopify_loc.attributes
-    loc_attr.transform_values!(&:to_s)
-    loc_attr[:address] = loc_attr[:address1] + " " + loc_attr[:address2]
-    loc_attr[:state] = loc_attr[:province]
-    loc_attr[:country] = Carmen::Country.coded(loc_attr[:country_code]).name
-    loc = Location.new(loc_attr.slice(*Location::PERMITTED_PARAMS))
-    loc.platform_location_id = shopify_loc.id
+  def self.new_from_shopify(shopify_loc, store)
+    loc = Location.new
+    shopify_attr = shopify_loc.try(:attributes).with_indifferent_access || shopify_loc.with_indifferent_access
+    loc.platform_location_id = shopify_attr[:id]
+    loc.load_from_shopify(shopify_attr)
+    loc.store_id = store.id
+    loc.email = store.email
+    loc.store
     loc
   end
 

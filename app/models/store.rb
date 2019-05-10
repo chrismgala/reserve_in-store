@@ -1,12 +1,14 @@
 class Store < ActiveRecord::Base
   include ShopifyApp::SessionStorage
   has_many :locations, dependent: :destroy
-  has_many :reservations
+  has_many :reservations, dependent: :destroy
+  has_many :users, dependent: :destroy
 
   before_create :generate_keys
   before_save :nil_default_templates
 
   alias_attribute :email_template, :customer_confirm_email_tpl # Alias for reverse compatibility, can be removed probably by July 1, 2019
+  alias_attribute :company_name, :name
 
   PERMITTED_PARAMS = [
     :top_msg, :success_msg, :show_phone, :show_instructions_from_customer, :active,
@@ -31,6 +33,12 @@ class Store < ActiveRecord::Base
 
   def url
     "https://#{shopify_domain}"
+  end
+  alias_method :website_url, :url
+  alias_method :company_website, :url
+
+  def email
+    shopify_settings[:email].to_s
   end
 
   def currency(val, opts = {})
@@ -119,12 +127,16 @@ class Store < ActiveRecord::Base
   # Ask Shopify for each location attached to this store
   # Ask Shopify for the store's email as well, to use as the default email for each location
   # Convert them into a Location instance, and save it to this store if it has an address
-  def populate_locations_from_api!
-    store_email = shopify_settings[:email].to_s
-
+  def sync_locations!
     api.locations.each do |shopify_loc|
-      loc = Location.new_from_shopify(shopify_loc)
-      loc.update(store_id: id, email: store_email) if loc.address.present?
+      loc = store.locations.find_by(platform_location_id: shopify_loc.id)
+      if loc.present?
+        loc.load_from_shopify(shopify_loc)
+      else
+        loc = Location.new_from_shopify(shopify_loc, store)
+        loc.store_id = id
+        loc.email = email
+      end
     end
   end
 
@@ -154,6 +166,12 @@ class Store < ActiveRecord::Base
       end
     end
 
+    ForcedLogger.log("Ensuring all webhooks are installed...")
+    ShopifyApp::WebhooksManager.queue(
+      shopify_domain,
+      shopify_token,
+      ShopifyApp.configuration.webhooks
+    )
   end
 
   ######################################################

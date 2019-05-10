@@ -184,7 +184,7 @@ class Store < ActiveRecord::Base
       ShopifyApp.configuration.scripttags
     )
 
-    update_footer_asset!
+    UpdateFooterJob.perform_later(self.id)
 
     true
   end

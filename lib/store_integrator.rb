@@ -100,7 +100,7 @@ class StoreIntegrator
   window.reserveInStore.push('setProduct', {{ product | json }});
   #{js_preloader}
 })();</script>
-<link crossorigin=\"anonymous\" media=\"all\" rel=\"stylesheet\" href=\"#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}reserveinstore.css\">
+<link crossorigin=\"anonymous\" media=\"all\" rel=\"stylesheet\" href=\"#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}/reserveinstore.css\">
 <link href=\"https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto:300\" rel=\"stylesheet\">
 #{cached_css}
 <!-- // END // #{RESERVE_IN_STORE_CODE} // -->

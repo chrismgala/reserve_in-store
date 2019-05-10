@@ -5,7 +5,8 @@
 }
 
 .setupPanel h1 {
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    font-size: 26px;
 }
 
 .setupPanel-actions {

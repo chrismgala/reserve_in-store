@@ -1,5 +1,5 @@
 class AppInstalledJob < ActiveJob::Base
-  def perform(shop_domain:, webhook:)
+  def perform(shop_domain:, webhook: {})
     store = Store.find_by(shopify_domain: shop_domain)
 
     new_store(store)
@@ -14,12 +14,12 @@ class AppInstalledJob < ActiveJob::Base
   # @param store [Store]
   def new_store(store)
     msg = "👶  #{store_markdown(store)} signed up."
-    Bananastand::SlackNotifier.ping_general(msg)
+    Slack::Notifier.new(ENV['SLACK_WEBHOOK_URL_GENERAL']).ping(msg)
   end
 
   def store_markdown(store)
     return "_store that no longer exists_" if store.blank?
     store_name = store.name.size > 22 ? "#{store.name[0..20]}..." : store.name
-    "[:shopify:](#{store.url.to_s.strip}) #{store_name}"
+    "[:shopify:](#{store.url.to_s.strip} #{store_name})"
   end
 end

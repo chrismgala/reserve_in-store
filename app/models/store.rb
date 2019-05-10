@@ -133,11 +133,11 @@ class Store < ActiveRecord::Base
   # Convert them into a Location instance, and save it to this store if it has an address
   def sync_locations!
     api.locations.each do |shopify_loc|
-      loc = store.locations.find_by(platform_location_id: shopify_loc.id)
+      loc = locations.find_by(platform_location_id: shopify_loc.id)
       if loc.present?
         loc.load_from_shopify(shopify_loc)
       else
-        loc = Location.new_from_shopify(shopify_loc, store)
+        loc = Location.new_from_shopify(shopify_loc, self)
         loc.store_id = id
         loc.email = email
       end

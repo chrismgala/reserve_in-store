@@ -88,7 +88,9 @@ class StoreIntegrator
   # @return [Boolean] True if successful, raise an error otherwise.
   def install_footer!
     store.with_shopify_session do
-      footer_script = "
+
+      if store.active?
+        footer_script = "
 {% if product and product.available %}
 <!-- // BEGIN // #{RESERVE_IN_STORE_CODE} - DO NOT MODIFY // -->
 <script type=\"application/javascript\">
@@ -104,6 +106,9 @@ class StoreIntegrator
 <!-- // END // #{RESERVE_IN_STORE_CODE} // -->
 {% endif %}
     "
+      else
+        footer_script = "<!-- Reserve In-Store is Deactivated. Please contact our support team if you need help. -->"
+      end
 
       ensure_snippet!("snippets/reserveinstore_footer.liquid", footer_script)
 

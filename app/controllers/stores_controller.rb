@@ -3,13 +3,13 @@ class StoresController < LoggedInController
   ##
   # GET /stores/help
   def help
-    redirect_to(stores_setup_url) and return unless @current_store.users.any?
+    require_user! || return
   end
 
   ##
   # GET /stores/templates
   def templates
-    redirect_to(stores_setup_url) and return unless @current_store.users.any?
+    require_user! || return
   end
 
   ##
@@ -34,7 +34,7 @@ class StoresController < LoggedInController
   ##
   # GET /stores/settings
   def settings
-    redirect_to(stores_setup_url) and return unless @current_store.users.any?
+    require_user! || return
 
     return if @current_store.integrator.integrated?
 
@@ -42,6 +42,22 @@ class StoresController < LoggedInController
 
     # integration was not successful:
     flash.now[:error] = "Integration failed! Please contact our support team for help."
+  end
+
+  ##
+  # GET /stores/deactivate
+  def deactivate
+    @current_store.deactivate!
+
+    render :settings, notice: 'Reserve In-store has been deactivated.'
+  end
+
+  ##
+  # GET /stores/activate
+  def activate
+    @current_store.activate!
+
+    render :settings, notice: 'Reserve In-store has been activated.'
   end
 
   ##
@@ -61,12 +77,7 @@ class StoresController < LoggedInController
 
       @current_store.assign_attributes(save_params)
 
-      needs_footer_reinstall = @current_store.changed_attributes.keys.any?{ |attr| attr.to_s =~ /reserve_product_btn.*|custom_css.*|stock_status.*/i }
-
-      if @current_store.validate_active_and_save!
-
-        UpdateFooterJob.perform_later(@current_store.id) if needs_footer_reinstall
-
+      if @current_store.save
         format.html { redirect_to params[:next_url].presence || stores_settings_url, notice: 'Store settings were successfully updated.' }
         format.json { render :settings, status: :ok }
       else
@@ -77,6 +88,15 @@ class StoresController < LoggedInController
   end
 
   private
+
+  def require_user!
+    unless @current_store.users.any?
+      redirect_to(stores_setup_url)
+      false
+    else
+      true
+    end
+  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def store_params

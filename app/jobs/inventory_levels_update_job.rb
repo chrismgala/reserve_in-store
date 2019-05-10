@@ -4,8 +4,8 @@ class InventoryLevelsUpdateJob < ActiveJob::Base
 
     return if store.blank?
 
-    store.api.clear_product_cache(webhook[:id])
-    store.api.product(webhook[:id])
+    store.cached_api.clear_product_cache(webhook[:id])
+    store.cached_api.product(webhook[:id])
 
     # TODO - for now just logging, later we will need to refresh cache
     ForcedLogger.log("InventoryLevelsUpdateJob called with: #{webhook.inspect}.", store: store.id)

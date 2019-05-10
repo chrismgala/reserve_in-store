@@ -15,7 +15,9 @@ module ReserveInStore
     config.assets.paths << Rails.root.join('node_modules')
 
     config.autoload_paths << Rails.root.join('lib')
+    config.autoload_paths << Rails.root.join('services')
     config.eager_load_paths << Rails.root.join('lib')
+    config.eager_load_paths << Rails.root.join('services')
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do

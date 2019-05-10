@@ -22,7 +22,7 @@
     <%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
       <div class="Polaris-Layout">
         <% if @current_store.created_at > 1.day.ago %>
-          <%= render partial: "stores/settings/status", locals: {f: f} %>
+          <%= render partial: "stores/settings/status", locals: { f: f, store: @current_store } %>
         <% end %>
 
         <div class="Polaris-Layout__AnnotatedSection">
@@ -264,7 +264,7 @@
         </div>
 
         <% if @current_store.created_at <= 1.day.ago %>
-          <%= render partial: "stores/settings/status", locals: {f: f} %>
+          <%= render partial: "stores/settings/status", locals: { f: f, store: @current_store } %>
         <% end %>
 
         <div class="Polaris-Layout__Section">
@@ -288,7 +288,6 @@
       ShopifyApp.ready(function () {
           ShopifyApp.Bar.initialize({title: "Settings", icon: "<%= image_url('reserve_32x32.png') %>"});
       });
-
 
       var parsleyBinder = new ParsleyBinder({
           btnSelector: '#submission_button',

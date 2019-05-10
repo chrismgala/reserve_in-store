@@ -3,9 +3,12 @@ class Store < ActiveRecord::Base
   has_many :locations, dependent: :destroy
   has_many :reservations, dependent: :destroy
   has_many :users, dependent: :destroy
+  has_one :subscription, dependent: :destroy
 
   before_create :generate_keys
   before_save :nil_default_templates
+  before_save :see_if_footer_needs_update
+  after_save :update_footer_asset!
 
   alias_attribute :email_template, :customer_confirm_email_tpl # Alias for reverse compatibility, can be removed probably by July 1, 2019
   alias_attribute :company_name, :name
@@ -97,30 +100,31 @@ class Store < ActiveRecord::Base
     shopify_settings['money_format']
   end
 
+  def cached_api
+    with_shopify_session do
+      @cached_api ||= Shopify::CachedApi.new(self)
+    end
+  end
+
   def api
-    @api ||= CachedShopifyAPI.new(self)
+    with_shopify_session do
+      @api ||= Shopify::Api.new(self)
+    end
   end
 
   def shopify_settings
-    api.shop.attributes.with_indifferent_access
+    cached_api.shop.attributes.with_indifferent_access
   end
 
   def with_shopify_session
-    ShopifyAPI::Session.temp(shopify_domain, shopify_token) { yield(self) }
+    @session ||= ShopifyAPI::Session.new(shopify_domain, shopify_token)
+    ShopifyAPI::Base.activate_session(@session)
+    yield(self) if block_given?
   end
 
 
   def shopify_link
     "<a href='https://#{shopify_domain}'>#{name}</a>"
-  end
-
-  ##
-  # Ensure that the scripts we are injecting have validity with our active state
-  # This method is exclusively used by the stores/save_settings controller
-  # This method can modify the errors array
-  # @return [Bool] If we pass validation or not
-  def validate_active_and_save!
-    (!active_changed? || active_validation!) && save
   end
 
   ##
@@ -144,7 +148,7 @@ class Store < ActiveRecord::Base
   # @deprecated Temporary code and can be removed by May 31, 2019
   def fix_old_data!
     new_locations = api.locations.map do |shopify_loc|
-      Location.new_from_shopify(shopify_loc)
+      Location.new_from_shopify(shopify_loc, self)
     end
 
     locations.where(platform_location_id: nil).find_each do |old_location|
@@ -172,6 +176,17 @@ class Store < ActiveRecord::Base
       shopify_token,
       ShopifyApp.configuration.webhooks
     )
+
+    ForcedLogger.log("Ensuring all scripts are installed...")
+    ShopifyApp::ScripttagsManager.queue(
+      shopify_domain,
+      shopify_token,
+      ShopifyApp.configuration.webhooks
+    )
+
+    update_footer_asset!
+
+    true
   end
 
   ######################################################
@@ -347,6 +362,52 @@ class Store < ActiveRecord::Base
     }
   end
 
+  def trial_days_left
+    plan = subscription.try(:plan) || recommended_plan
+    return nil if plan.blank?
+
+    [plan.trial_days - ((Time.now.utc.to_i - created_at.to_i)/1.day), 0].max.ceil
+  end
+
+  def activate!
+    self.active = true
+    save!
+  end
+
+  def deactivate!
+    self.active = false
+    save!
+  end
+
+  def user; users.first; end
+
+  def recommended_plan
+    plan_code = recommended_plan_code
+    return nil if plan_code.blank?
+    @recommended_plan ||= Plan.find_by(code: plan_code)
+  end
+
+  def recommended_plan_code
+    case locations.count
+    when 0
+      nil
+    when 1
+      'startup'
+    when 2..3
+      'small'
+    when 4..10
+      'medium'
+    when 11..100
+      'large'
+    else
+      'enterprise'
+    end
+  end
+
+  def needs_subscription?
+    subscription.blank? && recommended_plan.present?
+  end
+
   private
 
   ##
@@ -363,30 +424,17 @@ class Store < ActiveRecord::Base
     prefix.to_s + Digest::SHA256.hexdigest(prefix.to_s + Time.current.to_f.to_s + rand(99999).to_s)
   end
 
-  ##
-  # Ensure our Shopify ScriptTags:
-  # If we are active, then our scripttags must be in the api
-  # If we are not active, then our scripttags must not be in the api
-  # Modify the errors array and flip our active state if we have issues with the APIs.
-  # @return [Bool] If we pass validation or not
-  def active_validation!
-    with_shopify_session do
-      script_tags = ShopifyAPI::ScriptTag.all
+  def see_if_footer_needs_update
+    @footer_needs_update = changed_attributes.keys.any?{ |attr| attr.to_s =~ /active|reserve_product_btn.*|custom_css.*|stock_status.*/i }
+    true
+  end
 
-      if active? && script_tags.empty?
-        ShopifyAPI::ScriptTag.create({event:'onload', src: JS_SCRIPT_PATH})
-      elsif !active && script_tags.present?
-        ShopifyAPI::ScriptTag.delete(ShopifyAPI::ScriptTag.first.id)
-      end
-
-      true
+  def update_footer_asset!
+    if @footer_needs_update
+      UpdateFooterJob.perform_later(self.id)
+      @footer_needs_update = false
     end
-  rescue StandardError => e
-    ForcedLogger.error(e, store: id)
-    errors.add(:active, "Issue modifying your storefront. Try again / contact support so we can help you.")
-    self.active = false
-
-    false
+    true
   end
 
 end

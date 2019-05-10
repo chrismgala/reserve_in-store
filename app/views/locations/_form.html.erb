@@ -179,7 +179,7 @@
                           <div class="Polaris-Select">
                             <select class="Polaris-Select__Input" required="required" name="location[platform_location_id]">
                               <option></option>
-                              <% @current_store.api.locations.each do |remote_location| %>
+                              <% @current_store.cached_api.locations.each do |remote_location| %>
                                 <option value="<%= remote_location.id %>" <%= 'selected="selected"' if remote_location.id.to_s == location.platform_location_id.to_s %>>
                                   <%= remote_location.name %> (<%= remote_location.address1 %>, <%= remote_location.city %>, <%= remote_location.province %>)
                                 </option>

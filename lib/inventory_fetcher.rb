@@ -34,7 +34,7 @@ class InventoryFetcher
   end
 
   def levels
-    cache_key = "stores/#{store.id}/inventory_fetcher/product-#{id}"
+    cache_key = "stores/#{store.id}/inventory_fetcher/product-#{product_id}"
     Rails.cache.fetch(cache_key, expires_in: 1.hour) do
       stock_levels = inventory.to_h
 

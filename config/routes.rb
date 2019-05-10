@@ -6,11 +6,16 @@ Rails.application.routes.draw do
   resources :locations
   resources :users
   get 'stores/settings'
+  get 'stores/activate'
+  get 'stores/deactivate'
   get 'stores/setup'
   get 'stores/help'
   get 'stores/templates'
   get 'stores/iframe_preview'
   match 'stores/settings' => 'stores#save_settings', via: [:post, :patch]
+
+  get 'shopify/recurring_application_charge/create' => 'shopify/recurring_application_charge#create', as: :subscribe
+  get 'shopify/recurring_application_charge/callback' => 'shopify/recurring_application_charge#callback', as: :recurring_application_charge_callback
 
   namespace :api do
     namespace :v1 do

@@ -17,10 +17,12 @@
                       <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m2.293-10.707L9 10.586 7.707 9.293a1 1 0 1 0-1.414 1.414l2 2a.997.997 0 0 0 1.414 0l4-4a1 1 0 1 0-1.414-1.414"></path>
                     </svg>
                   </span>
-                ON
+                Activated
               </div>
               <div class="Polaris-SettingAction__Action">
-                <%= f.button("TURN OFF", name: "store[active]", value: false, class: "Polaris-Button Polaris-Button--destructive", data: ({confirm: "Are you sure you want to disable us?"} if @current_store.active?) )%>
+                <button class="btn-deactivate Polaris-Button Polaris-Button--destructive">
+                  DEACTIVATE
+                </button>
               </div>
               <div class="Polaris-SettingAction__Setting">
                 <p>Reserve In-Store is showing to your customers.</p>
@@ -32,10 +34,12 @@
                     <circle fill="currentColor" cx="10" cy="10" r="9"></circle>
                     <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m0-13a1 1 0 0 0-1 1v4a1 1 0 1 0 2 0V6a1 1 0 0 0-1-1m0 8a1 1 0 1 0 0 2 1 1 0 0 0 0-2"></path>
                   </svg>
-                </span>OFF
+                </span>Deactivated
               </div>
               <div class="Polaris-SettingAction__Action">
-                <%= f.button("TURN ON", name: "store[active]", value: true, class: "Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge", style: 'font-weight: 800; text-transform: uppercase;')%>
+                <button class="btn-activate Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge">
+                  ACTIVATE
+                </button>
               </div>
               <div class="Polaris-SettingAction__Setting">
                 <p>The Reserve In-Store modal is not currently showing to your shoppers. Click the "TURN ON" button to make it start showing.</p>
@@ -47,3 +51,30 @@
     </div>
   </div>
 </div>
+
+<% content_for(:javascript) do %>
+  <script>
+    $('.btn-deactivate').on('click', function(e) {
+        e.preventDefault();
+        ShopifyApp.Modal.confirm({
+            title: "Are you sure?",
+            message: "Once deactivated your reserve in-store buttons and modals will no longer show to your shoppers.",
+            okButton: "Yes, Deactivate",
+            cancelButton: "No, Keep Active",
+            style: "danger"
+        }, function(result) {
+            if (result) {
+                window.location= '<%= stores_deactivate_url %>'
+            }
+        });
+    });
+    $('.btn-activate').on('click', function(e) {
+        e.preventDefault();
+        <% if store.needs_subscription? %>
+        window.open('<%= subscribe_path(post_subscribe_url: stores_activate_url) %>')
+        <% else %>
+        window.location = '<%= stores_activate_url %>';
+        <% end %>
+    });
+  </script>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_10_115112) do
+ActiveRecord::Schema.define(version: 2019_05_10_124623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,18 @@ ActiveRecord::Schema.define(version: 2019_05_10_115112) do
     t.string "platform_location_id"
     t.index ["store_id", "platform_location_id"], name: "index_locations_on_store_id_and_platform_location_id"
     t.index ["store_id"], name: "index_locations_on_store_id"
+  end
+
+  create_table "plans", force: :cascade do |t|
+    t.float "price"
+    t.string "name"
+    t.jsonb "features"
+    t.jsonb "limits"
+    t.string "code"
+    t.integer "trial_days"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_plans_on_code"
   end
 
   create_table "reservations", force: :cascade do |t|
@@ -86,6 +98,17 @@ ActiveRecord::Schema.define(version: 2019_05_10_115112) do
     t.string "stock_status_behavior_when_no_location_selected", default: "use_nearby"
     t.string "stock_status_behavior_when_no_nearby_locations_and_no_location", default: "hide"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "store_id"
+    t.string "remote_id"
+    t.jsonb "plan_attributes"
+    t.jsonb "custom_attributes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["remote_id"], name: "index_subscriptions_on_remote_id"
+    t.index ["store_id"], name: "index_subscriptions_on_store_id"
   end
 
   create_table "uninstallations", force: :cascade do |t|

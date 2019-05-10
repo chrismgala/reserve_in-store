@@ -14,7 +14,7 @@ class LocationsUpdateJob < ActiveJob::Base
       location.save!
     end
 
-    store.api.clear_locations_cache
-    store.api.locations
+    store.cached_api.clear_locations_cache
+    store.cached_api.locations
   end
 end

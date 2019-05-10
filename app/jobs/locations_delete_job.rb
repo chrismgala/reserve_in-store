@@ -8,7 +8,7 @@ class LocationsDeleteJob < ActiveJob::Base
     location = store.locations.find_by(platform_location_id: webhook[:id])
     location.try(:destroy!)
 
-    store.api.clear_locations_cache
-    store.api.locations
+    store.cached_api.clear_locations_cache
+    store.cached_api.locations
   end
 end

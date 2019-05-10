@@ -117,7 +117,7 @@ module Shopify
       {
         name: plan.code,
         price: plan.price,
-        trial_days: store.trial_days_left
+        trial_days: @current_store.trial_days_left
       }
     end
 

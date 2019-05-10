@@ -404,7 +404,17 @@ class Store < ActiveRecord::Base
     end
   end
 
+  def sandbox_store?
+    shopify_settings.try(:[], :plan_name).to_s.downcase.include?('affiliate')
+  end
+
+  def is_fera_team?
+    email.to_s =~ /.*@(fera|@reserveinstore|bananastand|wellfounded).*/i
+  end
+
   def needs_subscription?
+    return false if sandbox_store?
+
     subscription.blank? && recommended_plan.present?
   end
 

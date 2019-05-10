@@ -4,7 +4,8 @@ class ShopUpdateJob < ActiveJob::Base
 
     return if store.blank?
 
-    # TODO - for now just logging, later we will need to refresh cache
-    ForcedLogger.log("ShopUpdateJob called with: #{webhook.inspect}.", store: store.id)
+    ForcedLogger.log("ShopUpdateJob called.", store: store.id)
+
+    store.cached_api.clear_shop_cache
   end
 end

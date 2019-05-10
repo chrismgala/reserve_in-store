@@ -8,6 +8,9 @@ module Shopify
     def clear_locations_cache
       Rails.cache.delete("stores/#{store.id}/cached_shopify_api/locations")
     end
+    def clear_shop_cache
+      Rails.cache.delete("stores/#{store.id}/cached_shopify_api/shop")
+    end
 
     def product(id)
       cache_key = "stores/#{store.id}/cached_shopify_api/product-#{id}"

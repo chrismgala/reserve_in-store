@@ -34,21 +34,24 @@ class InventoryFetcher
   end
 
   def levels
-    stock_levels = inventory.to_h
+    cache_key = "stores/#{store.id}/inventory_fetcher/product-#{id}"
+    Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+      stock_levels = inventory.to_h
 
-    stock_levels.keys.map do |variant_id|
-      new_levels = stock_levels[variant_id].keys.map do |platform_location_id|
-        inventory_caption = if stock_levels[variant_id][platform_location_id] > 15
-                              'in_stock'
-                            elsif stock_levels[variant_id][platform_location_id] > 0
-                              'low_stock'
-                            else
-                              'out_of_stock'
-                            end
-        [platform_location_id, inventory_caption]
+      stock_levels.keys.map do |variant_id|
+        new_levels = stock_levels[variant_id].keys.map do |platform_location_id|
+          inventory_caption = if stock_levels[variant_id][platform_location_id] > 15
+                                'in_stock'
+                              elsif stock_levels[variant_id][platform_location_id] > 0
+                                'low_stock'
+                              else
+                                'out_of_stock'
+                              end
+          [platform_location_id, inventory_caption]
+        end.to_h
+        [variant_id, new_levels]
       end.to_h
-      [variant_id, new_levels]
-    end.to_h
+    end
   end
 
 end

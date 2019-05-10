@@ -13,5 +13,8 @@ class LocationsUpdateJob < ActiveJob::Base
       location.load_from_shopify(webhook)
       location.save!
     end
+
+    store.api.clear_locations_cache
+    store.api.locations
   end
 end

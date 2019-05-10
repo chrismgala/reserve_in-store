@@ -12,5 +12,8 @@ class LocationsCreateJob < ActiveJob::Base
       location = Location.new_from_shopify(webhook, store)
       location.save!
     end
+
+    store.api.clear_locations_cache
+    store.api.locations
   end
 end

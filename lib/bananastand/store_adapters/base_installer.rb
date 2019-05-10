@@ -83,7 +83,7 @@ module Bananastand
       end
 
       def fera_js_url(add_store_domain = false)
-        url = "#{ENV['CDN_JS_BASE_PATH']}fera.js"
+        url = "#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}/reserveinstore.js"
         url = "#{url}?shop=#{store.canonical_domain}" if add_store_domain
         url
       end

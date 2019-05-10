@@ -17,6 +17,6 @@ ShopifyApp.configure do |config|
       {topic: 'shop/update', address: "#{ENV['BASE_APP_URL']}/webhooks/shop_update", format: 'json'},
   ]
   config.scripttags = [
-    {event:'onload', src: "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"}
+    {event:'onload', src: "#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}/reserveinstore.js"}
   ]
 end

@@ -1,6 +1,12 @@
 
 <div class="setupPanel">
-  <h1 class="Polaris-Heading">Create User Account</h1>
+  <h1 class="Polaris-Heading">
+    <% if @current_store.created_at > 15.minutes.ago %>
+      Create User Account
+    <% else %>
+      We need some extra details from you...
+    <% end %>
+  </h1>
   <p>Before you continue to the app we need to know how we can reach you.</p>
 
   <%= form_for(User.new,

@@ -24,7 +24,7 @@ class Store < ActiveRecord::Base
     :custom_css, :custom_css_enabled
   ]
 
-  JS_SCRIPT_PATH = "#{ENV['CDN_JS_BASE_PATH']}reserveinstore.js"
+  JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}/reserveinstore.js"
 
   def currency_template
     shopify_settings[:money_format].presence || '${{amount}}'
@@ -331,7 +331,7 @@ class Store < ActiveRecord::Base
   def frontend_tpl_vars
     {
       locations: locations.to_a,
-      cdn_url: ENV['CDN_BASE_PATH'],
+      cdn_url: ENV['PUBLIC_CDN_BASE_PATH'],
       settings: self
     }
   end

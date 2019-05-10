@@ -34,6 +34,6 @@ class Subscription < ApplicationRecord
   def nice_price(currency = :usd, round: true)
     converted_price = Bananastand::CurrencyConverter.convert(price, to: currency)
     converted_price = converted_price.round if round
-    ActionController::Base.helpers.number_to_currency(converted_price).chomp('.00').chomp('.00') + "/mo"
+    ActionController::Base.helpers.number_to_currency(converted_price).to_s.chomp('.00').chomp('.00') + "/mo"
   end
 end

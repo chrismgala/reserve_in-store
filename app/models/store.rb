@@ -24,7 +24,7 @@ class Store < ActiveRecord::Base
     :custom_css, :custom_css_enabled
   ]
 
-  JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}/reserveinstore.js"
+  JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].to_s.chomp('/')}/reserveinstore.js"
 
   def currency_template
     shopify_settings[:money_format].presence || '${{amount}}'

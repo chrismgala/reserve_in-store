@@ -2,6 +2,10 @@ class AppInstalledJob < ActiveJob::Base
   def perform(shop_domain:, webhook: {})
     store = Store.find_by(shopify_domain: shop_domain)
 
+    store.name = store.shopify_settings['name']
+    store.platform_store_id = store.id
+    store.save!
+
     new_store(store)
 
     store.sync_locations!

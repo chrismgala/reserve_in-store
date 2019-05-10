@@ -135,11 +135,12 @@ class Store < ActiveRecord::Base
     api.locations.each do |shopify_loc|
       loc = locations.find_by(platform_location_id: shopify_loc.id)
       if loc.present?
-        loc.load_from_shopify(shopify_loc)
+        loc.load_from_shopify(shopify_loc.attributes)
       else
         loc = Location.new_from_shopify(shopify_loc, self)
         loc.store_id = id
         loc.email = email
+        loc.save!
       end
     end
   end

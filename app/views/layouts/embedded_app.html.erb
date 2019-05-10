@@ -83,5 +83,14 @@
   </div>
 <% end %>
 
+<% if  ENV['HEROKU_RELEASE_VERSION'].present? && ENV['HEROKU_RELEASE_CREATED_AT'].present? %>
+  <!--
+      Server software <strong><%= ENV['HEROKU_RELEASE_VERSION'] %></strong>.
+      Server last updated <strong><%= local_time_ago(Time.parse(ENV['HEROKU_RELEASE_CREATED_AT'])) %></strong>.
+   -->
+<% end %>
+
+
+
 </body>
 </html>

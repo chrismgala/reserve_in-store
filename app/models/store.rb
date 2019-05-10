@@ -181,7 +181,7 @@ class Store < ActiveRecord::Base
     ShopifyApp::ScripttagsManager.queue(
       shopify_domain,
       shopify_token,
-      ShopifyApp.configuration.webhooks
+      ShopifyApp.configuration.scripttags
     )
 
     update_footer_asset!

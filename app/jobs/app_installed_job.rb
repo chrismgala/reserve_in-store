@@ -9,6 +9,8 @@ class AppInstalledJob < ActiveJob::Base
     new_store(store)
 
     store.sync_locations!
+
+    UpdateFooterJob.perform_later(store.id)
   end
 
   private

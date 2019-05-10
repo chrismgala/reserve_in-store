@@ -31,13 +31,6 @@ class StoresController < LoggedInController
   # GET /stores/settings
   def settings
     require_user! || return
-
-    return if @current_store.integrator.integrated?
-
-    return if @current_store.integrator.integrate!
-
-    # integration was not successful:
-    flash.now[:error] = "Integration failed! Please contact our support team for help."
   end
 
   ##

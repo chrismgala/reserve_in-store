@@ -86,7 +86,7 @@ module Shopify
 
       plan_msg = store.trial_days_left > 0 ? "(#{store.trial_days_left}d trial)" : '(non-trial)'
 
-      Bananastand::SlackNotifer.ping_general("💵 #{store_markdown(store)} :long_arrow_right: *#{subscription.nice_price}* #{plan_msg}")
+      Bananastand::SlackNotifier.ping_general("💵 #{store_markdown(store)} :long_arrow_right: *#{store.subscription.nice_price}* #{plan_msg}")
     end
 
     def store_markdown(store)

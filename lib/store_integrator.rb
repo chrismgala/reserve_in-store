@@ -24,7 +24,7 @@ class StoreIntegrator
       return true if !has_errors? && integrated?
 
       ForcedLogger.error("Failed to integrate", sentry: true, store: @store.try(:id))
-      if !has_errors?
+      unless has_errors?
         add_error("Failed to integrate the embedded components automatically into your store due " + \
                   "to an unknown error. Our engineers have been informed about the issue. Please contact our " + \
                   "support team for help with getting set up.")

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_10_203952) do
+ActiveRecord::Schema.define(version: 2019_05_10_213924) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(version: 2019_05_10_203952) do
     t.string "stock_status_behavior_when_stock_unknown", default: "hide"
     t.string "stock_status_behavior_when_no_location_selected", default: "use_nearby"
     t.string "stock_status_behavior_when_no_nearby_locations_and_no_location", default: "hide"
+    t.jsonb "webhooks"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

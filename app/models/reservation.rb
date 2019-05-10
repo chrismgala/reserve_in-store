@@ -7,6 +7,10 @@ class Reservation < ActiveRecord::Base
   validates_associated :store, :location
   validates :customer_email, format: /\A[^@\s]+@[^@\s]+\z/
 
+  after_create :trigger_create_webhook!
+  after_update :trigger_fulfilled_webhook!, :trigger_update_webhook!
+  after_destroy :trigger_destroy_webhook!
+
   PERMITTED_PARAMS = [:customer_name, :customer_email, :customer_phone, :location_id, :platform_product_id,
                       :platform_variant_id, :instructions_from_customer, :fulfilled, :line_item]
 
@@ -86,4 +90,27 @@ class Reservation < ActiveRecord::Base
      'store_link' => store.shopify_link,
      'reservation_time' => instructions_from_customer}
   end
+
+  def trigger_create_webhook!
+    TriggerWebhookJob.perform_later(store_id: store_id, topic: 'reservations/create', object_id: id, object_klass: self.class.to_s)
+    true
+  end
+
+  def trigger_fulfilled_webhook!
+    if previous_changes['fulfilled'].present? && !previous_changes['fulfilled'][0] && previous_changes['fulfilled'][1]
+      TriggerWebhookJob.perform_later(store_id: store_id, topic: 'reservations/fulfilled', object_id: id, object_klass: self.class.to_s)
+    end
+    true
+  end
+
+  def trigger_destroy_webhook!
+    TriggerWebhookJob.perform_later(store_id: store_id, topic: 'reservations/delete', object_id: id, object_klass: self.class.to_s)
+    true
+  end
+
+  def trigger_update_webhook!
+    TriggerWebhookJob.perform_later(store_id: store_id, topic: 'reservations/update', object_id: id, object_klass: self.class.to_s)
+    true
+  end
 end
+

@@ -419,6 +419,18 @@ class Store < ActiveRecord::Base
     subscription.blank? && recommended_plan.present?
   end
 
+  def add_webhook(topic, url)
+    clean_topic = topic.gsub(/\/(destroyed|deleted|destroy)/i, '/delete')
+                    .gsub(/\/(updated|saved|save|updates)/i, '/update')
+                    .gsub(/\/(new|creates)/i, '/create')
+                    .gsub(/\/(fulfill|fulfills)/i, '/fulfilled')
+    self.webhooks = webhooks.to_a + [{ topic: clean_topic, url: url }]
+  end
+
+  def webhooks
+    super.to_a
+  end
+
   private
 
   ##

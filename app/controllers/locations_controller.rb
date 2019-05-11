@@ -10,12 +10,13 @@ class LocationsController < LoggedInController
   ##
   # GET /locations/new
   def new
+    @location = Location.new(store: @current_store)
   end
 
   ##
   # POST /locations
   def create
-    @location = Location.new(location_params.merge(store: @current_store))
+    @location = Location.new(location_params.merge(store_id: @current_store.id))
 
     respond_to do |format|
       if @location.save

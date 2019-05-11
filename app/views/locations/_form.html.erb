@@ -180,6 +180,7 @@
                             <select class="Polaris-Select__Input" required="required" name="location[platform_location_id]">
                               <option></option>
                               <% @current_store.cached_api.locations.each do |remote_location| %>
+                                <% next if remote_location.address1.blank? %>
                                 <option value="<%= remote_location.id %>" <%= 'selected="selected"' if remote_location.id.to_s == location.platform_location_id.to_s %>>
                                   <%= remote_location.name %> (<%= remote_location.address1 %>, <%= remote_location.city %>, <%= remote_location.province %>)
                                 </option>
@@ -203,19 +204,20 @@
           </div>
         </div>
 
-
         <div class="Polaris-Layout__AnnotatedSection">
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
                 <h2 class="Polaris-Heading">Edit Display</h2>
                 <p>Customize the appearance of the radio button using HTML/CSS.</p>
-                <div>
-                  <button id="location_editor_update_btn" type="button" class="Polaris-Button">Update Preview</button>
-                </div>
-                <div>
-                  <a href="#" id="location_editor_reset_btn">Reset</a>
-                </div>
+                <% if @location.persisted? %>
+                  <div>
+                    <button id="location_editor_update_btn" type="button" class="Polaris-Button">Update Preview</button>
+                  </div>
+                  <div>
+                    <a href="#" id="location_editor_reset_btn">Reset</a>
+                  </div>
+                <% end %>
               </div>
             </div>
             <div class="Polaris-Layout__AnnotationContent">
@@ -223,38 +225,43 @@
                 <div class="Polaris-Card__Section">
                   <div class="Polaris-FormLayout">
 
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-Labelled__LabelWrapper">
-                        <div class="Polaris-Label">
-                          <%= f.label :custom_html_preview, class: 'Polaris-Label__Text' do %>
-                            Radio button preview
+                    <% if @location.persisted? %>
+                      <div class="Polaris-FormLayout__Item">
+                        <div class="Polaris-Labelled__LabelWrapper">
+                          <div class="Polaris-Label">
+                            <%= f.label :custom_html_preview, class: 'Polaris-Label__Text' do %>
+                              Radio button preview
+                            <% end %>
+                          </div>
+                        </div>
+                        <div class="location-preview-box">
+                          <% if location.is_a? Symbol %>
+                            <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: 0, name: 'Example location', map_url: 'https://www.google.ca/maps/', address: 'Example Address',
+                                                                                                   formatted_address: 'City, State, ZIP/Postal code', country: 'Country', custom_html: '<div id="location_custom_html_preview"></div>'} %>
+                          <% else %>
+                            <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: 0, name: location.name, map_url: location.google_map_url, address: location.address,
+                                                                                                   formatted_address: location.formatted_address, country: location.country, custom_html: '<div id="location_custom_html_preview"></div>'} %>
                           <% end %>
                         </div>
                       </div>
-                      <div class="location-preview-box">
-                        <% if location.is_a? Symbol %>
-                          <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: 0, name: 'Example location', map_url: 'https://www.google.ca/maps/', address: 'Example Address',
-                                                                                                 formatted_address: 'City, State, ZIP/Postal code', country: 'Country', custom_html: '<div id="location_custom_html_preview"></div>'} %>
-                        <% else %>
-                          <%= render partial: 'layouts/partials/location_radio_button', locals: {location_id: 0, name: location.name, map_url: location.google_map_url, address: location.address,
-                                                                                                 formatted_address: location.formatted_address, country: location.country, custom_html: '<div id="location_custom_html_preview"></div>'} %>
-                        <% end %>
-                      </div>
-                    </div>
 
-                    <div class="Polaris-FormLayout__Item">
-                      <div class="Polaris-Labelled__LabelWrapper">
-                        <div class="Polaris-Label">
-                          <%= f.label :custom_html, class: "Polaris-Label__Text" do %>
-                            HTML/CSS Editor
-                          <% end %>
+                      <div class="Polaris-FormLayout__Item">
+                        <div class="Polaris-Labelled__LabelWrapper">
+                          <div class="Polaris-Label">
+                            <%= f.label :custom_html, class: "Polaris-Label__Text" do %>
+                              HTML/CSS Editor
+                            <% end %>
+                          </div>
                         </div>
+                        <div id="ace_location_editor" class="location_html_editor"></div>
+                        <textarea style="display: none" id="default_location_html"></textarea>
+                        <%= f.text_area :custom_html, {style: "display: none;"} %>
                       </div>
-                      <div id="ace_location_editor" class="location_html_editor"></div>
-                      <textarea style="display: none" id="default_location_html"></textarea>
-                      <%= f.text_area :custom_html, {style: "display: none;"} %>
-                    </div>
-
+                    <% else%>
+                      <div class="Polaris-FormLayout__Item">
+                        <em>You'll be able to edit how the location displays after you save.</em>
+                      </div>
+                    <% end %>
                   </div>
                 </div>
               </div>
@@ -282,6 +289,8 @@
 
   <script>
       window.crs.init();
+
+      <% if @location.persisted? %>
       var locationHtmlEditor = new HTMLTemplateEditor({
           templateFormFieldSelector: '#location_custom_html',
           aceEditorId: 'ace_location_editor',
@@ -291,5 +300,6 @@
           previewContainerSelector: '#location_custom_html_preview',
           submissionButtonSelector: '#location-submit'
       });
+      <% end %>
   </script>
 </div>

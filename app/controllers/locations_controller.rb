@@ -20,10 +20,10 @@ class LocationsController < LoggedInController
 
     respond_to do |format|
       if @location.save
-        format.html { redirect_to locations_path, notice: 'location was successfully created.' }
-        format.json { render :locations, status: :ok }
+        format.html { redirect_to edit_location_path(@location), notice: 'Location was successfully created.' }
+        format.json { render json: @location, status: :ok }
       else
-        format.html { redirect_to locations_path, flash: { error: @location.errors.full_messages.join("\n") } }
+        format.html { redirect_to edit_location_path(@location), flash: { error: @location.errors.full_messages.join("\n") } }
         format.json { render json: @location.errors, status: :unprocessable_entity }
       end
     end
@@ -39,7 +39,7 @@ class LocationsController < LoggedInController
   def update
     respond_to do |format|
       if @location.update(location_params)
-        format.html { redirect_to locations_path, notice: 'location was successfully updated.' }
+        format.html { redirect_to locations_path, notice: 'Location was successfully updated.' }
         format.json { render :show, status: :ok, location: @location }
       else
         format.html { redirect_to locations_path, flash: { error: @location.errors.full_messages.join("\n") } }
@@ -53,7 +53,7 @@ class LocationsController < LoggedInController
   def destroy
     @location.destroy
     respond_to do |format|
-      format.html { redirect_to locations_url, notice: 'location was successfully deleted.' }
+      format.html { redirect_to locations_path, notice: 'Location was successfully deleted.' }
       format.json { head :no_content }
     end
   end

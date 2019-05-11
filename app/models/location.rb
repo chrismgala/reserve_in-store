@@ -36,7 +36,7 @@ class Location < ActiveRecord::Base
   # Filter out empty address fields, and returns a string containing city, state and postal code.
   # @return [String] in the form of 'City, State, ZIP/Postal code'
   def formatted_address
-    [city, state, zip].reject { |c| c.empty? }.join(', ')
+    [city, state, zip].reject { |c| c.blank? }.join(', ')
   end
 
   def load_from_shopify(shopify_attr)

@@ -26,6 +26,6 @@ class AppInstalledJob < ActiveJob::Base
   def store_markdown(store)
     return "_store that no longer exists_" if store.blank?
     store_name = store.name.size > 22 ? "#{store.name[0..20]}..." : store.name
-    "[:shopify:](#{store.url.to_s.strip} #{store_name})"
+    "[:shopify: #{store_name}](#{store.url.to_s.strip})"
   end
 end

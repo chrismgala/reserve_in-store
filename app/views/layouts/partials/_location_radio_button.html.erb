@@ -2,7 +2,7 @@
   <input type="radio" value="<%= location_id %>" name="reservation[location_id]" id="reservation_location_id_<%= location_id %>" <%= 'required' unless location_id == 0 %>><label class="ris-location-label" for="reservation_location_id_<%= location_id %>"><%= name %></label>
   <div class="ris-view-on-map">
     <img class="img-responsive" src="<%= asset_url('map_pin.png') %>">
-    <a href="<%= map_url %>" target="_blank">View on map</a>
+    <a href="<%= map_url.presence || '#' %>" target="_blank">View on map</a>
   </div>
   <div class="ris-location-description">
     <div class="ris-row">

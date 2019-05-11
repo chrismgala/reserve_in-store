@@ -10,7 +10,8 @@ class Location < ActiveRecord::Base
   ##
   # @return [String] Google Map url searching for current store's location
   def google_map_url
-    'https://www.google.com/maps/search/?api=1&query=' + URI.encode(address + ' ' + city + ' ' + state + ' ' + country + ' ' + zip)
+    return "" if full_address.strip.blank?
+    'https://www.google.com/maps/search/?api=1&query=' + URI.encode(full_address)
   end
   alias_method :google_maps_url, :google_map_url
 
@@ -25,6 +26,10 @@ class Location < ActiveRecord::Base
       'country' => country,
       'custom_html' => custom_html
     }
+  end
+
+  def full_address
+    "#{address} #{city} #{state} #{country} #{zip}".strip
   end
 
   ##

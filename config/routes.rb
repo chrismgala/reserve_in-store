@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get 'reservations/modal' => 'reservations#modal'
       get 'inventory' => 'inventory#index'
       post 'reservations' => 'reservations#create'
+      get 'reservations' => 'reservations#index'
 
       # Legacy endpoints
       post 'store_reservations' => 'reservations#create'

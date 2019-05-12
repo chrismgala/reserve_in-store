@@ -57,6 +57,8 @@ ReserveInStore.ChooseLocationModal = function (opts) {
 
         visible = true;
 
+        opts.app.trigger('choose_location_modal.create', self);
+
         opts.app.trigger('choose_location_modal.show choose_location_modal.open', self);
     };
 

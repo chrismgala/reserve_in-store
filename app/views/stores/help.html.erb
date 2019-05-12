@@ -20,11 +20,81 @@
                 <div class="Polaris-CalloutCard">
                   <div class="Polaris-CalloutCard__Content">
                     <div class="Polaris-CalloutCard__Title Polaris-TextContainer--spacingLoose">
-                      <h1 class="Polaris-Heading">Reserve In-Store helps your customers put items on hold</h1>
+                      <h2 class="Polaris-Heading">Reserve In-Store helps your customers put items on hold</h2>
                       <p>After installation, each product in your store will have have a new "reserve in-store" button.</p>
                       <p>If a customer clicks this button, they will be greeted with a form to provide you their name, email, phone-number, as well as when/where they want the item held.</p>
                       <p>You will automatically receive an email detailing their reservation request, and the customer will receive a reservation receipt detailing what they put on hold.</p>
                       <p>You can customize what locations are available for in-store holds and personalize each message the customer will see.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="Polaris-Layout__AnnotatedSection">
+        <div class="Polaris-Layout__AnnotationWrapper">
+          <div class="Polaris-Layout__Annotation">
+            <div class="Polaris-TextContainer">
+              <h2 class="Polaris-Heading">Additional Resources</h2>
+              <p>For further reading and customization.</p>
+            </div>
+          </div>
+          <div class="Polaris-Layout__AnnotationContent">
+            <div class="Polaris-Card">
+              <div class="Polaris-Card__Section">
+                <div class="Polaris-CalloutCard">
+                  <div class="Polaris-CalloutCard__Content">
+                    <div class="Polaris-CalloutCard__Title Polaris-TextContainer--spacingLoose">
+                      <h1 class="Polaris-Heading">Developer Docs</h1>
+                      <p>
+                        You can access our <a href="https://docs.reserveinstore.com" target="_docs">developer docs here</a>
+                        where you can find:
+                      </p>
+                      <ul>
+                        <li>How to move the location of buttons and other integrated content</li>
+                        <li>How to use our JavaScript API</li>
+                        <li>How to customize the modal and content templates</li>
+                        <li>How to customize the email templates</li>
+                        <li>How to use the Webhooks</li>
+                        <li>How to use the REST API</li>
+                      </ul>
+
+                      <div class="Polaris-SettingAction__Action">
+                        <a class="btn-deactivate Polaris-Button Polaris-Button--outline" href="https://docs.reserveinstore.com" target="_docs">
+                          View Docs
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="Polaris-CalloutCard__Title Polaris-TextContainer--spacingLoose">
+                      <h1 class="Polaris-Heading">API Keys</h1>
+                      <p>
+                        If you want to use the <a href="https://docs.reserveinstore.com" target="_docs">API</a> to extend
+                        the reserve in-store functionality, you'll need your API keys. Here they are for your account:
+                      </p>
+                      <ul>
+                        <li>
+                          Public Key: <code class="publicKey-toggle" style="display: none;"><%=- @current_store.public_key %></code>
+                          <a href="#" class="publicKey-toggle" onclick="$('.publicKey-toggle').toggle(); return false;" style="display: none;">hide</a>
+
+                          <a href="#" class="publicKey-toggle" onclick="$('.publicKey-toggle').toggle(); return false;">show</a>
+                        </li>
+                        <li>
+                          Secret Key: <code class="secretKey-toggle" style="display: none;"><%=- @current_store.secret_key %></code>
+                          <a href="#" class="secretKey-toggle" onclick="$('.secretKey-toggle').toggle(); return false;" style="display: none;">hide</a>
+
+                          <a href="#" class="secretKey-toggle" onclick="$('.secretKey-toggle').toggle(); return false;">show</a>
+                        </li>
+                      </ul>
+
+                      <div class="Polaris-SettingAction__Action">
+                        <a class="btn-deactivate Polaris-Button Polaris-Button--outline" href="https://docs.reserveinstore.com" target="_docs">
+                          View Docs
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>

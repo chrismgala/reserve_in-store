@@ -42,20 +42,7 @@
               ]
             }),
             container_css_class: '',
-            extra_css: '.reserveInStore-modal-background { padding-top: 8px; }',
-            frontend_mode: true
-        } %>
-
-
-        <%= render partial: 'stores/shared/liquid_editor_section', locals: {
-            heading: 'FAQ',
-            subheading: 'Customize the FAQ (Frequently Asked Questions) content that shows up when a new reservation is being created by a shopper.',
-            attr: 'reserve_modal_faq_tpl',
-            enabled: @current_store.reserve_modal_faq_tpl_enabled?,
-            db_value: @current_store.reserve_modal_faq_tpl,
-            value_in_use: @current_store.reserve_modal_faq_tpl_in_use,
-            default_value: @current_store.default_reserve_modal_faq_tpl,
-            container_css_class: 'reserveInStore-reserve-modal',
+            extra_css: '.reserveInStore-modal-background { padding-top: 8px; } .reserveInStore-reserve-modal { position: relative; top: 0; }',
             frontend_mode: true
         } %>
 
@@ -70,7 +57,7 @@
             default_value: @current_store.default_choose_location_modal_tpl,
             preview_vars: @current_store.frontend_tpl_vars,
             container_css_class: '',
-            extra_css: '.reserveInStore-modal-background { padding-top: 8px; }',
+            extra_css: '.reserveInStore-modal-background { padding-top: 8px; } .reserveInStore-reserve-modal { position: relative; top: 0; }',
             frontend_mode: true
         } %>
 

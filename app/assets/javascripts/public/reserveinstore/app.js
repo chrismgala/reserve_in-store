@@ -1,6 +1,6 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.1.0.0'; // Version of the JS library.
+    this.version = '1.1.1.0'; // Version of the JS library.
     var self = this;
     opts = opts || {};
 
@@ -11,11 +11,13 @@ ReserveInStore.App = function(opts) {
     var eventListeners = {
         "reserve_modal.show": [],
         "reserve_modal.open": [],
+        "reserve_modal.create": [],
         "reserve_modal.submit": [],
         "reserve_modal.close": [],
         "reserve_modal.hide": [],
         "choose_location_modal.show": [],
         "choose_location_modal.open": [],
+        "choose_location_modal.create": [],
         "choose_location_modal.close": [],
         "choose_location_modal.hide": [],
         "variant.change": [],
@@ -211,6 +213,12 @@ ReserveInStore.App = function(opts) {
             self.configure(object.data);
         } else if (object.action === "setProduct") {
             self.setProduct(object.data || object.product)
+        } else if (object.action === "showChooseLocationModal") {
+            self.showChooseLocationModal()
+        } else if (object.action === "showReserveModal") {
+            self.showReserveModal()
+        } else if (object.action === "on") {
+            self.on(object.data.event, object.data.callback)
         } else {
             ReserveInStore.logger.error("Unknown action: ", object.action);
         }

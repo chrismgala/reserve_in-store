@@ -8,7 +8,7 @@ try {
             window.reserveInStore = window.__reserveInStore;
         }
 
-        window.reserveInStore = window.__reserveInStore = new ReserveInStore.App({
+        window.reserveInStore = window.__reserveInStore = window.ris = new ReserveInStore.App({
             pushBuffer: window.reserveInStore || window.__reserveInStore,
             debugMode: <%= Rails.env.development?.to_s %>
         });

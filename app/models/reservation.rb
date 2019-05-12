@@ -40,6 +40,31 @@ class Reservation < ActiveRecord::Base
     Liquid::Template.parse(email_template).render(email_liquid_params(shopify_product_link)).html_safe
   end
 
+
+  def to_api_h
+    {
+      id: id,
+      location_id: location_id,
+      customer: {
+        name: customer_name,
+        email: customer_email,
+        phone: customer_phone,
+        instructions: instructions_from_customer
+      },
+      cart: {
+        items: [ {
+                   product_id: platform_product_id,
+                   variant_id: platform_variant_id
+                 }]
+      },
+      fulfilled: fulfilled?,
+      created_at: created_at,
+      updated_at: updated_at
+
+    }
+  end
+
+
   private
 
   ##

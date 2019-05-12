@@ -32,6 +32,20 @@ module Api
         end
       end
 
+      def index
+        private_authenticate!
+
+        reservations = @store.reservations
+
+        reservations.where(fulfilled: params[:fulfilled].to_bool) if params[:fulfilled].present?
+        reservations.where(location_id: params[:location_id].to_i) if params[:location_id].present?
+        reservations.where("customer_name ILIKE ?", "%#{params[:customer_name]}%") if params[:customer_name].present?
+        reservations.where("customer_email ILIKE ?", "%#{params[:customer_email]}%") if params[:customer_email].present?
+        reservations.where("customer_phone ILIKE ?", "%#{params[:customer_phone]}%") if params[:customer_phone].present?
+
+        render json: reservations.page(params[:page]).per(250).map{ |obj| obj.to_api_h }
+      end
+
       private
 
       def reservation_params

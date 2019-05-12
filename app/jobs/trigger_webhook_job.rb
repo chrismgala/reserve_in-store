@@ -26,6 +26,8 @@ class TriggerWebhookJob < ActiveJob::Base
     url += url.include?('?') ? '?' : '&'
     url += { secret_key: store.secret_key }.to_param
 
-    HTTParty.post(url, body: object.attributes.to_json, timeout: 10, headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' })
+    data = object.respond_to?(:to_api_h) ? object.to_api_h : object.attributes
+
+    HTTParty.post(url, body: data.to_json, timeout: 10, headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' })
   end
 end

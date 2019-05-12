@@ -85,6 +85,8 @@ ReserveInStore.ReserveModal = function (opts) {
         });
 
         adjustModalHeight();
+
+        opts.app.trigger('reserve_modal.create', self);
     };
 
     self.hide = self.close = function() {

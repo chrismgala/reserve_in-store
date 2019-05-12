@@ -29,7 +29,7 @@
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Edit Reservation Pop-up</h2>
+                <h2 class="Polaris-Heading">New Reservation Modal</h2>
                 <p>Customize the header message and data fields of your "Reserve In Store" pop-up</p>
               </div>
             </div>
@@ -100,6 +100,20 @@
                         </ul>
                       </fieldset>
                     </div>
+
+                    <%= render partial: 'stores/shared/liquid_editor_section', locals: {
+                        heading: 'FAQ',
+                        subheading: 'Customize the FAQ (Frequently Asked Questions) content that shows up when a new reservation is being created by a shopper.',
+                        attr: 'reserve_modal_faq_tpl',
+                        enabled: @current_store.reserve_modal_faq_tpl_enabled?,
+                        db_value: @current_store.reserve_modal_faq_tpl,
+                        value_in_use: @current_store.reserve_modal_faq_tpl_in_use,
+                        default_value: @current_store.default_reserve_modal_faq_tpl,
+                        container_css_class: 'reserveInStore-reserve-modal',
+                        extra_css: '.reserveInStore-modal-background { padding-top: 8px; } .reserveInStore-reserve-modal { position: relative; top: 0; }',
+                        frontend_mode: true,
+                        just_field: true
+                    } %>
                   </div>
                 </div>
               </div>
@@ -188,7 +202,7 @@
                       <div class="Polaris-Labelled__LabelWrapper">
                         <div class="Polaris-Label">
                           <%= f.label :stock_status_behavior_when_stock_unknown, class: 'Polaris-Label__Text' do %>
-                            If stock level is available at any physical locations...
+                            If stock level is NOT available at any physical locations...
                           <% end %>
                         </div>
                       </div>

@@ -6,6 +6,7 @@ class Location < ActiveRecord::Base
   validates_associated :store
 
   PERMITTED_PARAMS = [:name, :email, :address, :country, :state, :city, :phone, :zip, :custom_html]
+  PUBLIC_ATTRIBUTES = [:id, :name, :address, :country, :state, :city, :zip, :google_maps_url]
 
   ##
   # @return [String] Google Map url searching for current store's location
@@ -14,6 +15,10 @@ class Location < ActiveRecord::Base
     'https://www.google.com/maps/search/?api=1&query=' + URI.encode(full_address)
   end
   alias_method :google_maps_url, :google_map_url
+
+  def to_public_h
+    PUBLIC_ATTRIBUTES.map{ |attr| [attr, send(attr)] }.to_h.with_indifferent_access
+  end
 
   def to_liquid
     {

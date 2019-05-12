@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'team@bananastand.io'
+  default from: 'team@fera.ai'
   layout 'mailer'
 
   def from_system

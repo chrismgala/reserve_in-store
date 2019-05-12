@@ -13,7 +13,7 @@ class LocationMailer < ApplicationMailer
   end
 
   def staged_mail(params = {})
-    Rails.logger.info("Email being sent with params: #{params.inspect}") unless Rails.env.test?
+    ForcedLogger.log("Email being sent with params: #{params.inspect}") unless Rails.env.test?
     mail(params)
   end
 

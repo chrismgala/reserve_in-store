@@ -101,7 +101,7 @@ Rails.application.configure do
       :authentication => :plain,
       :enable_starttls_auto => true
   }
-  config.action_mailer.asset_host = ENV["BASE_APP_PATH"]
+  # config.action_mailer.asset_host = ENV["BASE_APP_PATH"]
   # config.action_controller.asset_host = ENV["CDN_BASE_PATH"]
 
   config.cache_store = :mem_cache_store,

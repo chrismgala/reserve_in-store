@@ -107,7 +107,7 @@ class StoreIntegrator
 {% endif %}
     "
       else
-        footer_script = "<!-- Reserve In-Store is Deactivated. Please contact our support team if you need help. -->"
+        footer_script = "<!-- #{RESERVE_IN_STORE_CODE} Deactivated. Please contact our support team if you need help. -->"
       end
 
       ensure_snippet!("snippets/reserveinstore_footer.liquid", footer_script)

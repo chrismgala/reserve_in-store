@@ -8,6 +8,6 @@ class ProductsCreateJob < ActiveJob::Base
     store.cached_api.product(webhook[:id])
 
     # TODO - for now just logging, later we will need to refresh cache
-    ForcedLogger.log("ProductsCreateJob called with: #{webhook.inspect}.", store: store.id)
+    ForcedLogger.log("ProductsCreateJob called.", store: store.id)
   end
 end

@@ -47,7 +47,7 @@ module Shopify
             flash[:notice] = (session['post_subscribe_success_message'] || "You've been subscribed successfully! Congrats!")
           end
 
-          Thread.new { ping_slack }
+          ping_slack
 
           redirect_to_correct_path(true)
         else
@@ -86,7 +86,10 @@ module Shopify
 
       plan_msg = store.trial_days_left > 0 ? "(#{store.trial_days_left}d trial)" : '(non-trial)'
 
-      Bananastand::SlackNotifier.ping_general("💵 #{store_markdown(store)} :long_arrow_right: *#{store.subscription.nice_price}* #{plan_msg}")
+      Slack::Notifier.new(ENV['SLACK_WEBHOOK_URL_GENERAL']).ping("💵 #{store_markdown(store)} :long_arrow_right: *#{store.subscription.nice_price}* #{plan_msg}")
+
+    rescue => e
+      ForcedLogger.(e, store: @store.try(:id))
     end
 
     def store_markdown(store)

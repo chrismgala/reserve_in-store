@@ -1,12 +1,15 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.1.1.0'; // Version of the JS library.
+    this.version = '1.2.0.0'; // Version of the JS library.
     var self = this;
     opts = opts || {};
+    opts.app = self;
+    self.opts = opts;
 
-    var config, api, storage, product, variant, reserveModal, chooselocationModal, variantLoader;
-
-    var btn, locationsManager;
+    var config, api, storage;
+    var product, variant, cart, stockStatus;
+    var reserveModal, chooselocationModal, variantLoader, locationsManager;
+    var reserveProductBtn, reserveCartBtn, stockStatusIndicator;
 
     var eventListeners = {
         "reserve_modal.show": [],
@@ -23,6 +26,7 @@ ReserveInStore.App = function(opts) {
         "variant.change": [],
         "product.change": [],
         "location.change": [],
+        "stock_status.change": [],
         "init": []
     };
 
@@ -67,33 +71,42 @@ ReserveInStore.App = function(opts) {
         reserveModal = new ReserveInStore.ReserveModal(componentOpts);
         chooselocationModal = new ReserveInStore.ChooseLocationModal(componentOpts);
 
-        btn = new ReserveInStore.ReserveBtn({
-            config: config.reserve_product_btn || {},
+        if (product) {
+            reserveProductBtn = new ReserveInStore.ReserveProductBtn({
+                config: config || {},
+                onClick: self.showReserveModal,
+                app: self
+            });
+
+            stockStatusIndicator = new ReserveInStore.StockStatusIndicator({
+                config: config.stock_status || {},
+                api: api,
+                product: product,
+                variant: variant,
+                app: self
+            });
+        }
+
+        reserveCartBtn = new ReserveInStore.ReserveCartBtn({
+            config: config.reserve_cart_btn || {},
             onClick: self.showReserveModal,
             app: self
         });
 
-        btn = new ReserveInStore.StockStatusIndicator({
-            config: config.stock_status || {},
-            onLocationClick: function(e) {
-                self.showChooseLocationModal()
-            },
-            api: api,
-            product: product,
-            variant: variant,
-            app: self
-        });
     };
 
     self.showChooseLocationModal = function(e) {
         if (typeof e !== 'undefined' && e.constructor === Event) {
             e.preventDefault();
         }
-        chooselocationModal.show();
+        chooselocationModal.show.apply(chooselocationModal, arguments);
     };
 
     self.showReserveModal = function() {
-        reserveModal.show();
+        if (typeof e !== 'undefined' && e.constructor === Event) {
+            e.preventDefault();
+        }
+        reserveModal.show.apply(reserveModal, arguments);
     };
 
     self.configure = function(_config) {
@@ -110,7 +123,26 @@ ReserveInStore.App = function(opts) {
             self.trigger('product.change', { old: original, new: variant, original: original });
         }
 
-        ReserveInStore.logger.log("Loaded product: ", product)
+        // ReserveInStore.logger.log("Set product: ", product)
+    };
+
+    self.getStockStatus = function(callback) {
+        if (!stockStatusIndicator) {
+            return callback(null);
+        }
+        return stockStatusIndicator.whenReady(function() {
+            callback(stockStatus);
+        });
+    };
+
+    self.setStockStatus = function(_stockStatus) {
+        var original = stockStatus;
+
+        stockStatus = _stockStatus;
+
+        if (original && original !== stockStatus) {
+            self.trigger('stock_status.change', { old: original, new: stockStatus, original: original });
+        }
     };
 
     self.setVariant = function(_variant) {
@@ -122,7 +154,13 @@ ReserveInStore.App = function(opts) {
             self.trigger('variant.change', { old: original, new: variant, original: original });
         }
 
-        ReserveInStore.logger.log("Loaded variant: ", variant)
+        // ReserveInStore.logger.log("Set variant: ", variant)
+    };
+
+    self.setCart = function(_cart) {
+        cart = _cart;
+
+        ReserveInStore.logger.log("Set cart: ", cart)
     };
 
     self.getLocation = function(callback) {
@@ -137,6 +175,7 @@ ReserveInStore.App = function(opts) {
 
     self.getProduct = function() { return product; };
     self.getVariant = function() { return variant; };
+    self.getCart = function() { return cart; };
 
     self.trigger = function(codes, data) {
         codes = codes.split(' ');
@@ -146,7 +185,7 @@ ReserveInStore.App = function(opts) {
 
             var listeners = eventListeners[code] || [];
 
-            ReserveInStore.logger.log("Event triggered ", code, data, listeners);
+            // ReserveInStore.logger.log("Event triggered ", code, data, listeners);
 
             for (var i = 0; i < listeners.length; i++) {
                 listeners[i](data);
@@ -163,7 +202,7 @@ ReserveInStore.App = function(opts) {
                 throw "Invalid event code requested: '"+eventCode+"'. Valid event codes are: " + validEventCodes;
             }
 
-            ReserveInStore.logger.log("Event listener attached", eventCode, callback);
+            // ReserveInStore.logger.log("Event listener attached", eventCode, callback);
 
             eventListeners[eventCode].push(callback);
         }
@@ -213,6 +252,8 @@ ReserveInStore.App = function(opts) {
             self.configure(object.data);
         } else if (object.action === "setProduct") {
             self.setProduct(object.data || object.product)
+        } else if (object.action === "setCart") {
+            self.setCart(object.data || object.cart)
         } else if (object.action === "showChooseLocationModal") {
             self.showChooseLocationModal()
         } else if (object.action === "showReserveModal") {

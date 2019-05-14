@@ -44,6 +44,9 @@
                       <%= f.email_field :customer_email, class: 'Polaris-TextField__Input', required: true, 'data-parsley-type': 'email' %>
                       <div class="Polaris-TextField__Backdrop"></div>
                     </div>
+                    <div class="Polaris-Labelled__HelpText">
+                      <strong>Note:</strong> The customer will receive a confirmation email after you save.
+                    </div>
                   </div>
 
                   <div class="Polaris-FormLayout__Item">
@@ -72,6 +75,9 @@
                   </div>
                   <div class="Polaris-Select__Backdrop"></div>
                 </div>
+                <div class="Polaris-Labelled__HelpText">
+                  <strong>Note:</strong> The store location will receive a new reservation email notification after your save.
+                </div>
               </div>
 
               <div role="group" class="Polaris-FormLayout--condensed">
@@ -79,7 +85,7 @@
                   <div class="Polaris-FormLayout__Item">
                     <div class="Polaris-Labelled__LabelWrapper">
                       <div class="Polaris-Label">
-                        <%= f.label :product_id, class: 'Polaris-Label__Text' %>
+                        <%= f.label :platform_product_id, class: 'Polaris-Label__Text' %>
                       </div>
                     </div>
                     <div class="Polaris-TextField">
@@ -91,12 +97,17 @@
                   <div class="Polaris-FormLayout__Item">
                     <div class="Polaris-Labelled__LabelWrapper">
                       <div class="Polaris-Label">
-                        <%= f.label :variant_id, class: 'Polaris-Label__Text' %>
+                        <%= f.label :platform_variant_id, class: 'Polaris-Label__Text' do %>
+                          Variant
+                        <% end %>
                       </div>
                     </div>
-                    <div class="Polaris-TextField">
-                      <%= f.text_field :platform_variant_id, class: 'Polaris-TextField__Input' %>
-                      <div class="Polaris-TextField__Backdrop"></div>
+                    <div class="Polaris-Select">
+                      <select class="Polaris-Select__Input" id="reservation_platform_variant_id" name="reservation[platform_variant_id]" required>
+                      </select>
+                      <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
+                      </div>
+                      <div class="Polaris-Select__Backdrop"></div>
                     </div>
                   </div>
                 </div>

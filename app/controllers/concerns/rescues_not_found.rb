@@ -12,7 +12,7 @@ module RescuesNotFound
   def bad_request!(message = nil)
     Rails.logger.info "A bad request was triggered manually from an ApplicationController"
 
-    raise ActionController::BadRequest.new('request', message.present? ? StandardError.new(message) : nil)
+    raise ActionController::BadRequest.new(message)
   end
 
   def not_found(exception = nil)

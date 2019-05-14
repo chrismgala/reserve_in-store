@@ -6,8 +6,10 @@ class Location < ActiveRecord::Base
   validates_associated :store
 
   PERMITTED_PARAMS = [:name, :email, :address, :country, :state, :city, :phone, :zip, :custom_html]
-  PUBLIC_ATTRIBUTES = [:id, :name, :address, :country, :state, :city, :zip, :google_maps_url]
+  PUBLIC_ATTRIBUTES = [:id, :name, :address, :country, :state, :city, :zip, :google_maps_url, :platform_location_id, :formatted_address, :details]
 
+
+  alias_attribute :custom_html, :details
   ##
   # @return [String] Google Map url searching for current store's location
   def google_map_url
@@ -22,15 +24,22 @@ class Location < ActiveRecord::Base
 
   def to_liquid
     {
-      'id' => id,
-      'platform_location_id' => platform_location_id,
-      'name' => name,
-      'google_map_url' => google_map_url,
-      'address' => address,
-      'formatted_address' => formatted_address,
-      'country' => country,
-      'custom_html' => custom_html
-    }
+      id: id,
+      platform_location_id: platform_location_id,
+      name: name,
+      google_map_url: google_map_url,
+      address: address,
+      formatted_address: formatted_address,
+      country: country,
+      city: city,
+      state: state,
+      province: state,
+      region: state,
+      phone: phone,
+      email: email,
+      custom_html: details, # legacy reverse-compatibility
+      details: details
+    }.stringify_keys
   end
 
   def full_address

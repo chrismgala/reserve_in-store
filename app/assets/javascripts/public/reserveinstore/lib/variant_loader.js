@@ -37,12 +37,18 @@ ReserveInStore.VariantLoader = function (opts) {
     };
 
     var findVariant = function(variantId) {
-        return $.grep(opts.app.getProduct().variants, function (obj) {
+        var prod = opts.app.getProduct();
+        if (!prod) return null;
+
+        return $.grep(prod.variants, function (obj) {
             return parseInt(obj.id) === parseInt(variantId);
         })[0];
     };
 
     var findVariantId = function() {
+        variantId = tryGetVariantIdFromURL();
+        if (variantId && variantId !== '') return parseInt(variantId);
+
         var formDataArray = $form.serializeArray();
         var variantIdEntry = formDataArray.find(function (obj) {
             return obj.name === "id";
@@ -54,10 +60,11 @@ ReserveInStore.VariantLoader = function (opts) {
             return variantId;
         }
 
-        variantId = tryGetVariantIdFromURL();
-        if (variantId && variantId !== '') return variantId;
+        var prod = opts.app.getProduct();
 
-        return parseInt(opts.app.getProduct().variants[0].id);
+        if (!prod) return null;
+
+        return parseInt(prod.variants[0].id);
     };
 
     /**

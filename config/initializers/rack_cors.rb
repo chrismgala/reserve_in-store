@@ -9,11 +9,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
              headers: :any,
              methods: [:get]
 
-    resource '/api/v2/public/*',
-             headers: :any,
-             methods: :any
-
-    resource '/api/v1/public/*',
+    resource '/api/v1/*',
              headers: :any,
              methods: :any
   end

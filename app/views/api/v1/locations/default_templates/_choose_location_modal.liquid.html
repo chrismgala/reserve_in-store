@@ -1,0 +1,46 @@
+<div class="reserveInStore-chooseLocationModal modal reserveInStore-modal-background">
+    <div class="reserveInStore-reserve-modal reserveInStore-modal--fitContents">
+
+        <header>
+            <span class="close reserveInStore-reserve-close">×</span>
+            <h2 class="ris-main-header">Choose a Location</h2>
+            <ul class="reserveInStore-error-ul" style="display:none;"></ul>
+        </header>
+
+        <div class="ris-location-options">
+            {% for location in locations %}
+            <div class="ris-location-option">
+                <div class="ris-location-content">
+                    <div class="ris-location-content-left">
+                        <input type="radio" value="{{ location.id }}"
+                               name="location_id"
+                               id="location_id-{{ location.id }}"  {% if location.id != 0 %}required{% endif %}>
+                    </div>
+                    <div class="ris-location-content-middle">
+                        <label class="ris-location-name"
+                               for="location_id-{{ location.id }}">
+                            {{ location.name }}
+                        </label>
+                        <div class="ris-location-address">
+                            {{ location.address }}<br>
+                            {{ location.formatted_address }}<br>
+                            {{ location.country }}
+                        </div>
+                        <div class="ris-location-details">
+                            {{ location.details }}
+                        </div>
+                    </div>
+                    <div class="ris-location-content-right">
+                        <a href="{{ location.google_map_url }}" target="_blank" class="ris-location-mapPin">
+                            <img class="ris-location-mapPin-img" src="{{ cdn_url }}map_pin.png">
+                            <span class="ris-location-mapPin-text">view on map</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+

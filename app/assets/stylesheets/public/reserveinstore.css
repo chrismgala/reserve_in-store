@@ -29,7 +29,7 @@
 
 /*Modal Content */
 .reserveInStore-reserve-modal {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', 'Roboto', 'Helvetica', sans-serif;
     position: absolute;
     background-color: #fefefe;
     border: 1px solid #888;
@@ -38,7 +38,7 @@
     -webkit-animation-duration: 0.4s;
     animation-name: reserveInStore-animatetop;
     animation-duration: 0.4s;
-    padding: 10px;
+    padding: 24px;
     max-width: 1200px;
     width: 93%;
     margin: auto;
@@ -47,174 +47,144 @@
     left: 0;
     right: 0;
     top: 40px;
+    color: #000000;
+}
+
+@media(max-width: 400px) {
+
+}
+
+.reserveInStore-reserve-modal h1,
+.reserveInStore-reserve-modal h2,
+.reserveInStore-reserve-modal h3,
+.reserveInStore-reserve-modal h4,
+.reserveInStore-reserve-modal h5,
+.reserveInStore-reserve-modal p {
+    font-family: 'Open Sans', 'Roboto', 'Helvetica', sans-serif;
+}
+
+.reserveInStore-reserve-modal h1,
+.reserveInStore-reserve-modal h2,
+.reserveInStore-reserve-modal h3,
+.reserveInStore-reserve-modal h4,
+.reserveInStore-reserve-modal h5 {
+    color: #000000;
 }
 
 .reserveInStore-reserve-modal * {
     box-sizing: border-box;
     margin: 0;
-    color: #000000;
     height: auto;
     font-style: normal;
     letter-spacing: 0;
 }
 
-.reserveInStore-reserve-modal .ris-location-block * {
-    box-sizing: border-box;
-    margin: 0;
-    color: #000000;
-    height: auto;
+
+.ris-cart-item {
+    background-color: #e2e2e2;
+    padding: 18px 24px;
+    margin-bottom: 18px;
+    color: black;
 }
+
+.ris-cart-item-total {
+    font-size: 1.5em;
+    text-align: right;
+}
+
+.ris-cart-item-title {
+    text-align: left;
+    padding-right: 12px;
+    line-height: 100%;
+    font-size: 14px;
+}
+.ris-cart-item {
+    display: table;
+    width: 100%;
+}
+
+.ris-cart-item-variant {
+    font-size: 13px;
+    color: #525252;
+}
+.ris-cart-item > * {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+
 
 .reserveInStore-reserve-modal .ris-columns {
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
-    margin: 5px 0;
+    padding-left: 24px;
+    padding-right: 24px;
 }
+
 
 .reserveInStore-reserve-modal .ris-column {
     flex: 1;
-    margin: 2px;
-    padding: 30px;
+    padding: 0 32px;
+}
+
+@media (max-width: 400px) {
+
+    .reserveInStore-reserve-modal .ris-columns {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    .reserveInStore-reserve-modal .ris-column {
+        padding: 0;
+    }
+}
+@media(max-width: 980px) {
+    .reserveInStore-reserve-modal .ris-column {
+        padding-top: 32px;
+        padding-bottom: 36px;
+    }
 }
 
 .reserveInStore-reserve-modal .ris-column:first-child {
-    margin-left: 0;
+    padding-left: 0;
 }
 
 .reserveInStore-reserve-modal .ris-column:last-child {
-    margin-right: 0;
+    padding-right: 0;
 }
 
-@media screen and (max-width: 980px) {
-    .ris-columns .ris-column {
-        margin-bottom: 5px;
-        flex-basis: 40%;
-    }
-
-    .ris-columns .ris-column:nth-last-child(2) {
-        margin-right: 0;
-    }
-
-    .ris-columns .ris-column:last-child {
-        flex-basis: 100%;
-        margin: 0;
-    }
-}
-
-@media screen and (max-width: 680px) {
-    .ris-columns .ris-column {
-        flex-basis: 100%;
-        margin: 0 0 5px 0;
-    }
-}
 
 .reserveInStore-reserve-modal header {
-    padding: 0 15px;
+    position: relative;
+    display: block;
+    padding-bottom: 28px;
 }
 
 .reserveInStore-reserve-modal .ris-main-header {
-    font-family: 'Roboto', sans-serif;
     font-weight: 300;
     text-align: center;
-    font-size: 39px;
-    padding-top: 40px;
+    font-size: 32px;
+    margin-top: 0;
     text-transform: none;
+    padding-top: 12px;
 }
+
 
 .reserveInStore-reserve-modal .ris-instruction {
     text-align: center;
-    padding-bottom: 20px;
     color: grey;
 }
 
 .reserveInStore-reserve-modal .ris-header-text {
-    font-family: 'Roboto', sans-serif;
     color: #000000;
     text-transform: uppercase;
     border-bottom: 1px solid grey;
     margin-bottom: 25px;
     padding-bottom: 8px;
-    font-size: larger;
+    font-size: 18px;
     font-weight: 300;
 }
 
-.reserveInStore-reserve-modal .ris-location-block {
-    margin-bottom: 1.6em;
-}
-
-.reserveInStore-reserve-modal .ris-location-block:last-child {
-    margin-bottom: 0;
-}
-
-.ris-location-block .ris-location-label {
-    display: inline-block;
-    text-transform: uppercase;
-    font-weight: bold;
-    font-size: 0.8em;
-    margin-left: 4px;
-}
-
-.ris-location-block .ris-location-description {
-    padding-left: 22px;
-}
-
-.ris-location-block .ris-view-on-map {
-    margin-top: 1.6em;
-    text-align: center;
-    font-size: 0.8em;
-    float: right;
-}
-
-.ris-location-block .ris-view-on-map img {
-    display: block;
-    margin: 0px auto;
-    width: 3em;
-}
-
-.ris-location-block.ris-view-on-map a {
-    text-decoration: underline;
-    color: #adadad;
-}
-
-.ris-location-block ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-/* For custom html code */
-.ris-location-block .ris-weekDays ul li:first-child {
-    padding-left: 0px;
-}
-
-.ris-location-block .ris-weekDays ul li:not(:last-child) {
-    border-right: thin solid black;
-}
-
-.ris-location-block .ris-weekDays ul li {
-    float: left;
-    padding-left: 14px;
-    padding-right: 14px;
-}
-
-.ris-location-block p {
-    font-size: 0.8em;
-    text-transform: uppercase;
-    line-height: 1.6em;
-}
-
-.ris-location-block .ris-row {
-    margin-top: 0;
-    margin-bottom: 8px;
-}
-
-/* Clearfix, in case user inputs floated elements */
-.ris-location-block .ris-row:after {
-    content: " ";
-    display: block;
-    clear: both;
-}
 
 .reserveInStore-reserve-modal .ris-contact-field {
     margin-bottom: 15px;
@@ -244,20 +214,8 @@
     margin-bottom: 0;
 }
 
-.reserveInStore-reserve-modal .ris-product-detail {
-    background-color: #e2e2e2;
-    padding: 30px;
-    margin-bottom: 18px;
-}
-
-.reserveInStore-reserve-modal .ris-product-detail .ris-product-price {
-    font-size: 1.5em;
-    float: right;
-}
-
 .reserveInStore-form-submit {
     margin-top: 12px;
-    margin-bottom: 12px;
     width: 100%;
     background-color: #333333;
     color: white;
@@ -282,7 +240,7 @@
 }
 
 .reserveInStore-reserve-modal .ris-text-block {
-    margin: 20px 0;
+    margin: 12px 0;
 }
 
 /* Add Animation */
@@ -311,9 +269,14 @@
 /*The Close Button */
 .reserveInStore-reserve-close {
     color: #000000;
-    float: right;
+    position: absolute;
     font-size: 28px;
     font-weight: bold;
+    right: -8px;
+    top: -17px;
+    line-height: 100%;
+    display: block;
+    height: 0;
 }
 
 .reserveInStore-reserve-close:hover,
@@ -343,6 +306,7 @@
 
 /* Success modal after submitting an In-Store reservation */
 .reserveInStore-success-modal {
+    font-family: 'Open Sans', 'Roboto', 'Helvetica', sans-serif;
     width: 350px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -353,13 +317,10 @@
     padding: 25px 25px 15px;
     text-align: center;
 }
-
 .reserveInStore-success-modal h1 {
-    font-family: 'Montserrat', sans-serif;
 }
 
 .reserveInStore-success-modal p {
-    font-family: 'Open Sans', sans-serif;
     text-align: left;
 }
 
@@ -527,7 +488,7 @@
 }
 
 .reserveInStore-chooseLocationModal .reserveInStore-reserve-modal {
-    max-width: 500px;
+    max-width: 400px;
 }
 
 .reserveInStore-stockStatus {
@@ -550,4 +511,157 @@
 .reserveInStore-stockStatus-locationName {
     text-decoration: underline;
     text-decoration-color: #c5c5c5;
+}
+
+
+img.ris-location-mapPin-img {
+    height: 32px;
+}
+
+.ris-location-content {
+    display: table;
+    width: 100%;
+}
+
+.ris-location-content-left, .ris-location-content-right, .ris-location-content-middle {
+    display: table-cell;
+    vertical-align: top;
+}
+
+
+
+span.ris-location-mapPin-text {
+    font-size: 12px;
+    display: block;
+}
+
+a.ris-location-mapPin {
+    display: block;
+}
+
+.ris-location-content-right {
+    text-align: center;
+    width: 82px;
+}
+
+.ris-location-option {
+    font-size: 13px;
+}
+
+.ris-location-option:not(:last-child) {
+    margin-bottom: 24px;
+}
+
+.ris-location-content-left {
+    width: 24px;
+}
+
+.ris-location-content-middle {
+    padding-right: 6px;
+    font-size: 12px;
+}
+
+label.ris-location-name {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.ris-location-address {
+    line-height: 120%;
+}
+
+.ris-location-details {
+    font-size: 10px;
+    color: #353535;
+    margin-top: 2px;
+}
+
+.ris-faq:not(:last-child) {
+    margin-bottom: 12px;
+}
+
+.ris-faq-heading {
+
+}
+
+h4.ris-faq-heading {
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.ris-faq {
+    font-size: 13px;
+}
+
+h5.ris-faq-question {
+    margin-bottom: 2px;
+}
+
+.ris-faq-answer {
+    line-height: 120%;
+    font-size: 11px;
+    color: #3a3a3a;
+}
+
+.ris-faqs {
+    margin-top: 22px;
+}
+
+.ris-noteAfterCart {
+    line-height: 120%;
+    font-size: 12px;
+}
+
+@media screen and (max-width: 980px) {
+    .ris-columns .ris-column {
+        margin-bottom: 5px;
+        flex-basis: 40%;
+        padding-top: 0;
+    }
+
+
+    .ris-columns .ris-column:last-child {
+        flex-basis: 100%;
+        margin: 0;
+    }
+    .reserveInStore-reserve-modal .ris-column:last-child {
+        padding-left: 0;
+    }
+    .ris-columns .ris-column:nth-last-child(2) {
+        padding-right: 0;
+    }
+
+}
+
+@media screen and (max-width: 680px) {
+    .ris-columns .ris-column {
+        flex-basis: 100%;
+        margin: 0 0 5px 0;
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .reserveInStore-reserve-modal .ris-instruction {
+        line-height: 100%;
+        font-size: 12px;
+    }
+
+    .reserveInStore-reserve-modal header {
+        padding-bottom: 18px;
+    }
+}
+@media(max-width: 500px) {
+
+    .reserveInStore-reserve-modal .ris-main-header {
+        font-size: 22px;
+    }
+
+    .ris-location-address {
+        font-size: 10px;
+    }
+    .reserveInStore-reserve-modal .ris-header-text {
+        font-size: 16px;
+        margin-bottom: 18px;
+        padding-bottom: 4px;
+    }
 }

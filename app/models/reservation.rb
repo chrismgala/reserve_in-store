@@ -3,6 +3,7 @@ class Reservation < ActiveRecord::Base
   belongs_to :store
   belongs_to :location
 
+  before_validation :populate_cart_attribute
   validates :customer_name, :customer_email, presence: true
   validates_associated :store, :location
   validates :customer_email, format: /\A[^@\s]+@[^@\s]+\z/
@@ -12,7 +13,7 @@ class Reservation < ActiveRecord::Base
   after_destroy :trigger_destroy_webhook!
 
   PERMITTED_PARAMS = [:customer_name, :customer_email, :customer_phone, :location_id, :platform_product_id,
-                      :platform_variant_id, :instructions_from_customer, :fulfilled, :line_item]
+                      :platform_variant_id, :instructions_from_customer, :fulfilled, :line_item, :cart => {}]
 
   def customer_first_name
     customer_name.to_s.split(' ').first
@@ -25,21 +26,23 @@ class Reservation < ActiveRecord::Base
   ##
   # Save the reservation, and send notification emails to the customer and the store owner
   # @return [Boolean] save result
-  def save_and_email(product_info)
-    @product_info = product_info
+  def save_and_email
     return false unless save
-    send_notification_emails
+    send_notification_emails!
     true
   end
 
   ##
   # @param [String] shopify_product_link - the link to put in our liquid params
   # @return [Text] - rendered email template
-  def rendered_email_template(shopify_product_link)
-    email_template = store.email_template || Store::default_email_template
-    Liquid::Template.parse(email_template).render(email_liquid_params(shopify_product_link)).html_safe
+  def rendered_email_template
+    tpl = store.customer_confirm_email_tpl_in_use
+    Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
   end
 
+  def cart
+    (super.presence || build_legacy_cart).to_h.with_indifferent_access
+  end
 
   def to_api_h
     {
@@ -51,24 +54,107 @@ class Reservation < ActiveRecord::Base
         phone: customer_phone,
         instructions: instructions_from_customer
       },
-      cart: {
-        items: [ {
-                   product_id: platform_product_id,
-                   variant_id: platform_variant_id
-                 }]
-      },
+      cart: cart,
       fulfilled: fulfilled?,
       created_at: created_at,
       updated_at: updated_at
-
     }
   end
 
+  ##
+  # @deprecated Temporary method. Can be removed by May 20, 2019
+  def populate_cart_attribute
+    return false if attributes['cart'].present? || platform_product_id.blank?
+
+    legacy_cart = self.cart = build_legacy_cart
+    legacy_cart[:items].map do |item|
+      product = store.cached_api.product(item[:product_id])
+      variant = product.variants.find{ |v| "#{v.id}" == "#{item[:variant_id]}" }
+      item.merge!(product_title: product.title)
+      item.merge!(variant_title: variant.title, total: variant.price)
+      item
+    end
+    self.cart = legacy_cart
+  end
+
+  ##
+  # Send emails to confirm with the customer and notify the store owner
+  def send_notification_emails!
+    ReservationMailer.location_notification(store: store, reservation: self).deliver_later
+    ReservationMailer.customer_confirmation(store: store, reservation: self).deliver_later
+  end
+
+  ##
+  # @return [Hash] - render the email liquid with this hash
+  def email_liquid_params
+    attributes.merge({
+                       customer: {
+                         first_name: customer_first_name,
+                         last_name: customer_last_name,
+                         email: customer_email,
+                         phone: customer_phone
+                       },
+                       location: location.to_liquid,
+                       store: {
+                         name: store.name,
+                         website_url: store.website_url
+                       }
+                     }.deep_stringify_keys)
+  end
+
+  ##
+  # @return [Hash] - liquid params used by JS email previewer
+  def preview_email_liquid_params
+    {
+      customer: {
+        first_name: "John",
+        last_name: "Doe",
+        email: "john.doe@example.com",
+        phone: "+1-123-456-7890"
+      },
+      location: {
+        name: "Store 3",
+        address: "1234 Test St.",
+        city: "City",
+        state: "State",
+        country: "Country",
+        email: "location@example.com",
+        phone: "+1-800-123-1234"
+      },
+      store: {
+        name: store.name,
+        website_url: store.website_url
+      },
+      instructions_from_customer: "Monday at 5:30pm",
+      cart: {
+        items: [
+                 {
+                   product_title: "Sample Product Name",
+                   variant_title: "Variant Name",
+                   total: 1234,
+                   total_formatted: store.currency(12.34)
+                 }
+               ]
+      }
+    }.deep_stringify_keys
+  end
 
   private
 
+  def build_legacy_cart
+    return {} unless platform_product_id.present?
+
+    {
+      items: [ {
+                 product_id: platform_product_id,
+                 variant_id: platform_variant_id
+               }]
+    }
+  end
+
   ##
   # Creates a link for the reservation's product
+  # @deprecated Uses old data. remove by May 31, 2019
   # @return [String] HTML link to the shopify product OR a raw "unknown product" string
   def shopify_product_link!
     if @product_info.present?
@@ -80,6 +166,7 @@ class Reservation < ActiveRecord::Base
 
   ##
   # Creates the product variant title
+  # @deprecated Uses old data. remove by May 31, 2019
   # @return [String] title of the product variant
   def shopify_product_variant_title!
     if @product_info[:product_title].present?
@@ -93,28 +180,6 @@ class Reservation < ActiveRecord::Base
     end
   end
 
-  ##
-  # Send emails to confirm with the customer and notify the store owner
-  def send_notification_emails
-    CustomerMailer.reserve_confirmation({store: store, reservation: self, shopify_product_link: shopify_product_link!}).deliver_later
-    LocationMailer.new_reservation({store: store, reservation: self, shopify_product_link: shopify_product_link!}).deliver_later
-  end
-
-  ##
-  # @param [String] shopify_product_link - the link to put in our liquid params
-  # @return [Hash] - render the email liquid with this hash
-  def email_liquid_params(shopify_product_link)
-    {'customer_first_name' => customer_first_name,
-     'customer_last_name' => customer_last_name,
-     'product_link' => shopify_product_link,
-     'location_name' => location.name,
-     'location_address' => location.address,
-     'location_city' => location.city,
-     'location_state' => location.state,
-     'location_country' => location.country,
-     'store_link' => store.shopify_link,
-     'reservation_time' => instructions_from_customer}
-  end
 
   def trigger_create_webhook!
     TriggerWebhookJob.perform_later(store_id: store_id, topic: 'reservations/create', object_id: id, object_klass: self.class.to_s)

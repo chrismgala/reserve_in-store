@@ -1,5 +1,6 @@
 module Shopify
-  class CachedApi < Api
+  class CachedApi < ::Shopify::Api
+
     def clear_product_cache(id)
       Rails.cache.delete("stores/#{store.id}/cached_shopify_api/product-#{id}")
       Rails.cache.delete("stores/#{store.id}/inventory_fetcher/product-#{id}")

@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <%= render partial: 'shared_mailer/head' %>
-  <%= yield %>
+  <head>
+    <%= render partial: 'shared_mailer/head' %>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
 </html>

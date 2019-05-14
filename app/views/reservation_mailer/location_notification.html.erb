@@ -8,30 +8,40 @@
         <table>
           <tr>
             <td>
-              <%= render partial: 'shared_mailer/fera_header', locals: {title: @reservation.location.name} %>
+              <%= render partial: 'shared_mailer/email_header', locals: {title: "New Reservation Request" } %>
               <p>
-                <%= "#{@reservation.customer_name} has submitted a new reservation request for "%>
-                <%= @shopify_product_link.html_safe %>
+                <%= "#{@reservation.customer_name} has submitted a new reservation request:"%>
               </p>
             </td>
           </tr>
           <tr style="margin-top: 20px">
             <td>
+
+              <hr style="max-width: 100px;">
+
+              <h4>Items:</h4>
+              <ul>
+                <% @reservation.cart[:items].to_a.each do |item| %>
+                  <li><%= item[:product_title] %> (<%= item[:variant_title] %>)</li>
+                <% end %>
+              </ul>
+
               <% if @reservation.instructions_from_customer.present? %>
-                <h4>Date for Reservation</h4>
+                <h4>Pick-up Date/Time:</h4>
                 <p>
                   <%= @reservation.instructions_from_customer %>
                 </p>
-                <hr style="max-width: 100px;">
               <% end %>
+
               <h4>Contact Information</h4>
               <p>
-                <%= @reservation.customer_email %>
+                <%= @reservation.customer_name %>
+                <br><%= @reservation.customer_email %>
                 <% if @reservation.customer_phone.present? %>
                   <br><%= number_to_phone(@reservation.customer_phone) %>
                 <% end %>
               </p>
-              <hr style="max-width: 100px;">
+
               <h4>Store Location</h4>
               <p>
                 <%= @reservation.location.name %><br>
@@ -39,6 +49,11 @@
                 <%= "#{@reservation.location.city} #{@reservation.location.state}" %><br>
                 <%= @reservation.location.country %>
               </p>
+
+              <hr style="max-width: 100px;">
+
+              <p>
+                <a href="<%= reservation_url(@reservation, referrer: 'email') %>">Click here view details or mark this reservation as fulfilled.</a></p>
             </td>
           </tr>
           <tr style="margin-top: 20px">

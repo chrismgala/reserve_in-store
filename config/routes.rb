@@ -20,8 +20,10 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'locations/modal' => 'locations#modal'
+      match 'locations/modal' => 'locations#modal', via: [:post, :get]
+
       get 'locations' => 'locations#index'
-      get 'reservations/modal' => 'reservations#modal'
+      match 'reservations/modal' => 'reservations#modal', via: [:post, :get]
       get 'inventory' => 'inventory#index'
       post 'reservations' => 'reservations#create'
       get 'reservations' => 'reservations#index'

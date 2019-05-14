@@ -3,6 +3,7 @@ ReserveInStore.Api = function (opts) {
     var $ = ReserveInStore.Util.$();
     opts = opts || {};
     var config;
+    var apiClientDescriptor = "reserveinstore.js-" + opts.app.version;
 
     var init = function () {
         if (opts.storePublicKey) {
@@ -76,15 +77,7 @@ ReserveInStore.Api = function (opts) {
     self.getInventory = function (params, successCallback, errorCallback) {
         successCallback = successCallback || function () { };
 
-        $.ajax({
-            url: self.urlPath("inventory.json") + "&" + $.param(params),
-            success: function (data, textStatus, jqXHR) {
-                successCallback(data, textStatus, jqXHR);
-            },
-            error: function (response) {
-                if (errorCallback) errorCallback(response);
-            }
-        });
+        return self.get('inventory.json', params, successCallback, errorCallback)
     };
 
     /**
@@ -94,17 +87,7 @@ ReserveInStore.Api = function (opts) {
      * @param errorCallback {function} (optional) Callback to run if the request failed.
      */
     self.getLocations = function (params, successCallback, errorCallback) {
-        successCallback = successCallback || function () { };
-
-        $.ajax({
-            url: self.urlPath("locations.json") + "&" + $.param(params),
-            success: function (data, textStatus, jqXHR) {
-                successCallback(data, textStatus, jqXHR);
-            },
-            error: function (response) {
-                if (errorCallback) errorCallback(response);
-            }
-        });
+        return self.get('locations.json', params, successCallback, errorCallback)
     };
 
 
@@ -115,30 +98,35 @@ ReserveInStore.Api = function (opts) {
      * @param errorCallback {function} (optional) Callback to run if the request failed.
      */
     self.getLocationsModal = function (params, successCallback, errorCallback) {
-        successCallback = successCallback || function () {
-        };
-        $.ajax({
-            url: self.urlPath("locations/modal") + "&" + $.param(params),
-            success: function (data, textStatus, jqXHR) {
-                successCallback(data, textStatus, jqXHR);
-            },
-            error: function (response) {
-                if (errorCallback) errorCallback(response);
-            }
-        });
+        return self.get('locations/modal', params, successCallback, errorCallback)
     };
 
     /**
      * Request modal via the API /api/v1/modal
-     * @param params URL params to send with the GET request.
+     * @param data {object} Posted data
+     * @param params {object} URL params to send with the GET request.
      * @param successCallback {function} (optional) Callback to run if the request is successful. This will not be called if the request fails.
      * @param errorCallback {function} (optional) Callback to run if the request failed.
      */
-    self.getModal = function (params, successCallback, errorCallback) {
-        successCallback = successCallback || function () {
-        };
-        $.ajax({
-            url: self.urlPath("reservations/modal") + "&" + $.param(params),
+    self.getReservationModal = function (data, params, successCallback, errorCallback) {
+        return self.postJson('reservations/modal.json', data, params, successCallback, errorCallback);
+    };
+
+    /**
+     * Push a new reservation to the server via the /api/v1/store_reservations
+     * @param formData {object} Posted form data
+     * @param successCallback {function} (optional) Callback to run if the request is successful. This will not be called if the request fails.
+     * @param errorCallback {function} (optional) Callback to run if the request failed.
+     */
+    self.createReservation = function (formData, successCallback, errorCallback) {
+        return self.postJson('reservations.json', formData, {}, successCallback, errorCallback);
+    };
+
+    self.get = function (path, params, successCallback, errorCallback) {
+        successCallback = successCallback || function () { };
+        return $.ajax({
+            url: self.urlPath(path, params),
+            headers: { 'API-CLIENT': apiClientDescriptor },
             success: function (data, textStatus, jqXHR) {
                 successCallback(data, textStatus, jqXHR);
             },
@@ -148,20 +136,16 @@ ReserveInStore.Api = function (opts) {
         });
     };
 
-    /**
-     * Push a new reservation to the server via the /api/v1/store_reservations
-     * @param params {Object} data to send with the POST request.
-     * @param successCallback {function} (optional) Callback to run if the request is successful. This will not be called if the request fails.
-     * @param errorCallback {function} (optional) Callback to run if the request failed.
-     */
-    self.createReservation = function (params, successCallback, errorCallback) {
-        successCallback = successCallback || function () {
-        };
-        $.ajax({
-            type: "POST",
-            method: "POST",
-            url: self.urlPath("reservations"),
-            data: params,
+    self.postJson = function (path, data, params, successCallback, errorCallback) {
+        successCallback = successCallback || function () { };
+        return $.ajax({
+            method: 'POST',
+            type: 'POST',
+            data: JSON.stringify(data),
+            headers: { 'API-CLIENT': apiClientDescriptor },
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: self.urlPath(path, params),
             success: function (data, textStatus, jqXHR) {
                 successCallback(data, textStatus, jqXHR);
             },
@@ -174,11 +158,15 @@ ReserveInStore.Api = function (opts) {
     /**
      * Get the API url that we need to use given the store API url and public key.
      * @param uri {string} URI path we want to access on the server. IE: 'modal' (no leading slash needed)
+     * @param params {object} Data params
      * @returns {string}
      */
-    self.urlPath = function (uri) {
+    self.urlPath = function (uri, params) {
         uri = uri || "";
-        return config.apiUrl + '/api/v1/' + uri + '?store_pk=' + config.storePublicKey;
+        params = params || {};
+        params.store_pk = config.storePublicKey;
+
+        return config.apiUrl + '/api/v1/' + uri + '?' + $.param(params);
     };
 
     init();

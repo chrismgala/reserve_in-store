@@ -21,7 +21,12 @@ class IframePreviewer {
             self._waitForFrameToLoad(function() {
                 self.$iframeBody = self._$iframe.contents().find('body');
                 self.$iframeHtml = self._$iframe.contents().find('html');
-                self.$iframeBody.append(self.$container);
+
+                if (self.$iframeBody.find('#body').length > 0) {
+                    self.$iframeBody.find('#body').append(self.$container);
+                } else {
+                    self.$iframeBody.append(self.$container);
+                }
                 self.$iframeBody.append(self.$cssContainer);
 
                 self._$iframe.show();

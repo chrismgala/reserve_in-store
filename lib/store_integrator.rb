@@ -91,20 +91,19 @@ class StoreIntegrator
 
       if store.active?
         footer_script = "
-{% if product and product.available %}
 <!-- // BEGIN // #{RESERVE_IN_STORE_CODE} - DO NOT MODIFY // -->
 <script type=\"application/javascript\">
 (function(){
   window.reserveInStore = window.reserveInStore || window.__reserveInStore || [];
   window.reserveInStore.push('configure', #{store.footer_config.to_json});
-  window.reserveInStore.push('setProduct', {{ product | json }});
+  {% if product and product.available %}window.reserveInStore.push('setProduct', {{ product | json }});{% endif %}
+  {% if cart %}window.reserveInStore.push('setCart', {{ cart | json }}); {% endif %}
   #{js_preloader}
 })();</script>
 <link crossorigin=\"anonymous\" media=\"all\" rel=\"stylesheet\" href=\"#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}/reserveinstore.css\">
-<link href=\"https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto:300\" rel=\"stylesheet\">
+<link href=\"https://fonts.googleapis.com/css?family=Open+Sans\" rel=\"stylesheet\">
 #{cached_css}
 <!-- // END // #{RESERVE_IN_STORE_CODE} // -->
-{% endif %}
     "
       else
         footer_script = "<!-- #{RESERVE_IN_STORE_CODE} Deactivated. Please contact our support team if you need help. -->"

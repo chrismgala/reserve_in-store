@@ -16,10 +16,11 @@ class Store < ActiveRecord::Base
   PERMITTED_PARAMS = [
     :top_msg, :success_msg, :show_phone, :show_instructions_from_customer, :active,
     :customer_confirm_email_tpl, :customer_confirm_email_tpl_enabled,
-    :reserve_product_modal_tpl, :reserve_product_modal_tpl_enabled,
+    :reserve_modal_tpl, :reserve_modal_tpl_enabled,
     :choose_location_modal_tpl, :choose_location_modal_tpl_enabled,
     :reserve_modal_faq_tpl, :reserve_modal_faq_tpl_enabled,
     :reserve_product_btn_tpl, :reserve_product_btn_tpl_enabled, :reserve_product_btn_selector, :reserve_product_btn_action,
+    :reserve_cart_btn_tpl, :reserve_cart_btn_tpl_enabled, :reserve_cart_btn_selector, :reserve_cart_btn_action,
     :stock_status_tpl, :stock_status_tpl_enabled, :stock_status_selector, :stock_status_action, :stock_status_behavior_when_stock_unknown, :stock_status_behavior_when_no_location_selected, :stock_status_behavior_when_no_nearby_locations_and_no_location,
     :custom_css, :custom_css_enabled
   ]
@@ -37,8 +38,20 @@ class Store < ActiveRecord::Base
   def url
     "https://#{shopify_domain}"
   end
+
+  def website_url
+    "https://#{shopify_settings[:domain].to_s.gsub(/https?:\/\//i, '')}"
+  end
   alias_method :website_url, :url
-  alias_method :company_website, :url
+  alias_method :company_website, :website_url
+
+  def website_link
+    "<a href=\"#{website_url}\" target=\"_blank\">#{name}</a>"
+  end
+
+  def support_email
+    shopify_settings[:customer_email].presence || email
+  end
 
   def email
     shopify_settings[:email].to_s
@@ -63,7 +76,8 @@ class Store < ActiveRecord::Base
   # Swap out our template to be nil if they are defaulted
   def nil_default_templates
     # Reset blank templates to `nil` so they don't get stuck in the DB
-    [:stock_status_tpl, :reserve_product_btn_tpl, :reserve_modal_faq_tpl, :choose_location_modal_tpl, :reserve_product_modal_tpl, :customer_confirm_email_tpl].each do |tpl_attr|
+    tpl_attr = attributes.keys.find_all{|k| k.to_s =~ /^.+_tpl$/i }.map{ |k| k.to_sym }
+    tpl_attr.each do |tpl_attr|
       new_val = send(tpl_attr)
       next if new_val.nil?
 
@@ -122,9 +136,12 @@ class Store < ActiveRecord::Base
     yield(self) if block_given?
   end
 
+  def shopify_app_path
+    ENV['SHOPIFY_APP_PATH_TOKEN'].presence || 'reserve-in-store-by-fera'
+  end
 
-  def shopify_link
-    "<a href='https://#{shopify_domain}'>#{name}</a>"
+  def shopify_app_link
+    "<a href=\"https://#{shopify_domain}/admin/apps/#{shopify_app_path}\">#{name}</a>"
   end
 
   ##
@@ -171,19 +188,31 @@ class Store < ActiveRecord::Base
       end
     end
 
-    ForcedLogger.log("Ensuring all webhooks are installed...")
+    ForcedLogger.log("Ensuring all webhooks are installed...", store: id)
     ShopifyApp::WebhooksManager.queue(
       shopify_domain,
       shopify_token,
       ShopifyApp.configuration.webhooks
     )
 
-    ForcedLogger.log("Ensuring all scripts are installed...")
+    ForcedLogger.log("Ensuring all scripts are installed...", store: id)
     ShopifyApp::ScripttagsManager.queue(
       shopify_domain,
       shopify_token,
       ShopifyApp.configuration.scripttags
     )
+
+    ForcedLogger.log("Updating reservation modals with proper cart data", store: id)
+    reservations.where(cart: nil).find_each do |reservation|
+      reservation.populate_cart_attribute
+      if reservation.changed?
+        if reservation.save
+          ForcedLogger.log("Updated reservation to contain cart data.", store: id, reservation: reservation.id)
+        else
+          ForcedLogger.warn("Failed to update reservation to contain cart data: #{reservation.errors.full_messages.inspect}", store: id, reservation: reservation.id)
+        end
+      end
+    end
 
     UpdateFooterJob.perform_later(self.id)
 
@@ -198,7 +227,7 @@ class Store < ActiveRecord::Base
   def self.default_customer_confirm_email_tpl
     return @default_customer_confirm_email_tpl if @default_customer_confirm_email_tpl.present? && !Rails.env.development?
 
-    @default_customer_confirm_email_tpl = ApplicationController.new.render_to_string(partial: 'customer_mailer/customer_confirm_email_tpl')
+    @default_customer_confirm_email_tpl = ApplicationController.new.render_to_string(partial: 'reservation_mailer/default_templates/customer_confirm_email_tpl')
   end
   def self.default_email_template; default_customer_confirm_email_tpl; end # Alias for reverse compatibility, can be removed probably by July 1, 2019
   def default_customer_confirm_email_tpl; self.class.default_customer_confirm_email_tpl; end
@@ -214,22 +243,6 @@ class Store < ActiveRecord::Base
   end
   alias_method :email_template_in_use, :customer_confirm_email_tpl_in_use # Alias for reverse compatibility, can be removed probably by July 1, 2019
 
-  ##
-  # @return [Hash] - liquid params used by JS email previewer
-  def preview_email_liquid_params
-    {'customer_first_name' => "John",
-     'customer_last_name' => "Doe",
-     'product_link' => "<a href=\"#\">Apple (Red)</a>",
-     'location_name' => "Store 3",
-     'location_address' => "1234 Test St.",
-     'location_city' => "City",
-     'location_state' => "State",
-     'location_country' => "Country",
-     'store_link' => "<a href=\"#\">Store 3</a>",
-     "reservation_time" => "Monday at 5:30pm"}
-  end
-
-
 
   ######################################################
   # For FAQ TPL
@@ -238,7 +251,7 @@ class Store < ActiveRecord::Base
   def self.default_reserve_modal_faq_tpl
     return @default_reserve_modal_faq_tpl if @default_reserve_modal_faq_tpl.present? && !Rails.env.development?
 
-    @default_reserve_modal_faq_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/faq/default_tpl.liquid.html')
+    @default_reserve_modal_faq_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/default_templates/faq.liquid.html')
   end
   def default_reserve_modal_faq_tpl; self.class.default_reserve_modal_faq_tpl; end
   def reserve_modal_faq_tpl_in_use
@@ -254,17 +267,17 @@ class Store < ActiveRecord::Base
   ######################################################
   # For Reserve Modal TPL
 
-  def self.default_reserve_product_modal_tpl
-    return @default_reserve_product_modal_tpl if @default_reserve_product_modal_tpl.present? && !Rails.env.development?
+  def self.default_reserve_modal_tpl
+    return @default_reserve_modal_tpl if @default_reserve_modal_tpl.present? && !Rails.env.development?
 
-    @default_reserve_product_modal_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/modal/default_tpl.liquid.html')
+    @default_reserve_modal_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/default_templates/reserve_modal.liquid.html')
   end
-  def default_reserve_product_modal_tpl; self.class.default_reserve_product_modal_tpl; end
-  def reserve_product_modal_tpl_in_use
-    if reserve_product_modal_tpl_enabled?
-      reserve_product_modal_tpl.to_s
+  def default_reserve_modal_tpl; self.class.default_reserve_modal_tpl; end
+  def reserve_modal_tpl_in_use
+    if reserve_modal_tpl_enabled?
+      reserve_modal_tpl.to_s
     else
-      self.class.default_reserve_product_modal_tpl
+      self.class.default_reserve_modal_tpl
     end
   end
 
@@ -275,7 +288,7 @@ class Store < ActiveRecord::Base
   def self.default_choose_location_modal_tpl
     return @default_choose_location_modal_tpl if @default_choose_location_modal_tpl.present? && !Rails.env.development?
 
-    @default_choose_location_modal_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/locations/modal/default_tpl.liquid.html')
+    @default_choose_location_modal_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/locations/default_templates/choose_location_modal.liquid.html')
   end
   def default_choose_location_modal_tpl; self.class.default_choose_location_modal_tpl; end
   def choose_location_modal_tpl_in_use
@@ -289,13 +302,13 @@ class Store < ActiveRecord::Base
 
 
   ######################################################
-  # Reserve Button TPL
+  # Product Reserve Button TPL
 
 
   def self.default_reserve_product_btn_tpl
     return @default_reserve_product_btn_tpl if @default_reserve_product_btn_tpl.present? && !Rails.env.development?
 
-    @default_reserve_product_btn_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/btn/default_tpl.liquid.html')
+    @default_reserve_product_btn_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/default_templates/reserve_product_btn.liquid.html')
   end
   def default_reserve_product_btn_tpl; self.class.default_reserve_product_btn_tpl; end
   def reserve_product_btn_tpl_in_use
@@ -308,13 +321,32 @@ class Store < ActiveRecord::Base
 
 
   ######################################################
+  # Cart Reserve Button TPL
+
+
+  def self.default_reserve_cart_btn_tpl
+    return @default_reserve_cart_btn_tpl if @default_reserve_cart_btn_tpl.present? && !Rails.env.development?
+
+    @default_reserve_cart_btn_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/default_templates/reserve_cart_btn.liquid.html')
+  end
+  def default_reserve_cart_btn_tpl; self.class.default_reserve_cart_btn_tpl; end
+  def reserve_cart_btn_tpl_in_use
+    if reserve_cart_btn_tpl_enabled?
+      reserve_cart_btn_tpl.to_s
+    else
+      self.class.default_reserve_cart_btn_tpl
+    end
+  end
+
+
+  ######################################################
   # Stock Status TPL
 
 
   def self.default_stock_status_tpl
     return @default_stock_status_tpl if @default_stock_status_tpl.present? && !Rails.env.development?
 
-    @default_stock_status_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/stock_status/default_tpl.liquid.html')
+    @default_stock_status_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/default_templates/stock_status.liquid.html')
   end
   def default_stock_status_tpl; self.class.default_stock_status_tpl; end
   def stock_status_tpl_in_use
@@ -331,10 +363,10 @@ class Store < ActiveRecord::Base
   # @return [Hash] - liquid params used by JS email previewer
   def frontend_tpl_vars
     {
-      locations: locations.to_a,
+      locations: locations.to_a.map { |loc| loc.to_liquid },
       cdn_url: ENV['PUBLIC_CDN_BASE_PATH'],
       settings: self
-    }
+    }.with_indifferent_access
   end
 
   def custom_css_in_use
@@ -347,6 +379,11 @@ class Store < ActiveRecord::Base
         tpl: reserve_product_btn_tpl_in_use,
         selector: reserve_product_btn_selector,
         action: reserve_product_btn_action
+      },
+      reserve_cart_btn: {
+        tpl: reserve_cart_btn_tpl_in_use,
+        selector: reserve_cart_btn_selector,
+        action: reserve_cart_btn_action
       },
       stock_status: {
         tpl: stock_status_tpl_in_use,
@@ -410,7 +447,7 @@ class Store < ActiveRecord::Base
   end
 
   def is_fera_team?
-    email.to_s =~ /.*@(fera|@reserveinstore|bananastand|wellfounded).*/i
+    email.to_s =~ /.*@(fera|reserveinstore|bananastand|wellfounded).*/i
   end
 
   def needs_subscription?
@@ -448,7 +485,7 @@ class Store < ActiveRecord::Base
   end
 
   def see_if_footer_needs_update
-    @footer_needs_update = changed_attributes.keys.any?{ |attr| attr.to_s =~ /active|reserve_product_btn.*|custom_css.*|stock_status.*/i }
+    @footer_needs_update = changed_attributes.keys.any?{ |attr| attr.to_s =~ /active|reserve_product_btn.*|reserve_cart_btn.*|custom_css.*|stock_status.*/i }
     true
   end
 

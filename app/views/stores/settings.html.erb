@@ -29,7 +29,7 @@
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">New Reservation Modal</h2>
+                <h2 class="Polaris-Heading">Reserve Popup</h2>
                 <p>Customize the header message and data fields of your "Reserve In Store" pop-up</p>
               </div>
             </div>
@@ -114,30 +114,13 @@
                         frontend_mode: true,
                         just_field: true
                     } %>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="Polaris-Layout__AnnotatedSection">
-          <div class="Polaris-Layout__AnnotationWrapper">
-            <div class="Polaris-Layout__Annotation">
-              <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Edit Additional Success Message</h2>
-                <p>Customize the message that is displayed when customers place new reservations. This will appear after the default.</p>
-              </div>
-            </div>
-            <div class="Polaris-Layout__AnnotationContent">
-              <div class="Polaris-Card">
-                <div class="Polaris-Card__Section">
-                  <div class="Polaris-FormLayout">
+
                     <div class="Polaris-FormLayout__Item">
                       <div class="Polaris-Labelled__LabelWrapper">
                         <div class="Polaris-Label">
                           <%= f.label :success_msg, class: 'Polaris-Label__Text' do %>
-                            Additional success message:
+                            Additional Success Message:
                           <% end %>
                         </div>
                       </div>
@@ -145,7 +128,11 @@
                         <%= f.text_area :success_msg, class: 'Polaris-TextField__Input', placeholder: "[Default message will display first]" %>
                         <div class="Polaris-TextField__Backdrop"></div>
                       </div>
+                      <div class="Polaris-Labelled__HelpText">
+                        Customize the message that is displayed when customers place new reservations. This will appear after the default content.
+                      </div>
                     </div>
+
                   </div>
                 </div>
               </div>
@@ -170,6 +157,32 @@
                         f: f,
                         attr: :reserve_product_btn,
                         store: @current_store
+                    } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Cart "Reserve" Button</h2>
+                <p>Define how we should integrate the cart page reservation button that will trigger the modal.</p>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+                    <%= render partial: "stores/settings/integration_option", locals: {
+                        f: f,
+                        attr: :reserve_cart_btn,
+                        store: @current_store,
+                        dont_show_not_showing_msg: true
                     } %>
                   </div>
                 </div>
@@ -208,11 +221,14 @@
                       </div>
                       <div class="Polaris-Select">
                         <select id="store_stock_status_behavior_when_stock_unknown" name="store[stock_status_behavior_when_stock_unknown]" class="Polaris-Select__Input" aria-invalid="false">
-                          <option value="show" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown == 'show' %>>
-                            Show as "In Stock"
+                          <option value="in_stock_show_button" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown == 'in_stock_show_button' %>>
+                            Show as "In Stock" and Show Reserve Button
                           </option>
-                          <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown.blank? ||  @current_store.stock_status_behavior_when_stock_unknown == 'hide' %>>
-                            Don't Show (Default)
+                          <option value="unknown_stock_show_button" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown.blank? ||  @current_store.stock_status_behavior_when_stock_unknown == 'unknown_stock_show_button' %>>
+                            Show as "Stock Unknown" and Show Reserve Button
+                          </option>
+                          <option value="unknown_stock_hide_button" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown == 'unknown_stock_hide_button' %>>
+                            Show as "Stock Unknown" but Hide Reserve Button
                           </option>
                         </select>
                         <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>

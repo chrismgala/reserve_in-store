@@ -113,4 +113,12 @@ Rails.application.configure do
      :socket_failure_delay => 0.2,
      :down_retry_delay => 60
     }
+
+
+  base_app_uri = URI.parse(ENV.fetch('BASE_APP_URL', 'https://app.reserveinstore.com'))
+  config.action_mailer.default_url_options = { host: base_app_uri.host }
+  config.action_controller.default_url_options = { host: base_app_uri.host }
+  Rails.application.routes.default_url_options[:host] = base_app_uri.host
+  config.action_mailer.asset_host = base_app_uri.to_s
+
 end

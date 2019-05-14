@@ -2,9 +2,11 @@ ReserveInStore.ReserveModal = function (opts) {
     var self = this;
     opts = opts || {};
     var $ = ReserveInStore.Util.$();
-    var api, $modalBackground, $reserveModal, $successModal, $form, formDataArray, lineItem = {};
+    var api, $modalBackground, $reserveModal, $successModal, $form, formDataArray;
 
     var locationsManager = opts.locationsManager;
+
+    var product, variant, cart, lineItem = {};
 
     var init = function () {
         api = opts.api;
@@ -14,39 +16,109 @@ ReserveInStore.ReserveModal = function (opts) {
      * Get product id/title and variant id/title, then make API call and display the modal
      */
     self.show = function () {
-
-        var selectedProductInfo = self.loadProductInfo();
+        if (arguments.length === 2) {
+            if (typeof arguments[0] === 'object') {
+                product = arguments[0];
+            } else {
+                throw "Invalid arguments provided to new reservation modal. See docs.reserveinstore.com";
+            }
+            if (typeof arguments[1] === 'object') {
+                variant = arguments[1];
+            } else {
+                throw "Invalid arguments provided to new reservation modal. See docs.reserveinstore.com";
+            }
+        } else if (arguments.length === 1) {
+            if (typeof arguments[0] === 'object') {
+                if (typeof arguments[0].length !== 'undefined') {
+                    cart = { items: arguments[1] };
+                } else {
+                    cart = arguments[1];
+                }
+            } else {
+                throw "Invalid arguments provided to new reservation modal. See docs.reserveinstore.com";
+            }
+        } else {
+            if (opts.app.getProduct()) {
+                product = opts.app.getProduct();
+                variant = opts.app.getVariant();
+            } else if (opts.app.getCart()) {
+                cart = opts.app.getCart();
+            } else {
+                throw "Could not detect what is being reserved, likely due to bad API usage. See docs.reserveinstore.com";
+            }
+        }
 
         self.$modalContainer = $('#reserveInStore-reserveModalContainer');
         if (self.$modalContainer.length < 1) {
             self.$modalContainer = $('<div class="reserveInStore-modal-container" id="reserveInStore-reserveModalContainer" style="display:none;"></div>').appendTo('body');
         }
 
-        api.getModal(selectedProductInfo, self.insertModal);
+        var modalParams = { cart: getCartObject() };
+        api.getReservationModal(modalParams, {}, function(response) {
+            self.insertModal(response.content);
+        });
 
         opts.app.trigger('reserve_modal.show reserve_modal.open', self);
     };
 
+    var getCartObject = function() {
+        var _cart = {}, item;
+
+        if (product && variant) {
+            // product mode
+            item = {
+                product_title: product.title,
+                variant_title: variant.title,
+                product_id: product.id,
+                variant_id: variant.id,
+                total: variant.price,
+                variant: variant,
+                product: product
+            };
+            item.price = item.total;
+
+            _cart = { items: [item] };
+
+            // ReserveInStore.logger.info("Sending via PRODUCT mode", items);
+        } else if(cart) {
+            _cart = $.extend({}, cart);
+
+            for (var i = 0; i < _cart.items.length; i++) {
+                _cart.items[i].total = _cart.items[i].line_price;
+                _cart.items[i].price = _cart.items[i].line_price;
+            }
+
+            ReserveInStore.logger.info("Sending via CART mode", _cart);
+        } else {
+            ReserveInStore.logger.logWarning("Could not determine cart object.", self);
+        }
+
+        return _cart
+    };
+
     /**
      * Set Product Id, Variant Id and line item properties object, return product title, variant title, line item properties and price to be used in modal
+     * @deprecated in favor of #getCartObject()
      * @returns {object} Product title, variant title and price, in the form of {product_title: "bleh", variant_title: "bleh", price: "bleh"}
      */
-    self.loadProductInfo = function () {
-        formDataArray = $('form[action~="/cart/add"]').serializeArray();
+    var getLegacyModalParams = function () {
         loadLineItem();
         return {
-            product_title: opts.app.getProduct().title,
-            variant_title: opts.app.getVariant().title,
-            price: opts.app.getVariant().price,
+            product_title: product.title,
+            variant_title: variant.title,
+            price: variant.price,
             line_item: lineItem
         };
     };
 
     /**
      * Set line item properties
+     * @deprecated in favor of #getCartObject()
      */
     var loadLineItem = function () {
         var re_lineItem = /properties\[(.*?)\]/;
+        formDataArray = $('form[action~="/cart/add"]').serializeArray();
+
         formDataArray.find(function (obj) {
             var matchLineItem = obj.name.match(re_lineItem);
             if (matchLineItem) {
@@ -73,15 +145,15 @@ ReserveInStore.ReserveModal = function (opts) {
         $form = $reserveModal.find(".reserveInStore-reservation-form");
         setSubmitConditions();
 
-        self.$modalContainer.find('input[name="reservation[location.id]"]').on('click change', function() {
-            var locationId = self.$modalContainer.find('input[name="reservation[location.id]"]:checked').val();
+        self.$modalContainer.find('input[name="reservation[location_id]"]').on('click change', function() {
+            var locationId = self.$modalContainer.find('input[name="reservation[location_id]"]:checked').val();
             locationsManager.setFavoriteLocationId(locationId);
         });
 
         locationsManager.whenReady(function(bestLocation) {
             if (!bestLocation) return; // Could not determine best location
 
-            self.$modalContainer.find('input[name="reservation[location.id]"][value="'+bestLocation.id+'"]').prop('checked', true);
+            self.$modalContainer.find('input[name="reservation[location_id]"][value="'+bestLocation.id+'"]').prop('checked', true);
         });
 
         adjustModalHeight();
@@ -99,7 +171,7 @@ ReserveInStore.ReserveModal = function (opts) {
         var $fit = self.$modalContainer.find('.reserveInStore-modal--fitContents');
         if ($fit.length < 1) return; // No fitting needed.
 
-        var totalHeight = 80;
+        var totalHeight = 120;
         $fit.children().each(function() {
             var $el = $(this);
             totalHeight += $el.height();
@@ -162,7 +234,7 @@ ReserveInStore.ReserveModal = function (opts) {
      */
     self.submitForm = function () {
         if ($form[0].checkValidity()) {
-            api.createReservation(serializeFormData(), self.displaySuccessModal, showErrorMessages);
+            api.createReservation(getFormData(), self.displaySuccessModal, showErrorMessages);
         } else {
             $form.find('input, select').addClass('reserveInStore-attempted');
             $form[0].reportValidity();
@@ -200,17 +272,9 @@ ReserveInStore.ReserveModal = function (opts) {
      * Serializes the form's elements, and add product id and variant id
      * @returns {object} Array of all information needed to generate new reservation
      */
-    var serializeFormData = function () {
-        var product = opts.app.getProduct();
-        var variant = opts.app.getVariant();
-
-        var data = $form.serializeArray();
-        data.push({name: "reservation[platform_product_id]", value: product.id});
-        data.push({name: "reservation[platform_variant_id]", value: variant.id});
-        data.push({name: "reservation[line_item]", value: JSON.stringify(lineItem)});
-        data.push({name: "product_title", value: product.title});
-        data.push({name: "product_handle", value: product.handle});
-        data.push({name: "variant_title", value: variant.title});
+    var getFormData = function () {
+        var data = ReserveInStore.Util.serializeObject($form);
+        data.reservation.cart = getCartObject();
         return data;
     };
 

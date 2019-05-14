@@ -3,9 +3,9 @@ module ReservationsHelper
 
   ##
   # @param [Reservation] reservations reservations displayed on current page
-  # @return [ShopifyAPI::Product|NilClass] nil if no available products, otherwise a collecFtion of Shopify products
+  # @return [ShopifyAPI::Product|NilClass] nil if no available products, otherwise a collection of Shopify products
   def related_products(reservations)
-    product_ids = reservations.map {|r| r.platform_product_id}.uniq.reject {|id| non_numeric_string(id)}
+    product_ids = reservations.map {|r| r.platform_product_id}.uniq.reject {|id| non_numeric_string?(id)}
     @related_products = shopify_products({ids: product_ids.join(','), limit: 250})
   end
 
@@ -15,7 +15,7 @@ module ReservationsHelper
   def shopify_products(shopify_search_params)
     if shopify_search_params[:ids].present?
       ForcedLogger.log("Shopify Api fetch products " + shopify_search_params.to_s, store: @current_store.try(:id))
-      ShopifyAPI::Product.where(shopify_search_params)
+      @current_store.cached_api.products(shopify_search_params)
     end
   rescue StandardError => e
     ForcedLogger.error("Failed to load Shopify products where #{shopify_search_params}, #{e}", sentry: true, store: @current_store.try(:id))
@@ -24,7 +24,9 @@ module ReservationsHelper
 
   ##
   # @return [Boolean] true if string contains non-numeric characters, otherwise returns false
-  def non_numeric_string(string)
+  def non_numeric_string?(string)
+    return true if string.blank?
+
     string.scan(/\D/).any?
   end
 end

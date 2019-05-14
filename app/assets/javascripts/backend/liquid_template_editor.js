@@ -58,6 +58,7 @@ var LiquidTemplateEditor = function(opts) {
             $fieldsContainer: self.$form,
             $previewPanel: $previewContainer,
             $previewContainer: $previewContainer,
+            getPreviewParams: function() { return opts.previewParams || {}; },
             getPreviewVars: function() {
                 return self.getPreviewVars();
             },

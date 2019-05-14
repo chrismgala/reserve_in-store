@@ -1,0 +1,118 @@
+<div class="modal reserveInStore-modal-background">
+    <div class="reserveInStore-reserve-modal reserveInStore-modal--fitContents">
+
+        <header>
+            <span class="close reserveInStore-reserve-close">×</span>
+            <h2 class="ris-main-header">Reserve In-store</h2>
+            <p class="ris-instruction">{{ settings.top_msg }}</p>
+            <ul class="reserveInStore-error-ul" style="display:none;"></ul>
+        </header>
+
+        <form class="reserveInStore-reservation-form" action="https://app.reserveinstore.com/api/v1/reservations/modal"
+              accept-charset="UTF-8" data-remote="true" method="post">
+            <input name="utf8" type="hidden" value="✓"/>
+            <section class="ris-columns">
+
+                <div class="ris-column">
+                    <h2 class="ris-header-text">1. SELECT A LOCATION:</h2>
+                    <div class="ris-location-options">
+                        {% for location in locations %}
+                        <div class="ris-location-option">
+                            <div class="ris-location-content">
+                                <div class="ris-location-content-left">
+                                    <input type="radio" value="{{ location.id }}"
+                                           name="reservation[location_id]"
+                                           id="reservation_location_id-{{ location.id }}"  {% if location.id != 0 %}required{% endif %}>
+                                </div>
+                                <div class="ris-location-content-middle">
+                                    <label class="ris-location-name"
+                                           for="reservation_location_id-{{ location.id }}">
+                                        {{ location.name }}
+                                    </label>
+                                    <div class="ris-location-address">
+                                        {{ location.address }}<br>
+                                        {{ location.formatted_address }}<br>
+                                        {{ location.country }}
+                                    </div>
+                                    <div class="ris-location-details">
+                                        {{ location.details }}
+                                    </div>
+                                </div>
+                                <div class="ris-location-content-right">
+                                    <a href="{{ location.google_map_url }}" target="_blank" class="ris-location-mapPin">
+                                        <img class="ris-location-mapPin-img" src="{{ cdn_url }}map_pin.png">
+                                        <span class="ris-location-mapPin-text">View on map</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="ris-column">
+                    <h2 class="ris-header-text">2. ENTER YOUR CONTACT INFO</h2>
+
+                    <div class="ris-contact-field">
+                        <label for="reservation_customer_name">Your Name</label>
+                        <input required="required" type="text" name="reservation[customer_name]" id="reservation_customer_name" />
+                    </div>
+                    <div class="ris-contact-field">
+                        <label for="reservation_customer_email">Your Email</label>
+                        <input required="required" type="email" name="reservation[customer_email]" id="reservation_customer_email" />
+                    </div>
+
+                    {% if settings.show_phone %}
+                    <div class="ris-contact-field">
+                        <label for="reservation_customer_phone">Your Contact Number</label>
+                        <input required="required" type="text" name="reservation[customer_phone]" id="reservation_customer_phone" />
+                    </div>
+                    {% endif %}
+
+                    {% if settings.show_instructions_from_customer %}
+                    <div class="ris-contact-field">
+                        <label for="reservation_instructions_from_customer">Pick-up Date & Time</label>
+                        <input required="required" type="text" name="reservation[instructions_from_customer]" id="reservation_instructions_from_customer" />
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="ris-column" style="width: 100%">
+                    <h2 class="ris-header-text">3. CONFIRM YOUR RESERVATION</h2>
+
+
+                    <div class="ris-cart">
+                        {% for item in cart.items %}
+                        <div class="ris-cart-item">
+                            <div class="ris-cart-item-details">
+                                <div class="ris-cart-item-title">{{ item.product_title }}</div>
+
+                                {% if item.variant_title and item.variant_title != 'Default Title' %}
+                                    <div class="ris-cart-item-variant">{{ item.variant_title }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="ris-cart-item-total">{{ item.total_formatted }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="ris-noteAfterCart">You will receive a confirmation email after you submit your reservation.</div>
+                    <button type="button" class="reserveInStore-form-submit">Reserve Now</button>
+                    <div class="ris-faqs">{{ settings.faq }}</div>
+                </div>
+
+            </section>
+        </form>
+    </div>
+
+    <div class="reserveInStore-success-modal reserveInStore-center" style="display: none;">
+        <div class="reserveInStore-modal-icon">
+            <span class="reserveInStore-center">✔</span>
+        </div>
+        <h1>Success!</h1>
+        <p>{{ settings.success_msg }}<br>
+            A confirmation email has been sent to you.</p>
+        <button type="button" class="btn reserveInStore-success-close">Ok</button>
+    </div>
+</div>
+

@@ -12,6 +12,8 @@ ReserveInStore.IntegratedComponent = function (opts) {
 
         action = config.action || opts.defaults.action;
 
+        self.$containers = $();
+
         if (action === 'manual') {
             // Don't try to integrate
         } else if (action === 'auto') {
@@ -24,57 +26,59 @@ ReserveInStore.IntegratedComponent = function (opts) {
 
     var insert = function(targetSelector, orientation) {
         self.$targets = $(targetSelector);
-        self.$container = $(config.tpl || opts.defaults.tpl);
-
-        if (opts.visibleInitially === false) self.$container.hide();
 
         self.$targets.each(function() {
+            var $container = $(config.tpl || opts.defaults.tpl);
             var $target = $(this);
+
+            if (opts.visibleInitially === false) $container.hide();
 
             if (orientation === 'prepend_to') {
                 if (!$target.children().first().data(opts.dataKey)) {
-                    $target.prepend(self.$container);
+                    $target.prepend($container);
                 }
             } else if (orientation === 'append_to') {
                 if (!$target.children().last().data(opts.dataKey)) {
-                    $target.append(self.$container);
+                    $target.append($container);
                 }
             } else if (orientation === 'insert_before') {
                 if (!$target.prev().data(opts.dataKey)) {
-                    $target.before(self.$container);
+                    $target.before($container);
                 }
             } else if (orientation === 'insert_after') {
                 if (!$target.next().data(opts.dataKey)) {
-                    $target.after(self.$container);
+                    $target.after($container);
                 }
             } else { // Manual
                 ReserveInStore.logger.error("Invalid insertion criteria: ", targetSelector, orientation, config);
                 return false;
             }
 
-            opts.afterInsert(self.$container, $target);
+            $container.data(opts.dataKey, self);
 
-            self.$container.data(opts.dataKey, self);
+            self.$containers = self.$containers.add($container);
+
+            opts.afterInsert($container, $target);
         });
     };
 
     self.show = function() {
-        return self.$container.show.apply(self.$container, arguments);
+        return self.$containers.show();
     };
     self.hide = function() {
-        return self.$container.hide.apply(self.$container, arguments);
+        return self.$containers.hide();
     };
     self.find = function() {
-        return self.$container.find.apply(self.$container, arguments);
+        return self.$containers.find(arguments[0]);
     };
     self.each = function() {
-        return self.$container.each.apply(self.$container, arguments);
+        return self.$containers.each(arguments[0]);
     };
     self.children = function() {
-        return self.$container.children.apply(self.$container, arguments);
+        return self.$containers.children(arguments[0]);
     };
     self.parents = function() {
-        return self.$container.parents.apply(self.$container, arguments);
+        return self.$containers.parents(arguments[0]);
     };
 
 

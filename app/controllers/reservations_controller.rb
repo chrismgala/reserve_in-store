@@ -16,7 +16,7 @@ class ReservationsController < LoggedInController
     @reservation = Reservation.new(reservation_params.merge(store: @current_store))
 
     respond_to do |format|
-      if @reservation.save
+      if @reservation.save_and_email
         format.html { redirect_to reservations_path, notice: 'Reservation was successfully created.' }
         format.json { render :reservations, status: :ok }
       else
@@ -48,6 +48,10 @@ class ReservationsController < LoggedInController
       format.html { redirect_to reservations_url, notice: 'reservation was successfully deleted.' }
       format.json { head :no_content }
     end
+  end
+
+  def show
+    redirect_to action: :index
   end
 
   private

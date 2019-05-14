@@ -2,6 +2,7 @@ module Api
   module V1
     class ApiController < ActionController::Base
       include RescuesNotFound
+      include ::Bananastand::AllowsEmbedding
 
       before_action :authenticate!
 

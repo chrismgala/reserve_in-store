@@ -5,9 +5,9 @@ ReserveInStore.StockStatusIndicator = function (opts) {
     var config, component, inventoryTable;
     var api = opts.api;
 
-    var currentLocation, onlyAvailableOnline = false;
+    var currentLocation, onlyAvailableOnline = false, ready = false;
 
-    var DEFAULT_STOCK_CAPTIONS = ["Out of Stock", "Low Stock", "In Stock"];
+    var DEFAULT_STOCK_CAPTIONS = ["Out of Stock", "Low Stock", "In Stock", "Stock Unknown"];
 
     var DEFAULT_SELECTOR = '.reserveInStore-btn-container';
     var DEFAULT_ACTION = 'insert_before';
@@ -18,7 +18,6 @@ ReserveInStore.StockStatusIndicator = function (opts) {
         'class="reserveInStore-stockStatus-locationName">store location</a>' +
         '</div>' +
         '</div>';
-    var DEFAULT_BEHAVIOR_WHEN_UNKNOWN = 'show';
 
     var init = function () {
         config = opts.config || {};
@@ -34,6 +33,17 @@ ReserveInStore.StockStatusIndicator = function (opts) {
             config: config,
             afterInsert: afterInsert
         });
+    };
+
+    self.whenReady = function(then) {
+        var readyCheck = function() {
+            if (ready) {
+                clearInterval(readyWaiter);
+                then();
+            }
+        };
+        var readyWaiter = setInterval(readyCheck, 1);
+        readyCheck();
     };
 
     var afterInsert = function($container, $target) {
@@ -118,21 +128,22 @@ ReserveInStore.StockStatusIndicator = function (opts) {
             inventoryStatus = inventoryLocations[currentLocation.platform_location_id];
 
             if (!inventoryStatus) {
-                if (config.behavior_when && config.behavior_when.stock_unknown === 'show') {
+                if (config.behavior_when && config.behavior_when.stock_unknown.indexOf('in_stock') === 0) {
                     inventoryStatus = "in_stock";
                 } else {
-                    component.hide();
-                    ReserveInStore.logger.logWarning("Selected location doesn't have stock information, so hiding stock status component.", self, inventoryTable, variant, currentLocation);
-                    return;
+                    inventoryStatus = "stock_unknown";
                 }
             }
+
 
             showStockStatus(inventoryStatus);
             $location.text(currentLocation.name);
             component.show();
+
+            opts.app.setStockStatus(inventoryStatus);
         }
 
-
+        ready = true;
     };
 
     var showStockStatus = function(status) {
@@ -154,10 +165,15 @@ ReserveInStore.StockStatusIndicator = function (opts) {
         } else if (status === 'out_of_stock') {
             $stockStatus.text(stockCaptions[0] || DEFAULT_STOCK_CAPTIONS[0]);
             $stockStatus.addClass('reserveInStore-stockStatus-status--outOfStock')
-        } else {
+        } else if (status === 'in_stock') {
             $stockStatus.text(stockCaptions[2] || DEFAULT_STOCK_CAPTIONS[2]);
             $stockStatus.addClass('reserveInStore-stockStatus-status--inStock')
+        } else {
+            $stockStatus.text(stockCaptions[3] || DEFAULT_STOCK_CAPTIONS[3]);
+            $stockStatus.addClass('reserveInStore-stockStatus-status--unknownStock')
         }
+
+        opts.app.trigger('stock_status.change')
     };
 
     init();

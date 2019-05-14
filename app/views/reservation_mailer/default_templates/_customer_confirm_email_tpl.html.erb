@@ -1,0 +1,46 @@
+<p>
+  Hello {{ customer.first_name }},
+</p>
+
+
+<p>
+  Your reservation has been received. Here are the details:
+</p>
+
+<hr>
+
+{% if instructions_from_customer %}
+<h4>Pick-up Date/Time:</h4>
+<p>
+  {{ instructions_from_customer }}
+</p>
+{% endif %}
+
+<h4>Items:</h4>
+<ul>
+  {% for item in cart.items %}
+  <li>
+    {{ item.product_title }} ({{ item.variant_title }}
+  </li>
+  {% endfor %}
+</ul>
+
+
+<h4>Location:</h4>
+<p>
+  {{ location.name }}
+  <br>
+  {{ location.address }}
+  <br>
+  {{ location.city }} {{ location.state }}
+  <br>
+  {{ location.country }} <br>
+  Phone: {{ location.phone }}
+</p>
+
+<hr>
+
+<p>
+  See you soon!<br>
+  <a href="{{store.website_url }}" target="_blank">{{ store.name }}</a>
+</p>

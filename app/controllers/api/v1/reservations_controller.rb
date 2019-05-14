@@ -79,8 +79,8 @@ module Api
                     product_id: params[:platform_product_id],
                     variant_id: params[:platform_variant_id],
                     variant_title: params[:variant_title],
-                    total: total/100,
-                    total_formatted: format_currency(total)
+                    total: total.is_a?(String) ? total.to_f : total/100,
+                    total_formatted: total.is_a?(String) ? total : format_currency(total)
                   }]
         }
       end

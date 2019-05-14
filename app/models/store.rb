@@ -427,8 +427,12 @@ class Store < ActiveRecord::Base
     @recommended_plan ||= Plan.find_by(code: plan_code)
   end
 
+  def distinctly_named_location_count
+    @distinctly_named_location_count ||= locations.pluck(:name).to_a.uniq.count
+  end
+
   def recommended_plan_code
-    case locations.count
+    case distinctly_named_location_count
     when 0
       nil
     when 1

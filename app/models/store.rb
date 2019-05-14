@@ -163,6 +163,7 @@ class Store < ActiveRecord::Base
   end
 
   ##
+  # Store.all.find_each { |s| begin; s.fix_old_data!; rescue => e; ForcedLogger.log("Failed to fix old data: #{e.inspect}", store: s.id); end; }; nil
   # @deprecated Temporary code and can be removed by May 31, 2019
   def fix_old_data!
     new_locations = api.locations.map do |shopify_loc|
@@ -218,6 +219,7 @@ class Store < ActiveRecord::Base
 
     true
   end
+
 
   ######################################################
   # For Custom Email Templates

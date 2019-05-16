@@ -6,7 +6,9 @@ class AppInstalledJob < ActiveJob::Base
     store.platform_store_id = store.id
     store.save!
 
-    new_store(store)
+    if store.created_at > 15.minutes.ago
+      new_store(store)
+    end
 
     store.sync_locations!
 

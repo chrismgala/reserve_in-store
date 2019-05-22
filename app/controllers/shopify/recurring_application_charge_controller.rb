@@ -89,7 +89,7 @@ module Shopify
       Slack::Notifier.new(ENV['SLACK_WEBHOOK_URL_GENERAL']).ping("💵 #{store_markdown(store)} :long_arrow_right: *#{store.subscription.nice_price}* #{plan_msg}")
 
     rescue => e
-      ForcedLogger.(e, store: @store.try(:id))
+      ForcedLogger.error(e, store: @store.try(:id))
     end
 
     def store_markdown(store)

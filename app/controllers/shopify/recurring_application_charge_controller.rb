@@ -82,7 +82,7 @@ module Shopify
     private
 
     def ping_slack
-      store = @store
+      store = @current_store
 
       plan_msg = store.trial_days_left > 0 ? "(#{store.trial_days_left}d trial)" : '(non-trial)'
 

@@ -69,7 +69,13 @@ class Location < ActiveRecord::Base
   # @return [Location] a new Location object made from the Shopify::Location
   def self.new_from_shopify(shopify_loc, store)
     loc = Location.new
-    shopify_attr = shopify_loc.try(:attributes).with_indifferent_access || shopify_loc.with_indifferent_access
+
+    shopify_attr = if shopify_loc.is_a?(ShopifyAPI::Location)
+                     shopify_loc.try(:attributes)
+                   else
+                     shopify_loc
+                   end.to_h.with_indifferent_access
+
     loc.platform_location_id = shopify_attr[:id]
     loc.load_from_shopify(shopify_attr)
     loc.store_id = store.id

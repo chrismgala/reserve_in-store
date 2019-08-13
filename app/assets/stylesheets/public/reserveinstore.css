@@ -25,6 +25,8 @@
     -ms-transform: translateY(0px);
     -webkit-transform: translateY(0px);
     transform: translateY(0px);
+    visibility: visible;
+    white-space: inherit;
 }
 
 /*Modal Content */
@@ -88,9 +90,9 @@
 }
 
 .ris-cart-item-total {
-    font-size: 1.5em;
+    font-size: 1.2em;
     text-align: right;
-    min-width: 60px;
+    min-width: 70px;
 }
 
 .ris-cart-item-title {

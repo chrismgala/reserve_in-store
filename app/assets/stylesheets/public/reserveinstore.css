@@ -90,6 +90,7 @@
 .ris-cart-item-total {
     font-size: 1.5em;
     text-align: right;
+    min-width: 60px;
 }
 
 .ris-cart-item-title {
@@ -111,7 +112,6 @@
     display: table-cell;
     vertical-align: middle;
 }
-
 
 
 .reserveInStore-reserve-modal .ris-columns {

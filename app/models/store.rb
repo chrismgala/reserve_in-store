@@ -8,7 +8,7 @@ class Store < ActiveRecord::Base
   before_create :generate_keys
   before_save :nil_default_templates
   before_save :see_if_footer_needs_update
-  after_save :update_footer_asset!
+  after_save :update_footer_asset!, :clear_api_cache!
 
   alias_attribute :email_template, :customer_confirm_email_tpl # Alias for reverse compatibility, can be removed probably by July 1, 2019
   alias_attribute :company_name, :name
@@ -500,6 +500,12 @@ class Store < ActiveRecord::Base
       UpdateFooterJob.perform_later(self.id)
       @footer_needs_update = false
     end
+    true
+  end
+
+  def clear_api_cache!
+    cached_api.clear_cache!
+
     true
   end
 

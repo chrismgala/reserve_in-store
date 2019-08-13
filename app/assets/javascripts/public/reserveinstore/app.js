@@ -251,15 +251,15 @@ ReserveInStore.App = function(opts) {
         if (object.action === "configure") {
             self.configure(object.data);
         } else if (object.action === "setProduct") {
-            self.setProduct(object.data || object.product)
+            self.setProduct(object.data || object.product);
         } else if (object.action === "setCart") {
-            self.setCart(object.data || object.cart)
+            self.setCart(object.data || object.cart);
         } else if (object.action === "showChooseLocationModal") {
             self.showChooseLocationModal()
         } else if (object.action === "showReserveModal") {
-            self.showReserveModal()
+            self.showReserveModal();
         } else if (object.action === "on") {
-            self.on(object.data.event, object.data.callback)
+            self.on(object.data.event, object.data.callback);
         } else {
             ReserveInStore.logger.error("Unknown action: ", object.action);
         }

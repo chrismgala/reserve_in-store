@@ -1,6 +1,11 @@
 module Shopify
   class CachedApi < ::Shopify::Api
 
+    def clear_cache!
+      clear_locations_cache
+      clear_shop_cache
+    end
+
     def clear_product_cache(id)
       Rails.cache.delete("stores/#{store.id}/cached_shopify_api/product-#{id}")
       Rails.cache.delete("stores/#{store.id}/inventory_fetcher/product-#{id}")
@@ -29,21 +34,21 @@ module Shopify
     def inventory_levels(params = {})
       params = clean_list_params(params)
       cache_key = "stores/#{store.id}/cached_shopify_api/inventory_levels/#{params.to_param}"
-      Rails.cache.fetch(cache_key, expires_in: 1.minutes) do
+      Rails.cache.fetch(cache_key, expires_in: 1.minute) do
         super
       end
     end
 
     def locations
       cache_key = "stores/#{store.id}/cached_shopify_api/locations"
-      Rails.cache.fetch(cache_key, expires_in: 1.week) do
+      Rails.cache.fetch(cache_key, expires_in: 1.day) do
         super
       end
     end
 
     def shop
       cache_key = "stores/#{store.id}/cached_shopify_api/shop"
-      Rails.cache.fetch(cache_key, expires_in: 1.week) do
+      Rails.cache.fetch(cache_key, expires_in: 1.day) do
         ShopifyAPI::Shop.current
       end
     end

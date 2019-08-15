@@ -395,6 +395,7 @@ class Store < ActiveRecord::Base
           stock_unknown: stock_status_behavior_when_stock_unknown,
           no_location_selected: stock_status_behavior_when_no_location_selected,
           no_nearby_locations_and_no_location: stock_status_behavior_when_no_nearby_locations_and_no_location,
+          show_when_only_available_online: show_when_only_available_online
         }
       },
       api_url: ENV['BASE_APP_URL'],

@@ -1,8 +1,9 @@
 class InventoryFetcher
   attr_accessor :store, :product_id, :variant_id
-  def initialize(store, product_id)
+  def initialize(store, product_id, use_cache: true)
     @store = store
     @product_id = product_id
+    @use_cache = use_cache
   end
 
   def inventory
@@ -12,7 +13,8 @@ class InventoryFetcher
 
       return {} if product.blank?
 
-      variant_map = product.variants.to_a.map{ |v| [v.inventory_item_id.to_s, v.id.to_s] }.to_h
+      variants = product.variants.to_a
+      variant_map = variants.map{ |v| [v.inventory_item_id.to_s, v.id.to_s] }.to_h
 
       inventory_item_ids = variant_map.keys.join(",")
 
@@ -34,24 +36,31 @@ class InventoryFetcher
   end
 
   def levels
+    return load_levels unless @use_cache
     cache_key = "stores/#{store.id}/inventory_fetcher/product-#{product_id}"
     Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      stock_levels = inventory.to_h
-
-      stock_levels.keys.map do |variant_id|
-        new_levels = stock_levels[variant_id].keys.map do |platform_location_id|
-          inventory_caption = if stock_levels[variant_id][platform_location_id] > 15
-                                'in_stock'
-                              elsif stock_levels[variant_id][platform_location_id] > 0
-                                'low_stock'
-                              else
-                                'out_of_stock'
-                              end
-          [platform_location_id, inventory_caption]
-        end.to_h
-        [variant_id, new_levels]
-      end.to_h
+      load_levels
     end
+  end
+
+  def load_levels
+    stock_levels = inventory.to_h
+
+    stock_levels.keys.map do |variant_id|
+      new_levels = stock_levels[variant_id].keys.map do |platform_location_id|
+        inventory_caption = if stock_levels[variant_id][platform_location_id] > 15
+                              'in_stock'
+                            elsif stock_levels[variant_id][platform_location_id] > 0
+                              'low_stock'
+                            elsif stock_levels[variant_id][platform_location_id].nil?
+                              'unknown_stock'
+                            else
+                              'out_of_stock'
+                            end
+        [platform_location_id, inventory_caption]
+      end.to_h
+      [variant_id, new_levels]
+    end.to_h
   end
 
 end

@@ -1,6 +1,6 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.2.0.0'; // Version of the JS library.
+    this.version = '1.2.1.0'; // Version of the JS library.
     var self = this;
     opts = opts || {};
     opts.app = self;
@@ -31,7 +31,7 @@ ReserveInStore.App = function(opts) {
     };
 
     var init = function () {
-        self.debugMode = opts.debugMode;
+        self.debugMode = opts.debugMode || (window.location.toString().indexOf('ris_debug=1') !== -1);
         ReserveInStore.logger = new ReserveInStore.Logger(opts);
 
         ReserveInStore.Util.waitFor$(function jqueryWaitingFunction() {

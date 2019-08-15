@@ -74,6 +74,7 @@ ReserveInStore.StockStatusIndicator = function (opts) {
         });
     };
 
+
     var useFirstAvailableLocation = function() {
         if (currentLocation) return;
         var inventoryLocations = inventoryTable[opts.app.getVariant().id];
@@ -95,8 +96,12 @@ ReserveInStore.StockStatusIndicator = function (opts) {
                 }
             }
 
-            // Not available at any locations, so must only be available online.
-            onlyAvailableOnline = true;
+            // Next try to find a location with any stock
+            for (var i = 0; i < locations.length; i++) {
+                currentLocation = locations[i];
+                onlyAvailableOnline = true;
+                return;
+            }
         });
 
         if (currentLocation || onlyAvailableOnline) {
@@ -112,36 +117,39 @@ ReserveInStore.StockStatusIndicator = function (opts) {
         var $location = component.find('.reserveInStore-stockStatus-locationName');
 
         if (onlyAvailableOnline) {
-            ReserveInStore.logger.log("Seems to only be available online so hiding...", config);
-            component.hide();
-        } else {
-            if (!currentLocation) {
-                if (config.behavior_when && config.behavior_when.no_nearby_locations_and_no_location === 'show_first_available') {
-                    return useFirstAvailableLocation();
-                }
-
-                // Don't show
-                ReserveInStore.logger.log("Could not determine best location using geolocating or selection.", self);
+            ReserveInStore.logger.log("Seems to only be available online...", config);
+            if (config.behavior_when && !config.behavior_when.show_when_only_available_online) {
+                component.hide();
                 return;
             }
+        }
 
-            inventoryStatus = inventoryLocations[currentLocation.platform_location_id];
-
-            if (!inventoryStatus) {
-                if (config.behavior_when && config.behavior_when.stock_unknown.indexOf('in_stock') === 0) {
-                    inventoryStatus = "in_stock";
-                } else {
-                    inventoryStatus = "stock_unknown";
-                }
+        if (!currentLocation) {
+            if (config.behavior_when && config.behavior_when.no_nearby_locations_and_no_location === 'show_first_available') {
+                return useFirstAvailableLocation();
             }
 
-
-            showStockStatus(inventoryStatus);
-            $location.text(currentLocation.name);
-            component.show();
-
-            opts.app.setStockStatus(inventoryStatus);
+            // Don't show
+            ReserveInStore.logger.log("Could not determine best location using geolocating or selection.", self);
+            return;
         }
+
+        inventoryStatus = inventoryLocations[currentLocation.platform_location_id];
+
+        if (!inventoryStatus) {
+            if (config.behavior_when && config.behavior_when.stock_unknown.indexOf('in_stock') === 0) {
+                inventoryStatus = "in_stock";
+            } else {
+                inventoryStatus = "stock_unknown";
+            }
+        }
+
+
+        showStockStatus(inventoryStatus);
+        $location.text(currentLocation.name);
+        component.show();
+
+        opts.app.setStockStatus(inventoryStatus);
 
         ready = true;
     };

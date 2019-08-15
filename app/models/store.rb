@@ -439,9 +439,9 @@ class Store < ActiveRecord::Base
       'startup'
     when 2..3
       'small'
-    when 4..10
+    when 4..27 # The medium plan limit is 10, but they can pay for $9/mo per store so it is still cheaper to use the medium plan up until 27 locations.
       'medium'
-    when 11..100
+    when 28..167 # The large plan limit is 100, but they can pay for $9/mo per store so it is still cheaper to use the medium plan up until 167 locations.
       'large'
     else
       'enterprise'

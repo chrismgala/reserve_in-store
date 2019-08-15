@@ -109,7 +109,7 @@ module Shopify
       end
 
       @subscription.remote_id = @current_rac.id.to_s
-      @subscription.plan = plan
+      @subscription.plan = plan # Make sure the subscription.store already exists before running this line or else the per location pricing may not work properly.
     end
 
     def load_current_recurring_charge
@@ -119,13 +119,17 @@ module Shopify
     def new_charge_params
       {
         name: plan.code,
-        price: plan.price,
+        price: plan_price,
         trial_days: @current_store.trial_days_left
       }
     end
 
     def plan_id
       @plan_id ||= params[:plan] || session['plan']
+    end
+
+    def plan_price
+      plan.price_for_store(@current_store)
     end
 
     def plan

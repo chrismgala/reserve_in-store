@@ -22,9 +22,17 @@ class Subscription < ApplicationRecord
   ##
   # Assigns the plan ID and plan attributes values to this subscription.
   # Later calling #plan will return a readonly object that contains these attributes.
+  # @note Make sure the subscription.store already exists before running this line or else the per location pricing may not work properly.
   # @param plan [Plan] Plan model to use in creating the subscription.
   def plan=(plan)
-    self.plan_attributes = plan.attributes
+    plan_attr = plan.attributes
+
+    if store.present?
+      plan_attr['price'] = plan.price_for_store(store)
+      plan_attr['limits']['locations'] = store.distinctly_named_location_count
+    end
+
+    self.plan_attributes = plan_attr
   end
 
   ##

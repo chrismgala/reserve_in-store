@@ -10,7 +10,7 @@ class ReservationMailer < ApplicationMailer
     @store = store
     @reservation = reservation
     staged_mail(to: store_location_contact,
-                subject: "New In-store Reservation",
+                subject: store.location_notification_subject.presence || "New In-store Reservation",
                 from: system_contact)
   end
 
@@ -26,7 +26,7 @@ class ReservationMailer < ApplicationMailer
     @reservation = reservation
     @rendered_email_template = @reservation.rendered_email_template
     staged_mail(to: customer_contact,
-                subject: "In-Store Reservation Confirmation",
+                subject: store.customer_confirmation_subject.presence || "In-Store Reservation Confirmation",
                 from: system_contact,
                 reply_to: store_location_contact)
   end

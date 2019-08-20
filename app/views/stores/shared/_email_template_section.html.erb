@@ -1,0 +1,130 @@
+<% unless local_assigns[:just_field] %>
+  <div class="Polaris-Layout__AnnotatedSection">
+    <div class="Polaris-Layout__AnnotationWrapper">
+      <div class="Polaris-Layout__Annotation">
+        <div class="Polaris-TextContainer">
+          <h2 class="Polaris-Heading"><%= heading %></h2>
+          <p><%= subheading %></p>
+        </div>
+      </div>
+      <div class="Polaris-Layout__AnnotationContent">
+        <div class="Polaris-Card">
+          <div class="Polaris-Card__Section">
+
+            <div class="Polaris-FormLayout">
+<% end %>
+
+<div id="<%= attr %>_section">
+  <% if local_assigns[:subject_field] %>
+    <div class="Polaris-FormLayout__Item">
+
+      <div class="Polaris-Labelled__LabelWrapper">
+        <div class="Polaris-Label">
+          <label class="Polaris-Label__Text">
+            Subject
+          </label>
+        </div>
+      </div>
+      <div class="Polaris-TextField">
+        <%= f.text_field subject_field, class: 'Polaris-TextField__Input', placeholder: local_assigns[:subject_field_default] %>
+        <div class="Polaris-TextField__Backdrop"></div>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="Polaris-FormLayout__Item">
+
+    <div class="Polaris-Labelled__LabelWrapper">
+      <div class="Polaris-Label">
+        <label class="Polaris-Label__Text">
+          Body
+        </label>
+      </div>
+    </div>
+
+    <div class="Polaris-Select">
+      <select id="store_<%= attr %>_enabled" name="store[<%= attr %>_enabled]" class="Polaris-Select__Input" aria-invalid="false">
+        <option value="false" <%= 'selected="selected"' unless enabled %>>Use Default Template</option>
+        <option value="true" <%= 'selected="selected"' if enabled %>>Specify Custom Template</option>
+      </select>
+      <div class="Polaris-Select__Icon"><span class="Polaris-Icon"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path></svg></span>
+      </div>
+      <div class="Polaris-Select__Backdrop"></div>
+    </div>
+
+    <% if local_assigns[:just_field] %>
+      <div class="Polaris-Labelled__HelpText">
+        <%= -subheading -%>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="display-if-selected-option template-editor-container"
+       data-if_selected_option="#store_<%= attr %>_enabled"
+       data-selected_value="true"
+       style="display:none">
+
+    <div class="Polaris-FormLayout__Item">
+      <div id="parsley_<%= attr %>_errors" class="parsley-danger-text"></div>
+
+      <textarea class="editor-hidden-textarea" id="store_<%= attr %>_textarea" style="display: none;"
+                name="store[<%= attr %>]"><%= value_in_use.to_s.html_safe %></textarea>
+      <textarea class="editor" id="store_<%= attr %>_editor"><%= value_in_use.to_s.html_safe %></textarea>
+      <textarea class="editor-default-content" style="display: none;" id="store_default_<%= attr %>_editor_textarea"><%= default_value.html_safe %></textarea>
+      <div class="editor-links">
+        <a href="#" class="beautify-link">beautify code</a>
+        <a href="#" class="expand-editor-link">expand editor</a>
+        <a href="#" class="contract-editor-link">contract editor</a>
+        <a href="#" class="reset-to-default">reset</a>
+      </div>
+    </div>
+    <div class="Polaris-FormLayout__Item">
+      <div class="Polaris-Labelled__LabelWrapper">
+        <div class="Polaris-Label">
+          <label class="Polaris-Label__Text">
+            Preview:
+          </label>
+        </div>
+      </div>
+      <div class="Polaris-TextField Polaris-TextField--multiline">
+        <div class="Polaris-TextField__Input preview-text-fix">
+          <div class="iframe-preview-container" id="<%= attr %>_preview_pane">
+            <iframe class="iframe-preview" style="height: 36px;"></iframe>
+            <div class="iframe-preview-container-hidden-mask"></div>
+          </div>
+        </div>
+        <div class="Polaris-TextField__Backdrop preview-box-fix"></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<% unless local_assigns[:just_field] %>
+  </div>
+  </div>
+  </div>
+  </div>
+
+  </div>
+  </div>
+<% end %>
+
+
+
+<% content_for(:javascript) do %>
+  <script>
+      var <%= attr %>_editor = new LiquidTemplateEditor({
+          attr: '<%= attr %>',
+          previewParams: <%= raw local_assigns[:preview_params].to_h.to_json %>,
+          frontendMode: <%= local_assigns[:frontend_mode].to_bool %>,
+          containerClasses: '<%= local_assigns[:container_css_class] %>',
+          previewVars: <%= raw local_assigns[:preview_vars].to_h.to_json %>,
+          extraCss: "<%= local_assigns[:extra_css] %>",
+          switchSelector: '#store_<%= attr %>_enabled',
+          dontUseGlobalCustomCss: <%= local_assigns[:dont_use_global_css].to_bool %>
+      });
+
+  </script>
+<% end %>

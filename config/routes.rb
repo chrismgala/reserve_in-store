@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   resources :users
   get 'stores/settings'
   get 'stores/activate'
+  get 'stores/reinstall'
+  get 'stores/resync'
   get 'stores/deactivate'
   get 'stores/setup'
   get 'stores/help'

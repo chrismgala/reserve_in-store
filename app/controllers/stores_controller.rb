@@ -50,6 +50,20 @@ class StoresController < LoggedInController
   end
 
   ##
+  # GET /stores/reinstall
+  def reinstall
+    UpdateFooterJob.new.perform(@current_store.id)
+
+    redirect_to stores_settings_url, notice: 'Reserve In-store has been re-installed into your store.'
+  end
+  ##
+  # GET /stores/resync
+  def resync
+    @current_store.sync_locations!
+
+    redirect_to stores_settings_url, notice: 'Reserve In-store has re-synced your store locations.'
+  end
+  ##
   # PUT/PATCH /stores/settings
   def save_settings
     respond_to do |format|

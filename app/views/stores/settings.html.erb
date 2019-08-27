@@ -23,6 +23,7 @@
       <div class="Polaris-Layout">
         <% if @current_store.created_at > 1.day.ago %>
           <%= render partial: "stores/settings/status", locals: { f: f, store: @current_store } %>
+          <%= render partial: "stores/settings/admin_functions", locals: { f: f, store: @current_store } %>
         <% end %>
 
         <div class="Polaris-Layout__AnnotatedSection">
@@ -320,6 +321,7 @@
 
         <% if @current_store.created_at <= 1.day.ago %>
           <%= render partial: "stores/settings/status", locals: { f: f, store: @current_store } %>
+          <%= render partial: "stores/settings/admin_functions", locals: { f: f, store: @current_store } %>
         <% end %>
 
         <div class="Polaris-Layout__Section">

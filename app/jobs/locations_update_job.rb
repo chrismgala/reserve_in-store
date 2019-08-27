@@ -8,13 +8,13 @@ class LocationsUpdateJob < ActiveJob::Base
     location = store.locations.find_by(platform_location_id: webhook[:id])
 
     if location.blank?
-      store.sync_locations!
+      # store.sync_locations!
     else
       location.load_from_shopify(webhook)
       location.save!
-    end
 
-    store.cached_api.clear_locations_cache
-    store.cached_api.locations
+      store.cached_api.clear_locations_cache
+      store.cached_api.locations
+    end
   end
 end

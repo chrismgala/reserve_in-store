@@ -6,13 +6,14 @@ class AppInstalledJob < ActiveJob::Base
     store.platform_store_id = store.id
     store.save!
 
-    if store.created_at > 15.minutes.ago
+    if store.has_not_been_setup?
       new_store(store)
+      store.sync_locations!
+
+      UpdateFooterJob.perform_later(store.id)
+
+      store.has_been_setup!
     end
-
-    store.sync_locations!
-
-    UpdateFooterJob.perform_later(store.id)
   end
 
   private

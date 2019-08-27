@@ -34,6 +34,7 @@ GEM
       activemodel (> 5.x)
       activesupport (> 5.x)
       builder (~> 3.1)
+    activemodel_flags (0.2.0)
     activerecord (5.2.0)
       activemodel (= 5.2.0)
       activesupport (= 5.2.0)
@@ -327,6 +328,7 @@ PLATFORMS
 
 DEPENDENCIES
   ace-rails-ap (~> 4.1.4)
+  activemodel_flags (~> 0.2.0)
   bootsnap (>= 1.1.0)
   byebug
   capybara (>= 2.15, < 4.0)

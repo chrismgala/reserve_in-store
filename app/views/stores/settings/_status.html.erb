@@ -71,7 +71,7 @@
     $('.btn-activate').on('click', function(e) {
         e.preventDefault();
         <% if store.needs_subscription? %>
-        window.open('<%= subscribe_path(post_subscribe_url: stores_activate_url) %>')
+        window.open('<%= subscribe_path(post_subscribe_url: stores_activate_url) %>');
         <% else %>
         window.location = '<%= stores_activate_url %>';
         <% end %>

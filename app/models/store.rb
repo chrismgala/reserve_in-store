@@ -1,5 +1,6 @@
-class Store < ActiveRecord::Base
+class Store < ApplicationRecord
   include ShopifyApp::SessionStorage
+
   has_many :locations, dependent: :destroy
   has_many :reservations, dependent: :destroy
   has_many :users, dependent: :destroy

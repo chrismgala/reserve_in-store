@@ -3,6 +3,10 @@ class Subscription < ApplicationRecord
 
   delegate :price, :code, :name, :features, :limits, :trial_days, to: :plan
 
+  scope :total_active_mrr, -> {
+    where(store_id: Store.all.find_all{ |s| s.connected? && (s.trial_days_left || 0) < 1 }.map{ |s| s.id }).sum("(plan_attributes ->> 'price')::float")
+  }
+
   ##
   # @return [Plan] A READONLY Plan based on the stored data from the plan when this subscription was created.
   def plan

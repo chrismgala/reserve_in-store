@@ -414,6 +414,50 @@ class Store < ApplicationRecord
     [plan.trial_days - ((Time.now.utc.to_i - created_at.to_i)/1.day), 0].max.ceil
   end
 
+
+  ##
+  # By default, connection errors are ignored, so it is up the store's adapter to decide if the caught error is real or not.
+  # @param e [StandardError]
+  def is_connection_error?(e)
+    return true if [ActiveResource::UnauthorizedAccess].include?(e.class)
+    return true if e.message =~ /.*((Net::(HTTPPaymentRequired|HTTPNotFound))|Payment Required).*/i
+    false
+  end
+
+  def connected?
+    Rails.cache.fetch("stores/#{id}/connected?", expires_in: 15.minutes) do
+      fetch_connection_error.blank?
+    end
+  end
+
+  ##
+  # @return [String|NiClass] Nil on success, the error class as a string on failure.
+  def fetch_connection_error
+    # ::Bananastand::StoreCrawler.new(self, raise_errors: true).read_url
+
+    api.store_information.present?
+
+    yield if block_given?
+
+    nil
+  rescue StandardError => e
+    if is_connection_error?(e)
+      e.inspect
+    else
+      ForcedLogger.log("Fetching connection got unrecognized error so assumed the store is still connected. Error was: #{e.inspect}", store: id)
+      nil
+    end
+  end
+
+  ##
+  # @return [Boolean] True if store is disconnected (we no longer have access), false otherwise.
+  def disconnected?
+    api.store_information
+    false
+  rescue ActiveResource::UnauthorizedAccess, ActiveResource::ResourceNotFound, ActiveResource::ClientError
+    true
+  end
+
   def activate!
     self.active = true
     save!

@@ -110,8 +110,9 @@ class Store < ApplicationRecord
   #
   # @param [Float|String|Integer] val 10.0
   # @return [String] Price in the form of "$10.00"
-  def price(val, opts = {})
+  def format_currency(val, opts = {})
     formatted_str = currency_template
+    val = val.to_f
     formatted_str = formatted_str
                       .gsub(/{{[ ]?amount[ ]?}}/, ActionController::Base.helpers.number_with_precision(val, precision: 2, delimiter: ','))
     formatted_str = formatted_str
@@ -119,7 +120,9 @@ class Store < ApplicationRecord
                       .gsub(/^(.+)\.00$/, '\1')
     formatted_str.gsub(/{{[ ]?amount_with_comma_separator[ ]?}}/, ActionController::Base.helpers.number_with_precision(val, precision: 2, separator: ','))
   end
-  alias_method :price, :currency
+  alias_method :price, :format_currency
+  alias_method :currency, :format_currency
+
 
   def cached_api
     with_shopify_session do
@@ -359,13 +362,16 @@ class Store < ApplicationRecord
     [plan.trial_days - ((Time.now.utc.to_i - created_at.to_i)/1.day), 0].max.ceil
   end
 
+  def approx_size
+
+  end
 
   ##
   # By default, connection errors are ignored, so it is up the store's adapter to decide if the caught error is real or not.
   # @param e [StandardError]
   def is_connection_error?(e)
-    return true if [ActiveResource::UnauthorizedAccess].include?(e.class)
-    return true if e.message =~ /.*((Net::(HTTPPaymentRequired|HTTPNotFound))|Payment Required).*/i
+    return true if [ActiveResource::UnauthorizedAccess, ActiveResource::ResourceNotFound, ActiveResource::ForbiddenAccess].include?(e.class)
+    return true if e.message =~ /.*((Net::(HTTPPaymentRequired|HTTPNotFound))|Payment Required|Locked).*/i
     false
   end
 

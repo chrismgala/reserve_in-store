@@ -32,7 +32,7 @@ if [[ ("$1" == 'all') || ("$1" == 'web') ]]; then
 
 
   echo "Invalidating CDN on CloudFront..."
-  curl -X POST "https://api.cloudflare.com/client/v4/zones/e64d384aa23b4c85854fe45889bcd4fa/purge_cache" \
+  curl -X POST "https://api.cloudflare.com/client/v4/zones/eb1bc99afdb00154120a4f5c5f84260a/purge_cache" \
        -H "X-Auth-Email: jay@bananastand.io" \
        -H "X-Auth-Key: $PUBLIC_CDN_CLOUDFLARE_AUTH_KEY" \
        -H "Content-Type: application/json" \

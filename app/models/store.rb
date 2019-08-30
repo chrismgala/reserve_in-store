@@ -31,9 +31,14 @@ class Store < ApplicationRecord
 
   JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].to_s.chomp('/')}/reserveinstore.js"
 
+
+  ##
+  # Get store's money format from cache, hit Shopify Api if cache is missing
+  # @return [String] Money format in the form of "${{amount}}"
   def currency_template
     shopify_settings[:money_format].presence || '${{amount}}'
   end
+  alias_method :money_format, :currency_template
 
   def integrator
     @integrator ||= StoreIntegrator.new(self)
@@ -103,20 +108,18 @@ class Store < ApplicationRecord
   ##
   # Display a product's price, check which currency the store is using, and render a string
   #
-  # @param [String] money_amount "10.00"
+  # @param [Float|String|Integer] val 10.0
   # @return [String] Price in the form of "$10.00"
-  def price(money_amount)
-    money_format.gsub(/{{[ ]?amount[ ]?}}/, ActionController::Base.helpers.number_with_precision(money_amount, precision: 2, delimeter: ','))
-        .gsub(/{{[ ]?amount_with_comma_separator[ ]?}}/, ActionController::Base.helpers.number_with_precision(money_amount, precision: 2, separator: ','))
-        .gsub(/{{[ ]?amount_no_decimals[ ]?}}/, ActionController::Base.helpers.number_with_precision(money_amount, precision: 0, separator: ','))
+  def price(val, opts = {})
+    formatted_str = currency_template
+    formatted_str = formatted_str
+                      .gsub(/{{[ ]?amount[ ]?}}/, ActionController::Base.helpers.number_with_precision(val, precision: 2, delimiter: ','))
+    formatted_str = formatted_str
+                      .gsub(/{{[ ]?amount_no_decimals[ ]?}}/, ActionController::Base.helpers.number_with_precision(val, precision: 0, delimiter: ','))
+                      .gsub(/^(.+)\.00$/, '\1')
+    formatted_str.gsub(/{{[ ]?amount_with_comma_separator[ ]?}}/, ActionController::Base.helpers.number_with_precision(val, precision: 2, separator: ','))
   end
-
-  ##
-  # Get store's money format from cache, hit Shopify Api if cache is missing
-  # @return [String] Money format in the form of "${{amount}}"
-  def money_format
-    shopify_settings['money_format']
-  end
+  alias_method :price, :currency
 
   def cached_api
     with_shopify_session do
@@ -164,64 +167,6 @@ class Store < ApplicationRecord
         loc.save!
       end
     end
-  end
-
-  ##
-  # Store.all.find_each { |s| begin; s.fix_old_data!; rescue => e; ForcedLogger.log("Failed to fix old data: #{e.inspect}", store: s.id); end; }; nil
-  # @deprecated Temporary code and can be removed by May 31, 2019
-  def fix_old_data!
-    new_locations = api.locations.map do |shopify_loc|
-      Location.new_from_shopify(shopify_loc, self)
-    end
-
-    locations.where(platform_location_id: nil).find_each do |old_location|
-      new_locations.each do |new_location|
-        match = old_location.attributes.except('id', 'created_at', 'updated_at', 'store_id', 'email', 'platform_location_id').keys.all? do |attr_key|
-          new_location.attributes[attr_key] == old_location.attributes[attr_key]
-        end
-
-        if match
-          ForcedLogger.log("Updating location with platform ID of #{new_location.platform_location_id}...", location: old_location.id, store: id)
-          old_location.update(platform_location_id: new_location.platform_location_id)
-        end
-      end
-    end
-
-    locations.where("length(country) = 2").each do |location|
-      if location.update(country: Carmen::Country.coded(location.country).name)
-        ForcedLogger.log("Fixed location country code to country name.", location: location.id, store: id)
-      end
-    end
-
-    ForcedLogger.log("Ensuring all webhooks are installed...", store: id)
-    ShopifyApp::WebhooksManager.queue(
-      shopify_domain,
-      shopify_token,
-      ShopifyApp.configuration.webhooks
-    )
-
-    ForcedLogger.log("Ensuring all scripts are installed...", store: id)
-    ShopifyApp::ScripttagsManager.queue(
-      shopify_domain,
-      shopify_token,
-      ShopifyApp.configuration.scripttags
-    )
-
-    ForcedLogger.log("Updating reservation modals with proper cart data", store: id)
-    reservations.where(cart: nil).find_each do |reservation|
-      reservation.populate_cart_attribute
-      if reservation.changed?
-        if reservation.save
-          ForcedLogger.log("Updated reservation to contain cart data.", store: id, reservation: reservation.id)
-        else
-          ForcedLogger.warn("Failed to update reservation to contain cart data: #{reservation.errors.full_messages.inspect}", store: id, reservation: reservation.id)
-        end
-      end
-    end
-
-    UpdateFooterJob.perform_later(self.id)
-
-    true
   end
 
 

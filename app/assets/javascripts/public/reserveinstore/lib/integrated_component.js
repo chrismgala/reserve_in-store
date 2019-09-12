@@ -15,7 +15,8 @@ ReserveInStore.IntegratedComponent = function (opts) {
         self.$containers = $();
 
         if (action === 'manual') {
-            // Don't try to integrate
+            // Don't try to integrate, update containers to allow external references to the data
+            self.$containers = self.$containers.add($(config.tpl || opts.defaults.tpl));
         } else if (action === 'auto') {
             insert(opts.defaults.selector, opts.defaults.action);
         } else {

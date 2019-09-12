@@ -31,8 +31,9 @@ ReserveInStore.StockStatusIndicator = function (opts) {
             },
             visibleInitially: false,
             config: config,
-            afterInsert: afterInsert
+            afterInsert: function(){}
         });
+        afterInsert();
     };
 
     self.whenReady = function(then) {

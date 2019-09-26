@@ -56,7 +56,7 @@ ReserveInStore.LocationsManager = function (opts) {
             return favoriteLocation;
         }
 
-        return null; //self.findNearestLocation();
+        return self.findNearestLocation();
     };
 
     self.findNearestLocation = function() {
@@ -117,20 +117,27 @@ ReserveInStore.LocationsManager = function (opts) {
         });
     };
 
+    var updateLocations = function() {
+        api.getLocations({}, function(_locations) {
+            locations = _locations;
+            storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
+            locationsReady = true;
+            if (favoriteLocation) ready = true;
+        });
+    };
+
     var loadLocations = function() {
         locations = storage.getItem('LocationsManager.locations');
 
-        if (!locations) {
-            api.getLocations({}, function(_locations) {
-                locations = _locations;
-                storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
-                locationsReady = true;
-                if (favoriteLocation) ready = true;
-            });
-        } else {
+        if (locations) {
             locationsReady = true;
             if (favoriteLocation) ready = true;
+
+            setTimeout(updateLocations, 15000); // Wait 15 seconds then get the latest locations.
+        } else {
+            updateLocations();
         }
+
     };
 
     init();

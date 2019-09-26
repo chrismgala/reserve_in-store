@@ -14,7 +14,7 @@ ReserveInStore.StockStatusIndicator = function (opts) {
     var DEFAULT_TPL = '<div class="reserveInStore-stockStatus">' +
         '<div class="reserveInStore-stockStatus-location">' +
         '<span class="reserveInStore-stockStatus-status">In Stock</span> @' +
-        '<a href="#" onclick="window.reserveInStore.showChooseLocationModal();" ' +
+        '<a href="#" onclick="window.reserveInStore.showChooseLocationModal(); return false;" ' +
         'class="reserveInStore-stockStatus-locationName">store location</a>' +
         '</div>' +
         '</div>';

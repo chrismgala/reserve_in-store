@@ -1,6 +1,6 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.2.1.1'; // Version of the JS library.
+    this.version = '1.2.1.3'; // Version of the JS library.
     var self = this;
     opts = opts || {};
     opts.app = self;
@@ -108,6 +108,8 @@ ReserveInStore.App = function(opts) {
             e.preventDefault();
         }
         chooselocationModal.show.apply(chooselocationModal, arguments);
+
+        return false;
     };
 
     self.showReserveModal = function() {

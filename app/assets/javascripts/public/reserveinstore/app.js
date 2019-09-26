@@ -34,12 +34,16 @@ ReserveInStore.App = function(opts) {
         self.debugMode = opts.debugMode || (window.location.toString().indexOf('ris_debug=1') !== -1);
         ReserveInStore.logger = new ReserveInStore.Logger(opts);
 
+        if (self.debugMode) {
+            ReserveInStore.logger.log("Loaded version " + self.version)
+        }
+
         ReserveInStore.Util.waitFor$(function jqueryWaitingFunction() {
             api = new ReserveInStore.Api(opts);
             storage = new ReserveInStore.LocalStorage(opts);
 
             if (window.location.toString().indexOf('clear_cache') !== -1) {
-                storage.clear();
+                self.clearCache();
             }
 
             loadPushBuffer();
@@ -93,6 +97,10 @@ ReserveInStore.App = function(opts) {
             app: self
         });
 
+    };
+
+    self.clearCache = function() {
+        storage.clear();
     };
 
     self.showChooseLocationModal = function(e) {

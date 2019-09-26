@@ -5,7 +5,7 @@ class Location < ActiveRecord::Base
   validates :name, :email, presence: true
   validates_associated :store
 
-  PERMITTED_PARAMS = [:name, :email, :address, :country, :state, :city, :phone, :zip, :custom_html]
+  PERMITTED_PARAMS = [:name, :email, :address, :country, :state, :city, :phone, :zip, :custom_html, :platform_location_id]
   PUBLIC_ATTRIBUTES = [:id, :name, :address, :country, :state, :city, :zip, :google_maps_url, :platform_location_id, :formatted_address, :details]
 
 

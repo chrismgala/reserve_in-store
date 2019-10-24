@@ -34,7 +34,7 @@ class ReservationMailer < ApplicationMailer
   private
 
   def store_location_contact
-    "\"#{store_name}\" <#{@reservation.location.email}>"
+    @reservation.location.email.split(",").map{|email_address| "\"#{store_name}\" <#{email_address}>"}.join(",")
   end
 
 

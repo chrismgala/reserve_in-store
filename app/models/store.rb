@@ -17,6 +17,7 @@ class Store < ApplicationRecord
   PERMITTED_PARAMS = [
     :top_msg, :success_msg, :show_phone, :show_instructions_from_customer, :active,
     :customer_confirm_email_tpl, :customer_confirm_email_tpl_enabled,
+    :location_notification_email_tpl, :location_notification_email_tpl_enabled,
     :reserve_modal_tpl, :reserve_modal_tpl_enabled,
     :choose_location_modal_tpl, :choose_location_modal_tpl_enabled,
     :reserve_modal_faq_tpl, :reserve_modal_faq_tpl_enabled,
@@ -197,6 +198,24 @@ class Store < ApplicationRecord
   end
   alias_method :email_template_in_use, :customer_confirm_email_tpl_in_use # Alias for reverse compatibility, can be removed probably by July 1, 2019
 
+  ##
+  # @return [Text] - default, un-rendered email template
+  def self.default_location_notification_email_tpl
+    return @default_location_notification_email_tpl if @default_location_notification_email_tpl.present? && !Rails.env.development?
+
+    @default_location_notification_email_tpl = ApplicationController.new.render_to_string(partial: 'reservation_mailer/default_templates/location_notification_email_tpl')
+  end
+  def default_location_notification_email_tpl; self.class.default_location_notification_email_tpl; end
+
+  ##
+  # @return [Text] - The template we want to use for emails for this store
+  def location_notification_email_tpl_in_use
+    if location_notification_email_tpl_enabled? && location_notification_email_tpl.present?
+      location_notification_email_tpl.to_s
+    else
+      self.class.default_location_notification_email_tpl
+    end
+  end
 
   ######################################################
   # For FAQ TPL

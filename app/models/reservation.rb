@@ -35,8 +35,15 @@ class Reservation < ActiveRecord::Base
   ##
   # @param [String] shopify_product_link - the link to put in our liquid params
   # @return [Text] - rendered email template
-  def rendered_email_template
+  def rendered_customer_confirm_email_template
     tpl = store.customer_confirm_email_tpl_in_use
+    Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
+  end
+
+  ##
+  # @return [Text] - rendered email template
+  def rendered_location_notification_email_template
+    tpl = store.location_notification_email_tpl_in_use
     Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
   end
 
@@ -132,7 +139,10 @@ class Reservation < ActiveRecord::Base
                    product_title: "Sample Product Name",
                    variant_title: "Variant Name",
                    total: 1234,
-                   total_formatted: store.currency(12.34)
+                   total_formatted: store.currency(12.34),
+                   product: {
+                       vendor: "Sample Product Brand/Vendor"
+                   }
                  }
                ]
       }

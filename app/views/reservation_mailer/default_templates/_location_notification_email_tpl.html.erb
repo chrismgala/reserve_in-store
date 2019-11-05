@@ -1,0 +1,37 @@
+<h4>Items:</h4>
+<ul>
+  {% for item in cart.items %}
+  <li>
+    {{ item.product_title }} ({{ item.variant_title }})
+  </li>
+  {% endfor %}
+</ul>
+
+{% if instructions_from_customer %}
+<h4>Pick-up Date/Time:</h4>
+<p>
+  {{ instructions_from_customer }}
+</p>
+{% endif %}
+
+<h4>Contact Information</h4>
+<p>
+  {{ customer.first_name }} {{ customer.last_name }}
+  <br>
+  {{ customer.email }}
+  {% if customer.phone %}
+    <br>
+    {{ customer.phone }}
+  {% endif %}
+</p>
+
+<h4>Store Location</h4>
+<p>
+  {{ location.name }}
+  <br>
+  {{ location.address }}
+  <br>
+  {{ location.city }} {{ location.state }}
+  <br>
+  {{ location.country }}
+</p>

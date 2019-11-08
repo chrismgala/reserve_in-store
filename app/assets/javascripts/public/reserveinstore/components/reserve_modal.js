@@ -5,11 +5,15 @@ ReserveInStore.ReserveModal = function (opts) {
     var api, $modalBackground, $reserveModal, $successModal, $form, formDataArray;
 
     var locationsManager = opts.locationsManager;
+    var inventoryTable;
+    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock"];
 
     var product, variant, cart, lineItem = {};
 
     var init = function () {
         api = opts.api;
+
+        buildInventoryTable();
     };
 
     /**
@@ -154,6 +158,8 @@ ReserveInStore.ReserveModal = function (opts) {
             if (!bestLocation) return; // Could not determine best location
 
             self.$modalContainer.find('input[name="reservation[location_id]"][value="'+bestLocation.id+'"]').prop('checked', true);
+
+            updateLocationStockInfo(locationsManager.getLocations());
         });
 
         adjustModalHeight();
@@ -182,6 +188,47 @@ ReserveInStore.ReserveModal = function (opts) {
         });
 
         $fit.css('max-height', totalHeight);
+    };
+
+    var buildInventoryTable = function () {
+        inventoryTable = {};
+        if (opts.app.getProduct()) {
+            api.getInventory({ product_id: opts.app.getProduct().id }, function(_inventoryTable) {
+                inventoryTable = _inventoryTable;
+            });
+        } else if(opts.app.getCart()) {
+            //TODO: try to get this working with carts
+            //The point is to add a stock indicator to the location list and filter locations with no stock,
+            //currently this works in the Product page but not the Cart page.
+        }
+    };
+
+    var updateLocationStockInfo = function (locations) {
+        var inventoryLocations;
+        var $locationContainer, $locationInput, $stockStatusDiv;
+
+        if (product && variant) {
+            inventoryLocations = inventoryTable[variant.id];
+
+            for (var i = 0; i < locations.length; i++) {
+                $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id );
+                $locationContainer = $locationInput.parent().parent().parent();
+                $stockStatusDiv = $locationContainer.find('.ris-location-stock-status');
+
+                if (inventoryLocations[locations[i].platform_location_id] === 'low_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
+                    $stockStatusDiv.addClass('ris-location-stock-status-low-stock');
+                } else if (inventoryLocations[locations[i].platform_location_id] === 'in_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
+                    $stockStatusDiv.addClass('ris-location-stock-status-in-stock');
+                } else {
+                    $locationInput.prop('disabled', true);
+                    $locationContainer.addClass('ris-location-disabled');
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
+                    $stockStatusDiv.addClass('ris-location-stock-status-no-stock');
+                }
+            }
+        }
     };
 
     /**

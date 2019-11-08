@@ -6,6 +6,9 @@ ReserveInStore.ChooseLocationModal = function (opts) {
 
     var locationsManager = opts.locationsManager;
 
+    var inventoryTable;
+    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock"];
+
     var init = function () {
         api = opts.api;
     };
@@ -53,6 +56,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
             self.$modalContainer.find('input[name="location_id"][value="'+bestLocation.id+'"]').prop('checked', true);
         });
 
+        updateLocationStockInfo();
         adjustModalHeight();
 
         visible = true;
@@ -87,6 +91,36 @@ ReserveInStore.ChooseLocationModal = function (opts) {
         });
 
         $fit.css('max-height', totalHeight);
+    };
+
+    var updateLocationStockInfo = function () {
+        api.getInventory({ product_id: opts.app.getProduct().id }, function(_inventoryTable) {
+            var inventoryLocations;
+            var $locationContainer, $locationInput, $stockStatusDiv;
+
+            inventoryTable = _inventoryTable;
+
+            inventoryLocations = inventoryTable[opts.app.getVariant().id];
+
+            opts.app.getLocations(function(locations) {
+                for (var i = 0; i < locations.length; i++) {
+                    $locationInput = $modal.find('#location_id-' + locations[i].id );
+                    $locationContainer = $locationInput.parent().parent().parent();
+                    $stockStatusDiv = $locationContainer.find('.ris-location-stock-status');
+
+                    if (inventoryLocations[locations[i].platform_location_id] === 'low_stock') {
+                        $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
+                        $stockStatusDiv.addClass('ris-location-stock-status-low-stock');
+                    } else if (inventoryLocations[locations[i].platform_location_id] === 'in_stock') {
+                        $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
+                        $stockStatusDiv.addClass('ris-location-stock-status-in-stock');
+                    } else {
+                        $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
+                        $stockStatusDiv.addClass('ris-location-stock-status-no-stock');
+                    }
+                }
+            });
+        });
     };
 
     /**

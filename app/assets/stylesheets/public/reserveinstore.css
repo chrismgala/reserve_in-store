@@ -523,6 +523,7 @@ img.ris-location-mapPin-img {
 .ris-location-content {
     display: table;
     width: 100%;
+    position: relative;
 }
 
 .ris-location-content-left, .ris-location-content-right, .ris-location-content-middle {
@@ -551,7 +552,7 @@ a.ris-location-mapPin {
 }
 
 .ris-location-option:not(:last-child) {
-    margin-bottom: 24px;
+    margin-bottom: 14px;
 }
 
 .ris-location-content-left {
@@ -577,6 +578,57 @@ label.ris-location-name {
     color: #353535;
     margin-top: 2px;
 }
+
+.ris-location-disabled .ris-location-content-left {
+    opacity: 0.5;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.ris-location-disabled .ris-location-content-middle {
+    background-color: #bbb;
+    opacity: 0.5;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 5px;
+    border-radius: 5px 0 0 5px;
+}
+
+.ris-location-disabled .ris-location-name {
+    cursor: unset;
+}
+
+.ris-location-disabled .ris-location-content-right {
+    background-color: #bbb;
+    opacity: 0.5;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 0 5px 5px 0;
+}
+
+.ris-location-stock-status {
+    display: table-cell;
+    border-radius: 3px;
+    padding-right: 4px;
+    padding-left: 4px;
+    color: white;
+    font-size: 8pt;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.ris-location-stock-status-in-stock {
+    background: green;
+}
+
+.ris-location-stock-status-low-stock {
+    background: orange;
+}
+
+.ris-location-stock-status-no-stock {
+    background: black;
+}
+
 
 .ris-faq:not(:last-child) {
     margin-bottom: 12px;

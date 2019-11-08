@@ -140,9 +140,12 @@ class Reservation < ActiveRecord::Base
                    variant_title: "Variant Name",
                    total: 1234,
                    total_formatted: store.currency(12.34),
-                   product: {
-                       vendor: "Sample Product Brand/Vendor"
-                   }
+                   price: 1234,
+                   vendor: "Sample Product Brand/Vendor",
+                   handle: "Sample Product Name",
+                   product_description: "This is the description for a sample product",
+                   taxable: true,
+                   sku: "SKU1234ABCD"
                  }
                ]
       }

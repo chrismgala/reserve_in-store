@@ -9,7 +9,7 @@ class ReservationMailer < ApplicationMailer
   def location_notification(store:, reservation:)
     @store = store
     @reservation = reservation
-    @rendered_location_notification_email_template = @reservation.rendered_location_notification_email_template
+    @rendered_location_email_template = @reservation.rendered_location_email_template
     staged_mail(to: store_location_contact,
                 subject: store.location_notification_subject.presence || "New In-store Reservation",
                 from: system_contact)
@@ -25,7 +25,7 @@ class ReservationMailer < ApplicationMailer
   def customer_confirmation(store:, reservation:)
     @store = store
     @reservation = reservation
-    @rendered_customer_confirm_email_template = @reservation.rendered_customer_confirm_email_template
+    @rendered_customer_email_template = @reservation.rendered_customer_email_template
     staged_mail(to: customer_contact,
                 subject: store.customer_confirmation_subject.presence || "In-Store Reservation Confirmation",
                 from: system_contact,

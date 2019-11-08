@@ -35,14 +35,15 @@ class Reservation < ActiveRecord::Base
   ##
   # @param [String] shopify_product_link - the link to put in our liquid params
   # @return [Text] - rendered email template
-  def rendered_customer_confirm_email_template
+  def rendered_customer_email_template
     tpl = store.customer_confirm_email_tpl_in_use
     Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
   end
 
   ##
-  # @return [Text] - rendered email template
-  def rendered_location_notification_email_template
+  # @return [ActiveSupport::SafeBuffer] - the rendered email template is a String object
+  # which is then wrapped in a SafeBuffer
+  def rendered_location_email_template
     tpl = store.location_notification_email_tpl_in_use
     Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
   end

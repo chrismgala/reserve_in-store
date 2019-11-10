@@ -73,13 +73,7 @@ ReserveInStore.ReserveModal = function (opts) {
                 variant_id: variant.id,
                 total: variant.price,
                 variant: variant,
-                product: product,
-                title: product.title,
-                handle: product.handle,
-                product_description: product.description,
-                vendor: product.vendor,
-                taxable: variant.taxable,
-                sku: variant.sku
+                product: product
             };
             item.price = item.total;
 

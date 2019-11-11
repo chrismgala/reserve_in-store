@@ -5,7 +5,9 @@ ReserveInStore.ReserveModal = function (opts) {
     var api, $modalBackground, $reserveModal, $successModal, $form, formDataArray;
 
     var locationsManager = opts.locationsManager;
+    var inventoryManager = opts.inventoryManager;
     var inventoryTable;
+
     var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock"];
 
     var product, variant, cart, lineItem = {};
@@ -13,7 +15,7 @@ ReserveInStore.ReserveModal = function (opts) {
     var init = function () {
         api = opts.api;
 
-        buildInventoryTable();
+        preloadInventoryData();
     };
 
     /**
@@ -154,6 +156,8 @@ ReserveInStore.ReserveModal = function (opts) {
             locationsManager.setFavoriteLocationId(locationId);
         });
 
+        buildInventoryTable();
+
         locationsManager.whenReady(function(bestLocation) {
             if (!bestLocation) return; // Could not determine best location
 
@@ -190,16 +194,30 @@ ReserveInStore.ReserveModal = function (opts) {
         $fit.css('max-height', totalHeight);
     };
 
+    /**
+     * Attempt to pre-load inventory data using what information is available at the start. T
+     */
+    var preloadInventoryData = function () {
+        if (opts.app.getProduct()) {
+             inventoryManager.updateInventory(opts.app.getProduct().id);
+        } else if(opts.app.getCart()) {
+            var cartItems = opts.app.getCart().items;
+            for (var i = 0; i < cartItems.length; i++) {
+                inventoryManager.updateInventory(cartItems[i].product_id);
+            }
+        }
+    };
+
     var buildInventoryTable = function () {
         inventoryTable = {};
-        if (opts.app.getProduct()) {
-            api.getInventory({ product_id: opts.app.getProduct().id }, function(_inventoryTable) {
-                inventoryTable = _inventoryTable;
-            });
-        } else if(opts.app.getCart()) {
-            //TODO: try to get this working with carts
-            //The point is to add a stock indicator to the location list and filter locations with no stock,
-            //currently this works in the Product page but not the Cart page.
+
+        if (product && variant) {
+            inventoryTable[product.id] = inventoryManager.getInventory(product.id);
+        } else if(cart) {
+            var cartItems = cart.items;
+            for (var i = 0; i < cartItems.length; i++) {
+                inventoryTable[cartItems[i].product_id] = inventoryManager.getInventory(cartItems[i].product_id);
+            }
         }
     };
 
@@ -208,7 +226,7 @@ ReserveInStore.ReserveModal = function (opts) {
         var $locationContainer, $locationInput, $stockStatusDiv;
 
         if (product && variant) {
-            inventoryLocations = inventoryTable[variant.id];
+            inventoryLocations = inventoryTable[product.id][variant.id];
 
             for (var i = 0; i < locations.length; i++) {
                 $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id );
@@ -222,6 +240,33 @@ ReserveInStore.ReserveModal = function (opts) {
                     $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
                     $stockStatusDiv.addClass('ris-location-stock-status-in-stock');
                 } else {
+                    $locationInput.prop('disabled', true);
+                    $locationContainer.addClass('ris-location-disabled');
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
+                    $stockStatusDiv.addClass('ris-location-stock-status-no-stock');
+                }
+            }
+        } else if (cart) {
+            var cartItems = cart.items;
+
+            for (var i = 0; i < locations.length; i++) {
+                var stockCount = cartItems.length;
+                var inventoryData, stockStatus;
+
+                for (var j = 0; j < cartItems.length; j++) {
+                    inventoryData = inventoryTable[cartItems[j].product_id][cartItems[j].variant_id];
+                    stockStatus  = inventoryData[locations[i].platform_location_id];
+
+                    if ((stockStatus === 'out_of_stock') || (stockStatus === 'unknown_stock') || !stockStatus) {
+                        stockCount-=1;
+                    }
+                }
+
+                $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id );
+                $locationContainer = $locationInput.parent().parent().parent();
+                $stockStatusDiv = $locationContainer.find('.ris-location-stock-status');
+
+                if (stockCount === 0) {
                     $locationInput.prop('disabled', true);
                     $locationContainer.addClass('ris-location-disabled');
                     $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);

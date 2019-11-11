@@ -8,7 +8,8 @@ ReserveInStore.App = function(opts) {
 
     var config, api, storage;
     var product, variant, cart, stockStatus;
-    var reserveModal, chooselocationModal, variantLoader, locationsManager;
+    var reserveModal, chooselocationModal, variantLoader
+    var locationsManager, inventoryManager;
     var reserveProductBtn, reserveCartBtn, stockStatusIndicator;
 
     var eventListeners = {
@@ -71,6 +72,9 @@ ReserveInStore.App = function(opts) {
 
         locationsManager = new ReserveInStore.LocationsManager(componentOpts);
         componentOpts.locationsManager = locationsManager;
+
+        inventoryManager = new ReserveInStore.InventoryManager(componentOpts);
+        componentOpts.inventoryManager = inventoryManager;
 
         reserveModal = new ReserveInStore.ReserveModal(componentOpts);
         chooselocationModal = new ReserveInStore.ChooseLocationModal(componentOpts);

@@ -35,8 +35,16 @@ class Reservation < ActiveRecord::Base
   ##
   # @param [String] shopify_product_link - the link to put in our liquid params
   # @return [Text] - rendered email template
-  def rendered_email_template
+  def rendered_customer_email_template
     tpl = store.customer_confirm_email_tpl_in_use
+    Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
+  end
+
+  ##
+  # @return [ActiveSupport::SafeBuffer] - the rendered email template is a String object
+  # which is then wrapped in a SafeBuffer
+  def rendered_location_email_template
+    tpl = store.location_notification_email_tpl_in_use
     Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
   end
 
@@ -87,6 +95,18 @@ class Reservation < ActiveRecord::Base
   ##
   # @return [Hash] - render the email liquid with this hash
   def email_liquid_params
+    if attributes['cart']['items'].length == 1
+      product = attributes['cart']['items'][0]['product']
+      variant = attributes['cart']['items'][0]['variant']
+      attributes['cart']['items'][0].merge!({
+                                              vendor: product['vendor'],
+                                              title: product['title'],
+                                              handle: product['handle'],
+                                              product_description: product['description'],
+                                              taxable: variant['taxable'],
+                                              sku: variant['sku']
+                                           }.deep_stringify_keys)
+    end
     attributes.merge({
                        customer: {
                          first_name: customer_first_name,
@@ -132,7 +152,13 @@ class Reservation < ActiveRecord::Base
                    product_title: "Sample Product Name",
                    variant_title: "Variant Name",
                    total: 1234,
-                   total_formatted: store.currency(12.34)
+                   total_formatted: store.currency(12.34),
+                   price: 1234,
+                   vendor: "Sample Product Brand/Vendor",
+                   handle: "Sample Product Name",
+                   product_description: "This is the description for a sample product",
+                   taxable: true,
+                   sku: "SKU1234ABCD"
                  }
                ]
       }

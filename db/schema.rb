@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_27_213212) do
+ActiveRecord::Schema.define(version: 2019_11_04_190929) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,8 @@ ActiveRecord::Schema.define(version: 2019_08_27_213212) do
     t.string "customer_confirmation_subject"
     t.string "location_notification_subject"
     t.jsonb "flags"
+    t.boolean "location_notification_email_tpl_enabled", default: false
+    t.text "location_notification_email_tpl"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

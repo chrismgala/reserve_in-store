@@ -19,36 +19,7 @@
 
               <hr style="max-width: 100px;">
 
-              <h4>Items:</h4>
-              <ul>
-                <% @reservation.cart[:items].to_a.each do |item| %>
-                  <li><%= item[:product_title] %> (<%= item[:variant_title] %>)</li>
-                <% end %>
-              </ul>
-
-              <% if @reservation.instructions_from_customer.present? %>
-                <h4>Pick-up Date/Time:</h4>
-                <p>
-                  <%= @reservation.instructions_from_customer %>
-                </p>
-              <% end %>
-
-              <h4>Contact Information</h4>
-              <p>
-                <%= @reservation.customer_name %>
-                <br><%= @reservation.customer_email %>
-                <% if @reservation.customer_phone.present? %>
-                  <br><%= number_to_phone(@reservation.customer_phone) %>
-                <% end %>
-              </p>
-
-              <h4>Store Location</h4>
-              <p>
-                <%= @reservation.location.name %><br>
-                <%= @reservation.location.address %><br>
-                <%= "#{@reservation.location.city} #{@reservation.location.state}" %><br>
-                <%= @reservation.location.country %>
-              </p>
+              <%= @rendered_location_email_template %>
 
               <hr style="max-width: 100px;">
 

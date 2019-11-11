@@ -83,42 +83,23 @@
             # frontend_mode: true
         } %>
 
-        <div class="Polaris-Layout__AnnotatedSection">
-          <div class="Polaris-Layout__AnnotationWrapper">
-            <div class="Polaris-Layout__Annotation">
-              <div class="Polaris-TextContainer">
-                <h2 class="Polaris-Heading">Location Notification Email</h2>
-                <p>Options for the notification email that gets sent to a store location email address when a new store reservation is created by a visitor.</p>
-              </div>
-            </div>
-            <div class="Polaris-Layout__AnnotationContent">
-              <div class="Polaris-Card">
-                <div class="Polaris-Card__Section">
 
-                  <div class="Polaris-FormLayout">
-                    <div id="location_notification_section">
+        <%= render partial: 'stores/shared/email_template_section', locals: {
+            heading: 'Location Notification Email',
+            enabled: @current_store.location_notification_email_tpl_enabled?,
+            subheading: 'Options for the notification email that gets sent to a store location email address when a new store reservation is created by a visitor.',
+            attr: 'location_notification_email_tpl',
+            db_value: @current_store.location_notification_email_tpl,
+            value_in_use: @current_store.location_notification_email_tpl_in_use,
+            default_value: @current_store.default_location_notification_email_tpl,
+            preview_vars: Reservation.new(store: @current_store).preview_email_liquid_params,
+            dont_use_global_css: true,
+            preview_params: { email: true },
+            subject_field: :location_notification_subject,
+            subject_field_default: 'Default: New In-store Reservation',
+            f: f
+        } %>
 
-                      <div class="Polaris-FormLayout__Item">
-
-                        <div class="Polaris-Labelled__LabelWrapper">
-                          <div class="Polaris-Label">
-                            <label class="Polaris-Label__Text">
-                              Subject
-                            </label>
-                          </div>
-                        </div>
-                        <div class="Polaris-TextField">
-                          <%= f.text_field :location_notification_subject, class: 'Polaris-TextField__Input', placeholder: 'Default: New In-store Reservation' %>
-                          <div class="Polaris-TextField__Backdrop"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <%= render partial: 'stores/shared/liquid_editor_section', locals: {
             heading: 'Product Page Reserve Button',

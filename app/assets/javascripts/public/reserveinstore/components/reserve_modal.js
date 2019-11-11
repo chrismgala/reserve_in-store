@@ -8,7 +8,7 @@ ReserveInStore.ReserveModal = function (opts) {
     var inventoryManager = opts.inventoryManager;
     var inventoryTable;
 
-    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock"];
+    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock", " out of ", " items available"];
 
     var product, variant, cart, lineItem = {};
 
@@ -271,6 +271,9 @@ ReserveInStore.ReserveModal = function (opts) {
                     $locationContainer.addClass('ris-location-disabled');
                     $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
                     $stockStatusDiv.addClass('ris-location-stock-status-no-stock');
+                } else if ((stockCount < cartItems.length) && (stockCount > 0)) {
+                    $stockStatusDiv.text(stockCount + DEFAULT_STOCK_CAPTIONS[3] + cartItems.length + DEFAULT_STOCK_CAPTIONS[4]);
+                    $stockStatusDiv.addClass('ris-location-stock-status-low-stock');
                 }
             }
         }

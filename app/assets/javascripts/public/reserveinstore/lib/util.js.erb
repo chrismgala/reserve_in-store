@@ -201,7 +201,7 @@ ReserveInStore.Util = {
     addZepto: function(opts, callback) {
         callback = callback || function() {
         };
-        var asset = new FeraCachedAsset({
+        var asset = new ReserveInStoreCachedAsset({
             name: 'zepto',
             version: '1.2.0',
             expiresIn: opts.devMode ? 15 : (15 * 60), // Expires in 15 minutes in production, or 15 seconds in dev mode.

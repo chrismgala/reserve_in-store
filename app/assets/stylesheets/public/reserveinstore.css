@@ -607,7 +607,7 @@ label.ris-location-name {
     border-radius: 0 5px 5px 0;
 }
 
-.ris-location-stock-status {
+.ris-location-stockStatus {
     display: table-cell;
     border-radius: 3px;
     padding-right: 4px;
@@ -618,15 +618,15 @@ label.ris-location-name {
     letter-spacing: 1px;
 }
 
-.ris-location-stock-status-in-stock {
+.ris-location-stockStatus-in-stock {
     background: green;
 }
 
-.ris-location-stock-status-low-stock {
+.ris-location-stockStatus-low-stock {
     background: orange;
 }
 
-.ris-location-stock-status-no-stock {
+.ris-location-stockStatus-no-stock {
     background: black;
 }
 

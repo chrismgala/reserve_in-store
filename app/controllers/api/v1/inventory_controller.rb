@@ -5,10 +5,20 @@ module Api
       ##
       # GET /api/v1/inventory.json?product_id=#{product_id}
       def index
-        fetcher = InventoryFetcher.new(@store, params[:product_id])
+        fetcher = InventoryFetcher.new(@store, "product", params[:product_id])
 
         render json: fetcher.levels
 
+      rescue ActiveResource::ResourceNotFound
+        not_found("Product or Variant not found")
+      end
+
+      ##
+      # GET /api/v1/inventories.json?product_ids=#{product_id},#{product_id}
+      def index_multi
+        fetcher = InventoryFetcher.new(@store, "cart", params[:product_ids])
+
+        render json: fetcher.levels
       rescue ActiveResource::ResourceNotFound
         not_found("Product or Variant not found")
       end

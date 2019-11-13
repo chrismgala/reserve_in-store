@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       get 'locations' => 'locations#index'
       match 'reservations/modal' => 'reservations#modal', via: [:post, :get]
       get 'inventory' => 'inventory#index'
+      get 'inventories' => 'inventory#index_multi'
       post 'reservations' => 'reservations#create'
       get 'reservations' => 'reservations#index'
 

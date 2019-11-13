@@ -99,25 +99,26 @@ ReserveInStore.ChooseLocationModal = function (opts) {
         var inventoryLocations;
         var $locationInput, $stockStatusDiv;
 
-        inventoryTable = inventoryManager.getInventory(opts.app.getProduct().id);
+        inventoryManager.getInventory(opts.app.getProduct().id, function(_inventory) {
+            inventoryTable = _inventory;
+            inventoryLocations = inventoryTable[opts.app.getVariant().id];
 
-        inventoryLocations = inventoryTable[opts.app.getVariant().id];
+            for (var i = 0; i < locations.length; i++) {
+                $locationInput = $modal.find('#location_id-' + locations[i].id);
+                $stockStatusDiv = $modal.find('#location_stockStatus-' + locations[i].id);
 
-        for (var i = 0; i < locations.length; i++) {
-            $locationInput = $modal.find('#location_id-' + locations[i].id);
-            $stockStatusDiv = $modal.find('#location_stockStatus-' + locations[i].id);
-
-            if (inventoryLocations[locations[i].platform_location_id] === 'in_stock') {
-                $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
-                $stockStatusDiv.addClass('ris-location-stockStatus-in-stock');
-            } else if (inventoryLocations[locations[i].platform_location_id] === 'low_stock') {
-                $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
-                $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
-            } else if (inventoryLocations[locations[i].platform_location_id] === 'out_of_stock') {
-                $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
-                $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
+                if (inventoryLocations[locations[i].platform_location_id] === 'in_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
+                    $stockStatusDiv.addClass('ris-location-stockStatus-in-stock');
+                } else if (inventoryLocations[locations[i].platform_location_id] === 'low_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
+                    $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
+                } else if (inventoryLocations[locations[i].platform_location_id] === 'out_of_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
+                    $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
+                }
             }
-        }
+        });
     };
 
     /**

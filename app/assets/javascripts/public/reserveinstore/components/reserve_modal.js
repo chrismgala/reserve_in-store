@@ -158,7 +158,6 @@ ReserveInStore.ReserveModal = function (opts) {
             locationsManager.setFavoriteLocationId(locationId);
         });
 
-
         locationsManager.whenReady(function(bestLocation) {
             if (!bestLocation) return; // Could not determine best location
 

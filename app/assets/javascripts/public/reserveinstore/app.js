@@ -1,6 +1,6 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.2.2.3'; // Version of the JS library.
+    this.version = '1.2.3.3'; // Version of the JS library.
     var self = this;
     opts = opts || {};
     opts.app = self;
@@ -8,7 +8,7 @@ ReserveInStore.App = function(opts) {
 
     var config, api, storage;
     var product, variant, cart, stockStatus;
-    var reserveModal, chooselocationModal, variantLoader
+    var reserveModal, chooselocationModal, variantLoader;
     var locationsManager, inventoryManager;
     var reserveProductBtn, reserveCartBtn, stockStatusIndicator;
 

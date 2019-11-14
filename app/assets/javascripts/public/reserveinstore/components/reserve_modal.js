@@ -163,6 +163,7 @@ ReserveInStore.ReserveModal = function (opts) {
 
             self.$modalContainer.find('input[name="reservation[location_id]"][value="'+bestLocation.id+'"]').prop('checked', true);
 
+            // make sure we have the reservation modal, location info, AND stock info before we update the display
             if (product) {
                 inventoryManager.getInventory(product.id, function(_inventory) {
                     inventoryTable[product.id] = _inventory;
@@ -208,6 +209,10 @@ ReserveInStore.ReserveModal = function (opts) {
         $fit.css('max-height', totalHeight);
     };
 
+    /**
+     * This function will update the location Divs in the reserve modal with stock information.
+     * @param locations - all valid locations for this store
+     */
     var updateLocationStockInfo = function (locations) {
         var inventoryLocations, stockStatus;
         var $locationContainer, $locationInput, $stockStatusDiv;
@@ -215,11 +220,13 @@ ReserveInStore.ReserveModal = function (opts) {
         if (!inventoryTable) return;
 
         if (product && variant) {
+            //get stock data for each location for the current product/variant
             if (inventoryTable[product.id]) {
                 inventoryLocations = inventoryTable[product.id][variant.id];
             }
 
             if (inventoryLocations) {
+                // go through each location and update it with stock status
                 for (var i = 0; i < locations.length; i++) {
                     $locationContainer = $reserveModal.find('#ris-location-' + locations[i].id);
                     $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id);
@@ -234,6 +241,7 @@ ReserveInStore.ReserveModal = function (opts) {
                         $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
                         $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
                     } else if (stockStatus === 'out_of_stock') {
+                        // if there is no stock, then disable the location so that it cannot be selected
                         $locationInput.prop('disabled', true);
                         $locationContainer.addClass('ris-location-disabled');
                         $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
@@ -242,11 +250,18 @@ ReserveInStore.ReserveModal = function (opts) {
                 }
             }
         } else if (cart) {
-            updateCartLocationStockInfo(locations, cart);
+            //split off into a different function for readability purposes
+            updateCartLocationStockInfo(locations);
         }
     };
 
-    var updateCartLocationStockInfo = function (locations, cart) {
+    /**
+     * This function has the same purpose as the previous one, only it works with cart data.
+     * The process is a bit differrent, because we have to consider the stock levels of all products
+     * in the cart.
+     * @param locations - all valid locations for this store
+     */
+    var updateCartLocationStockInfo = function (locations) {
         var inventoryLocations, stockStatus;
         var $locationContainer, $locationInput, $stockStatusDiv;
 
@@ -256,6 +271,8 @@ ReserveInStore.ReserveModal = function (opts) {
             var stockCount = cartItems.length;
             inventoryLocations = '';
 
+            // for each location, look at the stock levels for all cart items and determine how many of them are
+            // available.
             for (var j = 0; j < cartItems.length; j++) {
                 if (inventoryTable[cartItems[j].product_id]) {
                     inventoryLocations = inventoryTable[cartItems[j].product_id][cartItems[j].variant_id];
@@ -274,12 +291,14 @@ ReserveInStore.ReserveModal = function (opts) {
             $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id);
             $stockStatusDiv = $reserveModal.find('#location_stockStatus-' + locations[i].id);
 
+            // set the stock status based on how many items are available in this location
             if (stockCount === 0) {
                 $locationInput.prop('disabled', true);
                 $locationContainer.addClass('ris-location-disabled');
                 $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
                 $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
             } else if ((stockCount < cartItems.length) && (stockCount > 0)) {
+                // this caption will read "X out of Y items available"
                 $stockStatusDiv.text(stockCount + DEFAULT_STOCK_CAPTIONS[3] + cartItems.length + DEFAULT_STOCK_CAPTIONS[4]);
                 $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
             }

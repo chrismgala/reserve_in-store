@@ -6,18 +6,14 @@ ReserveInStore.ReserveModal = function (opts) {
 
     var locationsManager = opts.locationsManager;
     var inventoryManager = opts.inventoryManager;
-    var inventoryTable;
+    var inventoryData = {};
 
     var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock", " out of ", " items available"];
 
     var product, variant, cart, lineItem = {};
-    var productIdArray;
 
     var init = function () {
         api = opts.api;
-
-        productIdArray = [];
-        inventoryTable = {};
     };
 
     /**
@@ -159,26 +155,28 @@ ReserveInStore.ReserveModal = function (opts) {
         });
 
         locationsManager.whenReady(function(bestLocation) {
-            if (!bestLocation) return; // Could not determine best location
-
-            self.$modalContainer.find('input[name="reservation[location_id]"][value="'+bestLocation.id+'"]').prop('checked', true);
-
             // make sure we have the reservation modal, location info, AND stock info before we update the display
             if (product) {
                 inventoryManager.getInventory(product.id, function(_inventory) {
-                    inventoryTable[product.id] = _inventory;
+                    inventoryData[product.id] = _inventory;
                     updateLocationStockInfo(locationsManager.getLocations());
                 });
             } else if (cart) {
                 var cartItems = cart.items;
+                var productIdArray = [];
                 for (var i = 0; i < cartItems.length; i++) {
                     productIdArray.push(cartItems[i].product_id);
                 }
                 inventoryManager.getCartInventory(productIdArray, function(_inventory) {
-                    inventoryTable = _inventory;
-                    updateLocationStockInfo(locationsManager.getLocations());
+                    inventoryData = _inventory;
+                    updateCartLocationStockInfo(locationsManager.getLocations());
                 });
             }
+
+            if (!bestLocation) return; // Could not determine best location
+
+            self.$modalContainer.find('input[name="reservation[location_id]"][value="'+bestLocation.id+'"]').prop('checked', true);
+
         });
 
         adjustModalHeight();
@@ -217,42 +215,38 @@ ReserveInStore.ReserveModal = function (opts) {
         var inventoryLocations, stockStatus;
         var $locationContainer, $locationInput, $stockStatusDiv;
 
-        if (!inventoryTable) return;
+        if (!inventoryData) return;
 
-        if (product && variant) {
-            //get stock data for each location for the current product/variant
-            if (inventoryTable[product.id]) {
-                inventoryLocations = inventoryTable[product.id][variant.id];
-            }
+        //get stock data for each location for the current product/variant
+        if (inventoryData[product.id]) {
+            inventoryLocations = inventoryData[product.id][variant.id];
+        }
 
-            if (inventoryLocations) {
-                // go through each location and update it with stock status
-                for (var i = 0; i < locations.length; i++) {
-                    $locationContainer = $reserveModal.find('#ris-location-' + locations[i].id);
-                    $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id);
-                    $stockStatusDiv = $reserveModal.find('#location_stockStatus-' + locations[i].id);
+        if (inventoryLocations) {
+            // go through each location and update it with stock status
+            for (var i = 0; i < locations.length; i++) {
+                $locationContainer = $reserveModal.find('#risLocation-' + locations[i].id);
+                $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id);
+                $stockStatusDiv = $reserveModal.find('#locationStockStatus-' + locations[i].id);
 
-                    stockStatus = inventoryLocations[locations[i].platform_location_id];
+                stockStatus = inventoryLocations[locations[i].platform_location_id];
 
-                    if (stockStatus === 'in_stock') {
-                        $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
-                        $stockStatusDiv.addClass('ris-location-stockStatus-in-stock');
-                    } else if (stockStatus === 'low_stock') {
-                        $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
-                        $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
-                    } else if (stockStatus === 'out_of_stock') {
-                        // if there is no stock, then disable the location so that it cannot be selected
-                        $locationInput.prop('disabled', true);
-                        $locationContainer.addClass('ris-location-disabled');
-                        $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
-                        $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
-                    }
+                if (stockStatus === 'in_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
+                    $stockStatusDiv.addClass('ris-location-stockStatus-in-stock');
+                } else if (stockStatus === 'low_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
+                    $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
+                } else if (stockStatus === 'out_of_stock') {
+                    // if there is no stock, then disable the location so that it cannot be selected
+                    $locationInput.prop('disabled', true);
+                    $locationContainer.addClass('ris-location-disabled');
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
+                    $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
                 }
             }
-        } else if (cart) {
-            //split off into a different function for readability purposes
-            updateCartLocationStockInfo(locations);
         }
+
     };
 
     /**
@@ -266,6 +260,7 @@ ReserveInStore.ReserveModal = function (opts) {
         var $locationContainer, $locationInput, $stockStatusDiv;
 
         var cartItems = cart.items;
+        if (!cartItems || !inventoryData) return;
 
         for (var i = 0; i < locations.length; i++) {
             var stockCount = cartItems.length;
@@ -274,8 +269,8 @@ ReserveInStore.ReserveModal = function (opts) {
             // for each location, look at the stock levels for all cart items and determine how many of them are
             // available.
             for (var j = 0; j < cartItems.length; j++) {
-                if (inventoryTable[cartItems[j].product_id]) {
-                    inventoryLocations = inventoryTable[cartItems[j].product_id][cartItems[j].variant_id];
+                if (inventoryData[cartItems[j].product_id]) {
+                    inventoryLocations = inventoryData[cartItems[j].product_id][cartItems[j].variant_id];
                 }
 
                 if (inventoryLocations !== '') {
@@ -287,9 +282,9 @@ ReserveInStore.ReserveModal = function (opts) {
                 }
             }
 
-            $locationContainer = $reserveModal.find('#ris-location-' + locations[i].id);
+            $locationContainer = $reserveModal.find('#risLocation-' + locations[i].id);
             $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id);
-            $stockStatusDiv = $reserveModal.find('#location_stockStatus-' + locations[i].id);
+            $stockStatusDiv = $reserveModal.find('#locationStockStatus-' + locations[i].id);
 
             // set the stock status based on how many items are available in this location
             if (stockCount === 0) {

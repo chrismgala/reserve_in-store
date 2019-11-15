@@ -1,8 +1,8 @@
 ReserveInStore.InventoryManager = function (opts) {
     var self = this;
     opts = opts || {};
-    var api = opts.api,
-        storage = opts.storage;
+    var api = opts.api;
+    var storage = opts.storage;
 
     var inventoryStore, cartInventoryStore;
 
@@ -38,9 +38,7 @@ ReserveInStore.InventoryManager = function (opts) {
         } else if (inventoryStore[productId]) {
             then(inventoryStore[productId]);
         } else {
-            self.loadInventory( productId, function(_inventory) {
-                then(_inventory);
-            });
+            self.loadInventory(productId, then);
         }
     };
 

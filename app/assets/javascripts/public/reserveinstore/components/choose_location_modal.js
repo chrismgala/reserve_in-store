@@ -105,7 +105,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
 
             for (var i = 0; i < locations.length; i++) {
                 $locationInput = $modal.find('#location_id-' + locations[i].id);
-                $stockStatusDiv = $modal.find('#location_stockStatus-' + locations[i].id);
+                $stockStatusDiv = $modal.find('#locationStockStatus-' + locations[i].id);
 
                 if (inventoryLocations[locations[i].platform_location_id] === 'in_stock') {
                     $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);

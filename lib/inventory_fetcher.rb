@@ -1,19 +1,15 @@
 class InventoryFetcher
-  attr_accessor :store, :product_id, :variant_id
-  def initialize(store, product_id, use_cache: true)
+  attr_accessor :store, :product_ids, :variant_id
+  def initialize(store, product_ids, use_cache: true)
     @store = store
-    if product_id.class != "Array"
-      @product_id = [product_id]
-    else
-      @product_id = product_id
-    end
+    @product_ids = Array.wrap(product_ids)
     @use_cache = use_cache
   end
 
   def inventory
     store.with_shopify_session do
       # Get Product(s)
-      product_list = store.api.products(ids: product_id.join(','))
+      product_list = store.api.products(ids: product_ids.join(','))
 
       return {} if product_list.blank?
 
@@ -57,7 +53,7 @@ class InventoryFetcher
 
   def levels
     return load_levels unless @use_cache
-    cache_key = "stores/#{store.id}/inventory_fetcher/product-#{product_id}"
+    cache_key = "stores/#{store.id}/inventory_fetcher/product-#{product_ids}"
     Rails.cache.fetch(cache_key, expires_in: 1.hour) do
       load_levels
     end

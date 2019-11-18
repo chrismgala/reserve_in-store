@@ -5,6 +5,10 @@ ReserveInStore.ChooseLocationModal = function (opts) {
     var api, $modalBackground, $modal, visible = false;
 
     var locationsManager = opts.locationsManager;
+    var inventoryManager = opts.inventoryManager;
+
+    var inventoryTable;
+    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock"];
 
     var init = function () {
         api = opts.api;
@@ -51,6 +55,8 @@ ReserveInStore.ChooseLocationModal = function (opts) {
             if (!bestLocation) return; // Could not determine best location
 
             self.$modalContainer.find('input[name="location_id"][value="'+bestLocation.id+'"]').prop('checked', true);
+
+            updateLocationStockInfo(locationsManager.getLocations());
         });
 
         adjustModalHeight();
@@ -87,6 +93,32 @@ ReserveInStore.ChooseLocationModal = function (opts) {
         });
 
         $fit.css('max-height', totalHeight);
+    };
+
+    var updateLocationStockInfo = function (locations) {
+        var inventoryLocations;
+        var $locationInput, $stockStatusDiv;
+
+        inventoryManager.getInventory(opts.app.getProduct().id, function(_inventory) {
+            inventoryTable = _inventory;
+            inventoryLocations = inventoryTable[opts.app.getVariant().id];
+
+            for (var i = 0; i < locations.length; i++) {
+                $locationInput = $modal.find('#location_id-' + locations[i].id);
+                $stockStatusDiv = $modal.find('#locationStockStatus-' + locations[i].id);
+
+                if (inventoryLocations[locations[i].platform_location_id] === 'in_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
+                    $stockStatusDiv.addClass('ris-location-stockStatus-in-stock');
+                } else if (inventoryLocations[locations[i].platform_location_id] === 'low_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
+                    $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
+                } else if (inventoryLocations[locations[i].platform_location_id] === 'out_of_stock') {
+                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
+                    $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
+                }
+            }
+        });
     };
 
     /**

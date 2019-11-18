@@ -17,7 +17,7 @@
                     <h2 class="ris-header-text">1. SELECT A LOCATION:</h2>
                     <div class="ris-location-options">
                         {% for location in locations %}
-                        <div class="ris-location-option">
+                        <div class="ris-location-option" id="risLocation-{{ location.id }}">
                             <div class="ris-location-content">
                                 <div class="ris-location-content-left">
                                     <input type="radio" value="{{ location.id }}"
@@ -37,6 +37,7 @@
                                     <div class="ris-location-details">
                                         {{ location.details }}
                                     </div>
+                                    <div id="locationStockStatus-{{ location.id }}" class="ris-location-stockStatus"></div>
                                 </div>
                                 <div class="ris-location-content-right">
                                     <a href="{{ location.google_map_url }}" target="_blank" class="ris-location-mapPin">

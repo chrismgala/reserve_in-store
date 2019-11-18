@@ -365,6 +365,29 @@ ReserveInStore.ReserveModal = function (opts) {
 
         $reserveModal.hide();
         $successModal.show();
+
+        // If we're reserving a whole cart, then clear the cart
+        if (!product && !variant && cart) {
+            clearCart();
+        }
+    };
+
+    /**
+     * Empty the cart using the Shopify API
+     *
+     * @param then
+     */
+    var clearCart = function(then) {
+        $.ajax({
+            method: 'GET',
+            type: 'GET', // An alias for method. It's here for back compatibility with versions of jQuery prior to 1.9.0, I guess.
+            data: {},
+            dataType: 'json',
+            url: '/cart/clear',
+            complete: function(response) {
+                if (typeof then === 'function') then();
+            }
+        });
     };
 
     /**

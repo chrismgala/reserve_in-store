@@ -32,6 +32,7 @@ gem 'sprockets-es6', '~> 0.9.2' # For es6 automatic compilation
 gem 'to_bool', '~> 1.0.1' # For easy parsing of boolean values in params
 gem 'turbolinks', '~> 5' # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'uglifier', '>= 1.3.0' # Use Uglifier as codampressor for JavaScript assets
+gem 'rails_same_site_cookie', '0.1.5' # Allow all cookies to be fetched in a 3rd party context, since we are an embedded app
 
 group :production do
   gem 'sendgrid-ruby', '~> 5.2.0' # For sending email in production only

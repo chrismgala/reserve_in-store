@@ -208,6 +208,41 @@
           <div class="Polaris-Layout__AnnotationWrapper">
             <div class="Polaris-Layout__Annotation">
               <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Product Tag Filter</h2>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label :product_tag_filter, class: "Polaris-Label__Text" do %>
+                            Product Tag Filter
+                          <% end %>
+                        </div>
+                      </div>
+                      <div class="Polaris-TextField">
+                        <%= f.text_field :product_tag_filter, class: 'Polaris-TextField__Input', placeholder: 'Leave blank to show for all products'  %>
+                        <div class="Polaris-TextField__Backdrop"></div>
+                      </div>
+                      <div class="Polaris-Labelled__HelpText">
+                            If you want to make the location only show for certain products that match a tag, enter the tag here. If the location should show for all products it has stock at then leave this blank.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
                 <h2 class="Polaris-Heading">Additional Details to Display</h2>
                 <p>Optionally enter in some location-specific content that you want to display under the location, such as store hours or location info.</p>
               </div>

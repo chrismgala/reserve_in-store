@@ -191,6 +191,12 @@ ReserveInStore.App = function(opts) {
     self.getVariant = function() { return variant; };
     self.getCart = function() { return cart; };
 
+    self.getProductTag = function() {
+        var prod = opts.app.getProduct();
+        if (!prod) return '';
+        return prod.tags;
+    };    
+
     self.trigger = function(codes, data) {
         codes = codes.split(' ');
 

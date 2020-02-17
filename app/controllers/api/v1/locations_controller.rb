@@ -16,7 +16,6 @@ module Api
       ##
       # GET /api/v1/locations.json
       def index
-        
         locations = @store.locations
         locations = locations.where(product_tag_filter: load_product_tag_param)
         locations = locations.page(params[:page]).per(250)

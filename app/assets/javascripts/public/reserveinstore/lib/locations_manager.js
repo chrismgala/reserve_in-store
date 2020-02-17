@@ -135,7 +135,7 @@ ReserveInStore.LocationsManager = function (opts) {
         var localStorageLocationParseJson = JSON.parse(JSON.stringify(locations));
         
         if (localStorageLocationParseJson != '') {
-            var localStorageProductTag = localStorageLocationParseJson[0].product_tag_filter;
+            localStorageProductTag = localStorageLocationParseJson[0].product_tag_filter;
         } 
           
         var currentProductTag = opts.app.getProductTag();

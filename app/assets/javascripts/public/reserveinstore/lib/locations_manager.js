@@ -128,11 +128,16 @@ ReserveInStore.LocationsManager = function (opts) {
     
     /**
      * This function will compare current product tag and local storage product tag
-     * @return false if tags do not match   
+     * @return false if tags do not match we need to update new location.  
      */
     var compareStorageLocationProductTag = function(locations) {
+        var localStorageProductTag = '';
         var localStorageLocationParseJson = JSON.parse(JSON.stringify(locations));
-        var localStorageProductTag = localStorageLocationParseJson[0].product_tag_filter;
+        
+        if (localStorageLocationParseJson != '') {
+            var localStorageProductTag = localStorageLocationParseJson[0].product_tag_filter;
+        } 
+          
         var currentProductTag = opts.app.getProductTag();
         
         if (currentProductTag.indexOf(localStorageProductTag) !== -1) {

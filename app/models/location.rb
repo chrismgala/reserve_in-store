@@ -5,8 +5,8 @@ class Location < ActiveRecord::Base
   validates :name, :email, presence: true
   validates_associated :store
 
-  PERMITTED_PARAMS = [:name, :email, :address, :country, :state, :city, :phone, :zip, :custom_html, :platform_location_id]
-  PUBLIC_ATTRIBUTES = [:id, :name, :address, :country, :state, :city, :zip, :google_maps_url, :platform_location_id, :formatted_address, :details]
+  PERMITTED_PARAMS = [:name, :email, :address, :country, :state, :city, :phone, :zip, :custom_html, :platform_location_id, :product_tag_filter]
+  PUBLIC_ATTRIBUTES = [:id, :name, :address, :country, :state, :city, :zip, :google_maps_url, :platform_location_id, :formatted_address, :details, :product_tag_filter]
 
 
   alias_attribute :custom_html, :details
@@ -37,6 +37,7 @@ class Location < ActiveRecord::Base
       region: state,
       phone: phone,
       email: email,
+      product_tag_filter: product_tag_filter,
       custom_html: details, # legacy reverse-compatibility
       details: details
     }.stringify_keys

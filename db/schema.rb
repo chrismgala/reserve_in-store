@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_04_190929) do
+ActiveRecord::Schema.define(version: 2020_02_12_095319) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2019_11_04_190929) do
     t.string "zip"
     t.text "details"
     t.string "platform_location_id"
+    t.string "product_tag_filter"
     t.index ["store_id", "platform_location_id"], name: "index_locations_on_store_id_and_platform_location_id"
     t.index ["store_id"], name: "index_locations_on_store_id"
   end

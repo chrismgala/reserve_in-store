@@ -118,18 +118,38 @@ ReserveInStore.LocationsManager = function (opts) {
     };
 
     var updateLocations = function() {
-        api.getLocations({}, function(_locations) {
+        api.getLocations({ product_tag_filter: opts.app.getProductTag() }, function(_locations) {
             locations = _locations;
             storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
             locationsReady = true;
             if (favoriteLocation) ready = true;
         });
     };
+    
+    /**
+     * This function will compare current product tag and local storage product tag
+     * @return false if tags do not match we need to update new location.  
+     */
+    var compareStorageLocationProductTag = function(locations) {
+        var localStorageProductTag = '';
+        var localStorageLocationParseJson = JSON.parse(JSON.stringify(locations));
+        
+        if (localStorageLocationParseJson != '') {
+            localStorageProductTag = localStorageLocationParseJson[0].product_tag_filter;
+        } 
+          
+        var currentProductTag = opts.app.getProductTag();
+        
+        if (currentProductTag.indexOf(localStorageProductTag) !== -1) {
+            return true;
+        }
 
+        return false;
+    };    
+    
     var loadLocations = function() {
         locations = storage.getItem('LocationsManager.locations');
-
-        if (locations) {
+        if (locations && compareStorageLocationProductTag(locations)) {
             locationsReady = true;
             if (favoriteLocation) ready = true;
 

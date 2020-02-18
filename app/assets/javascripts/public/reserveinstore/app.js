@@ -1,6 +1,6 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.2.3.0'; // Version of the JS library.
+    this.version = '1.2.3.1'; // Version of the JS library.
     var self = this;
     opts = opts || {};
     opts.app = self;
@@ -190,6 +190,12 @@ ReserveInStore.App = function(opts) {
     self.getProduct = function() { return product; };
     self.getVariant = function() { return variant; };
     self.getCart = function() { return cart; };
+
+    self.getProductTag = function() {
+        var prod = opts.app.getProduct();
+        if (!prod) return '';
+        return prod.tags;
+    };    
 
     self.trigger = function(codes, data) {
         codes = codes.split(' ');

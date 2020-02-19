@@ -93,11 +93,20 @@ class Reservation < ActiveRecord::Base
   end
 
   ##
+  # cart page - {"items": [{"id": value, "vendor": value, "taxable": value }]
+  # product page - {"items": [{ "product": {"id": value, "vendor": value }, "variants": [{"id": value, "taxable": value }] }]
   # @return [Hash] - render the email liquid with this hash
   def email_liquid_params
     if attributes['cart']['items'].length == 1
       product = attributes['cart']['items'][0]['product']
       variant = attributes['cart']['items'][0]['variant']
+      
+      # for cart page
+      if(!product)
+        product = attributes['cart']['items'][0]
+        variant = attributes['cart']['items'][0]
+      end
+
       attributes['cart']['items'][0].merge!({
                                               vendor: product['vendor'],
                                               title: product['title'],

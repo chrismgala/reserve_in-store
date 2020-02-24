@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
-  root :to => 'stores#settings'
-  get 'auth/shopify/callback' => 'callbacks#callback'
+  #root :to => 'stores#settings'
+  #get 'auth/shopify/callback' => 'callbacks#callback'
 
   resources :reservations
   resources :locations
@@ -38,5 +38,6 @@ Rails.application.routes.draw do
   end
 
   mount ShopifyApp::Engine, at: '/'
+    root :to => 'stores#settings'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

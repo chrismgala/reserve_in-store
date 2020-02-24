@@ -8,7 +8,7 @@ class CallbacksController < ShopifyApp::SessionsController
     super
     store = Store.find_by(shopify_domain: current_shopify_domain)
 
-    new_session = ShopifyAPI::Session.new(shop_name, token)
+    new_session = ShopifyAPI::Session.new(domain: shop_name, token: token, api_version: "#{ShopifyApp.configuration.api_version}")
     ShopifyAPI::Base.activate_session(new_session)
   end
 

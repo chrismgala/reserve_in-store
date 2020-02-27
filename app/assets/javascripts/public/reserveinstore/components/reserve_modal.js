@@ -21,6 +21,7 @@ ReserveInStore.ReserveModal = function (opts) {
 
     var init = function () {
         api = opts.api;
+        updateCartOnAjax();
     };
 
     /**
@@ -70,6 +71,18 @@ ReserveInStore.ReserveModal = function (opts) {
         });
 
         opts.app.trigger('reserve_modal.show reserve_modal.open', self);
+    };
+
+    var updateCartOnAjax = function() {
+        $(document).on('ajaxComplete', function( event, xhr, settings ) {
+            if (xhr.status >= 300) return; // Bad ajax request, don't do anything
+
+            if (settings && settings.url.indexOf('/cart.js') !== -1) {
+                // nothing to do for now
+            } else if (settings && /\/cart\/(add|update|clear|change)/.test(settings.url)) {
+               opts.app.setCart(JSON.parse(xhr.responseText));
+            }
+        });
     };
 
     var getCartObject = function() {

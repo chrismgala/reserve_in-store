@@ -80,7 +80,7 @@ ReserveInStore.ReserveModal = function (opts) {
             if (settings && settings.url.indexOf('/cart.js') !== -1) {
                 // nothing to do for now
             } else if (settings && /\/cart\/(add|update|clear|change)/.test(settings.url)) {
-               opts.app.setCart(JSON.parse(xhr.responseText));
+                opts.app.setCart(JSON.parse(xhr.responseText));
             }
         });
     };

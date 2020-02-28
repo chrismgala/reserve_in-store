@@ -17,7 +17,7 @@ module Api
       # GET /api/v1/locations.json
       def index
         locations = @store.locations
-        locations = locations.where(product_tag_filter: load_product_tag_param)
+        locations = locations.where("product_tag_filter IN (?) OR product_tag_filter = ?", load_product_tag_param, '')
         locations = locations.page(params[:page]).per(250)
 
         if secret_key.present?

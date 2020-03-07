@@ -21,7 +21,7 @@ gem 'pg', '~> 0.20.0' # Use postgresql as the database for Active Record
 gem 'puma', '~> 3.11' # Use Puma as the app server
 gem "intercom-rails", '~> 0.4.0' # For live chat, support and knowledgebase
 gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (CORS) serve public assets
-gem 'rails', '~> 5.2.0' # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'rails', '~> 5.2.4.1' # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rainbow', '~> 3.0.0'  # Ruby gem for colorizing printed text on ANSI terminals
 gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets
 gem 'sentry-raven', '~> 2.7.4' # For bug tracking

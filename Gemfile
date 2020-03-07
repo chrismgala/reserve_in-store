@@ -25,8 +25,8 @@ gem 'rails', '~> 5.2.0' # Bundle edge Rails instead: gem 'rails', github: 'rails
 gem 'rainbow', '~> 3.0.0'  # Ruby gem for colorizing printed text on ANSI terminals
 gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets
 gem 'sentry-raven', '~> 2.7.4' # For bug tracking
-gem 'shopify_api', '~> 4.11.0'
-gem 'shopify_app', '~> 8.2.6' # Shopify Application Rails engine and generator
+gem 'shopify_api', '~> 9.0.0'
+gem 'shopify_app', '~> 9.0.4' # Shopify Application Rails engine and generator
 gem "slack-notifier", '~> 2.3.2' # For sending notifications to slack
 gem 'sprockets-es6', '~> 0.9.2' # For es6 automatic compilation
 gem 'to_bool', '~> 1.0.1' # For easy parsing of boolean values in params

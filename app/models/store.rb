@@ -33,6 +33,10 @@ class Store < ApplicationRecord
   JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].to_s.chomp('/')}/reserveinstore.js"
 
 
+  def api_version
+    ShopifyApp.configuration.api_version
+  end
+
   ##
   # Get store's money format from cache, hit Shopify Api if cache is missing
   # @return [String] Money format in the form of "${{amount}}"
@@ -142,7 +146,7 @@ class Store < ApplicationRecord
   end
 
   def with_shopify_session
-    @session ||= ShopifyAPI::Session.new(shopify_domain, shopify_token)
+    @session ||= ShopifyAPI::Session.new(domain: shopify_domain, token: shopify_token, api_version: "#{ShopifyApp.configuration.api_version}")
     ShopifyAPI::Base.activate_session(@session)
     yield(self) if block_given?
   end

@@ -97,13 +97,14 @@ ReserveInStore.ChooseLocationModal = function (opts) {
 
     var updateLocationStockInfo = function (locations) {
         var inventoryLocations;
-        var $locationInput, $stockStatusDiv;
+        var $locationContainer, $locationInput, $stockStatusDiv;
 
         inventoryManager.getInventory(opts.app.getProduct().id, function(_inventory) {
             inventoryTable = _inventory;
             inventoryLocations = inventoryTable[opts.app.getVariant().id];
 
             for (var i = 0; i < locations.length; i++) {
+                $locationContainer = $modal.find('#risLocation-' + locations[i].id);
                 $locationInput = $modal.find('#location_id-' + locations[i].id);
                 $stockStatusDiv = $modal.find('#locationStockStatus-' + locations[i].id);
 
@@ -114,6 +115,9 @@ ReserveInStore.ChooseLocationModal = function (opts) {
                     $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
                     $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
                 } else if (inventoryLocations[locations[i].platform_location_id] === 'out_of_stock') {
+                    $locationInput.prop('disabled', true);
+                    $locationInput.prop('checked', false);
+                    $locationContainer.addClass('ris-location-disabled');
                     $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
                     $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
                 }

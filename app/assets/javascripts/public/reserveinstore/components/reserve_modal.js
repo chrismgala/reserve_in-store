@@ -324,7 +324,7 @@ ReserveInStore.ReserveModal = function (opts) {
         }
     };
     
-    var getLocationPlatformId = function(locationId) {
+    var getLocationPlatformId = function (locationId) {
         var locations = JSON.parse(JSON.stringify(locationsManager.getLocations()));
         
         for (var i = 0; i < locations.length; i++) {
@@ -429,7 +429,7 @@ ReserveInStore.ReserveModal = function (opts) {
     /*
      * hide reservation button, show message if stock status is out_of_stock 
     */
-    var showHideNoStockMessage = function(productIsOutOfStock) {
+    var showHideNoStockMessage = function (productIsOutOfStock) {
         var $submitBtn = $reserveModal.find(".reserveInStore-form-submit");
         var $noStockMessageDiv = $reserveModal.find(".ris-no-stock-message"); 
         if (productIsOutOfStock) {

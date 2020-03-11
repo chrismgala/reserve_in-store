@@ -335,7 +335,7 @@ ReserveInStore.ReserveModal = function (opts) {
         return ''; 
     };    
     
-    var getStockInfo =function (locationId) {
+    var getStockInfo = function (locationId) {
         if (product) {
             inventoryManager.getInventory(product.id, function(_inventory) {
                 inventoryData[product.id] = _inventory;

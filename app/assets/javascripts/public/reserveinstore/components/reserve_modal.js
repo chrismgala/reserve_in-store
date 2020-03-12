@@ -403,9 +403,9 @@ ReserveInStore.ReserveModal = function (opts) {
         showHideNoStockMessage(cartItemOutOfStock);
     };
   
-    /*
+    /**
      * update stock message on each product / cart item
-    */
+     */
     var updateProductsStockInfo = function (variantId, stockStatus) {
         var $itemStockStatusDiv = $reserveModal.find('#cartItemStockStatus-' + variantId);
         $itemStockStatusDiv.removeClass();
@@ -426,9 +426,9 @@ ReserveInStore.ReserveModal = function (opts) {
         }
     };
 
-    /*
+    /**
      * hide reservation button, show message if stock status is out_of_stock 
-    */
+     */
     var showHideNoStockMessage = function (productIsOutOfStock) {
         var $submitBtn = $reserveModal.find(".reserveInStore-form-submit");
         var $noStockMessageDiv = $reserveModal.find(".ris-no-stock-message"); 

@@ -114,6 +114,36 @@
     display: table-cell;
     vertical-align: middle;
 }
+.ris-no-stock-message {
+    display: none;
+    line-height: 120%;
+    font-size: 16px;
+    color: #ff0000;
+    margin-top: 20px;
+}
+.ris-cart-item-stockStatus {
+    display: table-cell;
+    border-radius: 3px;
+    padding-right: 4px;
+    padding-left: 4px;
+    color: white;
+    font-size: 8pt;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-top: 10px;
+}
+.ris-cart-item-stockStatus-in-stock {
+    background: green;
+}
+.ris-cart-item-stockStatus-low-stock {
+    background: orange;
+}
+.ris-cart-item-stockStatus-no-stock {
+    background: black;
+}
+.ris-cart-item-stockStatus-stock-unknown {
+    background: grey;
+}
 
 
 .reserveInStore-reserve-modal .ris-columns {
@@ -628,6 +658,10 @@ label.ris-location-name {
 
 .ris-location-stockStatus-no-stock {
     background: black;
+}
+
+.ris-location-stockStatus-stock-unknown {
+    background: grey;
 }
 
 

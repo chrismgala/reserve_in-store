@@ -15,7 +15,7 @@ ReserveInStore.ReserveModal = function (opts) {
     // { product_id_1: {variant_id_1: {location_1: stock_value_1, location_2:
     var inventoryData = {};
 
-    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock", " out of ", " items available"];
+    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock", " out of ", " items available", "stock unknown"];
 
     var product, variant, cart, lineItem = {};
 
@@ -172,6 +172,7 @@ ReserveInStore.ReserveModal = function (opts) {
         self.$modalContainer.find('input[name="reservation[location_id]"]').on('click change', function() {
             var locationId = self.$modalContainer.find('input[name="reservation[location_id]"]:checked').val();
             locationsManager.setFavoriteLocationId(locationId);
+            getStockInfo(locationId);
         });
 
         locationsManager.whenReady(function(bestLocation) {
@@ -180,6 +181,7 @@ ReserveInStore.ReserveModal = function (opts) {
                 inventoryManager.getInventory(product.id, function(_inventory) {
                     inventoryData[product.id] = _inventory;
                     updateLocationStockInfo(locationsManager.getLocations());
+                    getProductStockInfo(bestLocation.id);
                 });
             } else if (cart) {
                 var cartItems = cart.items;
@@ -190,6 +192,7 @@ ReserveInStore.ReserveModal = function (opts) {
                 inventoryManager.getCartInventory(productIdArray, function(_inventory) {
                     inventoryData = _inventory;
                     updateCartLocationStockInfo(locationsManager.getLocations());
+                    getCartItemsStockInfo(bestLocation.id);
                 });
             }
 
@@ -260,6 +263,7 @@ ReserveInStore.ReserveModal = function (opts) {
                 } else if (stockStatus === 'out_of_stock') {
                     // if there is no stock, then disable the location so that it cannot be selected
                     $locationInput.prop('disabled', true);
+                    $locationInput.prop('checked', false);
                     $locationContainer.addClass('ris-location-disabled');
                     $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
                     $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
@@ -317,6 +321,123 @@ ReserveInStore.ReserveModal = function (opts) {
                 $stockStatusDiv.text(stockCount + DEFAULT_STOCK_CAPTIONS[3] + cartItems.length + DEFAULT_STOCK_CAPTIONS[4]);
                 $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
             }
+        }
+    };
+    
+    var getLocationPlatformId = function (locationId) {
+        var locations = JSON.parse(JSON.stringify(locationsManager.getLocations()));
+        
+        for (var i = 0; i < locations.length; i++) {
+            if (locations[i].id == locationId) {
+                return locations[i].platform_location_id;
+            }
+        }
+        return ''; 
+    };    
+    
+    var getStockInfo = function (locationId) {
+        if (product) {
+            inventoryManager.getInventory(product.id, function(_inventory) {
+                inventoryData[product.id] = _inventory;
+                getProductStockInfo(locationId);
+            });
+        } else if (cart) {
+            var cartItems = cart.items;
+            var productIdArray = [];
+            for (var i = 0; i < cartItems.length; i++) {
+                productIdArray.push(cartItems[i].product_id);
+            }
+            inventoryManager.getCartInventory(productIdArray, function(_inventory) {
+                inventoryData = _inventory;
+                getCartItemsStockInfo(locationId);
+            });
+        }
+    };
+    
+    var getProductStockInfo = function (locationId) {
+        var inventoryLocations, stockStatus;
+        var productIsOutOfStock = false;
+        var currentLocationPlatformId = getLocationPlatformId(locationId);
+        
+        if (!inventoryData) return;
+
+        if (inventoryData[product.id]) {
+            inventoryLocations = inventoryData[product.id][variant.id];
+        }
+
+        if (inventoryLocations !== '') {
+            stockStatus = inventoryLocations[currentLocationPlatformId];
+            updateProductsStockInfo(variant.id, stockStatus);
+
+            if (stockStatus === 'out_of_stock' || stockStatus === 'unknown_stock' || !stockStatus) {
+                productIsOutOfStock = true;
+            }
+        }
+
+        showHideNoStockMessage(productIsOutOfStock);
+    };
+
+    var getCartItemsStockInfo = function (locationId) {
+        var inventoryLocations, stockStatus;
+        var cartItemOutOfStock = false;
+        var currentLocationPlatformId = getLocationPlatformId(locationId);
+        
+        var cartItems = cart.items;
+        if (!cartItems || !inventoryData) return;
+
+        for (var k = 0; k < cartItems.length; k++) {
+            if (inventoryData[cartItems[k].product_id]) {
+                inventoryLocations = inventoryData[cartItems[k].product_id][cartItems[k].variant_id];
+            }
+
+            if (inventoryLocations !== '') {
+                stockStatus = inventoryLocations[currentLocationPlatformId];
+                updateProductsStockInfo(cartItems[k].variant_id, stockStatus);
+
+                if (stockStatus === 'out_of_stock' || stockStatus === 'unknown_stock' || !stockStatus) {
+                    cartItemOutOfStock = true;
+                }
+            }
+        }
+
+        showHideNoStockMessage(cartItemOutOfStock);
+    };
+  
+    /**
+     * update stock message on each product / cart item
+     */
+    var updateProductsStockInfo = function (variantId, stockStatus) {
+        var $itemStockStatusDiv = $reserveModal.find('#cartItemStockStatus-' + variantId);
+        $itemStockStatusDiv.removeClass();
+        $itemStockStatusDiv.addClass('ris-cart-item-stockStatus ');
+        
+        if (stockStatus === 'in_stock') {
+            $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
+            $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-in-stock');
+        } else if (stockStatus === 'low_stock') {
+            $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
+            $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-low-stock');
+        } else if (stockStatus === 'out_of_stock') {
+            $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
+            $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-no-stock');
+        } else {
+            $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[5]);
+            $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-stock-unknown');
+        }
+    };
+
+    /**
+     * hide reservation button, show message if stock status is out_of_stock 
+     */
+    var showHideNoStockMessage = function (productIsOutOfStock) {
+        var $submitBtn = $reserveModal.find(".reserveInStore-form-submit");
+        var $noStockMessageDiv = $reserveModal.find(".ris-no-stock-message"); 
+        if (productIsOutOfStock) {
+            $noStockMessageDiv.show();
+            $submitBtn.hide(); 
+        } else { 
+            $noStockMessageDiv.hide();
+            $submitBtn.show(); 
         }
     };
 

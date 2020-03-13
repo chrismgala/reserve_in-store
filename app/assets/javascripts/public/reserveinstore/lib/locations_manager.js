@@ -122,7 +122,13 @@ ReserveInStore.LocationsManager = function (opts) {
             locations = _locations;
             storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
             locationsReady = true;
-            if (favoriteLocation) ready = true;
+            // now we are using product tag filters so we need to update fav loc if location set in storage is not found.
+            if (favoriteLocation) {
+                if (!locations.some(el => el.id == favoriteLocation.id)) {
+                    self.setFavoriteLocation(_locations[0]);
+                }
+                ready = true;
+            }
         });
     };
     

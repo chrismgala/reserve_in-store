@@ -91,6 +91,9 @@
                                 {% if item.variant_title and item.variant_title != 'Default Title' %}
                                     <div class="ris-cart-item-variant">{{ item.variant_title }}</div>
                                 {% endif %}
+
+                                <div class="ris-cart-item-stockStatus" id="cartItemStockStatus-{{ item.variant_id }}"></div>
+
                             </div>
                             <div class="ris-cart-item-total">{{ item.total_formatted }}</div>
                         </div>
@@ -98,6 +101,7 @@
                     </div>
 
                     <div class="ris-noteAfterCart">You will receive a confirmation email after you submit your reservation.</div>
+                    <div class="ris-no-stock-message">Some products are out of stock. It is not possible to reserve . </div>
                     <button type="button" class="reserveInStore-form-submit">Reserve Now</button>
                     <div class="ris-faqs">{{ settings.faq }}</div>
                 </div>

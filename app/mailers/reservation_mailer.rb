@@ -12,7 +12,7 @@ class ReservationMailer < ApplicationMailer
     @rendered_location_email_template = @reservation.rendered_location_email_template
     staged_mail(to: store_location_contact,
                 subject: store.location_notification_subject.presence || "New In-store Reservation",
-                from: system_contact)
+                from: location_notification_sender)
   end
 
   ##
@@ -28,7 +28,7 @@ class ReservationMailer < ApplicationMailer
     @rendered_customer_email_template = @reservation.rendered_customer_email_template
     staged_mail(to: customer_contact,
                 subject: store.customer_confirmation_subject.presence || "In-Store Reservation Confirmation",
-                from: system_contact,
+                from: customer_confirmation_sender,
                 reply_to: store_location_contact)
   end
 
@@ -50,6 +50,30 @@ class ReservationMailer < ApplicationMailer
     else
       store_email.split('@').first
     end
+  end
+
+  def customer_confirmation_sender_name
+    if @store.customer_confirmation_sender_name.present?
+      @store.customer_confirmation_sender_name
+    else
+      system_name  
+    end
+  end
+
+  def customer_confirmation_sender
+    "\"#{customer_confirmation_sender_name}\" <#{system_email}>"
+  end
+
+  def location_notification_sender_name
+    from_name = system_name
+    if @store.location_notification_sender_name.present?
+      from_name = "#{@store.location_notification_sender_name} #{@reservation.customer_name}"
+    end
+    return from_name
+  end
+
+  def location_notification_sender
+    "\"#{location_notification_sender_name}\" <#{system_email}>"
   end
 
   def store_email

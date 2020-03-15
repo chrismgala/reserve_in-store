@@ -15,6 +15,23 @@
 <% end %>
 
 <div id="<%= attr %>_section">
+  <% if local_assigns[:sender_name_field] %>
+    <div class="Polaris-FormLayout__Item">
+
+      <div class="Polaris-Labelled__LabelWrapper">
+        <div class="Polaris-Label">
+          <label class="Polaris-Label__Text">
+            Sender Name (From)
+          </label>
+        </div>
+      </div>
+      <div class="Polaris-TextField">
+        <%= f.text_field sender_name_field, class: 'Polaris-TextField__Input', placeholder: local_assigns[:sender_name_field_default] %>
+        <div class="Polaris-TextField__Backdrop"></div>
+      </div>
+    </div>
+  <% end %>
+
   <% if local_assigns[:subject_field] %>
     <div class="Polaris-FormLayout__Item">
 

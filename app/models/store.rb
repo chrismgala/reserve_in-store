@@ -27,7 +27,8 @@ class Store < ApplicationRecord
     :stock_status_behavior_when_no_location_selected, :stock_status_behavior_when_no_nearby_locations_and_no_location,
     :store_show_when_only_available_online,
     :custom_css, :custom_css_enabled,
-    :location_notification_subject, :customer_confirmation_subject
+    :location_notification_subject, :customer_confirmation_subject,
+    :location_notification_sender_name, :customer_confirmation_sender_name
   ]
 
   JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].to_s.chomp('/')}/reserveinstore.js"

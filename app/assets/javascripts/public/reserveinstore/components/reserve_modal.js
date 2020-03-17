@@ -181,7 +181,7 @@ ReserveInStore.ReserveModal = function (opts) {
                 inventoryManager.getInventory(product.id, function(_inventory) {
                     inventoryData[product.id] = _inventory;
                     updateLocationStockInfo(locationsManager.getLocations());
-                    getProductStockInfo(bestLocation.id);
+                    if (bestLocation) getProductStockInfo(bestLocation.id);
                 });
             } else if (cart) {
                 var cartItems = cart.items;
@@ -192,7 +192,7 @@ ReserveInStore.ReserveModal = function (opts) {
                 inventoryManager.getCartInventory(productIdArray, function(_inventory) {
                     inventoryData = _inventory;
                     updateCartLocationStockInfo(locationsManager.getLocations());
-                    getCartItemsStockInfo(bestLocation.id);
+                    if (bestLocation) getCartItemsStockInfo(bestLocation.id);
                 });
             }
 

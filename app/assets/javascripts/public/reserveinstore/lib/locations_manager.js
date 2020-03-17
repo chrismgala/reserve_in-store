@@ -124,12 +124,27 @@ ReserveInStore.LocationsManager = function (opts) {
             locationsReady = true;
             // now we are using product tag filters so we need to update fav loc if location set in storage is not found.
             if (favoriteLocation) {
-                if (!locations.some(el => el.id == favoriteLocation.id)) {
+                if (!containsLocation(locations, favoriteLocation)) {
                     self.setFavoriteLocation(_locations[0]);
                 }
                 ready = true;
             }
         });
+    };
+
+    /**
+     * True if the the otherLocation is contained within locations list
+     * @param locations {array<object>}
+     * @param otherLocation {object}
+     * @returns {boolean}
+     */
+    var containsLocation = function(locations, otherLocation) {
+        for (var i = 0; i < locations.length; i++) {
+            if (locations[i].id == otherLocation.id) {
+                return true;
+            }
+        }
+        return false;
     };
     
     /**

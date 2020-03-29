@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="<%= meta_description %>">
+
+  <title><%= title_prefix %><%= " - #{yield(:title_content)}" if content_for?(:title_content) %></title>
+
+  <%= global_js_vars %>
+
+  <%= stylesheet_link_tag 'pages' %>
+
+  <%= yield :before_controller_css %>
+
+  <%= csrf_meta_tags %>
+
+  <%= render partial: "layouts/partials/favicon" %>
+
+  <%= yield :before_head_end %>
+
+</head>
+
+<body
+  <% if Rails.env.development? %>
+  data-controller="<%= params[:controller] %>" data-action="<%= params[:action] %>"
+  <% end %>
+  class="page-layout <%= 'embedded-mode' if params[:embedded_mode].to_bool %>">
+
+<div class="container">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-xl-6">
+      <%= render partial: 'layouts/partials/flash', locals: {store: @current_store, flash: flash} %>
+      <%= yield %>
+    </div>  
+  </div>  
+  
+</div>  
+
+<%= render partial: 'layouts/partials/font_awesome' %>
+
+<%= yield :before_controller_js %>
+
+<%= javascript_include_tag 'pages' %>
+
+<% unless ENV['OFFLINE_MODE'].to_bool %> 
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+<% end %>
+
+<%= yield :before_body_end %>
+
+</body>
+
+</html>  	

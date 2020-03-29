@@ -6,8 +6,10 @@ ruby '2.5.1'
 gem 'ace-rails-ap', '~> 4.1.4' # For making HTML editors look pretty
 gem 'activemodel_flags', "~> 0.2.0" # For simple flagging of models
 gem 'bootsnap', '>= 1.1.0', require: false # Reduces boot times through caching; required in config/boot.rb
+gem 'bootstrap','~> 4.3.1' # For our theme
 gem 'carmen', '~> 1.0.2' # For figuring out what the country/region names of a country code or region code are.
 gem 'dalli', '~> 2.7.6' # For memcached caching in production only
+gem 'devise' # For admin logins.
 gem 'dotenv-rails', '~> 2.4.0' # Adds the `ENV['BLEH']` ability to access environment variables
 gem 'httparty', '~> 0.13.7' # To party... and to do some really easy HTTP requests for things such as pulling the CSS content from the store for previews
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease, not really being used.

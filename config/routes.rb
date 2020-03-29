@@ -37,6 +37,18 @@ Rails.application.routes.draw do
     end
   end
 
+  devise_for :admin, controllers: {
+    sessions: "admins/sessions",
+    registrations: "admins/registrations",
+    passwords: "admins/passwords",
+  }, path_names: { 
+    sign_in: 'login', sign_out: 'logout'
+  }
+  
+  scope :admin, module: :admins, as: :admin do
+    root :to => 'dashboard#index'
+  end
+    
   mount ShopifyApp::Engine, at: '/'
     root :to => 'stores#settings'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

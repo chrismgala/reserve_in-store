@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@fortawesome/fontawesome-pro@^5.13.0":
+  version "5.13.0"
+  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/5.13.0/fontawesome-pro-5.13.0.tgz#fde32ed4d9933c4c9b60b8a74a79c67eba58d984"
+  integrity sha512-97Su0vmIuCdxrklVbjTzY1i16nvyKaqFmFBgrTsgeCVmyIWXNydiS62jhKlkwH9sMb8Tw4wYQ+J1EKbRILowxw==
+
 "@shopify/images@^1.1.0":
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/@shopify/images/-/images-1.1.5.tgz#f7ae5d5801b4550085480825ceda66420d9ff700"
@@ -263,6 +268,11 @@ lru-cache@^4.1.5:
   dependencies:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
+
+metismenujs@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/metismenujs/-/metismenujs-1.1.0.tgz#7b73161fbc9f42ac68b0694b0983b320c85bdc7e"
+  integrity sha512-lSnmOoR8xnfg07b0DROmpp0kOWNZxot5t6RhtQfyQ41V/5/i2bJLlDQHgGj25VHs+34k8UXqh7YTxEd5oh3BtQ==
 
 minimatch@^3.0.4:
   version "3.0.4"

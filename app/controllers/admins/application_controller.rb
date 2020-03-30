@@ -1,5 +1,6 @@
 module Admins
   class ApplicationController < ::ApplicationController
-    #layout 'admins' 
+    before_action :authenticate_admin!
+    layout 'admins' 
   end
 end

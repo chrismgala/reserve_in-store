@@ -1,0 +1,55 @@
+// Condensed layout for <body>
+.condensed-layout {
+  .content-page,
+  .left-side-menu-condensed .content-page {
+    margin-left: 0 !important;
+    padding: 0 35px !important;
+  }
+
+  .container-fluid {
+    padding: 0;
+  }
+  .content-heading-row {
+    margin: 0;
+  }
+
+  .content-heading-left {
+    padding-left: 0;
+  }
+
+  .content-heading-right {
+    padding-right: 0;
+  }
+
+  .footer {
+    left: 0;
+  }
+
+  .navbar-brand {
+    width: auto !important;
+    .logo-lg {
+      display: none !important;
+    }
+    .logo-sm {
+      display: block !important;
+    }
+  }
+
+  .button-menu-mobile {
+    display: block !important;
+  }
+
+  .left-side-menu {
+    display: none;
+  }
+
+  &.sidebar-enable {
+    .left-side-menu {
+      display: block;
+    }
+
+    .slimscroll-menu {
+      height: auto !important;
+    }
+  }
+}

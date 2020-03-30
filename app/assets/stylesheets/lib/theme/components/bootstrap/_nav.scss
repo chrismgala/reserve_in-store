@@ -1,0 +1,115 @@
+//
+// nav.scss
+//
+
+
+// Bootstrap override - turn nav tab with broder
+
+.nav-tabs {
+    border-bottom: 2px solid rgba($gray-600, 0.2);
+
+    &.with-active-item-label {
+        display: flex;
+        justify-content: space-between;
+
+        .nav-link {
+          padding: 10px;
+          &.active .label {
+            display: block !important;
+            font-size: 12px;
+            color: $blue;
+          }
+        }
+      }
+
+    .nav-item {
+        margin-bottom: -2px;
+
+        &.pull-right {
+            position: absolute;
+            right: 20px;
+            vertical-align: middle;
+            top: 12px;
+        }
+
+        .badge {
+            margin-left: 3px;
+        }
+
+    }
+
+    li {
+        a {
+            border-color: transparent !important;
+            padding: 0.625rem 1.25rem;
+        }
+        a.active {
+            border-bottom: 2px solid $primary !important;
+        }
+    }
+
+
+    &.nav-tabs--left {
+        > li {
+            > a.active {
+                // stylesheets/lib/theme/components/bootstrap/_nav.scss needs to use !important and I'm not sure why, so we need !important here as well.
+                border-bottom: none !important;
+                border-right: 3px solid $primary !important;
+                z-index: 1;
+
+                border-radius: 0;
+            }
+        }
+    }
+}
+
+
+// pills
+.nav-tabs,.nav-pills {
+    > li {
+        > a {
+            color: $gray-700;
+            font-weight: $font-weight-bold;
+        }
+    }
+}
+
+.nav-pills {
+    background: $body-bg;
+    border-radius: $border-radius;
+    padding: 6px 2px;
+
+    .nav-link {
+        background-color: transparent;
+        color: $primary;
+    }
+
+    .nav-link.active,
+    .show>.nav-link {
+        color: $body-color;
+        font-weight: 600;
+        background-color: $card-bg;
+        box-shadow: $box-shadow-sm;
+        cursor: default;
+        pointer-events: none;
+    }
+}
+
+
+//Navtab custom
+.navtab-bg {
+    li {
+        >a {
+            background-color: $gray-300;
+            margin: 0 5px;
+        }
+    }
+}
+
+.tab-content {
+  padding: 20px 0 0 0;
+}
+.card-body .tab-content .tab-pane {
+    padding: 0 22px;
+}
+

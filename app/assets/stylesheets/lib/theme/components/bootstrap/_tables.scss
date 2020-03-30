@@ -1,0 +1,67 @@
+//
+// tables.scss
+//
+
+
+//Table centered (Custom)
+.table-centered {
+    td,th {
+        vertical-align: middle !important;
+    }
+}
+
+
+// Custom table components (Custom)
+.table {
+    thead {
+        th {
+            font-weight: $font-weight-bold;
+            border-top: none;
+            padding-top: 0.375rem;
+            color: $table-head-color;
+        }
+    }
+    tbody {
+        border-bottom: 2px solid $table-border-color;
+    }
+    .table-user {
+        img {
+            height: 30px;
+            width: 30px;
+        }
+    }
+    th, td {
+        vertical-align: middle;
+    }
+    td {
+        font-size: 13px;
+    }
+}
+
+.action-icon {
+    color: $gray-600;
+    font-size: 1.2rem;
+    display: inline-block;
+    padding: 0 3px;
+
+    &:hover {
+        color: $gray-700;
+    }
+}
+
+// Tables fluid
+.table-nowrap {
+    th, td {
+      white-space: nowrap;
+    }
+}
+
+
+.table {
+    .text-sub {
+        line-height: 1.1;
+        font-size: $font-size-sm;
+        color: $text-muted;
+        margin-top: 1px;
+    }
+}

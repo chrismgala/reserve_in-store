@@ -14,6 +14,7 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 Rails.application.config.assets.precompile += ['lib/plugins/font_awesome']
 Rails.application.config.assets.precompile += ['pages.js', 'pages.css']
+Rails.application.config.assets.precompile += ['admin.js', 'admin.css']
 Rails.application.config.assets.precompile += ['backend.js', 'backend.css']
 Rails.application.config.assets.precompile += ['public/reserveinstore.js', 'public/reserveinstore.css']
 

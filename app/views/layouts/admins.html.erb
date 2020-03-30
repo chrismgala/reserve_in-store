@@ -11,13 +11,11 @@
 
   <%= global_js_vars %>
 
-  <%= stylesheet_link_tag 'pages' %>
+  <%= stylesheet_link_tag 'admin' %>
 
   <%= yield :before_controller_css %>
 
   <%= csrf_meta_tags %>
-
-  <%= render partial: "layouts/partials/favicon" %>
 
   <%= yield :before_head_end %>
 
@@ -27,23 +25,34 @@
   <% if Rails.env.development? %>
   data-controller="<%= params[:controller] %>" data-action="<%= params[:action] %>"
   <% end %>
-  class="page-layout <%= 'embedded-mode' if params[:embedded_mode].to_bool %>">
+  class="admins-layout <%= 'embedded-mode' if params[:embedded_mode].to_bool %>">
 
-<div class="container">
-  <div class="row h-100 justify-content-center align-items-center">
-    <div class="col-xl-6">
-      <%= render partial: 'layouts/partials/flash', locals: {flash: flash} %>
-      <%= yield %>
+<div class="wrapper">
+  <!-- top navbar-->
+  <%= render partial: "layouts/admins/topnavbar" %>
+  <!-- sidebar-->
+  <%= render partial: "layouts/admins/sidebar" %>
+    <div class="content-page">
+      <div class="content">
+        <!-- Page content-->
+        <div class="container-fluid">
+
+          <%= render partial: 'layouts/partials/flash', locals: {flash: flash} %>
+          
+          <%= yield %>
+        </div>
+
+        <!-- Page footer-->
+        <%= render partial: "layouts/partials/footer" %>
+      </div>  
     </div>  
-  </div>  
-  
 </div>  
 
 <%= render partial: 'layouts/partials/font_awesome' %>
 
 <%= yield :before_controller_js %>
 
-<%= javascript_include_tag 'pages' %>
+<%= javascript_include_tag 'admin' %>
 
 <% unless ENV['OFFLINE_MODE'].to_bool %> 
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800,900" rel="stylesheet">
@@ -51,6 +60,10 @@
 
 <%= yield :before_body_end %>
 
+<script>
+  new MetisMenu("#menu-bar"); 
+</script>
+
 </body>
 
-</html>  	
+</html>

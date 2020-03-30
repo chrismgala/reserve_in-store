@@ -1,0 +1,23 @@
+<!-- START Sidebar (left)-->
+
+<div class="left-side-menu hidden-embedded-mode">
+
+  <div class="sidebar-content">
+    <!--- Sidemenu -->
+    <div id="sidebar-menu" class="slimscroll-menu">
+      <ul class="metismenu" id="menu-bar">
+        <!-- Iterates over all sidebar items-->
+        <li class="<%= 'active mm-active' if controller?('admins/dashboard')%>">
+          <a href="<%= main_app.admin_root_path %>" title="Dashboard" class="">
+            <i class="fa fa-home"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="clearfix"></div>
+  </div>
+  <!-- Sidebar -left -->
+</div>
+<!-- Left Sidebar End -->

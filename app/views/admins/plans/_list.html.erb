@@ -1,0 +1,34 @@
+<div class=" table-responsive">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Limits<br>(location,reservation)</th>
+        <th>Interval</th>
+        <th>Features</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% plans.each do |plan| %>
+        <tr>
+          <td><%= plan.id %></td>
+          <td>
+            <%= plan.code %>
+          </td>
+          <td>
+            <%= plan.price %>
+          </td>
+          <td><%= plan.name %></td>
+          <td><%= plan.limits.to_a.map{ |limit| limit[1] if limit[1] }.join(', ') %></td>
+          <td><%= plan.trial_days %>days</td>
+          <td>
+            <%= plan.features.to_a.map{ |feat| feat[0] if feat[1] }.reject{|v| v.nil? }.join(', ') %>
+          </td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

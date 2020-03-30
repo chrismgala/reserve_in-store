@@ -59,6 +59,7 @@ Rails.application.routes.draw do
       match 'admin/stores/settings' => 'stores#save_settings', via: [:post, :patch]
     end
     resources :users
+    resources :plans
   end
     
   mount ShopifyApp::Engine, at: '/'

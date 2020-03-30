@@ -33,10 +33,26 @@
                 <span>Accounts</span>
               </a>
             </li>
-            
+
           </ul>
         </li>
 
+        <li class="<%= 'active mm-active' if controller?('admins/plans') %>">
+          <a href="#plans" title="Plans Plans" aria-expanded="false" class="<%= 'active' if controller?('admins/plans')%>">
+            <i class="fad fa-money-bill"></i>
+            <span>Plans</span>
+
+            <i class="fas fa-chevron-right menu-arrow"></i>
+          </a>
+          <ul id="plans" class="nav-second-level" aria-expanded="false">
+            <li class="<%= 'active' if controller?('admins/plans') %>">
+              <a href="<%= main_app.admin_plans_path %>" title="Paid Plans">
+                <i class="fa fa-money-bill"></i>
+                <span>Plans</span>
+              </a>
+            </li>
+          </ul>  
+        </li>  
       </ul>
     </div>
 

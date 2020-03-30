@@ -31,11 +31,11 @@
       <li class="">
         <div class="app-search">
           <div class="form form-inline searchForm">
-            <%= form_tag("", :method => "get", id: "search-form") do %>
+            <%= form_tag(admin_users_path, :method => "get", id: "search-form", enforce_utf8: false) do %>
               <div class="input-group input-group--search">
                 <%= text_field_tag :search, params[:search], name: "query", placeholder: "Search", class: "form-control"%>
                 <span class="input-group-append">
-                  <%= button_tag :submit, class: "btn btn-outline border", value: "" do %>
+                  <%= button_tag :submit, class: "btn btn-outline border", name: nil do %>
                     <i class="far fa-search"></i>
                   <% end %>
                 </span>

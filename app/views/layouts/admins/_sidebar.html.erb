@@ -13,6 +13,23 @@
             <span>Dashboard</span>
           </a>
         </li>
+
+        <li class="<%= 'active mm-active' if controller?('admins/stores') || controller?('admins/users') %>">
+          <a href="#stores_nav" title="Stores" aria-expanded="false" class="<%= 'active' if controller?('admins/stores') || controller?('admins/users') %>">
+            <i class="fad fa-cog"></i>
+            <span>Stores</span>
+
+            <i class="fas fa-chevron-right menu-arrow"></i>
+          </a>
+          <ul id="stores_nav" class="nav-second-level" aria-expanded="false">
+            <li class="<%= 'active mm-active' if controller?('admins/stores') %>">
+              <a href="<%= main_app.admin_stores_path(created_at: 'DESC') %>" title="All Stores">
+                <span>All Stores</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
       </ul>
     </div>
 

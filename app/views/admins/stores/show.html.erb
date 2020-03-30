@@ -1,0 +1,12 @@
+<%= render partial: 'admins/stores/shared/header', locals: { store: @store } %>
+<div class="card">
+  <%= render(partial: 'admins/stores/shared/tabs', locals: { store: @store, active_tab: params[:tab] || 'summary' }) %>
+  <!-- Tab panes-->
+  <div class="card-body">
+    <div class="tab-content">
+      <div id="summary" role="tabpanel" class="tab-pane active">
+      <%= render partial: 'admins/stores/show/summary', locals: { store: @store } %>
+      </div>
+    </div>
+  </div>  
+</div>  

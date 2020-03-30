@@ -1,0 +1,43 @@
+<%= render partial: 'admins/stores/shared/header', locals: { store: @store } %>
+
+<div class="card">
+  <!-- Nav tabs-->
+  <%= render partial: 'admins/stores/shared/tabs', locals: { store: @store, active_tab: 'tools' } %>
+  <!-- Tab panes-->
+  <div class="card-body">
+    <div class="tab-content">
+      <div id="tools" role="tabpanel" class="tab-pane active">
+
+        <h3>Re-integrate</h3>
+        <p>The reintegration process will attempt to re-install the footer scripts into this store.
+        If they recently changed their store theme, you should try running this process..</p>
+        <a href="<%= admin_store_reintegrate_path(@store) %>" class="btn btn-primary">Run Reintegration Process</a>
+
+        <hr>
+        <h3>Status</h3>
+          <% if @store.active %>
+
+            <div class="status-active text-success">
+              <i class="fal fa-check-circle"></i> Active
+            </div>
+            <p>Reserve In-Store is showing to customers.</p>
+            <div>
+              <a href="<%= admin_store_deactivate_path(@store) %>" class="btn btn-primary btn-danger"> 
+               Deactivate
+              </a>
+            </div>  
+          <% else %>
+            <div class="status-deactive text-danger">
+              <i class="far fa-times-circle"></i> Deactive
+            </div>
+            <p>Reserve In-Store is not showing to customers.</p>
+            <div>
+              <a href="<%= admin_store_activate_path(@store) %>" class="btn btn-primary btn-success">
+              Activate 
+              </a>
+            </div>       
+          <% end %>
+      </div>
+    </div>
+  </div>
+</div>

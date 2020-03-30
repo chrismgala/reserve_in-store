@@ -47,6 +47,17 @@ Rails.application.routes.draw do
   
   scope :admin, module: :admins, as: :admin do
     root :to => 'dashboard#index'
+    resources :stores do
+      get 'show'
+      get 'tools'
+      get 'reintegrate'
+      get 'reservations'
+      get 'settings'
+      get 'activate'
+      get 'deactivate'
+      get 'locations'
+      match 'admin/stores/settings' => 'stores#save_settings', via: [:post, :patch]
+    end
   end
     
   mount ShopifyApp::Engine, at: '/'

@@ -1,0 +1,14 @@
+<%= render partial: 'admins/stores/shared/header', locals: { store: @store } %>
+
+<div class="card">
+  <!-- Nav tabs-->
+  <%= render partial: 'admins/stores/shared/tabs', locals: { store: @store, active_tab: 'settings' } %>
+  <!-- Tab panes-->
+  <div class="store-setting card-body">
+    <div class="tab-content">
+      <div id="settings" role="tabpanel" class="tab-pane active">
+       <%= render partial: 'admins/stores/settings/index', locals: { store: @current_store } %>
+      </div>
+    </div>
+  </div>
+</div>

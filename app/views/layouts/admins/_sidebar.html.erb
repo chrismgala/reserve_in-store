@@ -27,6 +27,13 @@
                 <span>All Stores</span>
               </a>
             </li>
+
+            <li class="<%= 'active mm-active' if controller?('admins/users')%>">
+              <a href="<%= main_app.admin_users_path %>" title="Users">
+                <span>Accounts</span>
+              </a>
+            </li>
+            
           </ul>
         </li>
 

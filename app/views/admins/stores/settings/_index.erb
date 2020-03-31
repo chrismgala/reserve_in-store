@@ -1,127 +1,103 @@
-<%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
-<div class="row mb-4">
-  <div class="col">
-    <h3>Product Page "Reserve" Button</h3>
-    <div class="text">Define how we should integrate the product page reservation button that will trigger the modal</div>
+<%= form_for @store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
+  <input type="hidden" value="<%= admin_store_settings_path %>" name="next_url">
+
+  <div class="row mb-4">
+    <div class="col-5">
+      <h5>Product Page "Reserve" Button</h5>
+      <p>Define how we should integrate the product page reservation button that will trigger the modal</p>
+    </div>
+
+    <div class="col form-group">
+      <%= render partial: "admins/stores/shared/integration_option", locals: {
+          f: f,
+          attr: :reserve_product_btn,
+          store: @store
+      } %>
+    </div>
   </div>
-  <div class="col form-group">
-    <%= f.label "reserve_product_btn", class: '' do %>
-        Status/Integration:
-      <% end %>
-    <%= render_status_integration_field(@current_store, "reserve_product_btn", extra_classes: '') %>
-    <div class="display-if-selected-option"
-     data-if_selected_option="#store_reserve_product_btn_action"
-     data-selected_values="insert_after,insert_before,append_to,prepend_to"
-     style="display:none; margin-top: 12px;">
-     <%= f.text_field "reserve_product_btn_selector", class: 'form-control small-width-field ', placeholder: "Example: form #addtoCartButton" %>
-    </div> 
-  </div>  
-</div>
 
-<div class="row mb-4">
-  <div class="col">
-    <h3>Cart "Reserve" Button</h3>
-    <div class="text">Define how we should integrate the cart page reservation button that will trigger the modal.</div>
+  <div class="row mb-4">
+    <div class="col-5">
+      <h5>Cart "Reserve" Button</h5>
+      <p>Define how we should integrate the cart page reservation button that will trigger the modal.</p>
+    </div>
+
+    <div class="col form-group">
+      <%= render partial: "admins/stores/shared/integration_option", locals: {
+          f: f,
+          attr: :reserve_cart_btn,
+          store: @store,
+          dont_show_not_showing_msg: true
+      } %>
+    </div>
   </div>
-  <div class="col form-group">
-    <%= f.label "reserve_cart_btn", class: '' do %>
-        Status/Integration:
-      <% end %>
-    <%= render_status_integration_field(@current_store, "reserve_cart_btn", extra_classes: '') %>
-    <div class="display-if-selected-option"
-     data-if_selected_option="#store_reserve_cart_btn_action"
-     data-selected_values="insert_after,insert_before,append_to,prepend_to"
-     style="display:none; margin-top: 12px;">
-     <%= f.text_field "reserve_cart_btn_selector", class: 'form-control small-width-field ', placeholder: "Example: form #addtoCartButton" %>
-    </div> 
-  </div>  
-</div>
 
-<div class="row mb-4">
-  <div class="col">
-    <h3>Product Page Stock Status Indicator</h3>
-    <div class="text">Define how we should integrate the product page stock status component that tells shoppers the status of inventory for the currently being viewed product (if available).</div>
-  </div>
-  
-  <div class="col form-group">
-    <%= f.label "stock_status", class: '' do %>
-        Status/Integration:
-      <% end %>
-    <%= render_status_integration_field(@current_store, "stock_status", extra_classes: '') %>
-    <div class="display-if-selected-option"
-     data-if_selected_option="#store_stock_status_action"
-     data-selected_values="insert_after,insert_before,append_to,prepend_to"
-     style="display:none; margin-top: 12px;">
-     <%= f.text_field "stock_status_selector", class: 'form-control small-width-field ', placeholder: "Example: form #addtoCartButton" %>
+  <div class="row mb-4">
+    <div class="col-5">
+      <h5>Product Page Stock Status Indicator</h5>
+      <p>Define how we should integrate the product page stock status component that tells shoppers the status of inventory for the currently being viewed product (if available).</p>
     </div>
 
-    <div>
-      <%= f.label "stock_status_behavior", class: '' do %>
-        If stock level is NOT available at any physical locations...
-      <% end %>
-      <select id="store_stock_status_behavior_when_stock_unknown" name="store[stock_status_behavior_when_stock_unknown]" class="form-control small-width-field" aria-invalid="false">
-        <option value="in_stock_show_button" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown == 'in_stock_show_button' %>>
-          Show as "In Stock" and Show Reserve Button
-        </option>
-        <option value="unknown_stock_show_button" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown.blank? ||  @current_store.stock_status_behavior_when_stock_unknown == 'unknown_stock_show_button' %>>
-          Show as "Stock Unknown" and Show Reserve Button
-        </option>
-        <option value="unknown_stock_hide_button" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_stock_unknown == 'unknown_stock_hide_button' %>>
-          Show as "Stock Unknown" but Hide Reserve Button
-        </option>  
-      </select>  
-    </div>
+    <div class="col form-group">
+      <%= render partial: "admins/stores/shared/integration_option", locals: {
+          f: f,
+          attr: :stock_status,
+          store: @store,
+          dont_show_not_showing_msg: true
+      } %>
 
-    <div>
-      <%= f.label "stock_status_behavior_no_location", class: '' do %>
-        If no location is selected...
-      <% end %>
-      <select id="store_stock_status_behavior_when_no_location_selected" name="store[stock_status_behavior_when_no_location_selected]" class="form-control small-width-field" aria-invalid="false">
-        <option value="use_nearby" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_location_selected.blank? || @current_store.stock_status_behavior_when_no_location_selected == 'use_nearby' %>>
-          Use Nearby Location (Default)  
-        </option>
-        <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_location_selected == 'hide' %>>
-          Don't Show  
-        </option>
-      </select>  
-    </div>
+      <div class="mt-3">
+        <%= f.label :name, "If stock level is NOT available at any physical locations..." %>
+        <select id="store_stock_status_behavior_when_stock_unknown" name="store[stock_status_behavior_when_stock_unknown]"
+                class="form-control small-width-field" aria-invalid="false">
+          <option value="in_stock_show_button" <%= 'selected="selected"' if @store.stock_status_behavior_when_stock_unknown == 'in_stock_show_button' %>>
+          Show as "In Stock" and Show Reserve Button</option>
+          <option value="unknown_stock_show_button" <%= 'selected="selected"' if @store.stock_status_behavior_when_stock_unknown.blank? ||  @store.stock_status_behavior_when_stock_unknown == 'unknown_stock_show_button' %>>
+          Show as "Stock Unknown" and Show Reserve Button</option>
+          <option value="unknown_stock_hide_button" <%= 'selected="selected"' if @store.stock_status_behavior_when_stock_unknown == 'unknown_stock_hide_button' %>>
+          Show as "Stock Unknown" but Hide Reserve Button</option>
+        </select>
+      </div>
 
-    <div class="display-if-selected-option" data-if_selected_option="#store_stock_status_behavior_when_no_location_selected" data-selected_value="use_nearby" style="display:none; margin-top: 12px;">
-      <%= f.label "stock_status_behavior_no_nearby", class: '' do %>
-        If no location is nearby AND no location is selected...
-      <% end %>
-      <select id="store_stock_status_behavior_when_no_nearby_locations_and_no_location" name="store[stock_status_behavior_when_no_nearby_locations_and_no_location]" class="form-control small-width-field" aria-invalid="false">
-        <option value="hide" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_nearby_locations_and_no_location.blank? || @current_store.stock_status_behavior_when_no_nearby_locations_and_no_location == 'hide' %>>
-          Don't Show (Default)
-        </option>
-        <option value="show_first_available" <%= 'selected="selected"' if @current_store.stock_status_behavior_when_no_nearby_locations_and_no_location == 'show_first_available' %>>
-          Use First Available Location
-        </option>  
-      </select>  
-    </div>
+      <div class="mt-3">
+        <%= f.label :name, "If no location is selected..." %>
+        <select id="store_stock_status_behavior_when_no_location_selected" name="store[stock_status_behavior_when_no_location_selected]"
+                class="form-control small-width-field" aria-invalid="false">
+          <option value="use_nearby" <%= 'selected="selected"' if @store.stock_status_behavior_when_no_location_selected.blank? || @store.stock_status_behavior_when_no_location_selected == 'use_nearby' %>>
+          Use Nearby Location (Default)</option>
+          <option value="hide" <%= 'selected="selected"' if @store.stock_status_behavior_when_no_location_selected == 'hide' %>>
+          Don't Show</option>
+        </select>
+      </div>
 
-    <div>
-      <%= f.label "stock_status_behavior_available_online", class: '' do %>
-        When product seems to be only available online...
-      <% end %>
-      <select id="store_show_when_only_available_online" name="store[show_when_only_available_online]" class="form-control small-width-field" aria-invalid="false">
-        <option value="true" <%= 'selected="selected"' if @current_store.show_when_only_available_online.nil? || @current_store.show_when_only_available_online.to_bool %>>
-          Show Inventory Status and Reserve Button
-        </option>
-        <option value="false" <%= 'selected="selected"' unless @current_store.show_when_only_available_online.to_bool %>>
+      <div class="display-if-selected-option" data-if_selected_option="#store_stock_status_behavior_when_no_location_selected" data-selected_value="use_nearby" style="display:none; margin-top: 12px;">
+        <%= f.label :name, "If no location is nearby AND no location is selected..." %>
+        <select id="store_stock_status_behavior_when_no_nearby_locations_and_no_location" name="store[stock_status_behavior_when_no_nearby_locations_and_no_location]" class="form-control small-width-field" aria-invalid="false">
+          <option value="hide" <%= 'selected="selected"' if @store.stock_status_behavior_when_no_nearby_locations_and_no_location.blank? || @store.stock_status_behavior_when_no_nearby_locations_and_no_location == 'hide' %>>
+          Don't Show (Default)</option>
+          <option value="show_first_available" <%= 'selected="selected"' if @store.stock_status_behavior_when_no_nearby_locations_and_no_location == 'show_first_available' %>>
+          Use First Available Location</option>
+        </select>
+      </div>
+
+      <div class="mt-3">
+        <%= f.label :name, "When product seems to be only available online..." %>
+        <select id="store_show_when_only_available_online" name="store[show_when_only_available_online]" class="form-control small-width-field" aria-invalid="false">
+          <option value="true" <%= 'selected="selected"' if @store.show_when_only_available_online.nil? || @store.show_when_only_available_online.to_bool %>>
+          Show Inventory Status and Reserve Button</option>
+          <option value="false" <%= 'selected="selected"' unless @store.show_when_only_available_online.to_bool %>>
           Hide Inventory Status and Reserve Button
-        </option>
-      </select>  
-    </div> 
-  
-  </div>  
-</div>
-
-<div class="row mb-4">
-  <div class="col text-center">
-    <div class="actions">
-    <%= f.submit "Save", class: "btn save-btn btn-primary", id: "save_btn" %>
+          </option>
+        </select>
+      </div>
     </div>
-  </div>  
-</div>  
+  </div>
+
+  <div class="row mb-4">
+    <div class="col text-center">
+      <div class="actions">
+        <%= f.submit "Save", class: "btn save-btn btn-primary", id: "save_btn" %>
+      </div>
+    </div>
+  </div>
 <% end %>

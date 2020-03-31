@@ -40,7 +40,7 @@ module Admins
 
     #GET /admin/stores/:store_id/settings
     def settings
-      @current_store = store
+      store
       @locations = store.locations
     end
     

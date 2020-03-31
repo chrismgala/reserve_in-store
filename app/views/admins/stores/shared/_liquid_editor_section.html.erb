@@ -1,0 +1,46 @@
+<div class="row mb-4" id="<%= attr %>_section">
+  <div class="col-5">
+    <h5><%=- heading -%></h5>
+    <p><%=- subheading -%></p>
+  </div>
+ 
+  <div class="col form-group">
+    <select id="store_<%= attr %>_enabled" name="store[<%= attr %>_enabled]" class="form-control small-width-field" aria-invalid="false">
+      <option value="false" <%= 'selected="selected"' unless enabled %>>Use Default Template</option>
+      <option value="true" <%= 'selected="selected"' if enabled %>>Specify Custom Template</option>
+    </select>
+      
+    <div class="display-if-selected-option template-editor-container" data-if_selected_option="#store_<%= attr %>_enabled" data-selected_value="true">
+      <div class="mt-5">
+        <textarea class="editor-hidden-textarea" id="store_<%= attr %>_textarea"
+                  name="store[<%= attr %>]"><%= value_in_use.to_s.html_safe %></textarea>
+        <textarea class="editor" id="store_<%= attr %>_editor"><%= value_in_use.to_s.html_safe %></textarea>
+        <textarea class="editor-default-content" id="store_default_<%= attr %>_editor_textarea"><%= default_value.html_safe %></textarea>
+        
+        <div class="editor-links">
+          <a href="#" class="beautify-link">beautify code</a>
+          <a href="#" class="expand-editor-link">expand editor</a>
+          <a href="#" class="contract-editor-link">contract editor</a>
+          <a href="#" class="reset-to-default">reset</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for(:before_body_end) do %>
+  <script>
+      var <%= attr %>_editor = new LiquidTemplateEditor({
+          attr: '<%= attr %>',
+          previewParams: <%= raw local_assigns[:preview_params].to_h.to_json %>,
+          frontendMode: <%= local_assigns[:frontend_mode].to_bool %>,
+          containerClasses: '<%= local_assigns[:container_css_class] %>',
+          previewVars: <%= raw local_assigns[:preview_vars].to_h.to_json %>,
+          extraCss: "<%= local_assigns[:extra_css] %>",
+          switchSelector: '#store_<%= attr %>_enabled',
+          dontUseGlobalCustomCss: <%= local_assigns[:dont_use_global_css].to_bool %>
+      });
+
+  </script>
+<% end %>

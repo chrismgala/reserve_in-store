@@ -62,7 +62,7 @@ module Admins
         @current_store.assign_attributes(save_params)
 
         if @current_store.save
-          format.html { redirect_to admin_store_settings_path(@current_store), notice: 'Store settings were successfully updated.' }
+          format.html { redirect_to params[:next_url].presence || stores_settings_url, notice: 'Store settings were successfully updated.' }
           format.json { render :settings, status: :ok }
         else
           format.html { render :settings }
@@ -74,6 +74,10 @@ module Admins
     def locations
        @locations = store.locations
     end
+
+    def templates
+      store
+    end  
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def store_params

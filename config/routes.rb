@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       get 'reservations'
       get 'settings'
       get 'activate'
+      get 'templates'
       get 'deactivate'
       get 'locations'
       match 'admin/stores/settings' => 'stores#save_settings', via: [:post, :patch]

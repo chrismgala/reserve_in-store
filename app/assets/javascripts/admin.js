@@ -2,6 +2,18 @@
 //= require popper
 //= require bootstrap-sprockets
 //= require metismenujs/dist/metismenujs
+//= require_tree ./backend/
 //= require jquery_ujs
 //= require lib/display_if_enabled
 //= require lib/display_if_selected_value
+
+//= require ace-rails-ap
+//= require ace/theme-monokai
+//= require ace/mode-liquid
+//= require liquid.js/dist/liquid
+//= require js-beautify/js/lib/beautify
+//= require js-beautify/js/lib/beautify-css
+//= require js-beautify/js/lib/beautify-html
+//= require lib/code_editor
+//= require lib/iframe_previewer
+//= require lib/iframe_previewer

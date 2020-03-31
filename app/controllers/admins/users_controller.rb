@@ -1,6 +1,6 @@
 module Admins
   class UsersController < ::Admins::ApplicationController
-        
+
     def index
       @users = User.order(created_at: :desc)
       if params[:query]
@@ -10,11 +10,9 @@ module Admins
       @users = @users.page(params[:page]).per(20)
     end
     
-
     private
 
     def load_users_from_search_query(query)
-
       if params[:query].to_s.downcase.strip =~ /^pk_.+$/
         matched_store_ids = Store.where(public_key: params[:query].to_s.downcase.strip).pluck(:id).to_a
       elsif params[:query].to_s.strip =~ /^sk_.+$/
@@ -28,6 +26,5 @@ module Admins
 
       @users.where(store_id: matched_store_ids.to_a.uniq)
     end
-
-    end
+  end
 end

@@ -14,7 +14,7 @@
           </a>
         </li>
 
-        <li class="<%= 'active mm-active' if controller?('admins/stores') || controller?('admins/users') %>">
+        <li class="<%= 'active mm-active' if controller?('admins/stores') || controller?('admins/users') || controller?('admins/uninstallations') %>">
           <a href="#stores_nav" title="Stores" aria-expanded="false" class="<%= 'active' if controller?('admins/stores') || controller?('admins/users') %>">
             <i class="fad fa-cog"></i>
             <span>Stores</span>
@@ -31,6 +31,12 @@
             <li class="<%= 'active mm-active' if controller?('admins/users')%>">
               <a href="<%= main_app.admin_users_path %>" title="Users">
                 <span>Accounts</span>
+              </a>
+            </li>
+
+            <li class="<%= 'active mm-active' if controller?('admins/uninstallations')%>">
+              <a href="<%= main_app.admin_uninstallations_path %>" title="Uninstallation">
+                <span>Uninstallations</span>
               </a>
             </li>
 

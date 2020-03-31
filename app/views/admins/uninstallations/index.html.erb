@@ -1,0 +1,18 @@
+<div class="content-heading page-title ">
+  <div class="content-heading-row align-items-center justify-content-center">
+    <div class="content-heading-left">
+        <h1>Uninstallation</h1>
+    </div>
+  </div>
+</div>
+
+<p>
+  Showing <strong><%= pluralize(@uninstalls.total_count, 'uninstalls') %></strong>.
+</p>
+<div class="card">
+  <div class="card-body">
+  <%= render partial: 'list', locals: { uninstalls: @uninstalls } %>
+  </div>
+</div>  
+
+<%= paginate @uninstalls %>

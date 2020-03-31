@@ -61,6 +61,7 @@ Rails.application.routes.draw do
     end
     resources :users
     resources :plans
+    resources :uninstallations
   end
     
   mount ShopifyApp::Engine, at: '/'

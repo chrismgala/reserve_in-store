@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   }
   
   scope :admin, module: :admins, as: :admin do
-    root :to => 'dashboard#index'
+    root :to => 'stores#index'
     resources :stores do
       get 'show'
       get 'tools'

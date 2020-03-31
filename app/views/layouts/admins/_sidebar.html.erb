@@ -7,13 +7,6 @@
     <div id="sidebar-menu" class="slimscroll-menu">
       <ul class="metismenu" id="menu-bar">
         <!-- Iterates over all sidebar items-->
-        <li class="<%= 'active mm-active' if controller?('admins/dashboard')%>">
-          <a href="<%= main_app.admin_root_path %>" title="Dashboard" class="">
-            <i class="fa fa-home"></i>
-            <span>Dashboard</span>
-          </a>
-        </li>
-
         <li class="<%= 'active mm-active' if controller?('admins/stores') || controller?('admins/users') || controller?('admins/uninstallations') %>">
           <a href="#stores_nav" title="Stores" aria-expanded="false" class="<%= 'active' if controller?('admins/stores') || controller?('admins/users') %>">
             <i class="fad fa-cog"></i>
@@ -39,7 +32,6 @@
                 <span>Uninstallations</span>
               </a>
             </li>
-
           </ul>
         </li>
 

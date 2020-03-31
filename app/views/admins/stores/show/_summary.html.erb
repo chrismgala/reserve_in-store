@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-6">
-    <h3>General Details</h3>
+    <h5>General Details</h5>
     <table class="table table-responsive table-striped">
       <tr>
         <th>Name</th>
@@ -8,12 +8,15 @@
       </tr>
       <tr>
         <th>Created At</th>
-        <td><%= local_time(store.created_at) %>
-        (<%= time_ago_in_words(store.created_at) %> ago)</td>
+        <td>
+          <%= local_time(store.created_at) %>
+          (<%= time_ago_in_words(store.created_at) %> ago)
+        </td>
       </tr>
       <tr>
         <th>URL</th>
-        <td><a target="<%= store.name %>" href="https://<%= store.shopify_domain %>"><%= store.shopify_domain %> <i class="fa fa-external-link"></i></a>
+        <td>
+          <a target="<%= store.name %>" href="https://<%= store.shopify_domain %>"><%= store.shopify_domain %> <i class="fa fa-external-link"></i></a>
         </td>
       </tr>
     </table>
@@ -22,7 +25,7 @@
 
 <div class="row">
   <div class="col">
-    <h3>Owner Contact Details</h3>
+    <h5>Owner Contact Details</h5>
     <% if @user.any? %>
       <% @user.each do |user| %>
       <table class="table table-responsive table-striped">
@@ -40,8 +43,10 @@
         </tr>
         <tr>
           <th>Created at</th>
-          <td><%= local_time(user.created_at) %>
-          (<%= time_ago_in_words(user.created_at) %> ago)</td>
+          <td>
+            <%= local_time(user.created_at) %>
+            (<%= time_ago_in_words(user.created_at) %> ago)
+          </td>
         </tr> 
       </table>
       <% end %>
@@ -51,13 +56,13 @@
     
 <div class="row">
   <div class="col">
-    <h3>Technical Details</h3>
+    <h5>Technical Details</h5>
     <table class="table table-responsive table-striped">
       <tr>
         <th>API Keys</th>
         <td>
-        Public Key: <%= store.public_key %><br>
-        Secret Key: <%= store.secret_key %>
+          Public Key: <%= store.public_key %><br>
+          Secret Key: <%= store.secret_key %>
         </td>
       </tr>
     </table>

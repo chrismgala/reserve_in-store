@@ -10,40 +10,51 @@ module Admins
       @stores = @stores.page(params[:page]).per(20)
     end
 
+    ##
     # GET /admin/stores/:store_id/show
     def show
       store
       @user = User.where(store_id: params[:store_id].to_i)
     end
-
+    
+    ##
+    # GET /admin/stores/:store_id/deactivate
     def deactivate
       store.deactivate!
       
       redirect_to admin_store_tools_path(store), notice: 'Reserve In-store has been deactivated.'
     end
 
+    ##
+    # GET /admin/stores/:store_id/activate
     def activate
       store.activate!
       
       redirect_to admin_store_tools_path(store), notice: 'Reserve In-store has been activated.'
     end
-
+    
+    ##
+    # GET /admin/stores/:store_id/tools
     def tools
       store
     end
-
+    
+    ##
+    # GET /admin/stores/:store_id/reintegrate
     def reintegrate
       UpdateFooterJob.new.perform(store.id)
       
       redirect_to admin_store_tools_path(store), notice: 'Reserve In-store has been re-installed into this store.'
     end
 
-    #GET /admin/stores/:store_id/settings
+    ##
+    # GET /admin/stores/:store_id/settings
     def settings
       store
       @locations = store.locations
     end
     
+    ##
     # PUT/PATCH /stores/settings
     def save_settings
       @current_store = store
@@ -70,11 +81,15 @@ module Admins
         end
       end
     end
-
+    
+    ##
+    # GET /admin/stores/:store_id/locations(
     def locations
        @locations = store.locations
     end
-
+    
+    ##
+    # GET /admin/stores/:store_id/templates
     def templates
       store
     end  

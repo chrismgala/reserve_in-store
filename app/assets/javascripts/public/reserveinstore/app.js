@@ -1,6 +1,6 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.2.4.1'; // Version of the JS library.
+    this.version = '1.2.4.2'; // Version of the JS library.
     var self = this;
     opts = opts || {};
     opts.app = self;
@@ -65,7 +65,8 @@ ReserveInStore.App = function(opts) {
         var componentOpts = {
             api: api,
             storage: storage,
-            app: self
+            app: self,
+            config: config || {}
         };
 
         variantLoader = new ReserveInStore.VariantLoader(componentOpts);

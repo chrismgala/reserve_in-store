@@ -374,7 +374,7 @@ ReserveInStore.ReserveModal = function (opts) {
         if (inventoryLocations !== '') {
             stockStatus = inventoryLocations[currentLocationPlatformId];
             updateProductsStockInfo(variant.id, stockStatus);
-            
+
             if (stockStatus === 'out_of_stock' || (!showReserveBtnWhenUnknown && stockStatus === 'unknown_stock') || (!showReserveBtnWhenUnknown && !stockStatus)) {
                 productIsOutOfStock = true;
             }

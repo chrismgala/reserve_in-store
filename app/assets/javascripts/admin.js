@@ -17,3 +17,6 @@
 //= require lib/code_editor
 //= require lib/iframe_previewer
 //= require lib/iframe_previewer
+
+//= require admins/lib/platform_data_displayer
+//= require sweetalert2/dist/sweetalert2.min

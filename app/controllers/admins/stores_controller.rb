@@ -83,9 +83,17 @@ module Admins
     end
     
     ##
-    # GET /admin/stores/:store_id/locations(
+    # GET /admin/stores/:store_id/locations
     def locations
        @locations = store.locations
+       @locations = @locations.page(params[:page]).per(20)
+    end
+
+    ##
+    # GET /admin/stores/:store_id/reservations
+    def reservations
+       @reservations = store.reservations
+       @reservations = @reservations.page(params[:page]).per(20)
     end
     
     ##

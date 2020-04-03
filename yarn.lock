@@ -179,6 +179,11 @@ editorconfig@^0.15.3:
     semver "^5.6.0"
     sigmund "^1.0.1"
 
+es6-promise@latest:
+  version "4.2.8"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.8.tgz#4eb21594c972bc40553d276e510539143db53e0a"
+  integrity sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
+
 exenv@^1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
@@ -409,6 +414,13 @@ sigmund@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/sigmund/-/sigmund-1.0.1.tgz#3ff21f198cad2175f9f3b781853fd94d0d19b590"
   integrity sha1-P/IfGYytIXX587eBhT/ZTQ0ZtZA=
+
+sweetalert2@^4.1.2:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-4.3.3.tgz#9a7ba4b679f27eeb3daae6a1f688395c6e3ef90f"
+  integrity sha1-mnuktnnyfus9quah9og5XG4++Q8=
+  dependencies:
+    es6-promise latest
 
 tslib@^1.7.1, tslib@^1.8.0:
   version "1.9.3"

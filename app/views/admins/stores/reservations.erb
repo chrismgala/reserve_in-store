@@ -1,0 +1,69 @@
+<%= render partial: 'admins/stores/shared/header', locals: {store: @store} %>
+
+<% content_for(:title_content) {" - reservations"} %>
+
+<div class="card " role="tabpanel">
+  <!-- Nav tabs-->
+  <%= render partial: 'admins/stores/shared/tabs', locals: {store: @store, active_tab: 'reservations'} %>
+  <!-- Tab panes-->
+  <div class="card-body">
+    <div class="tab-content">
+      <div id="locations" role="tabpanel" class="tab-pane active">
+        <% if @store.reservations.any? %>
+          <p>This store has <strong><%= pluralize(@store.reservations.count, 'reservations') %></strong>.</p>
+
+          <table id="reservationTable" class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Customer Info</th>
+                <th>fulfilled</th>
+                <th>created at</th>
+                <th>updated at</th>
+                <th></th>
+              </tr>  
+            </thead>
+            
+            <tbody>
+              <% @reservations.each do |reservation| %>
+              <tr>
+                <td><%= reservation.id %>
+                  <span class="hidden"><%= reservation.location_id %>
+                  </span>  
+                </td>
+                <td>
+                  <%= reservation.customer_name %> <br>
+                  <%= reservation.customer_email %>
+                </td>
+                <td><%= reservation.fulfilled %></td>
+                <td><%= reservation.created_at %></td>
+                <td><%= reservation.updated_at %></td>
+                <td>
+                  <button class="btn btn-default platform-data-btn" type="button">
+                    <span class="hidden-platform-data hidden">
+                      <%= JSON.pretty_generate(reservation.cart.to_h) %>
+                    </span>Show Platform Data
+                  </button>
+                </td>
+              </tr>  
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p>There are no reservations to display.</p>
+        <% end %>
+      </div>
+      <%= paginate @reservations %>  
+    </div>  
+  </div>
+</div>
+
+<% content_for(:before_body_end) do %>
+  <script>
+      var adminReservationProductDataDisplay = new AdminPlatformDataDisplayer({
+          buttonClass: "platform-data-btn",
+          tableId: "reservationTable",
+          dataClass: "hidden-platform-data"
+      });
+  </script>
+<% end %>

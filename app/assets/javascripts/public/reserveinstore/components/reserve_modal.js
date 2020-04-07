@@ -2,10 +2,13 @@ ReserveInStore.ReserveModal = function (opts) {
     var self = this;
     opts = opts || {};
     var $ = ReserveInStore.Util.$();
-    var api, $modalBackground, $reserveModal, $successModal, $form, formDataArray;
+    var api, config, $modalBackground, $reserveModal, $successModal, $form, formDataArray;
 
     var locationsManager = opts.locationsManager;
     var inventoryManager = opts.inventoryManager;
+    var showReserveBtnWhenUnknown = false;
+    var inStockTextWhenUnknown = false;
+
     // inventoryData is a 3-level nested hash that contains data pertaining to product stock by location,
     // the fields should look like this:
     // * product id: key for the 1st level of the hash
@@ -21,6 +24,9 @@ ReserveInStore.ReserveModal = function (opts) {
 
     var init = function () {
         api = opts.api;
+        config = opts.config || {};
+        showReserveBtnWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('show_button') !== -1;
+        inStockTextWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('in_stock') !== -1;
         updateCartOnAjax();
     };
 
@@ -300,7 +306,7 @@ ReserveInStore.ReserveModal = function (opts) {
                 if (inventoryLocations !== '') {
                     stockStatus = inventoryLocations[locations[i].platform_location_id];
 
-                    if (stockStatus === 'out_of_stock' || stockStatus === 'unknown_stock' || !stockStatus) {
+                    if (stockStatus === 'out_of_stock' || (!showReserveBtnWhenUnknown && stockStatus === 'unknown_stock') || (!showReserveBtnWhenUnknown && !stockStatus)) {
                         stockCount -= 1;
                     }
                 }
@@ -369,7 +375,7 @@ ReserveInStore.ReserveModal = function (opts) {
             stockStatus = inventoryLocations[currentLocationPlatformId];
             updateProductsStockInfo(variant.id, stockStatus);
 
-            if (stockStatus === 'out_of_stock' || stockStatus === 'unknown_stock' || !stockStatus) {
+            if (stockStatus === 'out_of_stock' || (!showReserveBtnWhenUnknown && stockStatus === 'unknown_stock') || (!showReserveBtnWhenUnknown && !stockStatus)) {
                 productIsOutOfStock = true;
             }
         }
@@ -394,7 +400,7 @@ ReserveInStore.ReserveModal = function (opts) {
                 stockStatus = inventoryLocations[currentLocationPlatformId];
                 updateProductsStockInfo(cartItems[k].variant_id, stockStatus);
 
-                if (stockStatus === 'out_of_stock' || stockStatus === 'unknown_stock' || !stockStatus) {
+                if (stockStatus === 'out_of_stock' || (!showReserveBtnWhenUnknown && stockStatus === 'unknown_stock') || (!showReserveBtnWhenUnknown && !stockStatus)) {
                     cartItemOutOfStock = true;
                 }
             }
@@ -421,8 +427,14 @@ ReserveInStore.ReserveModal = function (opts) {
             $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
             $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-no-stock');
         } else {
-            $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[5]);
-            $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-stock-unknown');
+            if (inStockTextWhenUnknown) {
+                $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
+                $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-in-stock');
+            }
+            else {
+                $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[5]);
+                $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-stock-unknown');
+            }
         }
     };
 

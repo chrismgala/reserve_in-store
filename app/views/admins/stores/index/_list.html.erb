@@ -12,6 +12,8 @@
         <tr>
           <th>Store ID</th>
           <th>Name &amp; URL</th>
+          <th>#Locations</th>
+          <th>#Reservations</th>
           <th>Created</th>
           <th>Updated</th>
           <th></th>
@@ -30,6 +32,24 @@
               <%= store.name %>
               <a target="<%= store.shopify_domain %>" href="https://<%= store.shopify_domain %>"><i class="fal fa-external-link"></i></a>
             </td>
+            <td>
+              <span class="text-danger text-bold">
+                <% if store.locations.any? %>
+                  <%= store.locations.count %>
+                <% else %>
+                  0  
+                <% end %>
+              </span>    
+            </td>
+            <td>
+              <span class="text-danger text-bold">
+                <% if store.reservations.any? %>
+                  <%= store.reservations.count %>
+                <% else %>
+                  0  
+                <% end %>
+              </span>    
+            </td>  
             <td>
               <span title="<%= store.created_at %>" data-toggle="tooltip">
                 <%= local_time_ago(store.created_at) %>

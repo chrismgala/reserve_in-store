@@ -63,6 +63,7 @@ Rails.application.routes.draw do
     resources :users
     resources :plans
     resources :uninstallations
+    get 'stores/:store_id/subscriptions' => 'subscriptions#index', as: :subscriptions_store
   end
     
   mount ShopifyApp::Engine, at: '/'

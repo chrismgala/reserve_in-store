@@ -1,0 +1,16 @@
+<%= render partial: 'admins/stores/shared/header', locals: {store: @store} %>
+
+<div class="card " role="tabpanel">
+  <!-- Nav tabs-->
+  <%= render partial: 'admins/stores/shared/tabs', locals: {store: @store, active_tab: 'subscriptions'} %>
+  <!-- Tab panes-->
+  <div class="card-body">
+    <div class="tab-content">
+      <div id="subscriptions" role="tabpanel" class="tab-pane active">
+        <% if @store.subscription.present? %>
+          <%= render partial: 'admins/subscriptions/summary', locals: { store: @store, subscription: @subscription  } %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

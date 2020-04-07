@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="<%= meta_description %>">
+
+  <title><%= title_prefix %><%= " - #{yield(:title_content)}" if content_for?(:title_content) %></title>
+
+  <%= global_js_vars %>
+
+  <%= stylesheet_link_tag 'admin' %>
+
+  <%= yield :before_controller_css %>
+
+  <%= csrf_meta_tags %>
+
+  <%= render partial: "layouts/partials/favicon" %>
+
+  <%= yield :before_head_end %>
+
+</head>
+
+<body
+  <% if Rails.env.development? %>
+  data-controller="<%= params[:controller] %>" data-action="<%= params[:action] %>"
+  <% end %>
+  class="admins-layout <%= 'embedded-mode' if params[:embedded_mode].to_bool %>">
+
+<div class="wrapper">
+  <!-- top navbar-->
+  <%= render partial: "layouts/admins/topnavbar" %>
+  <!-- sidebar-->
+  <%= render partial: "layouts/admins/sidebar" %>
+    <div class="content-page">
+      <div class="content">
+        <!-- Page content-->
+        <div class="container-fluid">
+
+          <%= render partial: 'layouts/partials/flash', locals: {flash: flash} %>
+          
+          <%= yield %>
+        </div>
+
+        <!-- Page footer-->
+        <%= render partial: "layouts/partials/footer" %>
+      </div>  
+    </div>  
+</div>  
+
+<%= render partial: 'layouts/partials/font_awesome' %>
+
+<%= yield :before_controller_js %>
+
+<%= javascript_include_tag 'admin' %>
+
+<% unless ENV['OFFLINE_MODE'].to_bool %> 
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+<% end %>
+
+<%= yield :before_body_end %>
+
+<script>
+  new MetisMenu("#menu-bar"); 
+</script>
+
+</body>
+
+</html>

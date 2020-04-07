@@ -1,0 +1,19 @@
+
+.searchForm {
+    .input-group--search.input-group {
+        input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .btn {
+            box-shadow: none;
+            background-color: $input-bg;
+            color: $input-placeholder-color;
+        }
+    }
+
+    .input-group-append.searchForm-clearLink {
+        align-items: center;
+    }
+
+}

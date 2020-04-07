@@ -37,6 +37,35 @@ Rails.application.routes.draw do
     end
   end
 
+  devise_for :admin, controllers: {
+    sessions: "admins/sessions",
+    registrations: "admins/registrations",
+    passwords: "admins/passwords",
+  }, path_names: { 
+    sign_in: 'login', sign_out: 'logout'
+  }
+  
+  scope :admin, module: :admins, as: :admin do
+    root :to => 'stores#index'
+    resources :stores do
+      get 'show'
+      get 'tools'
+      get 'reintegrate'
+      get 'reservations'
+      get 'settings'
+      get 'activate'
+      get 'templates'
+      get 'deactivate'
+      get 'locations'
+      get 'reservations'
+      match 'admin/stores/settings' => 'stores#save_settings', via: [:post, :patch]
+    end
+    resources :users
+    resources :plans
+    resources :uninstallations
+    get 'stores/:store_id/subscriptions' => 'subscriptions#index', as: :subscriptions_store
+  end
+    
   mount ShopifyApp::Engine, at: '/'
     root :to => 'stores#settings'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

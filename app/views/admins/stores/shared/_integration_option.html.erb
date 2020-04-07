@@ -1,0 +1,37 @@
+<%
+  action_key = "#{attr}_action".to_sym
+  selector_key = "#{attr}_selector".to_sym
+  action_val = store.send(action_key)
+%>
+<div>
+  <%= f.label :name, 'Status/Integration:' %>
+  <select id="store_<%= action_key %>" name="store[<%= action_key %>]" class="form-control small-width-field" aria-invalid="false">
+    <option value="auto" <%= 'selected="selected"' if action_val.blank? ||  action_val == 'auto'%>>
+      ON - Automatic Integration (Default)
+    </option>
+    <option value="insert_after" <%= 'selected="selected"' if action_val == 'insert_after'%>>
+      ON - Custom Integration - Insert After...
+    </option>
+    <option value="insert_before" <%= 'selected="selected"' if action_val == 'insert_before'%>>
+      ON - Custom Integration - Insert Before...
+    </option>
+    <option value="append_to" <%= 'selected="selected"' if action_val == 'append_to'%>>
+      ON - Custom Integration - Append To...
+    </option>
+    <option value="prepend_to" <%= 'selected="selected"' if action_val == 'prepend_to'%>>
+      ON - Custom Integration - Prepend To...
+    </option>
+    <option value="manual" <%= 'selected="selected"' if action_val == 'manual'%>>
+      OFF - Manual Integration
+    </option>
+  </select>
+
+  <div class="display-if-selected-option" data-if_selected_option="#store_<%= action_key %>"
+       data-selected_values="insert_after,insert_before,append_to,prepend_to">
+    <div class="mt-3">
+      <div>
+        <%= f.text_field selector_key, class: "form-control small-width-field", placeholder: "Example: form #addtoCartButton" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+//
+// alerts
+// Bootstrap - extended default
+//
+
+
+@each $color, $value in $alert-colors {
+    .alert-#{$color} {
+        @include alert-variant($value, saturate(darken($value, 5%), 20%), color-yiq($value));
+
+        @if $alert-text-color != inherit {
+            color: $alert-text-color;
+        }
+
+        .alert-link, a {
+            color: $alert-link-text-color;
+            text-decoration: underline;
+            text-decoration-color: transparentize($alert-link-text-color, 0.75);
+        }
+    }
+}
+
+
+.alert {
+    .alert-icon {
+        display: inline;
+        vertical-align: top;
+        margin-right: 12px;
+        line-height: 1;
+        height: 100%;
+        float: left;
+
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    &.alert-inline,
+    &.alert--inline{
+        display: inline-block;
+        width: auto;
+        padding-right: 22px;
+
+        .close {
+            margin-left: 1.25rem;
+        }
+
+        .alert-icon {
+            margin-bottom: 0;
+        }
+    }
+
+    .alert-content {
+        p {
+            margin-bottom: 8px;
+        }
+        > p:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    &.alert--long .alert-icon {
+        margin-right: 20px;
+    }
+
+}
+
+.content > .container-fluid > .alert:first-child {
+    margin-top: 1.5rem;
+}

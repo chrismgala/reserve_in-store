@@ -1,0 +1,21 @@
+// 
+// store.scss
+//
+.store-setting .text {
+    font-size: 1em;
+}
+.store-setting .save-btn {
+    width: 100px;
+}
+.store-setting .form-group {
+    background-color: #f6f6f7;
+    padding: 20px;
+}
+.status-active,.status-deactive {
+	font-size: 22px;
+	margin-bottom: 10px;
+}
+
+.display-if-selected-option,.editor-hidden-textarea,.editor-default-content {
+	display: none;
+}

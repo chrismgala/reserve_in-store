@@ -1,0 +1,52 @@
+<!-- Topbar Start -->
+<div class="navbar navbar-expand flex-column flex-md-row navbar-custom hidden-embedded-mode navbar--dark">
+  <div class="container-fluid">
+    <!-- LOGO -->
+    <a href="#" class="navbar-brand mr-0 mr-md-2 logo">
+      <span class="logo-lg">
+        <img src="<%= image_path('reserve_64x64.png') %>" alt="App Logo" class="img-responsive"/>
+      </span>
+      <span class="logo-sm d-lg-none d-xl-none">
+        <img src="<%= image_path('reserve_32x32.png') %>" alt="App Logo" class="img-responsive" height="50" />
+      </span>
+      <span class="nav-afterLogo d-none d-md-inline-block">ADMIN</span>
+    </a>
+
+    <ul class="navbar-nav bd-navbar-nav flex-row list-unstyled menu-left mb-0 d-none d-mobileMenu-flex align-items-center">
+      <li class="">
+        <button class="button-menu-mobile open-left">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="menu-icon">
+            <rect y="0" width="20" height="1.5" fill="#9E9E9E"></rect>
+            <rect y="9.25" width="20" height="1.5" fill="#9E9E9E"></rect>
+            <rect y="18.5" width="20" height="1.5" fill="#9E9E9E"></rect>
+          </svg>
+        </button>
+      </li>
+      <li>
+        <span class="nav-afterLogo">ADMIN</span>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav flex-row ml-auto d-flex list-unstyled topnav-menu float-right mb-0">
+      <li class="">
+        <div class="app-search">
+          <div class="form form-inline searchForm">
+            <%= form_tag(admin_users_path, :method => "get", id: "search-form", enforce_utf8: false) do %>
+              <div class="input-group input-group--search">
+                <%= text_field_tag :search, params[:search], name: "query", placeholder: "Search", class: "form-control"%>
+                <span class="input-group-append">
+                  <%= button_tag :submit, class: "btn btn-outline border", name: nil do %>
+                    <i class="far fa-search"></i>
+                  <% end %>
+                </span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </li>
+
+      <%= render partial: 'layouts/partials/topnavbar/user_menu' %>
+    </ul>
+  </div>
+</div>
+<!-- end Topbar -->

@@ -1,0 +1,9 @@
+<% if resource.errors.any? %>
+  <div class="mt-5 errors text-center" id="error_explanation">
+    <ul class="list-unstyled">
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

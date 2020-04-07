@@ -1,0 +1,54 @@
+/*
+ * Anything added here will be added globally to all logged-out page interfaces
+ *
+ */
+@import "bootstrap";
+
+.vertical-logo {
+    max-height: 200px;
+}
+
+.admin-login, .admin-signup, .admin-forgot-pwd, .admin-reset-pwd  {
+        
+    .form-control {
+        width: 100%;
+        height: 52px;
+        padding: 0 15px;
+        box-shadow: 0 0 0 1px #ddd;
+        border: 0;
+        border-radius: 5px;
+        background-color: #fff;
+        font-size: 1em;
+        margin-bottom: 15px;
+    }
+    .form-control:focus {
+        color: #000;
+        outline: 0;
+        box-shadow: 0 0 0 2px #5e6ebf;
+    }
+    .field {
+        margin-top: 20px;
+    }
+    .btn,.btn {
+        display: inline-block;
+        width: 100%;
+        padding: 1.0625em 1.875em;
+        background-color: #5e6ebf;
+        color: #fff;
+        font-weight: 700;
+        font-size: 1em;
+        text-align: center;
+        outline: none;
+        border: 0 solid transparent;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn:hover,.btn:hover {
+        background: linear-gradient(to bottom, #5c6ac4, #4959bd);
+        border-color: #3f4eae;
+    }
+    .errors {
+        font-size:14px;
+        color: #dc3545;
+    }
+}

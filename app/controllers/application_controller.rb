@@ -6,4 +6,11 @@ class ApplicationController < ActionController::Base
   def embedded_mode?
     false
   end
+
+  private
+
+  # Overwriting the sign_out redirect path method
+  def after_sign_out_path_for(admins)
+    admin_root_path
+  end
 end

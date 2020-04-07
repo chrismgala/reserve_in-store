@@ -1,0 +1,70 @@
+<div class="row">
+  <div class="col-lg-6">
+    <h5>General Details</h5>
+    <table class="table table-responsive table-striped">
+      <tr>
+        <th>Name</th>
+        <td><%= store.name %></td>
+      </tr>
+      <tr>
+        <th>Created At</th>
+        <td>
+          <%= local_time(store.created_at) %>
+          (<%= time_ago_in_words(store.created_at) %> ago)
+        </td>
+      </tr>
+      <tr>
+        <th>URL</th>
+        <td>
+          <a target="<%= store.name %>" href="https://<%= store.shopify_domain %>"><%= store.shopify_domain %> <i class="fa fa-external-link"></i></a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <h5>Owner Contact Details</h5>
+    <% if @user.any? %>
+      <% @user.each do |user| %>
+      <table class="table table-responsive table-striped">
+        <tr>
+          <th>Name</th>
+          <td><%= user.name %></td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td><%= user.email %></td>
+        </tr>
+        <tr>
+          <th>Phone</th>
+          <td><%= user.phone %></td>
+        </tr>
+        <tr>
+          <th>Created at</th>
+          <td>
+            <%= local_time(user.created_at) %>
+            (<%= time_ago_in_words(user.created_at) %> ago)
+          </td>
+        </tr> 
+      </table>
+      <% end %>
+    <% end %>  
+  </div>
+</div>    
+    
+<div class="row">
+  <div class="col">
+    <h5>Technical Details</h5>
+    <table class="table table-responsive table-striped">
+      <tr>
+        <th>API Keys</th>
+        <td>
+          Public Key: <%= store.public_key %><br>
+          Secret Key: <%= store.secret_key %>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

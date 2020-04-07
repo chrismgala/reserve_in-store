@@ -1,0 +1,37 @@
+<div class="row mb-4" id="custom_css_section">
+  <div class="col-5">
+    <h5>Custom CSS</h5>
+    <p>Optionally include some custom CSS that the app will cache into your templates (for optimal speed) and load without slowing down your site.</p>
+  </div>
+  
+  <div class="col form-group template-editor-container">
+    <select id="store_custom_css_enabled" name="store[custom_css_enabled]" class="form-control small-width-field" aria-invalid="false">
+      <option value="false" <%= 'selected="selected"' unless enabled %>>Don't Include Custom CSS</option>
+      <option value="true" <%= 'selected="selected"' if enabled %>>Specify Custom CSS</option>
+    </select>
+
+    <div class="display-if-selected-option" data-if_selected_option="#store_custom_css_enabled" data-selected_value="true">
+      <textarea class="editor-hidden-textarea" id="store_custom_css_textarea" name="store[custom_css]"><%= db_value.to_s.html_safe %></textarea>
+      <textarea class="editor" id="store_custom_css_editor"><%= value_in_use.to_s.html_safe %></textarea>
+      <textarea class="editor-default-content"  id="store_default_custom_css_editor_textarea"><%= default_value.html_safe %></textarea>
+
+      <div class="editor-links">
+        <a href="#" class="beautify-link">beautify code</a>
+        <a href="#" class="expand-editor-link">expand editor</a>
+        <a href="#" class="contract-editor-link">contract editor</a>
+        <a href="#" class="reset-to-default">reset</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% content_for(:before_body_end) do %>
+  <script>
+      var customCssLiquidEditor = new CodeEditor({
+          containerSelector: $('#custom_css_section .template-editor-container'),
+          beautifyFunction: css_beautify,
+          language: 'css',
+          maximizeHeight: false
+      });
+  </script>
+<% end %>

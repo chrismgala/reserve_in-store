@@ -1,0 +1,51 @@
+<%= render partial: 'admins/stores/shared/header', locals: {store: @store} %>
+
+<% content_for(:title_content) {" - Locations"} %>
+
+<div class="card " role="tabpanel">
+  <!-- Nav tabs-->
+  <%= render partial: 'admins/stores/shared/tabs', locals: {store: @store, active_tab: 'locations'} %>
+  <!-- Tab panes-->
+  <div class="card-body">
+    <div class="tab-content">
+      <div id="locations" role="tabpanel" class="tab-pane active">
+        <% if @store.locations.any? %>
+          <p>This store has <strong><%= pluralize(@store.locations.count, 'locations') %></strong>.</p>
+
+          <table id="locationTable" class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Tag filter</th>
+              </tr>  
+            </thead>
+            
+            <tbody>
+              <% @locations.each do |location| %>
+              <tr>
+                <td><%= location.id %></td>
+                <td><%= location.name %></td>
+                <td>
+                  <%= location.address %><br>
+                  <%= location.city %>, <%= location.state %>,<%= location.zip %><br>
+                  <%= location.country %>,
+                </td>
+                <td><%= location.email %></td>
+                <td><%= location.phone %></td>
+                <td><%= location.product_tag_filter %></td>
+              </tr>  
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p>There are no locationss to display.</p>
+        <% end %>
+      </div>
+      <%= paginate @locations %>   
+    </div>  
+  </div>
+</div>

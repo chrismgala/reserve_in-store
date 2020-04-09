@@ -118,7 +118,13 @@ ReserveInStore.LocationsManager = function (opts) {
     };
 
     var updateLocations = function() {
-        api.getLocations({ product_tag_filter: opts.app.getProductTag() }, function(_locations) {
+        var productTagParams = {};
+        if (opts.app.getProductTag()) {
+            productTagParams = { product_tag_filter: opts.app.getProductTag() };
+        } else {
+            productTagParams = { product_tag_filter: opts.app.getCartItemProductTags() };
+        }
+        api.getLocations(productTagParams, function(_locations) {
             locations = _locations;
             storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
             locationsReady = true;
@@ -154,12 +160,17 @@ ReserveInStore.LocationsManager = function (opts) {
     var compareStorageLocationProductTag = function(locations) {
         var localStorageProductTag = '';
         var localStorageLocationParseJson = JSON.parse(JSON.stringify(locations));
+        var currentProductTag = '';
         
         if (localStorageLocationParseJson != '') {
             localStorageProductTag = localStorageLocationParseJson[0].product_tag_filter;
         } 
-          
-        var currentProductTag = opts.app.getProductTag();
+        
+        if (opts.app.getProductTag()) {    
+            currentProductTag = opts.app.getProductTag();
+        } else {
+            currentProductTag = opts.app.getCartItemProductTags();
+        }
         
         if (currentProductTag.indexOf(localStorageProductTag) !== -1) {
             return true;

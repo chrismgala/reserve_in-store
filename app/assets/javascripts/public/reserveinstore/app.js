@@ -195,7 +195,34 @@ ReserveInStore.App = function(opts) {
     self.getProductTag = function() {
         var prod = opts.app.getProduct();
         if (!prod) return '';
+        storage.setItem('ProductTags.' + prod.id, prod.tags);
         return prod.tags;
+    };
+    
+    self.getCartItemProductTags = function() {
+        var cart = opts.app.getCart();
+        var cartItems = cart.items;
+        var cartItemsProdTagArray = [];
+        
+        if ((!cart) || (cartItems.length == 0)) return '';
+        
+        for (var i = 0; i < cartItems.length; i++) {
+            if (storage.getItem('ProductTags.' + cartItems[i].product_id)) {
+                cartItemsProdTagArray = cartItemsProdTagArray.concat(storage.getItem('ProductTags.' + cartItems[i].product_id));
+            } else {
+                var cartItemUrl = cartItems[i].url.substring(0, cartItems[i].url.indexOf('?'));
+                setTimeout(self.getProductTagByUrl(cartItems[i].product_id, cartItemUrl), 3000);
+                cartItemsProdTagArray = cartItemsProdTagArray.concat(storage.getItem('ProductTags.' + cartItems[i].product_id));
+            }    
+        }
+        return cartItemsProdTagArray;   
+    };
+        
+    self.getProductTagByUrl = function(cartItemId, cartItemUrl) {
+        if ((!cartItemId) || (!cartItemUrl)) return '';
+        $.getJSON(cartItemUrl + ".js", function(product) {
+            storage.setItem('ProductTags.' + product.id, product.tags);
+        });
     };    
 
     self.trigger = function(codes, data) {

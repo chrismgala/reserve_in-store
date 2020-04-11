@@ -72,13 +72,7 @@ ReserveInStore.ReserveModal = function (opts) {
         }
 
         var modalParams = { cart: getCartObject() };
-        var productTagParams = {};
-        if (product) {
-            productTagParams = { product_tag_filter: opts.app.getProductTag() };
-        } else {
-            productTagParams = { product_tag_filter: opts.app.getCartItemProductTags() };
-        }
-        api.getReservationModal(modalParams, productTagParams, function(response) {
+        api.getReservationModal(modalParams, locationsManager.getLocationParams(), function(response) {
             self.insertModal(response.content);
         });
 

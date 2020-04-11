@@ -25,7 +25,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
             self.$modalContainer = $('<div class="reserveInStore-chooseLocationModal-container" id="reserveInStore-chooseLocationModalContainer" style="display:none;"></div>').appendTo('body');
         }
 
-        api.getLocationsModal({ product_tag_filter: opts.app.getProductTag() }, self.createModal);
+        api.getLocationsModal(locationsManager.getLocationParams(), self.createModal);
     };
 
 

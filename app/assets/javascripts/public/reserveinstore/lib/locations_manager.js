@@ -94,7 +94,16 @@ ReserveInStore.LocationsManager = function (opts) {
 
         return matchedLocations;
     };
-
+        
+    self.getLocationParams = function() {
+        var locationParams = {};
+        if (opts.app.getProduct()) {
+            locationParams = { product_tag_filter: opts.app.getProductTag(), current_page_is: "product" };
+        } else {
+            locationParams = { product_tag_filter: opts.app.getCartItemProductTags(), current_page_is: "cart" };
+        }
+        return locationParams;
+    };
 
     var waitForAllReady = function() {
         var readyCheck = function() {
@@ -118,13 +127,7 @@ ReserveInStore.LocationsManager = function (opts) {
     };
 
     var updateLocations = function() {
-        var productTagParams = {};
-        if (opts.app.getProductTag()) {
-            productTagParams = { product_tag_filter: opts.app.getProductTag() };
-        } else {
-            productTagParams = { product_tag_filter: opts.app.getCartItemProductTags() };
-        }
-        api.getLocations(productTagParams, function(_locations) {
+        api.getLocations(self.getLocationParams(), function(_locations) {
             locations = _locations;
             storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
             locationsReady = true;

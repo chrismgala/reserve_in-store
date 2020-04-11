@@ -20,6 +20,8 @@
                 <th>Address</th>
                 <th>Email</th>
                 <th>Phone</th>
+                <th>Product</th>
+                <th>Cart</th>
                 <th>Tag filter</th>
               </tr>  
             </thead>
@@ -36,6 +38,22 @@
                 </td>
                 <td><%= location.email %></td>
                 <td><%= location.phone %></td>
+                <td>
+                  <% if location.visible_in_product? %>
+                    <i class="fas fa-check text-success fas-3x" aria-hidden="true"></i>
+                  <% else %>
+                    <i class="fas fa-times fas-3x text-danger" aria-hidden="true"></i>
+                  <% end  %>
+                </td>
+                <td>
+                  <% if location.visible_in_cart? %>
+                    <i class="fas fa-check fas-3x text-success" aria-hidden="true"></i>
+                  <% else %>
+                    <span class="danger">
+                      <i class="fas fa-times fas-3x text-danger" aria-hidden="true"></i>
+                    </span>
+                  <% end  %>
+                </td>
                 <td><%= location.product_tag_filter %></td>
               </tr>  
               <% end %>

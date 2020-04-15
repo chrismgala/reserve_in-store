@@ -73,7 +73,7 @@ ReserveInStore.ReserveModal = function (opts) {
 
         var modalParams = { cart: getCartObject() };
         if (opts.app.getProduct()) {
-            api.getReservationModal(modalParams, locationsManager.getLocationParams(), function(response) {
+            api.getReservationModal(modalParams, locationsManager.getLocationProductParams(), function(response) {
                 self.insertModal(response.content);
             });
         } else {

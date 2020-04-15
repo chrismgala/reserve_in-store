@@ -95,7 +95,7 @@ ReserveInStore.LocationsManager = function (opts) {
         return matchedLocations;
     };
 
-    self.getLocationParams = function() {
+    self.getLocationProductParams = function() {
         var locationParams = {};
         if (opts.app.getProduct()) {
             locationParams = { product_tag_filter: opts.app.getProductTag(), current_page_is: "product" };

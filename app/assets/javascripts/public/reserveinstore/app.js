@@ -199,31 +199,43 @@ ReserveInStore.App = function(opts) {
         return prod.tags;
     };
     
-    self.getCartItemProductTags = function() {
+    self.getCartItemsProdTagArray = function(callback) {
         var cart = opts.app.getCart();
         var cartItems = cart.items;
         var cartItemsProdTagArray = [];
+        var loopCount = 0;
         
-        if ((!cart) || (cartItems.length == 0)) return '';
+        if ((!cart) || (cartItems.length == 0)) callback('');
+
+        self.getCartItemProductTag(function(productTag) {
+            loopCount = loopCount + 1;
+            cartItemsProdTagArray = cartItemsProdTagArray.concat(productTag);
+            if (loopCount == cartItems.length) {
+                callback(cartItemsProdTagArray);
+            }    
+        });    
+    };
+
+    self.getCartItemProductTag = function(callback) {
+        var cart = opts.app.getCart();
+        var cartItems = cart.items;
+        
+        if ((!cart) || (cartItems.length == 0)) callback('');
         
         for (var i = 0; i < cartItems.length; i++) {
-            if (storage.getItem('ProductTags.' + cartItems[i].product_id)) {
-                cartItemsProdTagArray = cartItemsProdTagArray.concat(storage.getItem('ProductTags.' + cartItems[i].product_id));
-            } else {
-                var cartItemUrl = cartItems[i].url.substring(0, cartItems[i].url.indexOf('?'));
-                setTimeout(self.getProductTagByUrl(cartItems[i].product_id, cartItemUrl), 3000);
-                cartItemsProdTagArray = cartItemsProdTagArray.concat(storage.getItem('ProductTags.' + cartItems[i].product_id));
-            }    
+            (function(i) {
+                if (storage.getItem('ProductTags.' + cartItems[i].product_id)) {
+                    callback(storage.getItem('ProductTags.' + cartItems[i].product_id));
+                } else {
+                    var cartItemUrl = cartItems[i].url.substring(0, cartItems[i].url.indexOf('?'));
+                    $.getJSON(cartItemUrl + ".js", function(product) {
+                        storage.setItem('ProductTags.' + product.id, product.tags);
+                        callback(product.tags);
+                    });
+                }
+            })(i);
         }
-        return cartItemsProdTagArray;   
     };
-        
-    self.getProductTagByUrl = function(cartItemId, cartItemUrl) {
-        if ((!cartItemId) || (!cartItemUrl)) return '';
-        $.getJSON(cartItemUrl + ".js", function(product) {
-            storage.setItem('ProductTags.' + product.id, product.tags);
-        });
-    };    
 
     self.trigger = function(codes, data) {
         codes = codes.split(' ');

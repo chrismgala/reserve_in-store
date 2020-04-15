@@ -72,9 +72,17 @@ ReserveInStore.ReserveModal = function (opts) {
         }
 
         var modalParams = { cart: getCartObject() };
-        api.getReservationModal(modalParams, locationsManager.getLocationParams(), function(response) {
-            self.insertModal(response.content);
-        });
+        if (opts.app.getProduct()) {
+            api.getReservationModal(modalParams, locationsManager.getLocationParams(), function(response) {
+                self.insertModal(response.content);
+            });
+        } else {
+            opts.app.getCartItemsProdTagArray(function(cartItemsProductTagsArray) {
+                api.getReservationModal(modalParams, { product_tag_filter: cartItemsProductTagsArray, current_page_is: "cart" }, function(response) {
+                    self.insertModal(response.content);
+                });
+            });    
+        }
 
         opts.app.trigger('reserve_modal.show reserve_modal.open', self);
     };

@@ -94,13 +94,11 @@ ReserveInStore.LocationsManager = function (opts) {
 
         return matchedLocations;
     };
-        
+
     self.getLocationParams = function() {
         var locationParams = {};
         if (opts.app.getProduct()) {
             locationParams = { product_tag_filter: opts.app.getProductTag(), current_page_is: "product" };
-        } else {
-            locationParams = { product_tag_filter: opts.app.getCartItemProductTags(), current_page_is: "cart" };
         }
         return locationParams;
     };
@@ -126,8 +124,25 @@ ReserveInStore.LocationsManager = function (opts) {
         });
     };
 
+    var updateCartLocations = function() {
+        opts.app.getCartItemsProdTagArray(function(cartItemsProductTagsArray) {
+            api.getLocations({ product_tag_filter: cartItemsProductTagsArray, current_page_is: "cart" }, function(_locations) {
+                locations = _locations;
+                storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
+                locationsReady = true;
+                // now we are using product tag filters so we need to update fav loc if location set in storage is not found.
+                if (favoriteLocation) {
+                    if (!containsLocation(locations, favoriteLocation)) {
+                    self.setFavoriteLocation(_locations[0]);
+                    }
+                    ready = true;
+                }
+            });
+        });
+    };
+
     var updateLocations = function() {
-        api.getLocations(self.getLocationParams(), function(_locations) {
+        api.getLocations({ product_tag_filter: opts.app.getProductTag(), current_page_is: "product" }, function(_locations) {
             locations = _locations;
             storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
             locationsReady = true;
@@ -171,8 +186,6 @@ ReserveInStore.LocationsManager = function (opts) {
         
         if (opts.app.getProductTag()) {    
             currentProductTag = opts.app.getProductTag();
-        } else {
-            currentProductTag = opts.app.getCartItemProductTags();
         }
         
         if (currentProductTag.indexOf(localStorageProductTag) !== -1) {
@@ -188,9 +201,17 @@ ReserveInStore.LocationsManager = function (opts) {
             locationsReady = true;
             if (favoriteLocation) ready = true;
 
-            setTimeout(updateLocations, 15000); // Wait 15 seconds then get the latest locations.
+            if (opts.app.getProduct()) {
+                setTimeout(updateLocations, 15000); // Wait 15 seconds then get the latest locations.
+            } else {
+                setTimeout(updateCartLocations, 15000);
+            }
         } else {
-            updateLocations();
+            if (opts.app.getProduct()) { 
+                updateLocations();
+            } else {
+                updateCartLocations();
+            }
         }
 
     };

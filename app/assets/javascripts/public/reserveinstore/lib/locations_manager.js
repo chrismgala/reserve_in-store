@@ -178,15 +178,12 @@ ReserveInStore.LocationsManager = function (opts) {
     var compareStorageLocationProductTag = function(locations) {
         var localStorageProductTag = '';
         var localStorageLocationParseJson = JSON.parse(JSON.stringify(locations));
-        var currentProductTag = '';
         
         if (localStorageLocationParseJson != '') {
             localStorageProductTag = localStorageLocationParseJson[0].product_tag_filter;
         } 
         
-        if (opts.app.getProductTag()) {    
-            currentProductTag = opts.app.getProductTag();
-        }
+        var currentProductTag = opts.app.getProductTag();
         
         if (currentProductTag.indexOf(localStorageProductTag) !== -1) {
             return true;

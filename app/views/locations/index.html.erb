@@ -32,12 +32,6 @@
                     Phone
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Product
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Cart
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                   </th>
                 </tr>
                 </thead>
@@ -45,7 +39,25 @@
                 <% @locations.each do |location| %>
                   <tr class="Polaris-DataTable__TableRow">
                     <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row">
-                      <p class="polaris-header-text"><%= location.name %></p></th>
+                      <p class="polaris-header-text">
+                        <%= location.name %>
+                        <% if !location.visible_in_product? || !location.visible_in_cart? %>
+                          <br><small>(Not visible in
+                        <% end %>
+                        <% if !location.visible_in_product? %>
+                          product
+                        <% end %>
+                        <% if !location.visible_in_product? && !location.visible_in_cart? %>
+                          &
+                        <% end %>
+                        <% if !location.visible_in_cart? %>
+                          cart
+                        <% end %>
+                        <% if !location.visible_in_product? || !location.visible_in_cart? %>
+                          pages)</small>
+                        <% end %>
+                      </p>
+                    </th>
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.address %><br>
                       <%= location.formatted_address %><br><%= location.country %></td>
@@ -56,40 +68,6 @@
                         <% end %>
                       <% end %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.phone %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <% if location.visible_in_product? %>
-                        <span class="Polaris-Icon Polaris-Icon--colorGreenDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop">
-                          <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
-                            <circle fill="currentColor" cx="10" cy="10" r="9"></circle>
-                            <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m2.293-10.707L9 10.586 7.707 9.293a1 1 0 1 0-1.414 1.414l2 2a.997.997 0 0 0 1.414 0l4-4a1 1 0 1 0-1.414-1.414"></path>
-                          </svg>
-                        </span>
-                      <% else %>
-                        <span class="Polaris-Icon Polaris-Icon--colorRedDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop">
-                          <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
-                            <circle fill="currentColor" cx="10" cy="10" r="9"></circle>
-                            <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m3.707-11.707a.999.999 0 0 0-1.414 0L10 8.586 7.707 6.293a.999.999 0 1 0-1.414 1.414L8.586 10l-2.293 2.293a.999.999 0 1 0 1.414 1.414L10 11.414l2.293 2.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L11.414 10l2.293-2.293a.999.999 0 0 0 0-1.414"></path>
-                          </svg>
-                        </span>
-                      <% end %>
-                    </td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <% if location.visible_in_cart? %>
-                        <span class="Polaris-Icon Polaris-Icon--colorGreenDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop">
-                          <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
-                            <circle fill="currentColor" cx="10" cy="10" r="9"></circle>
-                            <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8m2.293-10.707L9 10.586 7.707 9.293a1 1 0 1 0-1.414 1.414l2 2a.997.997 0 0 0 1.414 0l4-4a1 1 0 1 0-1.414-1.414"></path>
-                          </svg>
-                        </span>
-                      <% else %>
-                        <span class="Polaris-Icon Polaris-Icon--colorRedDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop">
-                          <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
-                            <circle fill="currentColor" cx="10" cy="10" r="9"></circle>
-                            <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m3.707-11.707a.999.999 0 0 0-1.414 0L10 8.586 7.707 6.293a.999.999 0 1 0-1.414 1.414L8.586 10l-2.293 2.293a.999.999 0 1 0 1.414 1.414L10 11.414l2.293 2.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L11.414 10l2.293-2.293a.999.999 0 0 0 0-1.414"></path>
-                          </svg>
-                        </span>
-                      <% end %>
-                    </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim button-margin-right' %>
                       <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: {confirm: "Are you sure? Deleting this location will also delete all its locations."} %>

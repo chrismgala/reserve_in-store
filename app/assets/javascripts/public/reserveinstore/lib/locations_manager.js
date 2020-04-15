@@ -181,8 +181,8 @@ ReserveInStore.LocationsManager = function (opts) {
         
         if (localStorageLocationParseJson != '') {
             localStorageProductTag = localStorageLocationParseJson[0].product_tag_filter;
-        }
-
+        } 
+          
         var currentProductTag = opts.app.getProductTag();
         
         if (currentProductTag.indexOf(localStorageProductTag) !== -1) {

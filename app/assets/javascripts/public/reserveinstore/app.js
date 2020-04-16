@@ -198,7 +198,7 @@ ReserveInStore.App = function(opts) {
         storage.setItem('ProductTags.' + prod.id, prod.tags);
         return prod.tags;
     };
-    
+
     self.getCartItemsProdTagArray = function(callback) {
         var cart = opts.app.getCart();
         var cartItems = cart.items;

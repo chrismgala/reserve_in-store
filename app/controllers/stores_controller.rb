@@ -38,7 +38,7 @@ class StoresController < LoggedInController
   def deactivate
     @current_store.deactivate!
 
-    redirect_to stores_settings_url, notice: 'Reserve In-store has been deactivated.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been deactivated.'
   end
 
   ##
@@ -46,7 +46,7 @@ class StoresController < LoggedInController
   def activate
     @current_store.activate!
 
-    redirect_to stores_settings_url, notice: 'Reserve In-store has been activated.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been activated.'
   end
 
   ##
@@ -54,14 +54,14 @@ class StoresController < LoggedInController
   def reinstall
     UpdateFooterJob.new.perform(@current_store.id)
 
-    redirect_to stores_settings_url, notice: 'Reserve In-store has been re-installed into your store.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been re-installed into your store.'
   end
   ##
   # GET /stores/resync
   def resync
     @current_store.sync_locations!
 
-    redirect_to stores_settings_url, notice: 'Reserve In-store has re-synced your store locations.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has re-synced your store locations.'
   end
   ##
   # PUT/PATCH /stores/settings
@@ -81,7 +81,7 @@ class StoresController < LoggedInController
       @current_store.assign_attributes(save_params)
 
       if @current_store.save
-        format.html { redirect_to params[:next_url].presence || stores_settings_url, notice: 'Store settings were successfully updated.' }
+        format.html { redirect_to params[:next_url].presence || stores_settings_url(view: 'settings'), notice: 'Store settings were successfully updated.' }
         format.json { render :settings, status: :ok }
       else
         format.html { render :settings }
@@ -101,6 +101,9 @@ class StoresController < LoggedInController
       redirect_to(stores_setup_url)
       false
     else
+      if !params[:view] && params[:action] != 'templates' && params[:action] != 'help' && @current_store.reservations.count > 0
+        redirect_to reservations_path
+      end
       true
     end
   end

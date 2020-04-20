@@ -110,6 +110,7 @@ module Shopify
 
       @subscription.remote_id = @current_rac.id.to_s
       @subscription.plan = plan # Make sure the subscription.store already exists before running this line or else the per location pricing may not work properly.
+      @subscription
     end
 
     def load_current_recurring_charge

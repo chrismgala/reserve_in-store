@@ -31,12 +31,20 @@ class Subscription < ApplicationRecord
   def plan=(plan)
     plan_attr = plan.attributes
 
+    plan_attr['limits'] ||= {}
+
     if store.present?
       plan_attr['price'] = plan.price_for_store(store)
       plan_attr['limits']['locations'] = store.distinctly_named_location_count
     end
 
+    plan_attr['limits'] = plan_attr['limits'].merge(store.plan_overrides.to_h['limits'].to_h)
+
     self.plan_attributes = plan_attr
+
+    @plan = nil # To force the #plan method to reload
+
+    self
   end
 
   ##

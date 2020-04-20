@@ -387,10 +387,6 @@ class Store < ApplicationRecord
     [plan.trial_days - ((Time.now.utc.to_i - created_at.to_i)/1.day), 0].max.ceil
   end
 
-  def approx_size
-
-  end
-
   ##
   # By default, connection errors are ignored, so it is up the store's adapter to decide if the caught error is real or not.
   # @param e [StandardError]
@@ -400,10 +396,30 @@ class Store < ApplicationRecord
     false
   end
 
-  def connected?
-    Rails.cache.fetch("stores/#{id}/connected?", expires_in: 15.minutes) do
-      fetch_connection_error.blank?
+  def update_connection!
+    update_connection
+    save!
+  end
+
+  def check_connected?
+    update_connection! if last_connected_at.blank? || last_connected_at < 1.hour.ago
+
+    connected?
+  end
+
+  def update_connection
+    self.connection_error = fetch_connection_error
+    if connection_error.blank?
+      self.last_connected_at = nil
+    elsif last_connected_at.blank?
+      self.last_connected_at = Time.now
     end
+  end
+
+  def connected?
+    update_connection if last_connected_at.blank? || last_connected_at < 1.hour.ago
+
+    connection_error.blank?
   end
 
   ##

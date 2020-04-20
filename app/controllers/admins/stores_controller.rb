@@ -7,7 +7,7 @@ module Admins
     
     def index
       @stores = Store.order(created_at: :desc)
-      @stores = @stores.page(params[:page]).per(20)
+      @stores = @stores.eager_load(:subscription).page(params[:page]).per(20)
     end
 
     ##

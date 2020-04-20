@@ -12,8 +12,9 @@
         <tr>
           <th>Store ID</th>
           <th>Name &amp; URL</th>
-          <th>#Locations</th>
-          <th>#Reservations</th>
+          <th>Subscription</th>
+          <th># Locations</th>
+          <th># Reservations</th>
           <th>Created</th>
           <th>Updated</th>
           <th></th>
@@ -31,6 +32,10 @@
             <td>
               <%= store.name %>
               <a target="<%= store.shopify_domain %>" href="https://<%= store.shopify_domain %>"><i class="fal fa-external-link"></i></a>
+              <%= render(partial: 'admins/stores/shared/connection_status', locals: { store: store }) %>
+            </td>
+            <td class="text-success">
+              <%= store.subscription.nice_price if store.connected? && store.subscription.present? %>
             </td>
             <td>
               <span class="text-danger text-bold">

@@ -1,0 +1,11 @@
+<% if store.check_connected? %>
+  <span class="ml-2 text-success d-inline-block" data-toggle="tooltip" title="This store appears to be connected.">
+    <i class="fas fa-check-circle text-success"></i>
+                </span>
+<% else %>
+  <span class="ml-2 text-danger" data-toggle="tooltip" title="This store has a connection error since <%= store.last_connected_at %> View the source to see the error.">
+                  <!-- <%=  store.connection_error %> -->
+    <i class="fas fa-exclamation-circle text-danger"></i>
+    error
+  </span>
+<% end %>

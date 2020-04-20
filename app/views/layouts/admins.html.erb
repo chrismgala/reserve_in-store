@@ -63,7 +63,8 @@
 <%= yield :before_body_end %>
 
 <script>
-  new MetisMenu("#menu-bar"); 
+  new MetisMenu("#menu-bar");
+  $('[data-toggle="tooltip"]').tooltip();
 </script>
 
 </body>

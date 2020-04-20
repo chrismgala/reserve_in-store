@@ -26,6 +26,7 @@ gem 'rack-cors', require: 'rack/cors' # used for Cross-Origin Resource Sharing (
 gem 'rails', '~> 5.2.4.1' # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rainbow', '~> 3.0.0'  # Ruby gem for colorizing printed text on ANSI terminals
 gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets
+gem 'scout_apm', '~>2.6.7' # For performance monitoring
 gem 'sentry-raven', '~> 2.7.4' # For bug tracking
 gem 'shopify_api', '~> 9.0.0'
 gem 'shopify_app', '~> 9.0.4' # Shopify Application Rails engine and generator

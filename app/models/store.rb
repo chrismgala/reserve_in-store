@@ -342,7 +342,7 @@ class Store < ApplicationRecord
   def frontend_tpl_vars(params = {})
     params[:product_tag_filter] = '' if params[:product_tag_filter].nil?
     
-    if params[:current_page_is] == "product"
+    if params[:current_page] == "product"
       current_page_condition = "visible_in_product = true"
     else
       current_page_condition = "visible_in_cart = true"

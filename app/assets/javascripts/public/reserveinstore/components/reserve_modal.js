@@ -77,8 +77,8 @@ ReserveInStore.ReserveModal = function (opts) {
                 self.insertModal(response.content);
             });
         } else {
-            opts.app.getCartItemsProdTagArray(function(cartItemsProductTagsArray) {
-                api.getReservationModal(modalParams, { product_tag_filter: cartItemsProductTagsArray, current_page_is: "cart" }, function(response) {
+            opts.cart.getProductTags(function(tags) {
+                api.getReservationModal(modalParams, { product_tag_filter: tags, current_page: "cart" }, function(response) {
                     self.insertModal(response.content);
                 });
             });    
@@ -94,7 +94,12 @@ ReserveInStore.ReserveModal = function (opts) {
             if (settings && settings.url.indexOf('/cart.js') !== -1) {
                 // nothing to do for now
             } else if (settings && /\/cart\/(add|update|clear|change)/.test(settings.url)) {
-                opts.app.setCart(JSON.parse(xhr.responseText));
+                var json = JSON.parse(xhr.responseText);
+                opts.app.setCart(json);
+                
+                if (json.items) {
+                    opts.cart.setData(json.items);
+                }
             }
         });
     };

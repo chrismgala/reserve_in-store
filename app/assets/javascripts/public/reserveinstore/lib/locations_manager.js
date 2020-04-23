@@ -98,7 +98,7 @@ ReserveInStore.LocationsManager = function (opts) {
     self.getLocationProductParams = function() {
         var locationParams = {};
         if (opts.app.getProduct()) {
-            locationParams = { product_tag_filter: opts.app.getProductTag(), current_page_is: "product" };
+            locationParams = { product_tag_filter: opts.app.getProductTag(), current_page: "product" };
         }
         return locationParams;
     };
@@ -125,8 +125,8 @@ ReserveInStore.LocationsManager = function (opts) {
     };
 
     var updateCartLocations = function() {
-        opts.app.getCartItemsProdTagArray(function(cartItemsProductTagsArray) {
-            api.getLocations({ product_tag_filter: cartItemsProductTagsArray, current_page_is: "cart" }, function(_locations) {
+        opts.cart.getProductTags(function(tags) {
+            api.getLocations({ product_tag_filter: tags, current_page: "cart" }, function(_locations) {
                 locations = _locations;
                 storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
                 locationsReady = true;
@@ -142,7 +142,7 @@ ReserveInStore.LocationsManager = function (opts) {
     };
 
     var updateLocations = function() {
-        api.getLocations({ product_tag_filter: opts.app.getProductTag(), current_page_is: "product" }, function(_locations) {
+        api.getLocations(self.getLocationProductParams(), function(_locations) {
             locations = _locations;
             storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on
             locationsReady = true;

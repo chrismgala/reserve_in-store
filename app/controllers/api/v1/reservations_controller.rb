@@ -6,7 +6,7 @@ module Api
       ##
       # GET /api/v1/reservations/modal
       def modal
-        liquid_vars = @store.frontend_tpl_vars(product_tag_filter: params[:product_tag_filter], current_page_is: params[:current_page_is])
+        liquid_vars = @store.frontend_tpl_vars(product_tag_filter: params[:product_tag_filter], current_page: params[:current_page])
 
         if params[:product_title].present?
           liquid_vars[:cart] = load_legacy_params

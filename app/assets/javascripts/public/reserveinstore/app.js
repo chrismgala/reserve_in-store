@@ -9,7 +9,7 @@ ReserveInStore.App = function(opts) {
     var config, api, storage;
     var product, variant, cart, stockStatus;
     var reserveModal, chooselocationModal, variantLoader;
-    var locationsManager, inventoryManager;
+    var locationsManager, inventoryManager, cartData;
     var reserveProductBtn, reserveCartBtn, stockStatusIndicator;
 
     var eventListeners = {
@@ -70,6 +70,9 @@ ReserveInStore.App = function(opts) {
         };
 
         variantLoader = new ReserveInStore.VariantLoader(componentOpts);
+        
+        cartData = new ReserveInStore.Cart(componentOpts); 
+        componentOpts.cart = cartData;
 
         locationsManager = new ReserveInStore.LocationsManager(componentOpts);
         componentOpts.locationsManager = locationsManager;
@@ -195,46 +198,13 @@ ReserveInStore.App = function(opts) {
     self.getProductTag = function() {
         var prod = opts.app.getProduct();
         if (!prod) return '';
-        storage.setItem('ProductTags.' + prod.id, prod.tags);
+        storage.setItem('ProductTags.' + prod.id, prod.tags, 1000 * 60 * 60);
         return prod.tags;
     };
 
-    self.getCartItemsProdTagArray = function(callback) {
+    self.cart = function() {
         var cart = opts.app.getCart();
-        var cartItems = cart.items;
-        var cartItemsProdTagArray = [];
-        var loopCount = 0;
-        
-        if ((!cart) || (cartItems.length == 0)) callback('');
-
-        self.getCartItemProductTag(function(productTag) {
-            loopCount = loopCount + 1;
-            cartItemsProdTagArray = cartItemsProdTagArray.concat(productTag);
-            if (loopCount == cartItems.length) {
-                callback(cartItemsProdTagArray);
-            }    
-        });    
-    };
-
-    self.getCartItemProductTag = function(callback) {
-        var cart = opts.app.getCart();
-        var cartItems = cart.items;
-        
-        if ((!cart) || (cartItems.length == 0)) callback('');
-        
-        for (var i = 0; i < cartItems.length; i++) {
-            (function(i) {
-                if (storage.getItem('ProductTags.' + cartItems[i].product_id)) {
-                    callback(storage.getItem('ProductTags.' + cartItems[i].product_id));
-                } else {
-                    var cartItemUrl = cartItems[i].url.substring(0, cartItems[i].url.indexOf('?'));
-                    $.getJSON(cartItemUrl + ".js", function(product) {
-                        storage.setItem('ProductTags.' + product.id, product.tags);
-                        callback(product.tags);
-                    });
-                }
-            })(i);
-        }
+        return cart.items;
     };
 
     self.trigger = function(codes, data) {

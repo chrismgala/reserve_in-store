@@ -203,7 +203,7 @@ ReserveInStore.App = function(opts) {
     };
 
     self.cart = function() {
-        var cart = opts.app.getCart();
+        var cart = self.getCart();
         return cart.items;
     };
 

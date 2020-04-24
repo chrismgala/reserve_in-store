@@ -10,7 +10,7 @@ ReserveInStore.Cart = function (opts) {
     self.setData = function(_data) {
         data = _data;
 
-        ReserveInStore.logger.log("Set cart Data: ", data)
+        ReserveInStore.logger.log("Set cart Data: ", data);
     };
 
     self.getProductTags = function(callback) {

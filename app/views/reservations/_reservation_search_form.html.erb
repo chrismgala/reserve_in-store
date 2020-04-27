@@ -1,0 +1,37 @@
+<%= form_tag(reservations_path, :method => "get", class:"reserveInStore-reservation-search-form", enforce_utf8: false) do |f| %>
+  <div class="Polaris-Stack__Item">
+    <%= search_field_tag :search, params[:search], placeholder: "Search", class: "Polaris-TextField__Input" %>
+  </div>
+  <div class="Polaris-Stack__Item">
+    <div class="Polaris-Select">
+      <%= select_tag "search_location", options_for_select(@current_store.reservations.includes(:location).map {|reservation| [ reservation.location.name, reservation.location_id ]}.uniq, params[:search_location]),
+                     include_blank: "All Locations", class: "Polaris-Select__Input" %>
+      <div class="Polaris-Select__Icon">
+        <span class="Polaris-Icon">
+            <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path>
+            </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="Polaris-Stack__Item">
+    <div class="Polaris-Select">
+      <%= select_tag "search_status", options_for_select([["Fulfilled", true], ["Unfulfilled", false]], params[:search_status]),
+                     include_blank: "All Status", class: "Polaris-Select__Input" %>
+      <div class="Polaris-Select__Icon">
+        <span class="Polaris-Icon">
+          <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+            <path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="Polaris-Stack__Item">
+    <button type="submit" name="reservation_search" class="Polaris-Button Polaris-Button--primary">
+      <span class="Polaris-Button__Content"><span>Search</span></span>
+    </button>
+    <%= link_to 'clear search', reservations_path, class: 'Polaris-Link' %>
+  </div>
+<% end %>

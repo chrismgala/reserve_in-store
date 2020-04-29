@@ -125,7 +125,7 @@ ReserveInStore.LocationsManager = function (opts) {
     };
 
     var updateCartLocations = function() {
-        opts.cart.getProductTags(function(tags) {
+        opts.app.cart.getProductTags(function(tags) {
             api.getLocations({ product_tag_filter: tags, current_page: "cart" }, function(_locations) {
                 locations = _locations;
                 storage.setItem('LocationsManager.locations', locations, opts.debugMode ? 1 : 1000*60*15); // Save for 15 minutes unless debug mode is on

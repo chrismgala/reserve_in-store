@@ -9,7 +9,7 @@ ReserveInStore.App = function(opts) {
     var config, api, storage;
     var product, variant, cart, stockStatus;
     var reserveModal, chooselocationModal, variantLoader;
-    var locationsManager, inventoryManager, cartData;
+    var locationsManager, inventoryManager;
     var reserveProductBtn, reserveCartBtn, stockStatusIndicator;
 
     var eventListeners = {
@@ -46,6 +46,13 @@ ReserveInStore.App = function(opts) {
             if (window.location.toString().indexOf('clear_cache') !== -1) {
                 self.clearCache();
             }
+            
+            self.cart = new ReserveInStore.Cart({
+                api: api,
+                storage: storage,
+                app: self,
+                config: config || {}
+            });
 
             loadPushBuffer();
 
@@ -70,9 +77,6 @@ ReserveInStore.App = function(opts) {
         };
 
         variantLoader = new ReserveInStore.VariantLoader(componentOpts);
-        
-        cartData = new ReserveInStore.Cart(componentOpts); 
-        componentOpts.cart = cartData;
 
         locationsManager = new ReserveInStore.LocationsManager(componentOpts);
         componentOpts.locationsManager = locationsManager;
@@ -177,8 +181,10 @@ ReserveInStore.App = function(opts) {
 
     self.setCart = function(_cart) {
         cart = _cart;
+        self.cart.setData(cart);
 
         ReserveInStore.logger.log("Set cart: ", cart)
+        return self;
     };
 
     self.getLocation = function(callback) {
@@ -200,11 +206,6 @@ ReserveInStore.App = function(opts) {
         if (!prod) return '';
         storage.setItem('ProductTags.' + prod.id, prod.tags, 1000 * 60 * 60);
         return prod.tags;
-    };
-
-    self.cart = function() {
-        var cart = self.getCart();
-        return cart.items;
     };
 
     self.trigger = function(codes, data) {

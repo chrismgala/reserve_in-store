@@ -2,29 +2,29 @@ ReserveInStore.Cart = function (opts) {
     var self = this;
     opts = opts || {};
     var storage = opts.storage;
+    var data;
  
     var init = function () {
-        self.setData(opts.app.cart());
     };
 
-    self.setData = function(_data) {
-        data = _data;
-
-        ReserveInStore.logger.log("Set cart Data: ", data);
+    self.setData = function(cartData) {
+        data = cartData;
+        return self;
     };
+
+    self.getData = function() { return data; };
 
     self.getProductTags = function(callback) {
         var tags = [];
-        var cartData = opts.app.cart();
-        
-        if (!cartData) return callback(tags);
+                
+        if (!data) return callback(tags);
 
-        var itemCount = cartData.length;
+        var itemCount = data.items.length;
         if (itemCount < 1) return callback(tags);
 
         var fetchedItemCount = 0;       
-        for (var i = 0; i < cartData.length; i++) {
-            var item = cartData[i];
+        for (var i = 0; i < data.items.length; i++) {
+            var item = data.items[i];
             if (storage.getItem('ProductTags.' + item.product_id)) {
                 fetchedItemCount += 1;
                 tags = tags.concat(storage.getItem('ProductTags.' + item.product_id));

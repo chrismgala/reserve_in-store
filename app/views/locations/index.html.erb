@@ -39,7 +39,25 @@
                 <% @locations.each do |location| %>
                   <tr class="Polaris-DataTable__TableRow">
                     <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed" scope="row">
-                      <p class="polaris-header-text"><%= location.name %></p></th>
+                      <p class="polaris-header-text">
+                        <%= location.name %>
+                        <% if !location.visible_in_product? || !location.visible_in_cart? %>
+                          <br><small>(Not visible in
+                        <% end %>
+                        <% if !location.visible_in_product? %>
+                          product
+                        <% end %>
+                        <% if !location.visible_in_product? && !location.visible_in_cart? %>
+                          &amp;
+                        <% end %>
+                        <% if !location.visible_in_cart? %>
+                          cart
+                        <% end %>
+                        <% if !location.visible_in_product? || !location.visible_in_cart? %>
+                          pages)</small>
+                        <% end %>
+                      </p>
+                    </th>
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.address %><br>
                       <%= location.formatted_address %><br><%= location.country %></td>

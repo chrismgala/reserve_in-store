@@ -28,7 +28,23 @@
               <% @locations.each do |location| %>
               <tr>
                 <td><%= location.id %></td>
-                <td><%= location.name %></td>
+                <td><%= location.name %>
+                  <% if !location.visible_in_product? || !location.visible_in_cart? %>
+                    <br><small>(Not visible in
+                  <% end %>
+                  <% if !location.visible_in_product? %>
+                    product
+                  <% end %>
+                  <% if !location.visible_in_product? && !location.visible_in_cart? %>
+                    &amp;
+                  <% end %>
+                  <% if !location.visible_in_cart? %>
+                    cart
+                  <% end %>
+                  <% if !location.visible_in_product? || !location.visible_in_cart? %>
+                    pages)</small>
+                  <% end %>
+                </td>
                 <td>
                   <%= location.address %><br>
                   <%= location.city %>, <%= location.state %>,<%= location.zip %><br>

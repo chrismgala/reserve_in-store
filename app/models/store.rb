@@ -341,8 +341,17 @@ class Store < ApplicationRecord
   # @return [Hash] - liquid params used by JS email previewer
   def frontend_tpl_vars(params = {})
     params[:product_tag_filter] = '' if params[:product_tag_filter].nil?
+    
+    if params[:current_page] == "product"
+      current_page_condition = "visible_in_product = true"
+    else
+      current_page_condition = "visible_in_cart = true"
+    end
+    product_tag_condition = "(string_to_array(product_tag_filter,',')::text[]) && (ARRAY[?]::text[]) OR product_tag_filter = ? ", params[:product_tag_filter], ''
     {
-      locations: (locations.where("product_tag_filter IN (?)  OR product_tag_filter = ?", params[:product_tag_filter], '')).to_a.map { |loc| loc.to_liquid },
+      locations: (locations.where(product_tag_condition)
+                    .where(current_page_condition)
+                 ).to_a.map { |loc| loc.to_liquid },
       cdn_url: ENV['PUBLIC_CDN_BASE_PATH'],
       settings: self
     }.with_indifferent_access

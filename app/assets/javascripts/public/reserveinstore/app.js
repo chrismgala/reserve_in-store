@@ -1,6 +1,6 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.2.4.2'; // Version of the JS library.
+    this.version = '1.2.4.3'; // Version of the JS library.
     var self = this;
     opts = opts || {};
     opts.app = self;
@@ -46,6 +46,13 @@ ReserveInStore.App = function(opts) {
             if (window.location.toString().indexOf('clear_cache') !== -1) {
                 self.clearCache();
             }
+            
+            self.cart = new ReserveInStore.Cart({
+                api: api,
+                storage: storage,
+                app: self,
+                config: config || {}
+            });
 
             loadPushBuffer();
 
@@ -174,8 +181,10 @@ ReserveInStore.App = function(opts) {
 
     self.setCart = function(_cart) {
         cart = _cart;
+        self.cart.setData(cart);
 
         ReserveInStore.logger.log("Set cart: ", cart)
+        return self;
     };
 
     self.getLocation = function(callback) {
@@ -195,8 +204,9 @@ ReserveInStore.App = function(opts) {
     self.getProductTag = function() {
         var prod = opts.app.getProduct();
         if (!prod) return '';
+        storage.setItem('ProductTags.' + prod.id, prod.tags, 1000 * 60 * 60);
         return prod.tags;
-    };    
+    };
 
     self.trigger = function(codes, data) {
         codes = codes.split(' ');

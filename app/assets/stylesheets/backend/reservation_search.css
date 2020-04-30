@@ -1,0 +1,11 @@
+.reserveInStore-reservation-search-form .Polaris-Stack__Item {
+    display: inline-block;
+}
+.reserveInStore-reservation-search-form .Polaris-Select__Input {
+    background: white;
+    border: 1px solid #c4cdd5;
+}
+.reserveInStore-reservation-search-form .Polaris-TextField__Input {
+    background: white;
+    border: 1px solid #c4cdd5;
+}

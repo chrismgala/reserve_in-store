@@ -5,7 +5,9 @@
   <div class="Polaris-Page__Content">
     <% if @reservations.any? %>
       <div class="Polaris-Stack">
-        <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
+        <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
+          <%= render partial: 'reservation_search_form', locals: { reservation: @reservations } %>
+        </div>
         <div class="Polaris-Stack__Item">
           <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-show">
             <span class="Polaris-Button__Content"><span>Add New Reservation</span></span></button>
@@ -109,9 +111,12 @@
     <% else %>
       <div class="Polaris-Stack">
         <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
-          <p>
-            There are no reservations yet.
-          </p>
+          <% if params[:reservation_search] %>
+            <%= render partial: 'reservation_search_form', locals: { reservation: @reservations } %>
+            <p>No reservation found</p>
+          <% else %>
+            <p>There are no reservations yet.</p>
+          <% end %>
         </div>
         <div class="Polaris-Stack__Item">
           <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-show">

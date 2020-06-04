@@ -16,6 +16,15 @@
 </p>
 {% endif %}
 
+{% if additional_fields %}
+  {% if additional_fields.address %}
+    <h4>More Info:</h4>
+    <p>
+    Address: {{ additional_fields.address }}
+    </p>
+  {% endif %}
+{% endif %}
+
 <h4>Items:</h4>
 <ul>
   {% for item in cart.items %}

@@ -12,8 +12,11 @@ class Reservation < ActiveRecord::Base
   after_update :trigger_fulfilled_webhook!, :trigger_update_webhook!
   after_destroy :trigger_destroy_webhook!
 
-  PERMITTED_PARAMS = [:customer_name, :customer_email, :customer_phone, :location_id, :platform_product_id,
-                      :platform_variant_id, :instructions_from_customer, :fulfilled, :line_item, :cart => {}]
+  PERMITTED_PARAMS = [
+    :customer_name, :customer_email, :customer_phone, :location_id, :platform_product_id,
+    :platform_variant_id, :instructions_from_customer, :fulfilled, :line_item, :cart => {},
+    :additional_fields => {}
+  ]
 
   def customer_first_name
     customer_name.to_s.split(' ').first
@@ -155,6 +158,7 @@ class Reservation < ActiveRecord::Base
         website_url: store.website_url
       },
       instructions_from_customer: "Monday at 5:30pm",
+      additional_fields: { address: "Newport Beach, California"},
       cart: {
         items: [
                  {

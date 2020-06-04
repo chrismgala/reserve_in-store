@@ -62,6 +62,12 @@
                         <label for="reservation_customer_email">Your Email</label>
                         <input required="required" type="email" name="reservation[customer_email]" id="reservation_customer_email" />
                     </div>
+                    {% if settings.show_additional_fields %}
+                    <div class="ris-contact-field">
+                        <label for="reservation_additional_field_address">Address</label>
+                        <input required="required" type="text" name="reservation[additional_fields][address]" id="reservation_additional_field_address" />
+                    </div>
+                    {% endif %}
 
                     {% if settings.show_phone %}
                     <div class="ris-contact-field">

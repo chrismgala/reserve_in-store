@@ -158,7 +158,7 @@ class Reservation < ActiveRecord::Base
         website_url: store.website_url
       },
       instructions_from_customer: "Monday at 5:30pm",
-      additional_fields: { address: "Newport Beach, California"},
+      additional_fields: { address: "Newport Beach, California" },
       cart: {
         items: [
                  {

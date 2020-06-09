@@ -1,23 +1,18 @@
-Ora PM Task URL: _link to the Ora PM task URL that looks like `https://ora.pm/project/11168/list/37043/task/135046`_
+Ora PM Task URL: https://ora.pm/project/11168/list/37043/task/135046
 
-# Why?
-Why are you doing this? What problem is it solving? Why is is good for our merchants? etc. If you're doing something from Ora PM then you can just copy the "why?" part here.
+# What did you do here?
+* *Briefly explain what you did*
 
-# What?
-What does this PR actually add. What code did you change? Did you introduce any new patterns? Etc.
+# Demo
+* For each flow, post a video/gif or link to one: (`![](https://www.fera.ai/wp-content/uploads/2017/12/cdyUNSv9bq.gif)`). If what was changed in the image/gif/video is not totally clear 
+*  If you only changed a single thing on a single static page and your changes don't affect any user flows, then a screenshot image is acceptable.
 
-# Demo / Screenshots
-Using recordit.co and/or monosnap to give screenshots and gif demos of your code. You can embed them in here like this: `![Brief description of image](https://www.fera.ai/wp-content/uploads/2017/12/cdyUNSv9bq.gif)`
-![Brief description of image](https://www.fera.ai/wp-content/uploads/2017/12/cdyUNSv9bq.gif)
-
-
-# How was it tested?
-What tests did you run? What scenarios did you test. What tests do you still need to run?
-
-# How can you test it.
-How can the reviewer test this PR? Are there any special steps required? For example:
-* `bundle install` (if you added bower assets)
-* `bower install` (if you added gems)
-* Restart your web server (if you added runtime things or gems)
-* Go to `/some_page` in your browser and do X, Y and Z (if there is a visual components)
-* Open up your `rails console` and type `some code` (if there are code components to test)
+# Good PR Checklist
+- [ ] I believe my code is complete and in working condition.
+- [ ] I've documented my public methods and any other methods I think need to be documented.
+- [ ] I've scanned my code for any left-behind test code.
+- [ ] I've written automated tests for my code and/or updated existing ones  (or I've been told I can skip them)
+- [ ] I've included: 
+    (A) video/gif(s) of my changes, 
+    *and/or* (B) or a screenshot since my changes only affect one screen, 
+    *and/or* (C) it is not possible to post screenshots 

@@ -28,7 +28,8 @@ class Store < ApplicationRecord
     :show_when_only_available_online,
     :custom_css, :custom_css_enabled,
     :location_notification_subject, :customer_confirmation_subject,
-    :location_notification_sender_name, :customer_confirmation_sender_name
+    :location_notification_sender_name, :customer_confirmation_sender_name,
+    :show_additional_fields
   ]
 
   JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].to_s.chomp('/')}/reserveinstore.js"
@@ -82,6 +83,7 @@ class Store < ApplicationRecord
       'top_msg' => top_msg,
       'show_phone' => show_phone,
       'show_instructions_from_customer' => show_instructions_from_customer,
+      'show_additional_fields' => show_additional_fields,
       'success_msg' => success_msg,
       'faq' => reserve_modal_faq_tpl_in_use
     }

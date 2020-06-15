@@ -36,7 +36,7 @@
                     Customer Details
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Pickup Time/Date
+                    Pickup Time/Date &amp; more info
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
                     <%= sortable('fulfilled', 'Status') %>
@@ -70,7 +70,18 @@
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %>
                       <br><%= reservation.customer_email %><br><%= reservation.customer_phone %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.instructions_from_customer %></td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <%= reservation.instructions_from_customer %><br>
+                      <% if reservation.additional_fields.present?  %>
+                        <a href="#" class="Polaris-Link more-info-<%= reservation.id %>-toggle" onclick="$('.more-info-<%= reservation.id %>-toggle').toggle(); return false;">Show more details</a>
+                        <div class="more-info-<%= reservation.id %>-toggle" style="display: none;">
+                          <% reservation.additional_fields.each do |additional_fields_key, additional_fields_value| %>
+                            <%= additional_fields_key %> : <%= additional_fields_value %><br>
+                          <% end %>
+                        </div>
+                        <a href="#" class="Polaris-Link more-info-<%= reservation.id %>-toggle" onclick="$('.more-info-<%= reservation.id %>-toggle').toggle(); return false;" style="display: none;">Hide</a>
+                      <% end %>
+                    </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <% if reservation.fulfilled? %>
                         Fulfilled

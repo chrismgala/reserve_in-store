@@ -38,6 +38,59 @@
         <div class="Polaris-Layout__AnnotationWrapper">
           <div class="Polaris-Layout__Annotation">
             <div class="Polaris-TextContainer">
+              <h2 class="Polaris-Heading">Show additional fields in Reserve Modal:</h2>
+              <p>If you want more information from customers. This tutorial will help. </p>
+            </div>
+          </div>
+          <div class="Polaris-Layout__AnnotationContent">
+            <div class="Polaris-Card">
+              <div class="Polaris-Card__Section">
+                <div class="Polaris-CalloutCard">
+                  <div class="Polaris-CalloutCard__Content">
+                    <div class="Polaris-CalloutCard__Title Polaris-TextContainer--spacingLoose">
+                      <h2 class="Polaris-Heading">How to add additional fields in Reserve Modal?</h2>
+                      <p>To make it easier for you by default Address field is added, now lets add new field City.</p>
+                      <p><strong>Step 1:</strong> Enable show additional fields for Reserve Popup from Settings.</p>
+                      <p><strong>Step 2:</strong> Click Templates >> Select specify custom templates. Once done template will be loaded.</p>
+                      <p>Approx Line 66 - 69 you will see this code:</p>
+                      <textarea class="helpful-code-read-only" rows="6" disabled="disabled">
+ <div class="ris-contact-field">
+   <label for="reservation_additional_field_address">Address</label>
+   <input required="required" type="text" name="reservation[additional_fields][address]" id="reservation_additional_field_address" />
+ </div>
+                      </textarea>
+                      <p><strong>Step 3:</strong> Replace <strong>address</strong> with <strong>city</strong>. Copy and paste below code anywhere within template.</p>
+                      <textarea class="helpful-code-read-only" rows="6" disabled="disabled">
+ <div class="ris-contact-field">
+   <label for="reservation_additional_field_city">City</label>
+   <input required="required" type="text" name="reservation[additional_fields][city]" id="reservation_additional_field_city" />
+ </div>
+                      </textarea>
+
+                      <p>We need to show this extra field in Reservation Confirmation Email and Location Notification Email.</p>
+                      <p><strong>Step 4:</strong> Select specify custom templates for Reservation Confirmation Email and Location Notification Email.</p>
+                      <p>Add this line</p>
+                      <textarea class="helpful-code-read-only" rows="6" disabled="disabled">
+ {% if additional_fields.city %}
+   <p>
+     City: {{ additional_fields.city }}
+   </p>
+ {% endif %}
+                      </textarea>
+                      <p><strong>Step 5:</strong> Click Save</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="Polaris-Layout__AnnotatedSection">
+        <div class="Polaris-Layout__AnnotationWrapper">
+          <div class="Polaris-Layout__Annotation">
+            <div class="Polaris-TextContainer">
               <h2 class="Polaris-Heading">Additional Resources</h2>
               <p>For further reading and customization.</p>
             </div>

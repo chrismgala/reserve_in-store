@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_20_163943) do
+ActiveRecord::Schema.define(version: 2020_06_02_154512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 2020_04_20_163943) do
     t.datetime "updated_at", null: false
     t.text "line_item"
     t.jsonb "cart"
+    t.jsonb "additional_fields", default: {}
     t.index ["location_id"], name: "index_reservations_on_location_id"
     t.index ["store_id"], name: "index_reservations_on_store_id"
   end
@@ -129,6 +130,7 @@ ActiveRecord::Schema.define(version: 2020_04_20_163943) do
     t.jsonb "plan_overrides"
     t.datetime "last_connected_at"
     t.text "connection_error"
+    t.boolean "show_additional_fields", default: false
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

@@ -7,6 +7,7 @@ module Shopify
     end
 
     def clear_product_cache(id)
+      return if id.nil?
       Rails.cache.delete("stores/#{store.id}/cached_shopify_api/product-#{id}")
       Rails.cache.delete("stores/#{store.id}/inventory_fetcher/product-#{id}")
     end
@@ -19,6 +20,7 @@ module Shopify
     end
 
     def product(id)
+      return if id.nil?
       cache_key = "stores/#{store.id}/cached_shopify_api/product-#{id}"
       Rails.cache.fetch(cache_key, expires_in: 1.minutes) do
         super(id)

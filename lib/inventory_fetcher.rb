@@ -26,7 +26,7 @@ class InventoryFetcher
       return {} if inventory_item_ids.blank?
 
       # Get Inventory Levels. We will make one API call even if we receive multiple products
-      inventory_levels = store.api.inventory_levels(inventory_item_ids: inventory_item_ids)
+      inventory_levels = store.api.inventory_levels(inventory_item_ids: inventory_item_ids, limit: 250)
 
       # concentrate inventory data based on variant ID
       inventory_map = {}

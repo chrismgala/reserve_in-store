@@ -114,7 +114,7 @@ class Reservation < ActiveRecord::Base
                                               vendor: product['vendor'],
                                               title: product['title'],
                                               handle: product['handle'],
-                                              product_description: product['description'],
+                                              product_description: product['product_description'],
                                               taxable: variant['taxable'],
                                               sku: variant['sku']
                                            }.deep_stringify_keys)

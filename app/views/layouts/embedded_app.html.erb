@@ -33,6 +33,12 @@
         <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'templates') %>" href="<%= stores_templates_path %>">
           <span class="Polaris-Tabs__Title">Templates</span></a>
       </li>
+      <% if @current_store.webhooks_enabled? %>
+        <li role="presentation" class="Polaris-Tabs__TabContainer">
+          <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'webhooks') %>" href="<%= stores_webhooks_path %>">
+            <span class="Polaris-Tabs__Title">Webhooks</span></a>
+        </li>
+      <% end %>
       <li role="presentation" class="Polaris-Tabs__TabContainer">
         <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'help') %>" href="<%= stores_help_path %>">
           <span class="Polaris-Tabs__Title">Help</span></a>

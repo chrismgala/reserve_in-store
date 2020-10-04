@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get 'stores/help'
   get 'stores/templates'
   get 'stores/iframe_preview'
+  get 'stores/webhooks'
   match 'stores/settings' => 'stores#save_settings', via: [:post, :patch]
 
   get 'shopify/recurring_application_charge/create' => 'shopify/recurring_application_charge#create', as: :subscribe
@@ -57,6 +58,7 @@ Rails.application.routes.draw do
       get 'templates'
       get 'deactivate'
       get 'locations'
+      get 'webhooks'
       get 'reservations'
       match 'admin/stores/settings' => 'stores#save_settings', via: [:post, :patch]
     end

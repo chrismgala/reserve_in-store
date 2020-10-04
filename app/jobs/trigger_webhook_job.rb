@@ -7,17 +7,21 @@ class TriggerWebhookJob < ActiveJob::Base
     @store = Store.find(store_id)
     return if @store.blank?
 
+    sleep(1.second)
+
     @object = object_klass.constantize.find(object_id)
     return if @object.blank?
 
-    store.webhooks.find_all{ |hook| hook['topic'] == topic }.each do |hook|
-      call_hook(hook['url'])
+    store.webhooks.find_all{ |hook| hook['topic'] }.each do |hook|
+      hook['topic'].each do |hook_topic|
+        call_hook(hook['url'], hook_topic) if hook_topic == topic
+      end
     end
   end
 
   private
 
-  def call_hook(url)
+  def call_hook(url, auth_token)
     url = url.to_s.strip.chomp('?')
     return if url.blank?
 
@@ -28,6 +32,9 @@ class TriggerWebhookJob < ActiveJob::Base
 
     data = object.respond_to?(:to_api_h) ? object.to_api_h : object.attributes
 
-    HTTParty.post(url, body: data.to_json, timeout: 10, headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' })
+    HTTParty.post(url, body: data.to_json, timeout: 10, headers: {
+      'Authorization' => "Bearer #{auth_token}",
+      'Content-Type' => 'application/json',
+      'Accept' => 'application/json' })
   end
 end

@@ -38,6 +38,12 @@ module Admins
     def tools
       store
     end
+
+    ##
+    # GET /admin/stores/:store_id/webhooks
+    def webhooks
+      store
+    end
     
     ##
     # GET /admin/stores/:store_id/reintegrate

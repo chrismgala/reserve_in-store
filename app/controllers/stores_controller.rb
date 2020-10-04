@@ -34,6 +34,12 @@ class StoresController < LoggedInController
   end
 
   ##
+  # GET /stores/webhooks
+  def webhooks
+    return
+  end
+
+  ##
   # GET /stores/deactivate
   def deactivate
     @current_store.deactivate!
@@ -110,6 +116,7 @@ class StoresController < LoggedInController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def store_params
+    #params.fetch(:store, {}).permit(Store::PERMITTED_PARAMS, webhooks: [:url, :topic])
     params.fetch(:store, {}).permit(Store::PERMITTED_PARAMS)
   end
 

@@ -25,7 +25,7 @@ class Store < ApplicationRecord
     :reserve_cart_btn_tpl, :reserve_cart_btn_tpl_enabled, :reserve_cart_btn_selector, :reserve_cart_btn_action,
     :stock_status_tpl, :stock_status_tpl_enabled, :stock_status_selector, :stock_status_action, :stock_status_behavior_when_stock_unknown,
     :stock_status_behavior_when_no_location_selected, :stock_status_behavior_when_no_nearby_locations_and_no_location,
-    { webhooks: [ :url, :token, topic: [] ] },
+    { webhooks: [ :url, :auth_token, topic: [] ] },
     :show_when_only_available_online,
     :custom_css, :custom_css_enabled,
     :location_notification_subject, :customer_confirmation_subject,

@@ -36,7 +36,6 @@ class StoresController < LoggedInController
   ##
   # GET /stores/webhooks
   def webhooks
-    return
   end
 
   ##

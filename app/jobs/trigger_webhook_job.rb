@@ -7,8 +7,6 @@ class TriggerWebhookJob < ActiveJob::Base
     @store = Store.find(store_id)
     return if @store.blank?
 
-    sleep(1.second)
-
     @object = object_klass.constantize.find(object_id)
     return if @object.blank?
 

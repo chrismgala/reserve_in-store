@@ -111,5 +111,7 @@ module Admins
     def load_store
       @store = Store.find(params[:store_id].to_i)
     end
+
+    def store; @store; end
   end
 end

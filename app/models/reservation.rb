@@ -64,7 +64,7 @@ class Reservation < ActiveRecord::Base
         email: customer_email,
         phone: customer_phone,
         instructions: instructions_from_customer,
-        additional_field: additional_fields
+        additional_fields: additional_fields
       },
       cart: cart,
       fulfilled: fulfilled?,

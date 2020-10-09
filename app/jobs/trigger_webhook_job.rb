@@ -31,9 +31,18 @@ class TriggerWebhookJob < ActiveJob::Base
 
     data = object.respond_to?(:to_api_h) ? object.to_api_h : object.attributes
 
-    HTTParty.post(url, body: data.to_json, timeout: 10, headers: {
-      'Authorization' => auth_token,
+    headers = headers(auth_token)
+
+    HTTParty.post(url, body: data.to_json, timeout: 10, headers: headers)
+  end
+
+  def headers(auth_token)
+    headers = {
       'Content-Type' => 'application/json',
-      'Accept' => 'application/json' })
+      'Accept' => 'application/json'
+    }
+    headers = headers.merge('Authorization' => "#{auth_token}") if auth_token.present?
+
+    headers
   end
 end

@@ -34,6 +34,11 @@ class StoresController < LoggedInController
   end
 
   ##
+  # GET /stores/webhooks
+  def webhooks
+  end
+
+  ##
   # GET /stores/deactivate
   def deactivate
     @current_store.deactivate!

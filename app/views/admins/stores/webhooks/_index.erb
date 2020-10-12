@@ -1,0 +1,54 @@
+
+<div>
+  <%= form_for @store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
+    <input type="hidden" value="<%= admin_store_webhooks_path %>" name="next_url">
+    <div class="row mb-4">
+      <div class="col-5">
+        <h5>Webhooks</h5>
+        <p>Webhooks allow you to react on your own servers whenever an event occurs on the Reserve In-store servers.</p>
+      </div>
+      <div class="col form-group">
+        <div class="">
+          <%= f.check_box :webhooks_enabled, class: '' %>
+          <span> Enable / disable Webhook</span>
+        </div>
+        <% if @store.webhooks.count > 0 %>
+          <% @store.webhooks.each do |hook| %>
+            <div class="mt-3">
+              <label class="Polaris-Label__Text">Endpoint</label>
+              <input type="text" name="store[webhooks][][url]" class="form-control small-width-field" value="<%= hook['url'] %>" />
+            </div>
+            <div class="mt-3">
+              <label class="Polaris-Label__Text">Auth Token</label>
+              <input type="text" name="store[webhooks][][auth_token]" class="form-control small-width-field" value="<%= hook['auth_token'] %>" />
+            </div>
+
+            <div class="mt-3">
+              <label class="Polaris-Label__Text">Topic:</label>
+              <div>
+                <% store_webhooks.each do |topic| %>
+                  <% default_checked = hook["topic"].include?(topic.to_s) rescue false %>
+                  <%= check_box_tag "store[webhooks][][topic][]", topic, default_checked %>
+                  <span><%= topic %></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% else %>
+          <div class="mt-3">
+            <label class="Polaris-Label__Text">Endpoint</label>
+            <input type="text" name="store[webhooks][][url]" class="form-control small-width-field" value="https://" />
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col text-center">
+        <div class="actions">
+          <%= f.submit "Save", class: "btn save-btn btn-primary", id: "save_btn" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

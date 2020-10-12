@@ -10,24 +10,37 @@ class TriggerWebhookJob < ActiveJob::Base
     @object = object_klass.constantize.find(object_id)
     return if @object.blank?
 
-    store.webhooks.find_all{ |hook| hook['topic'] == topic }.each do |hook|
-      call_hook(hook['url'])
+    store.webhooks.find_all{ |hook| hook['topic'] }.each do |hook|
+      topics = hook['topic'].is_a?(Array) ? hook['topic'] : [hook['topic']]
+      call_hook(hook['url'], hook['auth_token']) if topics.include? topic
     end
   end
 
   private
 
-  def call_hook(url)
+  def call_hook(url, auth_token)
     url = url.to_s.strip.chomp('?')
     return if url.blank?
 
     ForcedLogger.log("Hitting webhook #{url}", store: store.id, topic: topic, object: object_id)
 
-    url += url.include?('?') ? '?' : '&'
+    url += url.include?('?') ? '&' : '?&'
     url += { secret_key: store.secret_key }.to_param
 
     data = object.respond_to?(:to_api_h) ? object.to_api_h : object.attributes
 
-    HTTParty.post(url, body: data.to_json, timeout: 10, headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' })
+    headers = headers(auth_token)
+
+    HTTParty.post(url, body: data.to_json, timeout: 10, headers: headers)
+  end
+
+  def headers(auth_token)
+    headers = {
+      'Content-Type' => 'application/json',
+      'Accept' => 'application/json'
+    }
+    headers = headers.merge('Authorization' => "#{auth_token}") if auth_token.present?
+
+    headers
   end
 end

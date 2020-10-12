@@ -63,7 +63,8 @@ class Reservation < ActiveRecord::Base
         name: customer_name,
         email: customer_email,
         phone: customer_phone,
-        instructions: instructions_from_customer
+        instructions: instructions_from_customer,
+        additional_fields: additional_fields
       },
       cart: cart,
       fulfilled: fulfilled?,
@@ -221,13 +222,13 @@ class Reservation < ActiveRecord::Base
 
 
   def trigger_create_webhook!
-    TriggerWebhookJob.perform_later(store_id: store_id, topic: 'reservations/create', object_id: id, object_klass: self.class.to_s)
+    TriggerWebhookJob.set(wait: 1.seconds).perform_later(store_id: store_id, topic: 'reservations/create', object_id: id, object_klass: self.class.to_s)
     true
   end
 
   def trigger_fulfilled_webhook!
     if previous_changes['fulfilled'].present? && !previous_changes['fulfilled'][0] && previous_changes['fulfilled'][1]
-      TriggerWebhookJob.perform_later(store_id: store_id, topic: 'reservations/fulfilled', object_id: id, object_klass: self.class.to_s)
+      TriggerWebhookJob.set(wait: 1.seconds).perform_later(store_id: store_id, topic: 'reservations/fulfilled', object_id: id, object_klass: self.class.to_s)
     end
     true
   end

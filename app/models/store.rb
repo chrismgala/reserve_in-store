@@ -30,7 +30,7 @@ class Store < ApplicationRecord
     :custom_css, :custom_css_enabled,
     :location_notification_subject, :customer_confirmation_subject,
     :location_notification_sender_name, :customer_confirmation_sender_name,
-    :show_additional_fields,:webhooks_enabled
+    :show_additional_fields, :webhooks_enabled, :stock_threshold
   ]
 
   JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].to_s.chomp('/')}/reserveinstore.js"

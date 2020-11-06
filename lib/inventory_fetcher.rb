@@ -65,7 +65,7 @@ class InventoryFetcher
     stock_levels.keys.map do |product_id|
       product_stock_levels = stock_levels[product_id].keys.map do |variant_id|
         new_levels = stock_levels[product_id][variant_id].keys.map do |platform_location_id|
-          inventory_caption = if stock_levels[product_id][variant_id][platform_location_id] > 15
+          inventory_caption = if stock_levels[product_id][variant_id][platform_location_id] > store.stock_threshold
                                 'in_stock'
                               elsif stock_levels[product_id][variant_id][platform_location_id] > 0
                                 'low_stock'

@@ -252,6 +252,18 @@
 
                     <div class="Polaris-FormLayout__Item">
                       <div class="Polaris-Labelled__LabelWrapper">
+                        <%= f.label :stock_threshold, class: 'Polaris-Label__Text' do %>
+                          Show low stock message if stock inventory for that product is less than or equal to:
+                        <% end %>
+                      </div>
+                      <div class="Polaris-TextField">
+                        <%= f.number_field :stock_threshold, class: 'Polaris-TextField__Input', required: true, max: 99 %>
+                        <div class="Polaris-Select__Backdrop"></div>
+                      </div>
+                    </div>
+
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
                         <div class="Polaris-Label">
                           <%= f.label :stock_status_behavior_when_stock_unknown, class: 'Polaris-Label__Text' do %>
                             If stock level is NOT available at any physical locations...

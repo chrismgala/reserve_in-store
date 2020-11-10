@@ -77,3 +77,27 @@
     </table>
   </div>
 </div>
+
+<h5>Admin Functions</h5>
+<table class="table table-responsive table-striped">
+  <tr>
+    <th>Notes</th>
+    <td>
+      <div id="admin-notes-section">
+        <pre id="admin-note"><%= store.admin_notes.present? ? store.admin_notes.to_s : "There are no notes yet." %></pre>
+        <button id="admin-note-button" class="btn btn-default" type="button">Add an admin note</button>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<% content_for(:before_body_end) do %>
+  <script>
+      var adminNotesUpdater = new AdminNotesUpdater({
+          button_id: "admin-note-button",
+          notes_id: "admin-note",
+          section_id: "admin-notes-section",
+          store_id: "<%= store.id %>"
+      });
+  </script>
+<% end %>

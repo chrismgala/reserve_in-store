@@ -474,10 +474,39 @@ class Store < ApplicationRecord
 
   def user; users.first; end
 
+  def trial_days_left
+    plan = subscription.try(:plan) || recommended_plan
+    return nil if plan.blank?
+
+    return ((trial_extend_date.to_i - Time.now.utc.to_i)/1.day + 1) if trial_extend_date.present?
+
+    [plan.trial_days - ((Time.now.utc.to_i - created_at.to_i)/1.day), 0].max.ceil
+
+  end
+
   def recommended_plan
     plan_code = recommended_plan_code
     return nil if plan_code.blank?
     @recommended_plan ||= Plan.find_by(code: plan_code)
+  end
+
+  def override_subscriptions!(value, overriding, user_id, add_admin_notes = nil)
+    self.add_admin_note(add_admin_notes, user_id)
+    if overriding == "recommended_plan" && value!=""
+      self.plan_overrides = { code: value }
+    else
+      self.plan_overrides = {}
+    end
+
+    save!
+  end
+
+  def add_admin_note(note, user_id)
+    if note.present?
+      user             = Admin.find(user_id)
+      self.admin_notes = self.admin_notes.present? ? self.admin_notes + "\n" : ""
+      self.admin_notes += "#{Time.now}: #{note} - #{user.email} (id #{user.id})"
+    end
   end
 
   def distinctly_named_location_count
@@ -507,10 +536,36 @@ class Store < ApplicationRecord
     email.to_s =~ /.*@(fera|reserveinstore|bananastand|wellfounded).*/i
   end
 
+  def subscribed?
+    subscription.try(:id).present?
+  end
+
   def needs_subscription?
     return false if sandbox_store?
 
     subscription.blank? && recommended_plan.present?
+  end
+
+  def trial_ends_at
+    return trial_extend_date if trial_extend_date.present?
+    (created_at + 30.days).to_datetime
+  end
+
+  def extend_trial!(time_length, user_id, admin_note)
+    trial_ends = created_at + 30.days
+
+    trial_ends = trial_extend_date if trial_extend_date.present?
+    self.trial_extend_date = trial_ends + time_length.to_i
+
+    self.add_admin_note(admin_note, user_id)
+    save!
+  end
+
+  def reauthorize_subscription?
+    return true if plan_overrides.to_h['code'].present? && plan_overrides.to_h['code'] != subscription.plan_attributes.to_h['code']
+    return true if trial_extend_date.present? && trial_extend_date != trial_ends_at
+
+    false
   end
 
   def add_webhook(topic, url)

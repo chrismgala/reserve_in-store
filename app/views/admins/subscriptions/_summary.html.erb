@@ -3,31 +3,132 @@
     <h5>Subscription</h5>
     <table class="table table-responsive table-striped">
       <tr>
-        <th>Plan id</th>
-        <td><%= subscription.plan_attributes['id'] %></td>
-      </tr>
-      <tr>
-        <th>Plan code</th>
-        <td><%= subscription.plan_attributes['code'] %></td>
-      </tr>
-      <tr>
-        <th>Name</th>
-        <td><%= subscription.plan_attributes['name'] %></td>
-      </tr>
-      <tr>
-        <th>Created At</th>
+        <th>Status</th>
         <td>
-          <%= local_time(subscription.created_at) %>
-          (<%= time_ago_in_words(subscription.created_at) %> ago)
+          <% if store.subscribed? %>
+            <span class="text-success" data-toggle="tooltip"
+                  title="Subscribed to <%= store.subscription.plan.name %> with plan code <%= store.subscription.plan.code %> ($<%= store.subscription.plan.price.to_s.chomp('.00').chomp('.0') %> USD/mo) ">
+              <%= store.subscription.nice_price %>
+              <% if store.trial_ends_at > Time.now %>
+                (in trial: <%= time_ago_in_words(store.trial_ends_at) %> left)
+              <% end %>
+            </span>
+          <% elsif store.needs_subscription? %>
+            <% if store.trial_ends_at > Time.now %>
+              <span class="text-success">
+                Not subscribed (in trial: <%= time_ago_in_words(store.trial_ends_at) %> left)
+              </span>
+            <% else %>
+              <span class="text-danger">
+                Not subscribed (trial ended: <%= time_ago_in_words(store.trial_ends_at) %> ago)
+              </span>
+            <% end %>
+          <% else %>
+          <span class="text-muted">Free</span>
+          <% end %>
+          <div id="extendTrialSection">
+            <div id="extendTrialSectionInput" class="extend-trial-section-input">
+              <input class="form-control number-input" type="number" placeholder="Number of days"/>
+              <input class="form-control date-input" type="date" placeholder="Number of days"/>
+              <button class='btn btn-success'>Set Trial End Date</button>
+              <button class='btn btn-secondary btn-cancel'>Cancel</button>
+            </div>
+            <div id="buttonSection">
+              <button class='btn btn-default extend-by-days'>Add Days To Trial</button>
+              <button class='btn btn-default extend-to-date'>Extend Trial To Date</button>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <% if store.trial_extend_date.present? && store.subscribed? %>
+        <tr>
+          <th>Trail extended till date:</th>
+          <td><%= store.trial_extend_date %></td>
+        </tr>
+        <tr>
+          <th>Subscription end date:</th>
+          <td>
+            <%= store.trial_ends_at %><br>
+            <%= "(Trial extended locally but store owner still need to authorize)" if store.reauthorize_subscription? %>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <th>Recommended Plan</th>
+        <td>
+          <%= nice_monthly_amount(store.recommended_plan.price) if store.recommended_plan.present? %>
+          <%= store.recommended_plan.name if store.recommended_plan.present? %>
         </td>
       </tr>
       <tr>
-        <th>Updated At</th>
+        <th>Subscription url</th>
         <td>
-          <%= local_time(subscription.updated_at) %>
-          (<%= time_ago_in_words(subscription.updated_at) %> ago)
+          <%= ENV['BASE_APP_URL']  %><%= subscribe_path(plan: store.recommended_plan_code) %>
         </td>
       </tr>
+      <tr>
+        <th>Subscription Plan Overrides</th>
+        <td>
+          <% if store.plan_overrides.present? %>
+            Recommended Plan Override: <%= store.plan_overrides["code"] %><br>
+          <% end %>
+          <div id="overridePlanSection">
+            <div id="overridePlanSectionInput" class="override-plan-section-input">
+              <div class="plan-input my-3">
+                <select style="margin: 0 0 10px;" data-placeholder="Add Tags" id="planOverrideSelector">
+                  <% Plan.all.each do |plan| %>
+                    <option <%= "selected" if store.plan_overrides == plan.code %> value="<%= plan.code %>"><%= plan.name %>
+                      $<%= plan.price %> (<%= plan.code %>)
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+              <button class='btn btn-success'>Override</button>
+              <button class='btn btn-info'>Clear</button>
+              <button class='btn btn-secondary btn-cancel'>Cancel</button>
+            </div>
+          </div>
+          <div id="overrideButtonSection">
+            <button class='btn btn-default override-plan'>Override Plan</button>
+          </div>
+        </td>
+      </tr>
+      <% if store.subscribed? %>
+        <tr>
+          <th>Created At</th>
+          <td>
+            <%= local_time(subscription.created_at) %>
+            (<%= time_ago_in_words(subscription.created_at) %> ago)
+          </td>
+        </tr>
+        <tr>
+          <th>Updated At</th>
+          <td>
+            <%= local_time(subscription.updated_at) %>
+            (<%= time_ago_in_words(subscription.updated_at) %> ago)
+          </td>
+        </tr>
+      <% end %>
     </table>
   </div>
 </div>
+
+<% content_for(:before_body_end) do %>
+  <script>
+      var trialUpdater = new TrialUpdater({
+          section_id: "extendTrialSectionInput",
+          button_section_id: "buttonSection",
+          trial_ended_at: "<%= store.trial_ends_at %>",
+          user_id: "<%= current_admin.id %>",
+          store_id: "<%= store.id %>",
+          subscribed: <%= store.subscribed? %>
+      });
+      var planOverrider = new PlanOverrider({
+          section_id: "overridePlanSectionInput",
+          button_id: "overrideButtonSection",
+          plan_drop_down_id: "planOverrideSelector",
+          user_id: "<%= current_admin.id %>",
+          store_id: "<%= store.id %>"
+      });
+  </script>
+<% end %>

@@ -66,6 +66,9 @@ Rails.application.routes.draw do
     resources :plans
     resources :uninstallations
     get 'stores/:store_id/subscriptions' => 'subscriptions#index', as: :subscriptions_store
+    match 'stores/extend_trial' => 'stores#extend_trial', via: [:post, :patch]
+    match 'stores/override_subscriptions' => 'stores#override_subscriptions', via: [:post, :patch]
+    match 'stores/notes' => 'stores#save_notes', via: [:post, :patch]
   end
     
   mount ShopifyApp::Engine, at: '/'

@@ -7,9 +7,7 @@
   <div class="card-body">
     <div class="tab-content">
       <div id="subscriptions" role="tabpanel" class="tab-pane active">
-        <% if @store.subscription.present? %>
-          <%= render partial: 'admins/subscriptions/summary', locals: { store: @store, subscription: @subscription  } %>
-        <% end %>
+        <%= render partial: 'admins/subscriptions/summary', locals: { store: @store, subscription: @subscription  } %>
       </div>
     </div>
   </div>

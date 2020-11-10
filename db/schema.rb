@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_06_111654) do
+ActiveRecord::Schema.define(version: 2020_11_09_015321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,6 +133,8 @@ ActiveRecord::Schema.define(version: 2020_11_06_111654) do
     t.boolean "show_additional_fields", default: false
     t.boolean "webhooks_enabled"
     t.integer "stock_threshold", default: 15
+    t.text "admin_notes"
+    t.datetime "trial_extend_date"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

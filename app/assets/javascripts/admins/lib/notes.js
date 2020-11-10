@@ -25,9 +25,9 @@ var AdminNotesUpdater = function(opts) {
             data: { note: note, store_id: storeId },
             dataType: "json"
         }).done(function (value) {
-            swal({ title: "Success", text: "The note has been saved.", type: "success", onClose: refreshNote(value)});
+            swal({ title: "Success", text: "The note has been saved.", type: "success", onClose: refreshNote(value) });
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            swal({ title: "Failed", text: "Your request has failed: " + textStatus + ", " + errorThrown, type: "error"});
+            swal({ title: "Failed", text: "Your request has failed: " + textStatus + ", " + errorThrown, type: "error" });
         });
     };
 

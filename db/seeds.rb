@@ -1,10 +1,4 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+# See https://docs.google.com/spreadsheets/d/1aeZr4BI_tFWwWZRWqV3xUqErYdDS6gf0Izli35QYKzE/edit#gid=0
 
 unless Plan.find_by(code: 'startup')
   Plan.create(
@@ -45,7 +39,7 @@ end
 unless Plan.find_by(code: 'medium')
   Plan.create(
     code: 'medium',
-    price: 149,
+    price: 99,
     name: "Medium",
     features: {
       custom_templates: true,
@@ -53,6 +47,23 @@ unless Plan.find_by(code: 'medium')
     },
     limits: {
       locations: 10,
+      reservations_per_month: 9999999
+    },
+    trial_days: 30
+  )
+end
+
+unless Plan.find_by(code: 'medium-2')
+  Plan.create(
+    code: 'medium-2',
+    price: 199,
+    name: "Medium 2",
+    features: {
+      custom_templates: true,
+      dev_support: true
+    },
+    limits: {
+      locations: 25,
       reservations_per_month: 9999999
     },
     trial_days: 30
@@ -76,11 +87,29 @@ unless Plan.find_by(code: 'large')
   )
 end
 
+unless Plan.find_by(code: 'large-2')
+  Plan.create(
+    code: 'large-2',
+    price: 599,
+    name: "Large 2",
+    features: {
+      custom_templates: true,
+      dev_support: true
+    },
+    limits: {
+      locations: 250,
+      reservations_per_month: 9999999
+    },
+    trial_days: 30
+  )
+end
+
+
 unless Plan.find_by(code: 'enterprise')
   Plan.create(
     code: 'enterprise',
     price: 999,
-    name: "Large",
+    name: "Enterprise",
     features: {
       custom_templates: true,
       dev_support: true

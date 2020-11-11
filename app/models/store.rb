@@ -518,12 +518,15 @@ class Store < ApplicationRecord
       return plan_overrides.to_h['code']
     end
 
+    # See https://docs.google.com/spreadsheets/d/1aeZr4BI_tFWwWZRWqV3xUqErYdDS6gf0Izli35QYKzE/edit?usp=sharing
     case distinctly_named_location_count
       when 0 then nil
-      when 1 then 'startup'
-      when 2..3 then 'small'
-      when 4..27 then 'medium' # The medium plan limit is 10, but they can pay for $9/mo per store so it is still cheaper to use the medium plan up until 27 locations.
-      when 28..167 then 'large' # The large plan limit is 100, but they can pay for $9/mo per store so it is still cheaper to use the medium plan up until 167 locations.
+      when 1..2 then 'startup'
+      when 3..6 then 'small'
+      when 7..20 then 'medium'
+      when 21..50 then 'medium-2'
+      when 51..250 then 'large'
+      when 251..417 then 'large-2'
       else 'enterprise'
     end
   end

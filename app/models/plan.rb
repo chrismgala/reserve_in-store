@@ -7,12 +7,17 @@ class Plan < ApplicationRecord
     limits['locations'].to_i
   end
 
+  def price_per_extra_location
+    return 9.0 if price.blank? || location_limit.to_i < 1 # Failsafe even though this should never be the case
+    price.to_f / location_limit.to_i
+  end
+
   def price_for_store(store)
     locations_left = location_limit - store.distinctly_named_location_count
     if locations_left >= 0
       price
     else
-      price + (9.0*(-locations_left))
+      price + (price_per_extra_location*(-locations_left))
     end
   end
 end

@@ -141,7 +141,7 @@ module Admins
     end
 
     ##
-    # PUT/PATCH /backend/stores/extend_trial
+    # PUT/PATCH /admin/stores/extend_trial
     def extend_trial
       respond_to do |format|
         if extend_trial_params_exist? && @store.extend_trial!(params[:length].to_i, params[:user_id].to_i, params[:note].to_s)

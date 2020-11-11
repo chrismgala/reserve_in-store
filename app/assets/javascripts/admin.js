@@ -4,6 +4,7 @@
 //= require metismenujs/dist/metismenujs
 //= require_tree ./backend/
 //= require jquery_ujs
+//= require chosen-jquery
 //= require lib/display_if_enabled
 //= require lib/display_if_selected_value
 
@@ -20,3 +21,7 @@
 
 //= require admins/lib/platform_data_displayer
 //= require sweetalert2/dist/sweetalert2.min
+
+//= require admins/lib/trial_updater
+//= require admins/lib/plan_overrider
+//= require admins/lib/notes

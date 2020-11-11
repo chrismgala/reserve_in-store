@@ -16,8 +16,8 @@
       <tr>
         <td><%= plan.id %></td>
         <td><%= plan.code %></td>
-        <td><%= plan.price %></td>
         <td><%= plan.name %></td>
+        <td><%= plan.price %></td>
         <td><%= plan.limits.to_a.map{ |limit| limit[1] if limit[1] }.join(', ') %></td>
         <td><%= plan.trial_days %>days</td>
         <td>

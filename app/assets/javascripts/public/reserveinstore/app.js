@@ -1,6 +1,6 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.2.4.3'; // Version of the JS library.
+    this.version = '1.2.4.4'; // Version of the JS library.
     var self = this;
     opts = opts || {};
     opts.app = self;

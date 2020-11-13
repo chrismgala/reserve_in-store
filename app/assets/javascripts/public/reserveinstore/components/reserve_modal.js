@@ -473,9 +473,14 @@ ReserveInStore.ReserveModal = function (opts) {
      * Set close conditions to two modals: click on the "x", "OK" or click anywhere outside of the modal
      */
     var setCloseConditions = function () {
-        var $span = $modalBackground.find(".reserveInStore-reserve-close, .reserveInStore-success-close");
-        $span.on('click', function () {
+        $reserveModal.find(".reserveInStore-reserve-close").on('click', function () {
             self.hide();
+        });
+
+        $successModal.find('.reserveInStore-success-close').on('click', function() {
+            if (window.location.toString().indexOf('/cart') !== -1) {
+                window.location.reload();
+            }
         });
 
         $(document).on('click', function (event) {

@@ -147,7 +147,11 @@
 
 .ris-cart-item-avail {
     display: none;
-    color: #ff0000;
+    color: #ffffff;
+    background: #ff0000;
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 

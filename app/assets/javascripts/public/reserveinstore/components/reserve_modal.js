@@ -9,7 +9,7 @@ ReserveInStore.ReserveModal = function (opts) {
     var showReserveBtnWhenUnknown = false;
     var inStockTextWhenUnknown = false;
 
-    // inventoryData is a 3-level nested hash that contains data pertaining to product stock by location,
+    // inventoryData and stockData is a 3-level nested hash that contains data pertaining to product stock by location,
     // the fields should look like this:
     // * product id: key for the 1st level of the hash
     //        * variant_id: key for the 2nd level of the hash
@@ -17,6 +17,7 @@ ReserveInStore.ReserveModal = function (opts) {
     //                 * stock value: value for the 3rd level of the hash. This data is what we are ultimately after
     // { product_id_1: {variant_id_1: {location_1: stock_value_1, location_2:
     var inventoryData = {};
+    var stockData = {};
 
     var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock", " out of ", " items available", "stock unknown"];
 
@@ -461,6 +462,36 @@ ReserveInStore.ReserveModal = function (opts) {
         }
     };
 
+    var checkReserveItemsStock = function (formData) {
+        var reserveItems = formData.reservation.cart.items;
+        var productIdArray = [];
+        for (var i = 0; i < reserveItems.length; i++) {
+            productIdArray.push(reserveItems[i].product_id);
+        }
+        api.getStockAvail({ product_ids: productIdArray }, function(stock) {
+            stockData = stock;
+            if (showHideReserveItemsAvailMessage(formData.reservation.location_id, reserveItems)) {
+                api.createReservation(getFormData(), self.displaySuccessModal, showErrorMessages);
+            }
+        });
+    };
+
+    var showHideReserveItemsAvailMessage = function (locationId, reserveItems) {
+        var currentLocationPlatformId = getLocationPlatformId(locationId);
+        var reserveItemsStockAvail = true;
+        for (var k = 0; k < reserveItems.length; k++) {
+            var $itemStockAvailsDiv = $reserveModal.find('#cartItemAvail-' + reserveItems[k].variant_id);
+            if (reserveItems[k].quantity > stockData[reserveItems[k].product_id][reserveItems[k].variant_id][currentLocationPlatformId]) {
+                $itemStockAvailsDiv.show();
+                reserveItemsStockAvail = false;
+            }
+            else {
+                $itemStockAvailsDiv.hide();
+            }
+        }
+        return reserveItemsStockAvail;
+    };
+
     /**
      * Center the price
      */
@@ -516,7 +547,7 @@ ReserveInStore.ReserveModal = function (opts) {
      */
     self.submitForm = function () {
         if ($form[0].checkValidity()) {
-            api.createReservation(getFormData(), self.displaySuccessModal, showErrorMessages);
+            checkReserveItemsStock(getFormData());
         } else {
             $form.find('input, select').addClass('reserveInStore-attempted');
             $form[0].reportValidity();

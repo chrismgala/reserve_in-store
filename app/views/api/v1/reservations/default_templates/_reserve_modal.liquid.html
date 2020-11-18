@@ -99,9 +99,11 @@
                                 {% endif %}
 
                                 <div class="ris-cart-item-stockStatus" id="cartItemStockStatus-{{ item.variant_id }}"></div>
-
                             </div>
                             <div class="ris-cart-item-total">{{ item.total_formatted }}</div>
+                        </div>
+                        <div class="ris-cart-item-avail" id="cartItemAvail-{{ item.variant_id }}">
+                            The requested quantity is more than your store location quantity available. Please reduce your quantity or choose another location that may have more in stock.
                         </div>
                         {% endfor %}
                     </div>

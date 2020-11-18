@@ -145,6 +145,11 @@
     background: grey;
 }
 
+.ris-cart-item-avail {
+    display: none;
+    color: #ff0000;
+}
+
 
 .reserveInStore-reserve-modal .ris-columns {
     display: flex;

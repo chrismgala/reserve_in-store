@@ -27,6 +27,15 @@ module Api
         not_found("Products or Variants were not found")
       end
 
+      ##
+      # GET /api/v1/stock.json?product_ids=#{product_id},#{product_id}
+      def stock
+        fetcher = InventoryFetcher.new(@store, params[:product_ids])
+
+        render json: fetcher.load_levels_stock_avail
+      rescue ActiveResource::ResourceNotFound
+        not_found("Products or Variants were not found")
+      end
       private
 
     end

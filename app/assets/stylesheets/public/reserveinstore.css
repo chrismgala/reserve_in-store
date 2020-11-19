@@ -145,7 +145,7 @@
     background: grey;
 }
 
-.ris-cart-item-avail {
+.ris-cart-items-not-avail {
     display: none;
     color: #ffffff;
     background: #ff0000;
@@ -154,6 +154,9 @@
     margin-bottom: 10px;
 }
 
+.ris-cartItems-list-qty-not-avail {
+    font-weight: bold;
+}
 
 .reserveInStore-reserve-modal .ris-columns {
     display: flex;

@@ -23,6 +23,8 @@ ReserveInStore.ReserveModal = function (opts) {
 
     var product, variant, cart, lineItem = {};
 
+    var reservationFormFieldPair = {};
+
     var init = function () {
         api = opts.api;
         config = opts.config || {};
@@ -180,6 +182,7 @@ ReserveInStore.ReserveModal = function (opts) {
         $successModal = $modalBackground.find('.reserveInStore-success-modal');
         centerPriceDiv();
         setCloseConditions();
+        inputFormValue();
 
         $form = $reserveModal.find(".reserveInStore-reservation-form");
         setSubmitConditions();
@@ -224,8 +227,21 @@ ReserveInStore.ReserveModal = function (opts) {
 
     self.hide = self.close = function() {
         self.$modalContainer.hide();
-
         opts.app.trigger('reserve_modal.close reserve_modal.hide', self);
+    };
+
+    var rememberFromInputValue = function() {
+        $('.reserveInStore-reservation-form input[type="text"]').each(function() {
+            if ($(this).attr("name").length > 0) {
+                reservationFormFieldPair[$(this).attr("name")] = $(this).val();
+            }
+        });
+    }
+
+    var inputFormValue = function () {
+        $('.reserveInStore-reservation-form input[type="text"]').each(function() {
+            $(this).val(reservationFormFieldPair[$(this).attr("name")]);
+        });
     };
 
     var adjustModalHeight = function() {
@@ -491,6 +507,8 @@ ReserveInStore.ReserveModal = function (opts) {
         if (!reserveItemsStockAvail) {
             $reserveItemsNotAvailMessageDiv.show();
             $reserveModal.find('.ris-cartItems-list-qty-not-avail').text(productName.slice(0, -2));
+
+            rememberFromInputValue();
         }
         else
         {

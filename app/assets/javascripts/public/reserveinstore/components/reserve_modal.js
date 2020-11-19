@@ -230,7 +230,7 @@ ReserveInStore.ReserveModal = function (opts) {
         opts.app.trigger('reserve_modal.close reserve_modal.hide', self);
     };
 
-    var rememberFromInputValue = function() {
+    var rememberFormInputValue = function() {
         $('.reserveInStore-reservation-form input[type="text"]').each(function() {
             if ($(this).attr("name").length > 0) {
                 reservationFormFieldPair[$(this).attr("name")] = $(this).val();
@@ -508,7 +508,7 @@ ReserveInStore.ReserveModal = function (opts) {
             $reserveItemsNotAvailMessageDiv.show();
             $reserveModal.find('.ris-cartItems-list-qty-not-avail').text(productName.slice(0, -2));
 
-            rememberFromInputValue();
+            rememberFormInputValue();
         }
         else
         {

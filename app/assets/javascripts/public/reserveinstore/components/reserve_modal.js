@@ -512,11 +512,11 @@ ReserveInStore.ReserveModal = function (opts) {
 
             // if there are more than 1 items not available show text "are" else show text "is"
             if (totalItemNotAvail > 1) {
-                $reserveModal.find('.ris-totalItem-one-no-avail-text').hide();
-                $reserveModal.find('.ris-totalItem-above-one-no-avail-text').show();
+                $reserveModal.find('.ris-is-text').hide();
+                $reserveModal.find('.ris-are-text').show();
             } else {
-                $reserveModal.find('.ris-totalItem-above-one-no-avail-text').hide();
-                $reserveModal.find('.ris-totalItem-one-no-avail-text').show();
+                $reserveModal.find('.ris-are-text').hide();
+                $reserveModal.find('.ris-is-text').show();
             }
             rememberFormInputValue();
         } else {

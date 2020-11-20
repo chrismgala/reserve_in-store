@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       match 'reservations/modal' => 'reservations#modal', via: [:post, :get]
       get 'inventory' => 'inventory#show'
       get 'inventories' => 'inventory#index'
+      get 'stock' => 'inventory#stock'
       post 'reservations' => 'reservations#create'
       get 'reservations' => 'reservations#index'
 

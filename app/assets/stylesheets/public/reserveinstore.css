@@ -145,6 +145,18 @@
     background: grey;
 }
 
+.ris-cart-items-not-avail {
+    display: none;
+    color: #ffffff;
+    background: #ff0000;
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.ris-cartItems-list-qty-not-avail {
+    font-weight: bold;
+}
 
 .reserveInStore-reserve-modal .ris-columns {
     display: flex;

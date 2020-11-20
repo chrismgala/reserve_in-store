@@ -82,4 +82,18 @@ class InventoryFetcher
     end.to_h
   end
 
+  def load_levels_stock_avail
+    stock_levels = inventory.to_h
+
+    stock_levels.keys.map do |product_id|
+      product_stock_levels = stock_levels[product_id].keys.map do |variant_id|
+        new_levels = stock_levels[product_id][variant_id].keys.map do |platform_location_id|
+          [platform_location_id, stock_levels[product_id][variant_id][platform_location_id]]
+        end.to_h
+        [variant_id, new_levels]
+      end.to_h
+      [product_id, product_stock_levels]
+    end.to_h
+  end
+
 end

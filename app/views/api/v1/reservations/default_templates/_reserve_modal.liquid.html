@@ -98,14 +98,22 @@
                                     <div class="ris-cart-item-variant">{{ item.variant_title }}</div>
                                 {% endif %}
 
-                                <div class="ris-cart-item-stockStatus" id="cartItemStockStatus-{{ item.variant_id }}"></div>
+                                <div class="ris-cart-items-qty">
+                                    qty: {% if item.quantity %} {{ item.quantity }} {% else %} 1 {% endif %}
+                                </div>
 
+                                <div class="ris-cart-item-stockStatus" id="cartItemStockStatus-{{ item.variant_id }}"></div>
                             </div>
                             <div class="ris-cart-item-total">{{ item.total_formatted }}</div>
                         </div>
                         {% endfor %}
                     </div>
 
+                    <div class="ris-cart-items-not-avail">
+                        <span class="ris-cartItems-list-qty-not-avail"></span> quantity
+                        <span class="ris-is-text">is</span> <span class="ris-are-text">are</span>
+                        more than what's available at the selected location. Please reduce your purchase quantity, choose another location or contact us for help.
+                    </div>
                     <div class="ris-noteAfterCart">You will receive a confirmation email after you submit your reservation.</div>
                     <div class="ris-no-stock-message">Some products are out of stock. It is not possible to reserve . </div>
                     <button type="button" class="reserveInStore-form-submit">Reserve Now</button>

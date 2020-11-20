@@ -486,13 +486,13 @@ ReserveInStore.ReserveModal = function (opts) {
         }
         api.getStockAvail({ product_ids: productIdArray }, function(stock) {
             stockData = stock;
-            if (showHideReserveItemsAvailMessage(formData.reservation.location_id, reserveItems)) {
+            if (showHideReserveItemsNotAvailMessage(formData.reservation.location_id, reserveItems)) {
                 api.createReservation(getFormData(), self.displaySuccessModal, showErrorMessages);
             }
         });
     };
 
-    var showHideReserveItemsAvailMessage = function (locationId, reserveItems) {
+    var showHideReserveItemsNotAvailMessage = function (locationId, reserveItems) {
         var currentLocationPlatformId = getLocationPlatformId(locationId);
         var reserveItemsStockAvail = true;
         var $reserveItemsNotAvailMessageDiv = $reserveModal.find('.ris-cart-items-not-avail');

@@ -496,6 +496,8 @@ ReserveInStore.ReserveModal = function (opts) {
         var currentLocationPlatformId = getLocationPlatformId(locationId);
         var reserveItemsStockAvail = true;
         var $reserveItemsNotAvailMessageDiv = $reserveModal.find('.ris-cart-items-not-avail');
+        var $reserveIsTextSpan = $reserveModal.find('.ris-is-text');
+        var $reserveAreTextSpan = $reserveModal.find('.ris-are-text');
         var productName = "";
         var totalItemNotAvail = 0;
         for (var k = 0; k < reserveItems.length; k++) {
@@ -512,11 +514,11 @@ ReserveInStore.ReserveModal = function (opts) {
 
             // if there are more than 1 items not available show text "are" else show text "is"
             if (totalItemNotAvail > 1) {
-                $reserveModal.find('.ris-is-text').hide();
-                $reserveModal.find('.ris-are-text').show();
+                $reserveAreTextSpan.show();
+                $reserveIsTextSpan.hide();
             } else {
-                $reserveModal.find('.ris-are-text').hide();
-                $reserveModal.find('.ris-is-text').show();
+                $reserveIsTextSpan.show();
+                $reserveAreTextSpan.hide();
             }
             rememberFormInputValue();
         } else {

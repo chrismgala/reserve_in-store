@@ -236,7 +236,7 @@ ReserveInStore.ReserveModal = function (opts) {
                 reservationFormFieldPair[$(this).attr("name")] = $(this).val();
             }
         });
-    }
+    };
 
     var inputFormValue = function () {
         $('.reserveInStore-reservation-form input[type="text"]').each(function() {
@@ -497,10 +497,12 @@ ReserveInStore.ReserveModal = function (opts) {
         var reserveItemsStockAvail = true;
         var $reserveItemsNotAvailMessageDiv = $reserveModal.find('.ris-cart-items-not-avail');
         var productName = "";
+        var totalItemNotAvail = 0;
         for (var k = 0; k < reserveItems.length; k++) {
             if (reserveItems[k].quantity > stockData[reserveItems[k].product_id][reserveItems[k].variant_id][currentLocationPlatformId]) {
                 reserveItemsStockAvail = false;
                 productName = productName + reserveItems[k].product_title + ", ";
+                totalItemNotAvail = totalItemNotAvail + 1;
             }
         }
 
@@ -508,10 +510,16 @@ ReserveInStore.ReserveModal = function (opts) {
             $reserveItemsNotAvailMessageDiv.show();
             $reserveModal.find('.ris-cartItems-list-qty-not-avail').text(productName.slice(0, -2));
 
+            // if there are more than 1 items not available show text "are" else show text "is"
+            if (totalItemNotAvail > 1) {
+                $reserveModal.find('.ris-totalItem-one-no-avail-text').hide();
+                $reserveModal.find('.ris-totalItem-above-one-no-avail-text').show();
+            } else {
+                $reserveModal.find('.ris-totalItem-above-one-no-avail-text').hide();
+                $reserveModal.find('.ris-totalItem-one-no-avail-text').show();
+            }
             rememberFormInputValue();
-        }
-        else
-        {
+        } else {
             $reserveItemsNotAvailMessageDiv.hide();
         }
         return reserveItemsStockAvail;

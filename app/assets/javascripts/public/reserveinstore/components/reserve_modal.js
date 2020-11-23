@@ -546,6 +546,8 @@ ReserveInStore.ReserveModal = function (opts) {
         $successModal.find('.reserveInStore-success-close').on('click', function() {
             if (window.location.toString().indexOf('/cart') !== -1) {
                 window.location.reload();
+            } else {
+                self.hide();
             }
         });
 

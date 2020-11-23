@@ -12,7 +12,8 @@ class ReservationMailer < ApplicationMailer
     @rendered_location_email_template = @reservation.rendered_location_email_template
     staged_mail(to: store_location_contact,
                 subject: store.location_notification_subject.presence || "New In-store Reservation",
-                from: location_notification_sender)
+                from: location_notification_sender,
+                reply_to: customer_contact)
   end
 
   ##

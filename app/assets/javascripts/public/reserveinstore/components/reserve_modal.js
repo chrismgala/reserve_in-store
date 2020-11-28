@@ -476,6 +476,7 @@ ReserveInStore.ReserveModal = function (opts) {
         var itemStockStatusId = '#cartItemStockStatus-' + variantId;
         var $itemStockStatusDiv = $reserveModal.find(itemStockStatusId);
         $itemStockStatusDiv.removeClass();
+        $itemStockStatusDiv.text('');
         $itemStockStatusDiv.addClass('ris-cart-item-stockStatus ');
 
         var whereToShow = 'in_reserve_modal_cart_items';

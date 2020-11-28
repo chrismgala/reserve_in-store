@@ -123,7 +123,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
      * {string} stockStatusLabelDefaultCaptionKey - stock status label key: eg: "no_stock", "low_stock", "in_stock"....
      */
     var showHideStockStatusLabel = function (stockStatusLabelId, stockStatusLabelClassName, stockStatusLabelDefaultCaption, stockStatusLabelWhereToDisplay, stockStatusLabelDefaultCaptionKey) {
-        $stockStatusDiv = $modal.find(stockStatusLabelId);
+        var $stockStatusDiv = $modal.find(stockStatusLabelId);
         if (storeStockLabelsToDisplay[stockStatusLabelWhereToDisplay] && storeStockLabelsToDisplay[stockStatusLabelWhereToDisplay].indexOf(stockStatusLabelDefaultCaptionKey) !== -1) {
             $stockStatusDiv.text(stockStatusLabelDefaultCaption);
             $stockStatusDiv.addClass(stockStatusLabelClassName);

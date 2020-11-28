@@ -18,3 +18,11 @@
     margin-bottom: 12px;
     font-size: 11px;
 }
+
+.stock-status-li {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: top;
+    width: 48%;
+    margin-bottom: 20px;
+}

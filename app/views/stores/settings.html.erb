@@ -36,6 +36,14 @@
 
 <%= render partial: 'layouts/partials/error_banner', locals: {item: @current_store} %>
 
+<% if @current_store.distinctly_named_location_count > 0 && !@current_store.sandbox_store? %>
+  <% if @current_store.needs_subscription? %>
+    <%= render partial: 'stores/subscriptions/partials/need_subscription', locals: { store: @current_store } %>
+  <% else %>
+    <%= render partial: 'stores/subscriptions/partials/upgrade_subscription', locals: { store: @current_store } %>
+  <% end %>
+<% end %>
+
 <div class="Polaris-Page">
   <div class="Polaris-Page__Content">
     <%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>

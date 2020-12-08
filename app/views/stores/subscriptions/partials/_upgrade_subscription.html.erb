@@ -1,4 +1,4 @@
-<% if @current_store.recommended_plan.price > @current_store.subscription.plan.price %>
+<% if store.recommended_plan.price > store.subscription.plan.price %>
   <div class="Polaris-Layout__Section Polaris-Banner Polaris-Banner--statusWarning Polaris-Banner--withinPage subscription-banner">
     <div class="Polaris-Banner__Ribbon">
       <span class="Polaris-Icon Polaris-Icon--colorYellowDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop">
@@ -10,17 +10,17 @@
     </div>
     <div class="Polaris-Banner__ContentWrapper">
       <div class="Polaris-Banner__Heading">
-        <div class="Polaris-Heading">Subscribed to <%= @current_store.subscription.plan.name %> Plan</div>
+        <div class="Polaris-Heading">Subscribed to <%= store.subscription.plan.name %> Plan</div>
       </div>
       <div class="Polaris-Banner__Content">
-        You've exceeded the maximum number of locations for your current plan (Limit: <%= @current_store.subscription.plan.limits["locations"] %>). Please upgrade your plan to continue.
+        You've exceeded the maximum number of locations for your current plan (Limit: <%= store.subscription.plan.limits["locations"] %>). Please upgrade your plan to continue.
         If you have any questions/concerns/comments please contact our support team.
-        <div class="details">There are <%= @current_store.distinctly_named_location_count %> active locations in your store. </div>
+        <div class="details">There are <%= store.distinctly_named_location_count %> active locations in your store. </div>
         <div class="Polaris-Banner__Actions">
           <div class="Polaris-ButtonGroup">
             <div class="Polaris-ButtonGroup__Item">
               <div class="Polaris-Banner__PrimaryAction">
-                <a href="<%= subscribe_path(plan: @current_store.recommended_plan.code, post_subscribe_url: stores_settings_url) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
+                <a href="<%= subscribe_path(plan: store.recommended_plan.code, post_subscribe_url: stores_settings_url) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
                   Upgrade Plan
                 </a>
               </div>

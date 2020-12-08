@@ -38,9 +38,9 @@
 
 <% if @current_store.distinctly_named_location_count > 0 && !@current_store.sandbox_store? %>
   <% if @current_store.needs_subscription? %>
-    <%= render partial: 'stores/subscriptions/partials/need_subscription' %>
+    <%= render partial: 'stores/subscriptions/partials/need_subscription', locals: { store: @current_store } %>
   <% else %>
-    <%= render partial: 'stores/subscriptions/partials/upgrade_subscription' %>
+    <%= render partial: 'stores/subscriptions/partials/upgrade_subscription', locals: { store: @current_store } %>
   <% end %>
 <% end %>
 

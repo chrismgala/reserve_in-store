@@ -1,4 +1,4 @@
-<% if @current_store.trial_ends_at > Time.now %>
+<% if store.trial_ends_at > Time.now %>
   <div class="Polaris-Layout__Section Polaris-Banner Polaris-Banner--statusWarning Polaris-Banner--withinPage">
     <div class="Polaris-Banner__Ribbon">
       <span class="Polaris-Icon Polaris-Icon--colorYellowDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop">
@@ -13,12 +13,12 @@
         <div class="Polaris-Heading">You are not subscribed to a plan yet.</div>
       </div>
       <div class="Polaris-Banner__Content">
-         You have <span class="Polaris-TextStyle--variationStrong"><%= time_ago_in_words(@current_store.trial_ends_at) %></span> left of your unlimited-use trial period.
+         You have <span class="Polaris-TextStyle--variationStrong"><%= time_ago_in_words(store.trial_ends_at) %></span> left of your unlimited-use trial period.
         <div class="Polaris-Banner__Actions">
           <div class="Polaris-ButtonGroup">
             <div class="Polaris-ButtonGroup__Item">
               <div class="Polaris-Banner__PrimaryAction">
-                <a href="<%= subscribe_path(plan: @current_store.recommended_plan.code, post_subscribe_url: stores_settings_url) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
+                <a href="<%= subscribe_path(plan: store.recommended_plan.code, post_subscribe_url: stores_settings_url) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
                   Subscribe Now
                 </a>
               </div>
@@ -46,14 +46,14 @@
         <div class="Polaris-Heading">You are not subscribed to a plan yet.</div>
       </div>
       <div class="Polaris-Banner__Content">
-         Trial expired <span class="Polaris-TextStyle--variationStrong"><%= time_ago_in_words(@current_store.trial_ends_at) %></span> ago.
+         Trial expired <span class="Polaris-TextStyle--variationStrong"><%= time_ago_in_words(store.trial_ends_at) %></span> ago.
          Please subscribe to a plan by clicking subscribe link to continue. If you have any questions/concerns/comments please contact our support team.
 
         <div class="Polaris-Banner__Actions">
           <div class="Polaris-ButtonGroup">
             <div class="Polaris-ButtonGroup__Item">
               <div class="Polaris-Banner__PrimaryAction">
-                <a href="<%= subscribe_path(plan: @current_store.recommended_plan.code, post_subscribe_url: stores_settings_url) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
+                <a href="<%= subscribe_path(plan: store.recommended_plan.code, post_subscribe_url: stores_settings_url) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
                   Subscribe Now
                 </a>
               </div>

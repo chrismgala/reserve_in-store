@@ -22,8 +22,8 @@ module StoresHelper
 
   def stock_status_where_to_show
     {
-      in_reserve_modal_product_page_locations: "Locations on Product page",
-      in_reserve_modal_cart_page_locations: "Locations on cart page",
+      in_reserve_modal_product_page_locations: "Reserve modal locations (product page)",
+      in_reserve_modal_cart_page_locations: "Reserve modal locations (cart page)",
       in_reserve_modal_cart_items: "Reserved product or cart items",
       in_choose_location_modal_product_page: "Choose Location Modal (product page)"
     }

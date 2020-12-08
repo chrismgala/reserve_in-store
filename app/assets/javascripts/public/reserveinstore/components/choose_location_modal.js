@@ -17,9 +17,6 @@ ReserveInStore.ChooseLocationModal = function (opts) {
 
     // set this default value for old stores because without reinstalling footer script labels will not be visible.
     var DEFAULT_STOCK_STATUS_LABEL_VISIBLE = {
-        in_reserve_modal_product_page_locations: ["in_stock", "low_stock", "no_stock", "stock_unknown"],
-        in_reserve_modal_cart_page_locations: ["all_items_available", "x_items_available", "no_stock"],
-        in_reserve_modal_cart_items: ["in_stock", "low_stock", "no_stock", "stock_unknown"],
         in_choose_location_modal_product_page: ["in_stock", "low_stock", "no_stock", "stock_unknown"]
     };
 

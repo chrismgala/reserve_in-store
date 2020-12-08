@@ -18,7 +18,10 @@
     margin-bottom: 12px;
     font-size: 11px;
 }
-
+.setupPanel .show-more-options {
+    text-align: right;
+    margin-top: 10px;
+}
 .stock-status-li {
     display: inline-block;
     margin-right: 10px;

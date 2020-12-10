@@ -68,11 +68,11 @@ ReserveInStore.ChooseLocationModal = function (opts) {
         });
 
         locationsManager.whenReady(function(bestLocation) {
+            updateLocationStockInfo(locationsManager.getLocations());
+
             if (!bestLocation) return; // Could not determine best location
 
             self.$modalContainer.find('input[name="location_id"][value="'+bestLocation.id+'"]').prop('checked', true);
-
-            updateLocationStockInfo(locationsManager.getLocations());
         });
 
         adjustModalHeight();

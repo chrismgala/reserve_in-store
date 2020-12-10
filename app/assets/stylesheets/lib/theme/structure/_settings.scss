@@ -1,0 +1,21 @@
+// 
+// settings.scss
+//
+.stock-status-where-to-display-li {
+    float: left;
+    padding: 5px 0;
+    width: 50%;
+}
+.stock-status-label-li {
+    padding: 5px 0;
+}
+.stock-label-value {
+    margin-right: 10px;
+}
+.stock-status-label-head {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.stock-status-label-head li:nth-child(3) {
+    clear: both;
+}

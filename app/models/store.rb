@@ -30,7 +30,7 @@ class Store < ApplicationRecord
     :custom_css, :custom_css_enabled,
     :location_notification_subject, :customer_confirmation_subject,
     :location_notification_sender_name, :customer_confirmation_sender_name,
-    :show_additional_fields, :webhooks_enabled, :stock_threshold
+    :show_additional_fields, :webhooks_enabled, :stock_threshold, show_stock_status_labels: {}
   ]
 
   JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].to_s.chomp('/')}/reserveinstore.js"
@@ -385,7 +385,8 @@ class Store < ApplicationRecord
           no_location_selected: stock_status_behavior_when_no_location_selected,
           no_nearby_locations_and_no_location: stock_status_behavior_when_no_nearby_locations_and_no_location,
           show_when_only_available_online: show_when_only_available_online
-        }
+        },
+        stock_label: show_stock_status_labels
       },
       api_url: ENV['BASE_APP_URL'],
       store_pk: public_key

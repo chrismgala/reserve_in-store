@@ -99,6 +99,32 @@
           </option>
         </select>
       </div>
+
+      <div class="mt-3">
+        Stock Status Labels
+        <ul class="stock-status-label-head list-unstyled">
+          <% stock_status_where_to_show.each do |stock_status_where_to_show_key, stock_status_where_to_show_value| %>
+            <li class="stock-status-where-to-display-li">
+              <h5><%= stock_status_where_to_show_value %></h5>
+              <% if stock_status_where_to_show_key.to_s == "in_reserve_modal_cart_page_locations"
+                   assign stock_status_labels = default_stock_status_labels_cart_page
+                 else
+                   assign stock_status_labels = default_stock_status_labels
+                 end
+              %>
+              <ul class="list-unstyled">
+                <% stock_status_labels.each do |stock_status_label_key, stock_status_label_value| %>
+                  <% default_checked = @store.show_stock_status_labels[stock_status_where_to_show_key.to_s].include?(stock_status_label_key.to_s) rescue false %>
+                  <li class="stock-status-label-li">
+                    <%= check_box_tag "store[show_stock_status_labels][#{stock_status_where_to_show_key}][]", stock_status_label_key, default_checked %>
+                    <span class="stock-label-value"><%= stock_status_label_value %></span>
+                  </li>
+                <% end %>
+              </ul>
+            </li>
+          <% end %>
+        </ul>
+      </div>
     </div>
   </div>
 

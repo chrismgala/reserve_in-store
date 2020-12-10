@@ -19,17 +19,31 @@ ReserveInStore.ReserveModal = function (opts) {
     var inventoryData = {};
     var stockData = {};
 
-    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock", " out of ", " items available", "stock unknown"];
+    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock", " out of ", " items available", "stock unknown", "available"];
+
+    // check stores_helper for existing key name used
+    var DEFAULT_STOCK_CAPTIONS_KEY = ["no_stock", "low_stock", "in_stock", " out of ", "x_items_available", "stock_unknown", "all_items_available"];
+
+    // setting this default value for old stores because without reinstalling footer script labels will not be visible
+    var DEFAULT_STOCK_STATUS_LABEL_VISIBLE = {
+        in_reserve_modal_product_page_locations: ["in_stock", "low_stock", "no_stock", "stock_unknown"],
+        in_reserve_modal_cart_page_locations: ["x_items_available", "no_stock"],
+        in_reserve_modal_cart_items: ["in_stock", "low_stock", "no_stock", "stock_unknown"],
+        in_choose_location_modal_product_page: ["in_stock", "low_stock", "no_stock", "stock_unknown"]
+    };
 
     var product, variant, cart, lineItem = {};
 
     var reservationFormFieldPair = {};
+
+    var storeStockLabelsToDisplay = {};
 
     var init = function () {
         api = opts.api;
         config = opts.config || {};
         showReserveBtnWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('show_button') !== -1;
         inStockTextWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('in_stock') !== -1;
+        storeStockLabelsToDisplay = config.stock_status.stock_label || DEFAULT_STOCK_STATUS_LABEL_VISIBLE;
         updateCartOnAjax();
     };
 
@@ -261,13 +275,29 @@ ReserveInStore.ReserveModal = function (opts) {
         $fit.css('max-height', totalHeight);
     };
 
+    /*
+     * This function will show/hide stock status label depending on store settings which stock labels store owner want to show.
+     * {string} stockStatusLabelId - stock status label div id eg: '#locationStockStatus-' + locations[i].id
+     * {string} stockStatusLabelClassName - which classname we need to add eg: ris-location-stockStatus-in-stock
+     * {string} stockStatusLabelDefaultCaption - stock label text that we want to show eg: "No Stock", "Low Stock", "In Stock"....
+     * {string} stockStatusLabelWhereToDisplay - which modal and where we want to show eg: in_reserve_modal_product_page_location
+     * {string} stockStatusLabelDefaultCaptionKey - stock status label key: eg: "no_stock", "low_stock", "in_stock"....
+     */
+    var showHideStockStatusLabel = function (stockStatusLabelId, stockStatusLabelClassName, stockStatusLabelDefaultCaption, stockStatusLabelWhereToDisplay, stockStatusLabelDefaultCaptionKey) {
+        var $stockStatusDiv = $reserveModal.find(stockStatusLabelId);
+        if (storeStockLabelsToDisplay[stockStatusLabelWhereToDisplay] && storeStockLabelsToDisplay[stockStatusLabelWhereToDisplay].indexOf(stockStatusLabelDefaultCaptionKey) !== -1) {
+            $stockStatusDiv.text(stockStatusLabelDefaultCaption);
+            $stockStatusDiv.addClass(stockStatusLabelClassName);
+        }
+    };
+
     /**
      * This function will update the location Divs in the reserve modal with stock information.
      * @param locations - all valid locations for this store
      */
     var updateLocationStockInfo = function (locations) {
         var inventoryLocations, stockStatus;
-        var $locationContainer, $locationInput, $stockStatusDiv;
+        var $locationContainer, $locationInput, stockStatusId;
 
         if (!inventoryData) return;
 
@@ -277,27 +307,31 @@ ReserveInStore.ReserveModal = function (opts) {
         }
 
         if (inventoryLocations) {
+            var whereToShow = 'in_reserve_modal_product_page_locations';
             // go through each location and update it with stock status
             for (var i = 0; i < locations.length; i++) {
                 $locationContainer = $reserveModal.find('#risLocation-' + locations[i].id);
                 $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id);
-                $stockStatusDiv = $reserveModal.find('#locationStockStatus-' + locations[i].id);
+                stockStatusId = '#locationStockStatus-' + locations[i].id;
 
                 stockStatus = inventoryLocations[locations[i].platform_location_id];
 
                 if (stockStatus === 'in_stock') {
-                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
-                    $stockStatusDiv.addClass('ris-location-stockStatus-in-stock');
+                    showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-in-stock', DEFAULT_STOCK_CAPTIONS[2], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[2]);
                 } else if (stockStatus === 'low_stock') {
-                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
-                    $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
+                    showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-low-stock', DEFAULT_STOCK_CAPTIONS[1], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[1]);
                 } else if (stockStatus === 'out_of_stock') {
                     // if there is no stock, then disable the location so that it cannot be selected
                     $locationInput.prop('disabled', true);
                     $locationInput.prop('checked', false);
                     $locationContainer.addClass('ris-location-disabled');
-                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
-                    $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
+                    showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-no-stock', DEFAULT_STOCK_CAPTIONS[0], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[0]);
+                } else {
+                    if (inStockTextWhenUnknown) {
+                        showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-in-stock', DEFAULT_STOCK_CAPTIONS[2], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[2]);
+                    } else {
+                        showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-stock-unknown', DEFAULT_STOCK_CAPTIONS[5], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[5]);
+                    }
                 }
             }
         }
@@ -312,7 +346,7 @@ ReserveInStore.ReserveModal = function (opts) {
      */
     var updateCartLocationStockInfo = function (locations) {
         var inventoryLocations, stockStatus;
-        var $locationContainer, $locationInput, $stockStatusDiv;
+        var $locationContainer, $locationInput, stockStatusId;
 
         var cartItems = cart.items;
         if (!cartItems || !inventoryData) return;
@@ -339,18 +373,19 @@ ReserveInStore.ReserveModal = function (opts) {
 
             $locationContainer = $reserveModal.find('#risLocation-' + locations[i].id);
             $locationInput = $reserveModal.find('#reservation_location_id-' + locations[i].id);
-            $stockStatusDiv = $reserveModal.find('#locationStockStatus-' + locations[i].id);
-
+            stockStatusId = '#locationStockStatus-' + locations[i].id;
+            var whereToShow = 'in_reserve_modal_cart_page_locations';
             // set the stock status based on how many items are available in this location
             if (stockCount === 0) {
                 $locationInput.prop('disabled', true);
                 $locationContainer.addClass('ris-location-disabled');
-                $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
-                $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
+                showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-no-stock', DEFAULT_STOCK_CAPTIONS[0], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[0]);
             } else if ((stockCount < cartItems.length) && (stockCount > 0)) {
                 // this caption will read "X out of Y items available"
-                $stockStatusDiv.text(stockCount + DEFAULT_STOCK_CAPTIONS[3] + cartItems.length + DEFAULT_STOCK_CAPTIONS[4]);
-                $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
+                var stockStatusText = stockCount + DEFAULT_STOCK_CAPTIONS[3] + cartItems.length + DEFAULT_STOCK_CAPTIONS[4];
+                showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-low-stock', stockStatusText, whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[4]);
+            } else {
+                showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-in-stock', DEFAULT_STOCK_CAPTIONS[6], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[6]);
             }
         }
     };
@@ -438,27 +473,25 @@ ReserveInStore.ReserveModal = function (opts) {
      * update stock message on each product / cart item
      */
     var updateProductsStockInfo = function (variantId, stockStatus) {
-        var $itemStockStatusDiv = $reserveModal.find('#cartItemStockStatus-' + variantId);
+        var itemStockStatusId = '#cartItemStockStatus-' + variantId;
+        var $itemStockStatusDiv = $reserveModal.find(itemStockStatusId);
         $itemStockStatusDiv.removeClass();
+        $itemStockStatusDiv.text('');
         $itemStockStatusDiv.addClass('ris-cart-item-stockStatus ');
+
+        var whereToShow = 'in_reserve_modal_cart_items';
         
         if (stockStatus === 'in_stock') {
-            $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
-            $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-in-stock');
+            showHideStockStatusLabel(itemStockStatusId, 'ris-cart-item-stockStatus-in-stock', DEFAULT_STOCK_CAPTIONS[2], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[2]);
         } else if (stockStatus === 'low_stock') {
-            $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
-            $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-low-stock');
+            showHideStockStatusLabel(itemStockStatusId, 'ris-cart-item-stockStatus-low-stock', DEFAULT_STOCK_CAPTIONS[1], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[1]);
         } else if (stockStatus === 'out_of_stock') {
-            $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
-            $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-no-stock');
+            showHideStockStatusLabel(itemStockStatusId, 'ris-cart-item-stockStatus-no-stock', DEFAULT_STOCK_CAPTIONS[0], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[0]);
         } else {
             if (inStockTextWhenUnknown) {
-                $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
-                $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-in-stock');
-            }
-            else {
-                $itemStockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[5]);
-                $itemStockStatusDiv.addClass('ris-cart-item-stockStatus-stock-unknown');
+                showHideStockStatusLabel(itemStockStatusId, 'ris-cart-item-stockStatus-in-stock', DEFAULT_STOCK_CAPTIONS[2], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[2]);
+            } else {
+                showHideStockStatusLabel(itemStockStatusId, 'ris-cart-item-stockStatus-stock-unknown', DEFAULT_STOCK_CAPTIONS[5], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[5]);
             }
         }
     };

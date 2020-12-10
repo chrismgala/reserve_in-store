@@ -2,16 +2,32 @@ ReserveInStore.ChooseLocationModal = function (opts) {
     var self = this;
     opts = opts || {};
     var $ = ReserveInStore.Util.$();
-    var api, $modalBackground, $modal, visible = false;
+    var api, config, $modalBackground, $modal, visible = false;
 
     var locationsManager = opts.locationsManager;
     var inventoryManager = opts.inventoryManager;
+    var showReserveBtnWhenUnknown = false;
+    var inStockTextWhenUnknown = false;
 
     var inventoryTable;
-    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock"];
+    var DEFAULT_STOCK_CAPTIONS = ["No Stock", "Low Stock", "In Stock", "Stock Unknown"];
+
+    // check stores_helper for existing key name used.
+    var DEFAULT_STOCK_CAPTIONS_KEY = ["no_stock", "low_stock", "in_stock", "stock_unknown"];
+
+    // set this default value for old stores because without reinstalling footer script labels will not be visible.
+    var DEFAULT_STOCK_STATUS_LABEL_VISIBLE = {
+        in_choose_location_modal_product_page: ["in_stock", "low_stock", "no_stock", "stock_unknown"]
+    };
+
+    var storeStockLabelsToDisplay = {};
 
     var init = function () {
         api = opts.api;
+        config = opts.config || {};
+        showReserveBtnWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('show_button') !== -1;
+        inStockTextWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('in_stock') !== -1;
+        storeStockLabelsToDisplay = config.stock_status.stock_label || DEFAULT_STOCK_STATUS_LABEL_VISIBLE;
     };
 
     /**
@@ -52,11 +68,11 @@ ReserveInStore.ChooseLocationModal = function (opts) {
         });
 
         locationsManager.whenReady(function(bestLocation) {
+            updateLocationStockInfo(locationsManager.getLocations());
+
             if (!bestLocation) return; // Could not determine best location
 
             self.$modalContainer.find('input[name="location_id"][value="'+bestLocation.id+'"]').prop('checked', true);
-
-            updateLocationStockInfo(locationsManager.getLocations());
         });
 
         adjustModalHeight();
@@ -95,9 +111,25 @@ ReserveInStore.ChooseLocationModal = function (opts) {
         $fit.css('max-height', totalHeight);
     };
 
+    /*
+     * This function will show/hide stock status label depending on store settings which stock labels store owner want to show.
+     * {string} stockStatusLabelId - stock status label div id eg: '#locationStockStatus-' + locations[i].id
+     * {string} stockStatusLabelClassName - which classname we need to add eg: ris-location-stockStatus-in-stock
+     * {string} stockStatusLabelDefaultCaption - stock label text that we want to show eg: "No Stock", "Low Stock", "In Stock"....
+     * {string} stockStatusLabelWhereToDisplay - which modal and where we want to show eg: in_reserve_modal_product_page_locations
+     * {string} stockStatusLabelDefaultCaptionKey - stock status label key: eg: "no_stock", "low_stock", "in_stock"....
+     */
+    var showHideStockStatusLabel = function (stockStatusLabelId, stockStatusLabelClassName, stockStatusLabelDefaultCaption, stockStatusLabelWhereToDisplay, stockStatusLabelDefaultCaptionKey) {
+        var $stockStatusDiv = $modal.find(stockStatusLabelId);
+        if (storeStockLabelsToDisplay[stockStatusLabelWhereToDisplay] && storeStockLabelsToDisplay[stockStatusLabelWhereToDisplay].indexOf(stockStatusLabelDefaultCaptionKey) !== -1) {
+            $stockStatusDiv.text(stockStatusLabelDefaultCaption);
+            $stockStatusDiv.addClass(stockStatusLabelClassName);
+        }
+    };
+
     var updateLocationStockInfo = function (locations) {
         var inventoryLocations;
-        var $locationContainer, $locationInput, $stockStatusDiv;
+        var $locationContainer, $locationInput, stockStatusId;
 
         inventoryManager.getInventory(opts.app.getProduct().id, function(_inventory) {
             inventoryTable = _inventory;
@@ -106,20 +138,24 @@ ReserveInStore.ChooseLocationModal = function (opts) {
             for (var i = 0; i < locations.length; i++) {
                 $locationContainer = $modal.find('#risLocation-' + locations[i].id);
                 $locationInput = $modal.find('#location_id-' + locations[i].id);
-                $stockStatusDiv = $modal.find('#locationStockStatus-' + locations[i].id);
+                stockStatusId = '#locationStockStatus-' + locations[i].id;
+                var whereToShow = 'in_choose_location_modal_product_page';
 
                 if (inventoryLocations[locations[i].platform_location_id] === 'in_stock') {
-                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[2]);
-                    $stockStatusDiv.addClass('ris-location-stockStatus-in-stock');
+                    showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-in-stock', DEFAULT_STOCK_CAPTIONS[2], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[2]);
                 } else if (inventoryLocations[locations[i].platform_location_id] === 'low_stock') {
-                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[1]);
-                    $stockStatusDiv.addClass('ris-location-stockStatus-low-stock');
+                    showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-low-stock', DEFAULT_STOCK_CAPTIONS[1], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[1]);
                 } else if (inventoryLocations[locations[i].platform_location_id] === 'out_of_stock') {
                     $locationInput.prop('disabled', true);
                     $locationInput.prop('checked', false);
                     $locationContainer.addClass('ris-location-disabled');
-                    $stockStatusDiv.text(DEFAULT_STOCK_CAPTIONS[0]);
-                    $stockStatusDiv.addClass('ris-location-stockStatus-no-stock');
+                    showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-no-stock', DEFAULT_STOCK_CAPTIONS[0], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[0]);
+                } else {
+                    if (inStockTextWhenUnknown) {
+                        showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-in-stock', DEFAULT_STOCK_CAPTIONS[2], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[2]);
+                    } else {
+                        showHideStockStatusLabel(stockStatusId, 'ris-location-stockStatus-stock-unknown', DEFAULT_STOCK_CAPTIONS[3], whereToShow, DEFAULT_STOCK_CAPTIONS_KEY[3]);
+                    }
                 }
             }
         });

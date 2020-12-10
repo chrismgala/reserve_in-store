@@ -375,6 +375,80 @@
               </div>
             </div>
           </div>
+          <div class="show-more-options">
+            <a href="#" class="Polaris-Link stock-status-labels-toggle" onclick="$('.stock-status-labels-toggle').toggle(); return false;">
+              show more options
+            </a>
+            <a href="#" class="Polaris-Link stock-status-labels-toggle" onclick="$('.stock-status-labels-toggle').toggle(); return false;" style="display: none;">
+              hide more options
+            </a>
+          </div>
+        </div>
+
+        <div class="Polaris-Layout__AnnotatedSection stock-status-labels-toggle" style="display: none;">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Stock Status Labels</h2>
+                <p>Show/hide stock status labels on reserve and choose location modal.</p>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+                    <div class="Polaris-FormLayout__Item">
+                      <fieldset class="Polaris-ChoiceList">
+                        <ul class="Polaris-ChoiceList__Choices">
+                          <% stock_status_where_to_show.each do |stock_status_where_to_show_key, stock_status_where_to_show_value| %>
+                            <li class="stock-status-li">
+                              <h2 class="Polaris-Heading">
+                                <%= stock_status_where_to_show_value %>
+                              </h2>
+                              <ul class="Polaris-ChoiceList__Choices">
+                                <% if stock_status_where_to_show_key.to_s == "in_reserve_modal_cart_page_locations"
+                                     assign stock_status_labels = default_stock_status_labels_cart_page
+                                   else
+                                     assign stock_status_labels = default_stock_status_labels
+                                   end
+                                %>
+
+                                <% stock_status_labels.each do |stock_status_label_key, stock_status_label_value| %>
+                                  <% default_checked = @current_store.show_stock_status_labels[stock_status_where_to_show_key.to_s].include?(stock_status_label_key.to_s) rescue false %>
+                                  <li>
+                                    <label class="Polaris-Choice" for="<%= stock_status_where_to_show_key %>_<%= stock_status_label_key %>">
+                                      <div class="Polaris-Choice__Control">
+                                        <div class="Polaris-Checkbox">
+                                          <%= hidden_field_tag "store[show_stock_status_labels][#{stock_status_where_to_show_key}][]", '' %>
+                                          <%= check_box_tag "store[show_stock_status_labels][#{stock_status_where_to_show_key}][]", stock_status_label_key,
+                                                            default_checked, class: "Polaris-Checkbox__Input", id: "#{stock_status_where_to_show_key}_#{stock_status_label_key}" %>
+                                          <div class="Polaris-Checkbox__Backdrop"></div>
+                                          <div class="Polaris-Checkbox__Icon">
+                                            <span class="Polaris-Icon">
+                                              <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
+                                                <g fill-rule="evenodd">
+                                                  <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
+                                                </g>
+                                              </svg>
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </label>
+                                    <%= stock_status_label_value %>
+                                  </li>
+                                <% end %>
+                              </ul>
+                            </li>
+                          <% end %>
+                        </ul>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <% if @current_store.created_at <= 1.day.ago %>

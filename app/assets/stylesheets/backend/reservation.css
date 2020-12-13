@@ -1,0 +1,83 @@
+.reservation-page {
+    margin-top: 100px;
+}
+.reservation-page .Polaris-DataTable__Cell {
+    padding: 1.6rem 1rem;
+}
+.reservation-page .datatable-cell-small-width {
+    width: 80px;
+}
+.reserved-cart-items {
+    margin-bottom: 10px;
+}
+.reservation-additional-info {
+    font-size: 12px;
+    margin-top: 10px;
+}
+.reservation-status-form {
+    display: inline-block;
+}
+
+.reserved-items-modal .Polaris-Modal-Section {
+    font-size: 12px;
+    align-items: center;
+    padding: 1.6rem 1.6rem;
+    border-bottom: .1rem solid #dfe3e8;
+
+}
+.reserved-items-modal .items-short-info {
+    display: flex;
+}
+.reserved-items-modal .items-short-info-right-block {
+    white-space: initial;
+}
+.reserved-items-modal .Polaris-Thumbnail {
+    margin-right: 20px;
+}
+.reserved-items-modal .reserved-items-no-image-block {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3px;
+    border: .1rem solid #dfe3e8;
+    background: #f9fafb;
+    margin-right: 20px;
+}
+.reserved-items-modal .reserved-items-no-image {
+    width: 2.8rem;
+    height: 2.8rem;
+    display: block;
+    fill: #c4cdd5;
+    color: transparent;
+}
+.items-short-info .Polaris-Thumbnail::after {
+    content: none;
+}
+.reserved-items-modal .reserved-item-info {
+    white-space: initial;
+}
+.reserved-items-modal .product-info-key {
+    font-weight: bold;
+}
+.reserved-items-modal .product-info-value,
+.reserved-cart-items-modal .details {
+    white-space: initial;
+}
+.reserved-items-modal .item-details {
+    margin-top: 30px;
+}
+@media screen and (max-width: 1024px) {
+    .reservation-page {
+        font-size: 12px;
+        margin-top: 150px;
+    }
+    .reservation-page .Polaris-Button--destructive {
+        display: block;
+        margin-top: 20px;
+    }
+    .reservation-page .Polaris-Button--sizeSlim {
+        padding: 1rem 1.2rem;
+    }
+}

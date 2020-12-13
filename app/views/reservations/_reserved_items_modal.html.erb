@@ -1,0 +1,124 @@
+<div class="reserved-cart-items-info-<%= reservation.id %> reserved-items-modal" style="display:none;">
+  <div class="Polaris-Modal-Dialog__Container" data-polaris-layer="true" data-polaris-overlay="true">
+    <div class="Polaris-Modal-Dialog__Modal" role="dialog" aria-labelledby="modal-header" tabindex="-1">
+      <div class="Polaris-Modal-Header">
+        <div class="Polaris-Stack Polaris-Stack--alignmentCenter">
+          <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
+            <div id="modal-header9">
+              <h2 class="Polaris-DisplayText Polaris-DisplayText--sizeSmall">Reservation #<%= reservation.id %></h2></div>
+          </div>
+          <div class="Polaris-Stack__Item">
+            <button class="Polaris-Modal-Header__CloseButton reservation-modal-close" onclick="$('.reserved-cart-items-info-<%= reservation.id %>').hide(); return false;">
+              <span class="Polaris-Icon Polaris-Icon--colorInkLighter Polaris-Icon--isColored"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M11.414 10l6.293-6.293a.999.999 0 1 0-1.414-1.414L10 8.586 3.707 2.293a.999.999 0 1 0-1.414 1.414L8.586 10l-6.293 6.293a.999.999 0 1 0 1.414 1.414L10 11.414l6.293 6.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L11.414 10z" fill-rule="evenodd"></path></svg></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="Polaris-Modal__BodyWrapper">
+        <div class="Polaris-Modal__Body Polaris-Scrollable Polaris-Scrollable--vertical Polaris-Scrollable--hasBottomShadow Polaris-Scrollable--verticalHasScrolling" data-polaris-scrollable="true">
+
+          <% reservation.cart[:items].to_a.each_with_index do |item, item_num| %>
+            <section class="Polaris-Modal-Section">
+              <% product_image =  '' %>
+
+              <% if item[:product] %>
+                <% if item[:variant].to_h['featured_image'].to_h['src'].present? %>
+                  <% product_image = item[:variant].to_h['featured_image'].to_h['src'] %>
+                <% else %>
+                  <% item[:product].to_h['media'].to_a.each do |thumbnail| %>
+                    <% product_image = thumbnail[:src] %>
+                  <% end %>
+                <% end %>
+              <% else %>
+                <% product_image = item[:image] %>
+              <% end %>
+
+              <div class="items-short-info">
+                <% if !product_image.blank? %>
+                  <div class="Polaris-Thumbnail Polaris-Thumbnail--sizeSmall">
+                    <img src="<%= product_image %>" alt="<%= item[:product_title] %>" class="Polaris-Thumbnail__Image">
+                  </div>
+                <% else %>
+                  <div class="reserved-items-no-image-block">
+                    <svg viewBox="0 0 20 20" class="reserved-items-no-image">
+                    <path d="M2.5 1A1.5 1.5 0 0 0 1 2.5v15A1.5 1.5 0 0 0 2.5 19h15a1.5 1.5 0 0 0 1.5-1.5v-15A1.5 1.5 0 0 0 17.5 1h-15zm5 3.5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM16.499 17H3.497c-.41 0-.64-.46-.4-.79l3.553-4.051c.19-.21.52-.21.72-.01L9 14l3.06-4.781a.5.5 0 0 1 .84.02l4.039 7.011c.18.34-.06.75-.44.75z"></path>
+                    </svg>
+                  </div>
+                <% end %>
+                <div class="items-short-info-right-block">
+                  <div><%= item[:product_title] %></div>
+
+                  <% if item[:variant].to_h['sku'].present? %>
+                    <div>Sku: <%= item[:variant].to_h['sku'] %></div>
+                  <% end %>
+
+                  <% if item[:variant_title].present? && item[:variant_title] != 'Default Title' %>
+                    <div>Variant: <%= item[:variant_title] %></div>
+                  <% end %>
+
+                  <% if item[:variant].to_h['price'].present? || item[:price].present? %>
+                    <div>Price: <%= store.currency((item[:variant].to_h['price'] || item[:price]).to_f/100).to_s.chomp('.00').chomp('.0') %></div>
+                  <% end %>
+
+                  <div>Quantity: <%= item[:quantity] || 1 %></div>
+                  <div>
+                    <a class="item-full-details-<%= reservation.id %>-<%= item_num %>" href="item-full-details-<%= reservation.id %>-<%= item_num %>"
+                       onclick="$('.item-full-details-<%= reservation.id %>-<%= item_num %>').toggle(); return false;">
+                      show more details
+                    </a>
+                    <a class="item-full-details-<%= reservation.id %>-<%= item_num %>" href="item-full-details-<%= reservation.id %>-<%= item_num %>"
+                       onclick="$('.item-full-details-<%= reservation.id %>-<%= item_num %>').toggle(); return false;" style="display: none;">
+                      hide more details
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="item-details item-full-details-<%= reservation.id %>-<%= item_num %>" style="display: none;">
+                <% price_format_for_keys = ["price", "price_max", "price_min", "original_price", "final_line_price",
+                                            "original_line_price", "discounted_price", "compare_at_price", "compare_at_price_max",
+                                            "compare_at_price_min", "total", "line_price"] %>
+
+                <% if item[:product] %>
+                  <% item[:product].except(:type, :media, :images, :options, :variants).each do |product_key, product_value| %>
+                    <div>
+                      <span class="product-info-key"><%= product_key %>:</span>
+                      <span class="product-info-value">
+                        <% if price_format_for_keys.include? product_key %>
+                          <%= store.currency(product_value.to_f/100).to_s.chomp('.00').chomp('.0') %>
+                        <% else %>
+                          <%= raw product_value %>
+                        <% end %>
+                      </span>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <% item.each do |item_key, item_value| %>
+                    <div>
+                      <span class="product-info-key"><%= item_key %>:</span>
+                      <span class="product-info-value">
+                        <% if price_format_for_keys.include? item_key %>
+                          <%= store.currency(item_value.to_f/100).to_s.chomp('.00').chomp('.0') %>
+                        <% else %>
+                          <%= raw item_value %>
+                        <% end %>
+                      </span>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </section>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="Polaris-Modal-Footer">
+        <div class="Polaris-Modal-Footer__FooterContent">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="Polaris-Modal__Backdrop"></div>
+</div>
+

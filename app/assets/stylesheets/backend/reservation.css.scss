@@ -18,55 +18,61 @@
     display: inline-block;
 }
 
-.reserved-items-modal .Polaris-Modal-Section {
+.reservation-items-modal .reservedItems {
     font-size: 12px;
     align-items: center;
     padding: 1.6rem 1.6rem;
     border-bottom: .1rem solid #dfe3e8;
 
 }
-.reserved-items-modal .items-short-info {
+.reservedItems .shortInfo {
     display: flex;
 }
-.reserved-items-modal .items-short-info-right-block {
+.reservedItems .shortInfo-rightBlock {
     white-space: initial;
 }
-.reserved-items-modal .Polaris-Thumbnail {
+.reservedItems .Polaris-Thumbnail {
     margin-right: 20px;
 }
-.reserved-items-modal .reserved-items-no-image-block {
+.reservedItems .noImage-block {
     width: 4rem;
     height: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 5px;
     border-radius: 3px;
     border: .1rem solid #dfe3e8;
     background: #f9fafb;
     margin-right: 20px;
 }
-.reserved-items-modal .reserved-items-no-image {
+.reservedItems .noImage {
     width: 2.8rem;
     height: 2.8rem;
     display: block;
     fill: #c4cdd5;
     color: transparent;
 }
-.items-short-info .Polaris-Thumbnail::after {
+.reservedItems .shortInfo .Polaris-Thumbnail::after {
     content: none;
 }
-.reserved-items-modal .reserved-item-info {
-    white-space: initial;
+.reservedItems .Polaris-Thumbnail__Image {
+    bottom: auto;
+    margin-top: 5px;
 }
-.reserved-items-modal .product-info-key {
+.reservedItems .itemKey {
     font-weight: bold;
 }
-.reserved-items-modal .product-info-value,
-.reserved-cart-items-modal .details {
+.reservedItems .itemValue,
+.reservedItems .details {
     white-space: initial;
 }
-.reserved-items-modal .item-details {
-    margin-top: 30px;
+.reservedItems .showHide-moreDetails {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+.reservedItems .details {
+    margin-left: 60px;
 }
 @media screen and (max-width: 1024px) {
     .reservation-page {

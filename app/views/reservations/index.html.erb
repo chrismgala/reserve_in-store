@@ -64,7 +64,7 @@
                         </div>
                       <% end %>
                       <div>
-                        <a href="#" class="Polaris-Link" onclick="$('.reserved-cart-items-info-<%= reservation.id %>').show(); return false;">
+                        <a href="#" class="Polaris-Link" onclick="$('.reservationItems-<%= reservation.id %>').show(); return false;">
                           View Item details
                         </a>
                       </div>
@@ -115,7 +115,7 @@
                   <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--footer">
                     <p>
                       Showing <%= @reservations.count %>
-                      of <%= pluralize(@current_store.reservations.count, 'reservation') %>.
+                      of <%= pluralize(@reservations.total_count, 'reservation') %>.
                     </p>
                   </td>
                 </tr>

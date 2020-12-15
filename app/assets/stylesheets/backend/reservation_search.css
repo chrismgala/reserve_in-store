@@ -24,3 +24,8 @@
         width: 100%;
     }
 }
+@media screen and (max-width: 768px) {
+    .reserveInStore-reservation-search-form .Polaris-Stack__Item {
+        margin-bottom: 10px;
+    }
+}

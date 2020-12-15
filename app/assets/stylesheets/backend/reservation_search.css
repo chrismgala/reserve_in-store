@@ -1,3 +1,12 @@
+.reservation-search-bar {
+    position: fixed;
+    z-index: 21;
+    background-color: #ffffff;
+    top: 53px;
+    padding: 20px 30px;
+    width: 100%;
+    max-width: 100%;
+}
 .reserveInStore-reservation-search-form .Polaris-Stack__Item {
     display: inline-block;
 }
@@ -8,4 +17,15 @@
 .reserveInStore-reservation-search-form .Polaris-TextField__Input {
     background: white;
     border: 1px solid #c4cdd5;
+}
+@media screen and (max-width: 1024px) {
+    .add-new-reservation-btn-container {
+        text-align: center;
+        width: 100%;
+    }
+}
+@media screen and (max-width: 768px) {
+    .reserveInStore-reservation-search-form .Polaris-Stack__Item {
+        margin-bottom: 10px;
+    }
 }

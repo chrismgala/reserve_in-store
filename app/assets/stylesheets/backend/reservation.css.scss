@@ -1,0 +1,94 @@
+.reservation-page {
+    margin-top: 100px;
+}
+.reservation-page .Polaris-DataTable__Cell {
+    padding: 1.6rem 1rem;
+}
+.reservation-page .datatable-cell-small-width {
+    width: 80px;
+}
+.reserved-cart-items {
+    margin-bottom: 10px;
+}
+.reservation-additional-info {
+    font-size: 12px;
+    margin-top: 10px;
+}
+.reservation-status-form {
+    display: inline-block;
+}
+
+.reservation-items-modal .reservedItems {
+    font-size: 12px;
+    align-items: center;
+    padding: 1.6rem 1.6rem;
+    border-bottom: .1rem solid #dfe3e8;
+
+}
+.reservedItems .shortInfo {
+    display: flex;
+}
+.reservedItems .shortInfo-rightBlock {
+    white-space: initial;
+}
+.reservedItems .Polaris-Thumbnail {
+    margin-right: 20px;
+}
+.reservedItems .noImage-block {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    border-radius: 3px;
+    border: .1rem solid #dfe3e8;
+    background: #f9fafb;
+    margin-right: 20px;
+}
+.reservedItems .noImage {
+    width: 2.8rem;
+    height: 2.8rem;
+    display: block;
+    fill: #c4cdd5;
+    color: transparent;
+}
+.reservedItems .shortInfo .Polaris-Thumbnail::after {
+    content: none;
+}
+.reservedItems .Polaris-Thumbnail__Image {
+    bottom: auto;
+    margin-top: 5px;
+}
+.reservedItems .itemKey {
+    font-weight: bold;
+}
+.reservedItems .itemValue,
+.reservedItems .details {
+    white-space: initial;
+}
+.reservedItems .showHide-moreDetails {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+.reservedItems .details {
+    margin-left: 60px;
+}
+@media screen and (max-width: 1024px) {
+    .reservation-page {
+        font-size: 12px;
+        margin-top: 170px;
+    }
+    .reservation-page .Polaris-Button--destructive {
+        display: block;
+        margin-top: 20px;
+    }
+    .reservation-page .Polaris-Button--sizeSlim {
+        padding: 1rem 1.2rem;
+    }
+}
+@media screen and (max-width: 768px) {
+    .reservation-page {
+      margin-top: 240px;
+    }
+}

@@ -1,20 +1,21 @@
 
 <% content_for(:title) { 'Reservations' } %>
 
-<div class="Polaris-Page">
+<div class="Polaris-Card reservation-search-bar">
+  <div class="Polaris-Stack">
+    <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
+      <%= render partial: 'reservation_search_form', locals: { reservation: @reservations } %>
+    </div>
+    <div class="Polaris-Stack__Item add-new-reservation-btn-container">
+      <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-show add-new-reservation-btn">
+        <span class="Polaris-Button__Content"><span>Add New Reservation</span></span></button>
+    </div>
+  </div>
+</div>
+
+<div class="Polaris-Page reservation-page">
   <div class="Polaris-Page__Content">
     <% if @reservations.any? %>
-      <div class="Polaris-Stack">
-        <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
-          <%= render partial: 'reservation_search_form', locals: { reservation: @reservations } %>
-        </div>
-        <div class="Polaris-Stack__Item">
-          <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-show">
-            <span class="Polaris-Button__Content"><span>Add New Reservation</span></span></button>
-        </div>
-      </div>
-      <br>
-
       <div class="Polaris-Card">
         <div class="">
           <div class="Polaris-DataTable Polaris-DataTable--hasFooter">
@@ -35,13 +36,8 @@
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                     Customer Details
                   </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Pickup Time/Date &amp; more info
-                  </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
                     <%= sortable('fulfilled', 'Status') %>
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
                   </th>
                 </tr>
                 </thead>
@@ -58,41 +54,57 @@
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <% reservation.cart[:items].to_a.each do |item| %>
-                        <div>
-                          <%= item[:product_title] %>
+                        <div class="reserved-cart-items">
+                          <%= truncate(item[:product_title], length: 30, separator: '...') %>
                           <% if item[:variant_title].present? && item[:variant_title] != 'Default Title' %>
                             <div class="ris-text-small">
                               Variant: <%= item[:variant_title] %>
                             </div>
                           <% end %>
-                        <% end %>
+                        </div>
+                      <% end %>
+                      <div>
+                        <a href="#" class="Polaris-Link" onclick="$('.reservationItems-<%= reservation.id %>').show(); return false;">
+                          View Item details
+                        </a>
                       </div>
-                    </td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= reservation.customer_name %>
-                      <br><%= reservation.customer_email %><br><%= reservation.customer_phone %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <%= reservation.instructions_from_customer %><br>
-                      <% if reservation.additional_fields.present?  %>
-                        <a href="#" class="Polaris-Link more-info-<%= reservation.id %>-toggle" onclick="$('.more-info-<%= reservation.id %>-toggle').toggle(); return false;">Show more details</a>
-                        <div class="more-info-<%= reservation.id %>-toggle" style="display: none;">
-                          <% reservation.additional_fields.each do |additional_fields_key, additional_fields_value| %>
-                            <%= additional_fields_key %> : <%= additional_fields_value %><br>
+                      <%= render partial: 'reserved_items_modal', locals: { store: @current_store, reservation: reservation } %>
+                      <% if reservation.instructions_from_customer.present? || reservation.additional_fields.present? %>
+                        <div class="reservation-additional-info">
+                          <div class="additional-info-head">Pickup Time/Date & more info</div>
+                          <%= reservation.instructions_from_customer if reservation.instructions_from_customer.present? %>
+                          <% if reservation.additional_fields.present? %>
+                            <div>
+                              <a href="#" class="Polaris-Link more-info-<%= reservation.id %>-toggle" onclick="$('.more-info-<%= reservation.id %>-toggle').toggle(); return false;">
+                                Show more details
+                              </a>
+                              <div class="more-info-<%= reservation.id %>-toggle" style="display: none;">
+                                <% reservation.additional_fields.each do |additional_fields_key, additional_fields_value| %>
+                                  <p><%= additional_fields_key %> : <%= additional_fields_value %></p>
+                                <% end %>
+                              </div>
+                              <a href="#" class="Polaris-Link more-info-<%= reservation.id %>-toggle" onclick="$('.more-info-<%= reservation.id %>-toggle').toggle(); return false;" style="display: none;">
+                                Hide
+                              </a>
+                            </div>
                           <% end %>
                         </div>
-                        <a href="#" class="Polaris-Link more-info-<%= reservation.id %>-toggle" onclick="$('.more-info-<%= reservation.id %>-toggle').toggle(); return false;" style="display: none;">Hide</a>
                       <% end %>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <%= reservation.customer_name %>
+                      <br><%= reservation.customer_email %><br><%= reservation.customer_phone %>
+                    </td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text datatable-cell-small-width">
                       <% if reservation.fulfilled? %>
                         Fulfilled
                       <% else %>
-                        <%= form_for :reservation, url: reservation_path(reservation), method: :put do |f| %>
+                        <%= form_for :reservation, url: reservation_path(reservation), html: { class: 'reservation-status-form' }, method: :put do |f| %>
                           <%= f.hidden_field :fulfilled, value: true %>
                           <button type="submit" class="Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim">
                             <span class="Polaris-Button__Content"><span>Fulfill</span></span></button>
                         <% end %>
-                      <% end %></td>
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <% end %>
                       <%= link_to 'Delete', reservation, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: {confirm: "Are you sure?"} %>
                     </td>
                   </tr>
@@ -103,7 +115,7 @@
                   <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--footer">
                     <p>
                       Showing <%= @reservations.count %>
-                      of <%= pluralize(@current_store.reservations.count, 'reservation') %>.
+                      of <%= pluralize(@reservations.total_count, 'reservation') %>.
                     </p>
                   </td>
                 </tr>
@@ -123,15 +135,10 @@
       <div class="Polaris-Stack">
         <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
           <% if params[:reservation_search] %>
-            <%= render partial: 'reservation_search_form', locals: { reservation: @reservations } %>
             <p>No reservation found</p>
           <% else %>
             <p>There are no reservations yet.</p>
           <% end %>
-        </div>
-        <div class="Polaris-Stack__Item">
-          <button type="button" class="Polaris-Button Polaris-Button--primary reservation-modal-show">
-            <span class="Polaris-Button__Content"><span>Add New Reservation</span></span></button>
         </div>
       </div>
     <% end %>

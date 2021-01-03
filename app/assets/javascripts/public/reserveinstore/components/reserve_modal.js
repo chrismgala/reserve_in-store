@@ -207,6 +207,47 @@ ReserveInStore.ReserveModal = function (opts) {
             getStockInfo(locationId);
         });
 
+        $reserveModal.find('.reserveInStore-locationSearch-btn').on('click', function(e) {
+            e.preventDefault();
+            var searchLocationInputValue = $reserveModal.find(".reserveInStore-locationSearch-input").val();
+            opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
+                $reserveModal.find(".ris-location-options").html('');
+                $reserveModal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtml(data));
+
+                if (opts.app.getProduct()) {
+                    updateLocationStockInfo(data);
+                } else {
+                    updateCartLocationStockInfo(data);
+                }
+                self.$modalContainer.find('input[name="reservation[location_id]"]').on('click change', function() {
+                    var locationId = self.$modalContainer.find('input[name="reservation[location_id]"]:checked').val();
+                    locationsManager.setFavoriteLocationId(locationId);
+                    getStockInfo(locationId);
+                });
+            });
+        });
+
+        $reserveModal.find('.reserveInStore-locationSearch-clear').on('click', function(e) {
+            e.preventDefault();
+            $reserveModal.find(".reserveInStore-locationSearch-input").val('');
+            var searchLocationInputValue = $reserveModal.find(".reserveInStore-locationSearch-input").val();
+            opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
+                $reserveModal.find(".ris-location-options").html('');
+                $reserveModal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtml(data));
+
+                if (opts.app.getProduct()) {
+                    updateLocationStockInfo(data);
+                } else {
+                    updateCartLocationStockInfo(data);
+                }
+                self.$modalContainer.find('input[name="reservation[location_id]"]').on('click change', function() {
+                    var locationId = self.$modalContainer.find('input[name="reservation[location_id]"]:checked').val();
+                    locationsManager.setFavoriteLocationId(locationId);
+                    getStockInfo(locationId);
+                });
+            });
+        });
+
         locationsManager.whenReady(function(bestLocation) {
             // make sure we have the reservation modal, location info, AND stock info before we update the display
             if (product) {

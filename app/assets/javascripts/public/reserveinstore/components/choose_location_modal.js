@@ -67,6 +67,43 @@ ReserveInStore.ChooseLocationModal = function (opts) {
             }, 1);
         });
 
+        $modal.find('.reserveInStore-locationSearch-btn').on('click', function(e) {
+            e.preventDefault();
+            var searchLocationInputValue = $modal.find(".reserveInStore-locationSearch-input").val();
+            opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
+                $modal.find(".ris-location-options").html('');
+                $modal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtmlChooseLocModal(data));
+                updateLocationStockInfo(data);
+
+                self.$modalContainer.find('input[name="location_id"]').on('change', function() {
+                    setTimeout(function() {
+                        var locationId = self.$modalContainer.find('input[name="location_id"]:checked').val();
+                        locationsManager.setFavoriteLocationId(locationId);
+                        self.hide();
+                    }, 1);
+                });
+            });
+        });
+
+        $modal.find('.reserveInStore-locationSearch-clear').on('click', function(e) {
+            e.preventDefault();
+            $modal.find(".reserveInStore-locationSearch-input").val('');
+            var searchLocationInputValue = $modal.find(".reserveInStore-locationSearch-input").val();
+            opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
+                $modal.find(".ris-location-options").html('');
+                $modal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtmlChooseLocModal(data));
+                updateLocationStockInfo(data);
+
+                self.$modalContainer.find('input[name="location_id"]').on('change', function() {
+                    setTimeout(function() {
+                        var locationId = self.$modalContainer.find('input[name="location_id"]:checked').val();
+                        locationsManager.setFavoriteLocationId(locationId);
+                        self.hide();
+                    }, 1);
+                });
+            });
+        });
+
         locationsManager.whenReady(function(bestLocation) {
             updateLocationStockInfo(locationsManager.getLocations());
 

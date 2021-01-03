@@ -535,6 +535,47 @@
     max-width: 400px;
 }
 
+.reserveInStore-locationSearch {
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-bottom: 20px;
+}
+.reserveInStore-chooseLocationModal .reserveInStore-locationSearch {
+    padding-left: 0;
+}
+.reserveInStore-locationSearch-input {
+    border: 1px solid #e2e7f1;
+    font-size: 12px;
+}
+.reserveInStore-locationSearch-input:focus {
+    border: 1px solid #e2e7f1;
+}
+.reserveInStore-locationSearch-btn {
+    box-shadow: none;
+    background-color: #fff;
+    color: #adb5bd;
+    border: 1px solid #e2e7f1;
+    border-radius: 0 3px 3px 0;
+    padding: 5px 10px 6px 10px;
+    margin-left: -5px;
+}
+.reserveInStore-locationSearch-icon {
+    width: 1em;
+    height: 1em;
+}
+.reserveInStore-locationSearch-clear,
+.reserveInStore-locationSearch-clear:active,
+.reserveInStore-locationSearch-clear:hover,
+.reserveInStore-locationSearch-clear:visited {
+    color: #007ace;
+}
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
 .reserveInStore-stockStatus {
     margin-top: 12px;
     font-size: 12px;

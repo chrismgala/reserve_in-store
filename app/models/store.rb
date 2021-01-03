@@ -30,7 +30,7 @@ class Store < ApplicationRecord
     :custom_css, :custom_css_enabled,
     :location_notification_subject, :customer_confirmation_subject,
     :location_notification_sender_name, :customer_confirmation_sender_name,
-    :show_additional_fields, :webhooks_enabled, :stock_threshold, show_stock_status_labels: {}
+    :show_additional_fields, :webhooks_enabled, :stock_threshold, :show_location_search, show_stock_status_labels: {}
   ]
 
   JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].to_s.chomp('/')}/reserveinstore.js"
@@ -86,7 +86,8 @@ class Store < ApplicationRecord
       'show_instructions_from_customer' => show_instructions_from_customer,
       'show_additional_fields' => show_additional_fields,
       'success_msg' => success_msg,
-      'faq' => reserve_modal_faq_tpl_in_use
+      'faq' => reserve_modal_faq_tpl_in_use,
+      'show_location_search' => show_location_search
     }
   end
 

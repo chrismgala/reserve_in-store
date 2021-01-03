@@ -1,0 +1,116 @@
+ReserveInStore.SearchLocations = function (opts) {
+    var self = this;
+    opts = opts || {};
+
+    var init = function () {
+    };
+
+    self.getSearchData = function(searchLocationInputValue, callback) {
+        if (opts.app.getProduct()) {
+            opts.api.getLocations( { product_tag_filter: opts.app.getProductTag(),
+                current_page: "product", search: searchLocationInputValue }, function(response) {
+                return callback(response);
+            });
+        } else {
+            opts.app.cart.getProductTags(function(tags) {
+                opts.api.getLocations( { product_tag_filter: tags,
+                    current_page: "cart", search: searchLocationInputValue }, function(response) {
+                    return callback(response);
+                });
+            });
+        }
+    };
+
+    self.renderSearchHtml = function(data) {
+        var parsedData = JSON.parse(JSON.stringify(data));
+        var output = '';
+
+        if (parsedData == '') {
+            return emptyResultText();
+        }
+
+        $.each(parsedData, function(key, loc) {
+            output += '<div class="ris-location-option" id="risLocation-' + loc.id + '">' +
+                '<div class="ris-location-content">' +
+                '<div class="ris-location-content-left">' +
+                '<input type="radio" value="' + loc.id + '" name="reservation[location_id]"' +
+                'id="reservation_location_id-' + loc.id + '">' +
+                '</div>' +
+                '<div class="ris-location-content-middle">' +
+                '<label class="ris-location-name" for="reservation_location_id-' + loc.id + '">' + loc.name + ' </label>' +
+                '<div class="ris-location-address">'+ loc.address + '<br>' + formatAddress([loc.city, loc.state, loc.zip]) + '<br>' + loc.country + '</div>';
+
+            if (loc.details) {
+                output += '<div class="ris-location-details">' + loc.details + '</div>';
+            }
+
+            output += '<div id="locationStockStatus-' + loc.id + '" class="ris-location-stockStatus"></div>' +
+                '</div>' +
+                '<div class="ris-location-content-right"><a href=' + googleMapUrl(formatAddress([loc.city, loc.state, loc.zip])) + '" target="_blank" class="ris-location-mapPin"> ' +
+                '<img class="ris-location-mapPin-img" src="<%= ENV['PUBLIC_CDN_BASE_PATH'] %>map_pin.png">' +
+                '<span class="ris-location-mapPin-text">View on map</span>' +
+                '</a></div>' +
+                '</div></div>';
+        });
+        return output;
+    };
+
+    self.renderSearchHtmlChooseLocModal = function(data) {
+        var parsedData = JSON.parse(JSON.stringify(data));
+        var output = '';
+
+        if (parsedData == '') {
+            return emptyResultText();
+        }
+
+        $.each(parsedData, function(key, loc) {
+            output += '<div class="ris-location-option" id="risLocation-' + loc.id + '">' +
+                '<div class="ris-location-content">' +
+                '<div class="ris-location-content-left">' +
+                '<input type="radio" value="' + loc.id + '" name="location_id"' +
+                'id="location_id-' + loc.id + '">' +
+                '</div>' +
+                '<div class="ris-location-content-middle">' +
+                '<label class="ris-location-name" for="location_id-' + loc.id + '">' + loc.name + ' </label>' +
+                '<div class="ris-location-address">'+ loc.address + '<br>' + formatAddress([loc.city, loc.state, loc.zip]) + '<br>' + loc.country + '</div>';
+
+            if (loc.details) {
+                output += '<div class="ris-location-details">' + loc.details + '</div>';
+            }
+
+            output += '<div id="locationStockStatus-' + loc.id + '" class="ris-location-stockStatus"></div>' +
+                '</div>' +
+                '<div class="ris-location-content-right"><a href=' + googleMapUrl(formatAddress([loc.city, loc.state, loc.zip])) + '" target="_blank" class="ris-location-mapPin"> ' +
+                '<img class="ris-location-mapPin-img" src="<%= ENV['PUBLIC_CDN_BASE_PATH'] %>map_pin.png">' +
+                '<span class="ris-location-mapPin-text">View on map</span>' +
+                '</a></div>' +
+                '</div></div>';
+        });
+        return output;
+    };
+
+    /**
+     * Remove null and undefined elements from address, format address comma-separated city, state, zip
+     * @param {Array} address - [city, state, zip]
+     * @returns {String}
+     */
+    var formatAddress = function(address) {
+        var realAddress = address.filter(function (e) {
+            return e != null && e != '';
+        });
+        return realAddress.join(",");
+    };
+
+    var googleMapUrl = function(full_address) {
+        return 'https://www.google.com/maps/search/?api=1&query=' + encodeURI(full_address);
+    };
+
+    /**
+     * Returns text if search result is empty.
+     */
+    var emptyResultText = function() {
+        return '<div>No locations found.</div>';
+    };
+
+    init();
+};

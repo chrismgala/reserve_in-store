@@ -7,14 +7,18 @@ ReserveInStore.SearchLocations = function (opts) {
 
     self.getSearchData = function(searchLocationInputValue, callback) {
         if (opts.app.getProduct()) {
-            opts.api.getLocations( { product_tag_filter: opts.app.getProductTag(),
-                current_page: "product", search: searchLocationInputValue }, function(response) {
+            opts.api.getLocations({
+                product_tag_filter: opts.app.getProductTag(),
+                current_page: "product",
+                search: searchLocationInputValue }, function(response) {
                 return callback(response);
             });
         } else {
             opts.app.cart.getProductTags(function(tags) {
-                opts.api.getLocations( { product_tag_filter: tags,
-                    current_page: "cart", search: searchLocationInputValue }, function(response) {
+                opts.api.getLocations({
+                    product_tag_filter: tags,
+                    current_page: "cart",
+                    search: searchLocationInputValue }, function(response) {
                     return callback(response);
                 });
             });
@@ -72,7 +76,7 @@ ReserveInStore.SearchLocations = function (opts) {
                 '</div>' +
                 '<div class="ris-location-content-middle">' +
                 '<label class="ris-location-name" for="location_id-' + loc.id + '">' + loc.name + ' </label>' +
-                '<div class="ris-location-address">'+ loc.address + '<br>' + formatAddress([loc.city, loc.state, loc.zip]) + '<br>' + loc.country + '</div>';
+                '<div class="ris-location-address">'+ loc.address + '<br>' + formatAddress([loc.address, loc.city, loc.state, loc.zip]) + '<br>' + loc.country + '</div>';
 
             if (loc.details) {
                 output += '<div class="ris-location-details">' + loc.details + '</div>';
@@ -80,7 +84,7 @@ ReserveInStore.SearchLocations = function (opts) {
 
             output += '<div id="locationStockStatus-' + loc.id + '" class="ris-location-stockStatus"></div>' +
                 '</div>' +
-                '<div class="ris-location-content-right"><a href=' + googleMapUrl(formatAddress([loc.city, loc.state, loc.zip])) + '" target="_blank" class="ris-location-mapPin"> ' +
+                '<div class="ris-location-content-right"><a href=' + googleMapUrl(formatAddress([loc.address, loc.city, loc.state, loc.zip])) + '" target="_blank" class="ris-location-mapPin"> ' +
                 '<img class="ris-location-mapPin-img" src="<%= ENV['PUBLIC_CDN_BASE_PATH'] %>map_pin.png">' +
                 '<span class="ris-location-mapPin-text">View on map</span>' +
                 '</a></div>' +

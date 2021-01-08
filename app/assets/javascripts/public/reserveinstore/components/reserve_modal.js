@@ -2,7 +2,7 @@ ReserveInStore.ReserveModal = function (opts) {
     var self = this;
     opts = opts || {};
     var $ = ReserveInStore.Util.$();
-    var api, config, $modalBackground, $reserveModal, $successModal, $form, formDataArray;
+    var api, config, $modalBackground, $reserveModal, $successModal, $form, $clearSearchLink, formDataArray;
 
     var locationsManager = opts.locationsManager;
     var inventoryManager = opts.inventoryManager;
@@ -194,6 +194,7 @@ ReserveInStore.ReserveModal = function (opts) {
         $modalBackground = self.$modalContainer.find('.reserveInStore-modal-background');
         $reserveModal = $modalBackground.find('.reserveInStore-reserve-modal');
         $successModal = $modalBackground.find('.reserveInStore-success-modal');
+        $clearSearchLink = $reserveModal.find(".reserveInStore-locationSearch-clear");
         centerPriceDiv();
         setCloseConditions();
         inputFormValue();
@@ -224,6 +225,13 @@ ReserveInStore.ReserveModal = function (opts) {
                     locationsManager.setFavoriteLocationId(locationId);
                     getStockInfo(locationId);
                 });
+
+                if (searchLocationInputValue === '') {
+                    $clearSearchLink.hide();
+                } else {
+                    $clearSearchLink.show();
+                }
+
             });
         });
 
@@ -245,6 +253,7 @@ ReserveInStore.ReserveModal = function (opts) {
                     locationsManager.setFavoriteLocationId(locationId);
                     getStockInfo(locationId);
                 });
+                $clearSearchLink.hide();
             });
         });
 

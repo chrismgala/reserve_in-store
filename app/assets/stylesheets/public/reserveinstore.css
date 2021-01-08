@@ -563,6 +563,9 @@
     width: 1em;
     height: 1em;
 }
+.reserveInStore-locationSearch-clear {
+    display: none;
+}
 .reserveInStore-locationSearch-clear,
 .reserveInStore-locationSearch-clear:active,
 .reserveInStore-locationSearch-clear:hover,

@@ -2,7 +2,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
     var self = this;
     opts = opts || {};
     var $ = ReserveInStore.Util.$();
-    var api, config, $modalBackground, $modal, visible = false;
+    var api, config, $modalBackground, $modal, $clearSearchLink, visible = false;
 
     var locationsManager = opts.locationsManager;
     var inventoryManager = opts.inventoryManager;
@@ -56,6 +56,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
         self.$modalContainer.show();
         $modalBackground = self.$modalContainer.find('.reserveInStore-modal-background');
         $modal = $modalBackground.find('.reserveInStore-reserve-modal');
+        $clearSearchLink = $modal.find(".reserveInStore-locationSearch-clear");
         centerPriceDiv();
         setCloseConditions();
 
@@ -82,6 +83,13 @@ ReserveInStore.ChooseLocationModal = function (opts) {
                         self.hide();
                     }, 1);
                 });
+
+                if (searchLocationInputValue === '') {
+                   $clearSearchLink.hide();
+                } else {
+                   $clearSearchLink.show();
+                }
+
             });
         });
 
@@ -101,6 +109,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
                         self.hide();
                     }, 1);
                 });
+                $clearSearchLink.hide();
             });
         });
 

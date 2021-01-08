@@ -39,3 +39,6 @@
 /node_modules/
 /yarn-error.log
 
+# For foreman and running multuple processes at aonce
+Procfile-local
+

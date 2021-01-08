@@ -14,7 +14,17 @@ module Shopify
     end
 
     def inventory_levels(params = {})
-      ShopifyAPI::InventoryLevel.where(params).to_a
+      results = []
+
+      levels = ShopifyAPI::InventoryLevel.where(params)
+      results = levels.to_a
+
+      while levels.next_page?
+        levels = levels.fetch_next_page
+        results += levels.to_a
+      end
+
+      results
     end
 
     def order(id, params = {})

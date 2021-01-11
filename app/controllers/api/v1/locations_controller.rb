@@ -21,6 +21,7 @@ module Api
         locations = locations.where(visible_in_product: true) if params[:current_page] == "product" 
         locations = locations.where(visible_in_cart: true) if params[:current_page] == "cart"
         locations = locations.where('name ILIKE :query OR address ILIKE :query OR state ILIKE :query OR city ILIKE :query OR zip ILIKE :query', query: "%#{params[:search]}%") if params[:search].present?
+        locations = locations.order("name")
         locations = locations.page(params[:page]).per(250)
 
         if secret_key.present?

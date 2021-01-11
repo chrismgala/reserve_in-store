@@ -7,7 +7,7 @@
             <ul class="reserveInStore-error-ul" style="display:none;"></ul>
         </header>
 
-        {% if settings.show_location_search %}
+        {% if settings.hide_location_search != true and locations.size > 10 %}
         <div class="reserveInStore-locationSearch">
             <form action="" accept-charset="UTF-8" method="get">
                 <div>

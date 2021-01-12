@@ -572,6 +572,9 @@
 .reserveInStore-locationSearch-clear:visited {
     color: #007ace;
 }
+.reserveInStore-reserve-modal .ris-location-options.loading {
+    opacity: 0.5;
+}
 input:focus,
 select:focus,
 textarea:focus,

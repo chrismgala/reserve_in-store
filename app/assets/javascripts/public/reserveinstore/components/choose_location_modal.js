@@ -71,6 +71,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
         $modal.find('.reserveInStore-locationSearch-btn').on('click', function(e) {
             e.preventDefault();
             var searchLocationInputValue = $modal.find(".reserveInStore-locationSearch-input").val();
+            $modal.find(".ris-location-options").toggleClass("loading");
             opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
                 $modal.find(".ris-location-options").html('');
                 $modal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtmlChooseLocModal(data));
@@ -83,6 +84,8 @@ ReserveInStore.ChooseLocationModal = function (opts) {
                         self.hide();
                     }, 1);
                 });
+
+                $modal.find(".ris-location-options").toggleClass("loading");
 
                 if (searchLocationInputValue === '') {
                    $clearSearchLink.hide();
@@ -97,6 +100,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
             e.preventDefault();
             $modal.find(".reserveInStore-locationSearch-input").val('');
             var searchLocationInputValue = $modal.find(".reserveInStore-locationSearch-input").val();
+            $modal.find(".ris-location-options").toggleClass("loading");
             opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
                 $modal.find(".ris-location-options").html('');
                 $modal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtmlChooseLocModal(data));
@@ -109,6 +113,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
                         self.hide();
                     }, 1);
                 });
+                $modal.find(".ris-location-options").toggleClass("loading");
                 $clearSearchLink.hide();
             });
         });

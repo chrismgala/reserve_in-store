@@ -211,6 +211,7 @@ ReserveInStore.ReserveModal = function (opts) {
         $reserveModal.find('.reserveInStore-locationSearch-btn').on('click', function(e) {
             e.preventDefault();
             var searchLocationInputValue = $reserveModal.find(".reserveInStore-locationSearch-input").val();
+            $reserveModal.find(".ris-location-options").toggleClass("loading");
             opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
                 $reserveModal.find(".ris-location-options").html('');
                 $reserveModal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtml(data));
@@ -225,6 +226,8 @@ ReserveInStore.ReserveModal = function (opts) {
                     locationsManager.setFavoriteLocationId(locationId);
                     getStockInfo(locationId);
                 });
+
+                $reserveModal.find(".ris-location-options").toggleClass("loading");
 
                 if (searchLocationInputValue === '') {
                     $clearSearchLink.hide();
@@ -239,6 +242,7 @@ ReserveInStore.ReserveModal = function (opts) {
             e.preventDefault();
             $reserveModal.find(".reserveInStore-locationSearch-input").val('');
             var searchLocationInputValue = $reserveModal.find(".reserveInStore-locationSearch-input").val();
+            $reserveModal.find(".ris-location-options").toggleClass("loading");
             opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
                 $reserveModal.find(".ris-location-options").html('');
                 $reserveModal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtml(data));
@@ -253,6 +257,7 @@ ReserveInStore.ReserveModal = function (opts) {
                     locationsManager.setFavoriteLocationId(locationId);
                     getStockInfo(locationId);
                 });
+                $reserveModal.find(".ris-location-options").toggleClass("loading");
                 $clearSearchLink.hide();
             });
         });

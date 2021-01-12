@@ -539,6 +539,10 @@
     padding-left: 24px;
     padding-right: 24px;
     margin-bottom: 20px;
+    display: flex;
+}
+.reserveInStore-locationSearch-inputDiv {
+    flex: 1 1 auto;
 }
 .reserveInStore-chooseLocationModal .reserveInStore-locationSearch {
     padding-left: 0;
@@ -546,6 +550,7 @@
 .reserveInStore-locationSearch-input {
     border: 1px solid #e2e7f1;
     font-size: 12px;
+    width: 100%;
 }
 .reserveInStore-locationSearch-input:focus {
     border: 1px solid #e2e7f1;
@@ -565,6 +570,8 @@
 }
 .reserveInStore-locationSearch-clear {
     display: none;
+    margin-left: 10px;
+    padding-top: 6px;
 }
 .reserveInStore-locationSearch-clear,
 .reserveInStore-locationSearch-clear:active,
@@ -767,6 +774,16 @@ h5.ris-faq-question {
         padding-top: 0;
     }
 
+    .ris-column-blank {
+        display: none;
+    }
+    .reserveInStore-locationSearch-btn {
+        padding: 3px 5px 2px 5px;
+    }
+    .reserveInStore-reserve-modal .reserveInStore-locationSearch {
+        margin-top: 20px;
+        padding-bottom: 20px;
+    }
 
     .ris-columns .ris-column:last-child {
         flex-basis: 100%;

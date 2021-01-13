@@ -580,6 +580,7 @@ ReserveInStore.ReserveModal = function (opts) {
     };
 
     var showHideReserveItemsNotAvailMessage = function (locationId, reserveItems) {
+        var reservedQty = 1;
         var currentLocationPlatformId = getLocationPlatformId(locationId);
         var reserveItemsStockAvail = true;
         var $reserveItemsNotAvailMessageDiv = $reserveModal.find('.ris-cart-items-not-avail');
@@ -588,7 +589,12 @@ ReserveInStore.ReserveModal = function (opts) {
         var productName = "";
         var totalItemNotAvail = 0;
         for (var k = 0; k < reserveItems.length; k++) {
-            if (reserveItems[k].quantity > stockData[reserveItems[k].product_id][reserveItems[k].variant_id][currentLocationPlatformId]) {
+            if (reserveItems[k].quantity !== undefined) {
+                reservedQty = reserveItems[k].quantity;
+            } else {
+                reservedQty = 1;
+            }
+            if (reservedQty > stockData[reserveItems[k].product_id][reserveItems[k].variant_id][currentLocationPlatformId]) {
                 reserveItemsStockAvail = false;
                 productName = productName + reserveItems[k].product_title + ", ";
                 totalItemNotAvail = totalItemNotAvail + 1;

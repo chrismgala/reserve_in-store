@@ -92,7 +92,6 @@ ReserveInStore.ChooseLocationModal = function (opts) {
                 } else {
                    $clearSearchLink.show();
                 }
-
             });
         });
 

@@ -234,7 +234,6 @@ ReserveInStore.ReserveModal = function (opts) {
                 } else {
                     $clearSearchLink.show();
                 }
-
             });
         });
 

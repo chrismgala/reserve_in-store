@@ -20,6 +20,8 @@ module Api
         locations = locations.where("(string_to_array(product_tag_filter,',')::text[]) && (ARRAY[?]::text[]) OR product_tag_filter = ? ", load_product_tag_param, '')
         locations = locations.where(visible_in_product: true) if params[:current_page] == "product" 
         locations = locations.where(visible_in_cart: true) if params[:current_page] == "cart"
+        locations = locations.where('name ILIKE :query OR address ILIKE :query OR state ILIKE :query OR city ILIKE :query OR zip ILIKE :query', query: "%#{params[:search]}%") if params[:search].present?
+        locations = locations.order("name")
         locations = locations.page(params[:page]).per(250)
 
         if secret_key.present?

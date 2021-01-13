@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_27_072900) do
+ActiveRecord::Schema.define(version: 2021_01_08_065959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +136,7 @@ ActiveRecord::Schema.define(version: 2020_11_27_072900) do
     t.text "admin_notes"
     t.datetime "trial_extend_date"
     t.jsonb "show_stock_status_labels", default: {"in_reserve_modal_cart_items"=>["in_stock", "low_stock", "no_stock", "stock_unknown"], "in_reserve_modal_cart_page_locations"=>["all_items_available", "x_items_available", "no_stock"], "in_choose_location_modal_product_page"=>["in_stock", "low_stock", "no_stock", "stock_unknown"], "in_reserve_modal_product_page_locations"=>["in_stock", "low_stock", "no_stock", "stock_unknown"]}
+    t.boolean "hide_location_search"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

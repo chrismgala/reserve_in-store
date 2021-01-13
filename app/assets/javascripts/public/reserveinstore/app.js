@@ -1,6 +1,6 @@
 var ReserveInStore = ReserveInStore || {};
 ReserveInStore.App = function(opts) {
-    this.version = '1.2.6.0'; // Version of the JS library.
+    this.version = '1.2.7.0'; // Version of the JS library.
     var self = this;
     opts = opts || {};
     opts.app = self;
@@ -86,6 +86,8 @@ ReserveInStore.App = function(opts) {
 
         reserveModal = new ReserveInStore.ReserveModal(componentOpts);
         chooselocationModal = new ReserveInStore.ChooseLocationModal(componentOpts);
+
+        self.searchLocations = new ReserveInStore.SearchLocations(componentOpts);
 
         if (product) {
             reserveProductBtn = new ReserveInStore.ReserveProductBtn({

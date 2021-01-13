@@ -2,7 +2,7 @@ ReserveInStore.ReserveModal = function (opts) {
     var self = this;
     opts = opts || {};
     var $ = ReserveInStore.Util.$();
-    var api, config, $modalBackground, $reserveModal, $successModal, $form, formDataArray;
+    var api, config, $modalBackground, $reserveModal, $successModal, $form, $clearSearchLink, formDataArray;
 
     var locationsManager = opts.locationsManager;
     var inventoryManager = opts.inventoryManager;
@@ -194,6 +194,7 @@ ReserveInStore.ReserveModal = function (opts) {
         $modalBackground = self.$modalContainer.find('.reserveInStore-modal-background');
         $reserveModal = $modalBackground.find('.reserveInStore-reserve-modal');
         $successModal = $modalBackground.find('.reserveInStore-success-modal');
+        $clearSearchLink = $reserveModal.find(".reserveInStore-locationSearch-clear");
         centerPriceDiv();
         setCloseConditions();
         inputFormValue();
@@ -205,6 +206,59 @@ ReserveInStore.ReserveModal = function (opts) {
             var locationId = self.$modalContainer.find('input[name="reservation[location_id]"]:checked').val();
             locationsManager.setFavoriteLocationId(locationId);
             getStockInfo(locationId);
+        });
+
+        $reserveModal.find('.reserveInStore-locationSearch-btn').on('click', function(e) {
+            e.preventDefault();
+            var searchLocationInputValue = $reserveModal.find(".reserveInStore-locationSearch-input").val();
+            $reserveModal.find(".ris-location-options").toggleClass("loading");
+            opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
+                $reserveModal.find(".ris-location-options").html('');
+                $reserveModal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtml(data));
+
+                if (opts.app.getProduct()) {
+                    updateLocationStockInfo(data);
+                } else {
+                    updateCartLocationStockInfo(data);
+                }
+                self.$modalContainer.find('input[name="reservation[location_id]"]').on('click change', function() {
+                    var locationId = self.$modalContainer.find('input[name="reservation[location_id]"]:checked').val();
+                    locationsManager.setFavoriteLocationId(locationId);
+                    getStockInfo(locationId);
+                });
+
+                $reserveModal.find(".ris-location-options").toggleClass("loading");
+
+                if (searchLocationInputValue === '') {
+                    $clearSearchLink.hide();
+                } else {
+                    $clearSearchLink.show();
+                }
+            });
+        });
+
+        $reserveModal.find('.reserveInStore-locationSearch-clear').on('click', function(e) {
+            e.preventDefault();
+            $reserveModal.find(".reserveInStore-locationSearch-input").val('');
+            var searchLocationInputValue = $reserveModal.find(".reserveInStore-locationSearch-input").val();
+            $reserveModal.find(".ris-location-options").toggleClass("loading");
+            opts.app.searchLocations.getSearchData(searchLocationInputValue, function(data)  {
+                $reserveModal.find(".ris-location-options").html('');
+                $reserveModal.find(".ris-location-options").append(opts.app.searchLocations.renderSearchHtml(data));
+
+                if (opts.app.getProduct()) {
+                    updateLocationStockInfo(data);
+                } else {
+                    updateCartLocationStockInfo(data);
+                }
+                self.$modalContainer.find('input[name="reservation[location_id]"]').on('click change', function() {
+                    var locationId = self.$modalContainer.find('input[name="reservation[location_id]"]:checked').val();
+                    locationsManager.setFavoriteLocationId(locationId);
+                    getStockInfo(locationId);
+                });
+                $reserveModal.find(".ris-location-options").toggleClass("loading");
+                $clearSearchLink.hide();
+            });
         });
 
         locationsManager.whenReady(function(bestLocation) {

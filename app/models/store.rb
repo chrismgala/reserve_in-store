@@ -355,7 +355,7 @@ class Store < ApplicationRecord
     {
       locations: (locations.where(product_tag_condition)
                     .where(current_page_condition)
-                 ).to_a.map { |loc| loc.to_liquid },
+                 ).order("name").to_a.map { |loc| loc.to_liquid },
       cdn_url: ENV['PUBLIC_CDN_BASE_PATH'],
       settings: self
     }.with_indifferent_access

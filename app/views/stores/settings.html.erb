@@ -485,6 +485,79 @@
           </div>
         </div>
 
+        <div class="Polaris-Layout__AnnotatedSection">
+          <div class="Polaris-Layout__AnnotationWrapper">
+            <div class="Polaris-Layout__Annotation">
+              <div class="Polaris-TextContainer">
+                <h2 class="Polaris-Heading">Email Notifications</h2>
+              </div>
+            </div>
+            <div class="Polaris-Layout__AnnotationContent">
+              <div class="Polaris-Card">
+                <div class="Polaris-Card__Section">
+                  <div class="Polaris-FormLayout">
+                    <div class="Polaris-FormLayout__Item">
+                      <div class="Polaris-Labelled__LabelWrapper">
+                        <div class="Polaris-Label">
+                          <%= f.label 'Send Email to customers once reservation is', class: 'Polaris-Label__Text' %>
+                        </div>
+                      </div>
+                      <fieldset class="Polaris-ChoiceList">
+                        <ul class="Polaris-ChoiceList__Choices">
+                          <li>
+                            <label class="Polaris-Choice" for="store_reservation_fulfilled_send_notification">
+                              <div class="Polaris-Choice__Control">
+                                <div class="Polaris-Checkbox">
+                                  <%= f.check_box :reservation_fulfilled_send_notification, class: 'Polaris-Checkbox__Input' %>
+                                  <div class="Polaris-Checkbox__Backdrop"></div>
+                                  <div class="Polaris-Checkbox__Icon">
+                                    <span class="Polaris-Icon">
+                                      <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
+                                        <g fill-rule="evenodd">
+                                          <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
+                                        </g>
+                                      </svg>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="Polaris-Choice__Label">
+                                Fulfilled
+                              </div>
+                            </label>
+                          </li>
+                          <li>
+                            <label class="Polaris-Choice" for="store_reservation_unfulfilled_send_notification">
+                              <div class="Polaris-Choice__Control">
+                                <div class="Polaris-Checkbox">
+                                  <%= f.check_box :reservation_unfulfilled_send_notification, class: 'Polaris-Checkbox__Input' %>
+                                  <div class="Polaris-Checkbox__Backdrop"></div>
+                                  <div class="Polaris-Checkbox__Icon">
+                                    <span class="Polaris-Icon">
+                                      <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
+                                        <g fill-rule="evenodd">
+                                          <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
+                                        </g>
+                                      </svg>
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="Polaris-Choice__Label">
+                                Unfulfilled
+                              </div>
+                            </label>
+                          </li>
+                        </ul>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <% if @current_store.created_at <= 1.day.ago %>
           <%= render partial: "stores/settings/status", locals: { f: f, store: @current_store } %>
         <% end %>

@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   #root :to => 'stores#settings'
   #get 'auth/shopify/callback' => 'callbacks#callback'
 
-  resources :reservations
+  resources :reservations do
+    post 'unfulfilled_send_email'
+  end
   resources :locations
   resources :users
   get 'stores/settings'

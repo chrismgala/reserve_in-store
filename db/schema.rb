@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_25_155536) do
+ActiveRecord::Schema.define(version: 2021_01_25_161710) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,6 +139,14 @@ ActiveRecord::Schema.define(version: 2021_01_25_155536) do
     t.boolean "hide_location_search"
     t.boolean "reservation_fulfilled_send_notification"
     t.boolean "reservation_unfulfilled_send_notification"
+    t.text "unfulfilled_reservation_notification_email_tpl"
+    t.boolean "unfulfilled_reservation_notification_email_tpl_enabled"
+    t.string "unfulfilled_reservation_sender_name"
+    t.string "unfulfilled_reservation_subject"
+    t.text "fulfilled_reservation_notification_email_tpl"
+    t.boolean "fulfilled_reservation_notification_email_tpl_enabled"
+    t.string "fulfilled_reservation_sender_name"
+    t.string "fulfilled_reservation_subject"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

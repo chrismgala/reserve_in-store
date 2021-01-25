@@ -1,0 +1,26 @@
+<p>
+  Hello {{ customer.first_name }},
+</p>
+
+
+<p>
+  Your reservation has been fulfilled.
+</p>
+
+<hr>
+Details of your order:
+<h4>Items:</h4>
+<ul>
+  {% for item in cart.items %}
+  <li>
+    {{ item.product_title }} ({{ item.variant_title }})
+  </li>
+  {% endfor %}
+</ul>
+
+<hr>
+
+<p>
+  Thank you for Shopping with us!<br>
+  <a href="{{ store.website_url }}" target="_blank">{{ store.name }}</a>
+</p>

@@ -31,7 +31,12 @@ class Store < ApplicationRecord
     :location_notification_subject, :customer_confirmation_subject,
     :location_notification_sender_name, :customer_confirmation_sender_name,
     :show_additional_fields, :webhooks_enabled, :stock_threshold, :hide_location_search,
-    :reservation_fulfilled_send_notification, :reservation_unfulfilled_send_notification, show_stock_status_labels: {}
+    :reservation_fulfilled_send_notification, :reservation_unfulfilled_send_notification,
+    :fulfilled_reservation_notification_email_tpl, :fulfilled_reservation_notification_email_tpl_enabled,
+    :unfulfilled_reservation_notification_email_tpl, :unfulfilled_reservation_notification_email_tpl_enabled,
+    :fulfilled_reservation_subject, :unfulfilled_reservation_subject,
+    :fulfilled_reservation_sender_name, :unfulfilled_reservation_sender_name,
+    show_stock_status_labels: {}
   ]
 
   JS_SCRIPT_PATH = "#{ENV['PUBLIC_CDN_BASE_PATH'].to_s.chomp('/')}/reserveinstore.js"
@@ -207,6 +212,42 @@ class Store < ApplicationRecord
     end
   end
   alias_method :email_template_in_use, :customer_confirm_email_tpl_in_use # Alias for reverse compatibility, can be removed probably by July 1, 2019
+
+  ##
+  # @return [Text] - default, un-rendered email template
+  def self.default_unfulfilled_reservation_notification_email_tpl
+    return @default_unfulfilled_reservation_notification_email_tpl if @default_unfulfilled_reservation_notification_email_tpl.present? && !Rails.env.development?
+    @default_unfulfilled_reservation_notification_email_tpl = ApplicationController.new.render_to_string(partial: 'reservation_mailer/default_templates/unfulfilled_reservation_notification_email_tpl')
+    end
+  def default_unfulfilled_reservation_notification_email_tpl; self.class.default_unfulfilled_reservation_notification_email_tpl; end
+
+  ##
+  # @return [Text] - The template we want to use for unfulfilled emails for this store
+  def unfulfilled_reservation_notification_email_tpl_in_use
+    if unfulfilled_reservation_notification_email_tpl_enabled? && unfulfilled_reservation_notification_email_tpl.present?
+      unfulfilled_reservation_notification_email_tpl.to_s
+    else
+      self.class.default_unfulfilled_reservation_notification_email_tpl
+    end
+  end
+
+  ##
+  # @return [Text] - default, un-rendered email template
+  def self.default_fulfilled_reservation_notification_email_tpl
+    return @default_fulfilled_reservation_notification_email_tpl if @default_fulfilled_reservation_notification_email_tpl.present? && !Rails.env.development?
+    @default_fulfilled_reservation_notification_email_tpl = ApplicationController.new.render_to_string(partial: 'reservation_mailer/default_templates/fulfilled_reservation_notification_email_tpl')
+    end
+  def default_fulfilled_reservation_notification_email_tpl; self.class.default_fulfilled_reservation_notification_email_tpl; end
+
+  ##
+  # @return [Text] - The template we want to use for fulfilled emails for this store
+  def fulfilled_reservation_notification_email_tpl_in_use
+    if fulfilled_reservation_notification_email_tpl_enabled? && fulfilled_reservation_notification_email_tpl.present?
+      fulfilled_reservation_notification_email_tpl.to_s
+    else
+      self.class.default_fulfilled_reservation_notification_email_tpl
+    end
+  end
 
   ##
   # @return [Text] - default, un-rendered email template

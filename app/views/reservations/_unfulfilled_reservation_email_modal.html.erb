@@ -1,0 +1,78 @@
+<%= form_for :unfulfilled_reservation_email, url: reservation_unfulfilled_send_email_path(reservation), html: { class: 'reservation-status-form' }, method: :post do |f| %>
+<div class="unfulfilled-reservation-email-modal-<%= reservation.id %>" style="display:none;">
+  <div class="Polaris-Modal-Dialog__Container" data-polaris-layer="true" data-polaris-overlay="true">
+    <div class="Polaris-Modal-Dialog__Modal" role="dialog" aria-labelledby="modal-header" tabindex="-1">
+      <div class="Polaris-Modal-Header">
+        <div class="Polaris-Stack Polaris-Stack--alignmentCenter">
+          <div class="Polaris-Stack__Item Polaris-Stack__Item--fill">
+            <div id="modal-header9">
+              <h2 class="Polaris-DisplayText Polaris-DisplayText--sizeSmall">Reservation #<%= reservation.id %> Send Email Notification</h2></div>
+          </div>
+          <div class="Polaris-Stack__Item">
+            <button class="Polaris-Modal-Header__CloseButton reservation-email-modal-close" onclick="$('.unfulfilled-reservation-email-modal-<%= reservation.id %>').hide(); return false;">
+              <span class="Polaris-Icon Polaris-Icon--colorInkLighter Polaris-Icon--isColored"><svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true"><path d="M11.414 10l6.293-6.293a.999.999 0 1 0-1.414-1.414L10 8.586 3.707 2.293a.999.999 0 1 0-1.414 1.414L8.586 10l-6.293 6.293a.999.999 0 1 0 1.414 1.414L10 11.414l6.293 6.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L11.414 10z" fill-rule="evenodd"></path></svg></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="Polaris-Modal__BodyWrapper">
+        <div class="Polaris-Modal__Body Polaris-Scrollable Polaris-Scrollable--vertical Polaris-Scrollable--hasBottomShadow Polaris-Scrollable--verticalHasScrolling" data-polaris-scrollable="true">
+          <section class="Polaris-Modal-Section">
+            <div class="Polaris-FormLayout">
+              <div class="Polaris-FormLayout__Items">
+                <div class="Polaris-FormLayout__Item">
+                  <div>To</div>
+                  <div><%= reservation.customer_email %></div>
+                </div>
+                <div class="Polaris-FormLayout__Item">
+                  <div>Subject:</div>
+                  <div><%= store.unfulfilled_reservation_subject.presence || 'In-store Reservation Unfulfilled' %></div>
+                </div>
+              </div>
+              <input value="true" type="hidden" name="reservation[unfulfilled_reservation_email_sent]">
+              <input value="true" type="hidden" name="reservation[is_unfulfilled]">
+              <div>
+                <%= render partial: 'stores/shared/unfulfilled_reservation_liquid_editor_section', locals: {
+                    reservation: reservation,
+                    enabled: @current_store.unfulfilled_reservation_notification_email_tpl_enabled?,
+                    attr: "unfulfilled_reservation_custom_email_tpl_#{reservation.id}",
+                    attr_name: "unfulfilled_reservation_custom_email_tpl",
+                    db_value: reservation.unfulfilled_reservation_custom_email_tpl.presence || @current_store.unfulfilled_reservation_notification_email_tpl,
+                    value_in_use: reservation.unfulfilled_reservation_custom_email_tpl.presence  || @current_store.unfulfilled_reservation_notification_email_tpl_in_use,
+                    default_value: @current_store.default_unfulfilled_reservation_notification_email_tpl,
+                    preview_vars: Reservation.new(store: @current_store).preview_email_liquid_params,
+                    dont_use_global_css: true,
+                    preview_params: { email: true },
+                    f: f
+                } %>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="Polaris-Modal-Footer">
+        <div class="Polaris-Modal-Footer__FooterContent">
+          <div class="Polaris-Stack Polaris-Stack--alignmentCenter">
+            <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
+            <div class="Polaris-Stack__Item">
+              <div class="Polaris-ButtonGroup">
+                <div class="Polaris-ButtonGroup__Item">
+                  <button type="button" class="Polaris-Button reservation-email-modal-close" onclick="$('.unfulfilled-reservation-email-modal-<%= reservation.id %>').hide(); return false;" data-dismiss="modal">
+                    <span class="Polaris-Button__Content"><span>Cancel</span></span></button>
+                </div>
+                <div class="Polaris-ButtonGroup__Item">
+                  <button type="submit" class="Polaris-Button Polaris-Button--primary">
+                    <span class="Polaris-Button__Content"><span>Send</span></span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="Polaris-Modal__Backdrop"></div>
+</div>
+<% end %>

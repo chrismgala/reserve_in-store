@@ -1,0 +1,26 @@
+<p>
+  Hello {{ customer.first_name }},
+</p>
+
+
+<p>
+  Unfortunately we will be unable to fulfill your reservation due to high demand.
+  We apologize for this inconvenience.
+</p>
+
+<hr>
+Details of your order:
+<h4>Items:</h4>
+<ul>
+  {% for item in cart.items %}
+  <li>
+    {{ item.product_title }} ({{ item.variant_title }})
+  </li>
+  {% endfor %}
+</ul>
+
+<hr>
+
+<p>
+  <a href="{{ store.website_url}}" target="_blank">{{ store.name }}</a>
+</p>

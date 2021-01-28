@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_08_065959) do
+ActiveRecord::Schema.define(version: 2021_01_25_165339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,10 @@ ActiveRecord::Schema.define(version: 2021_01_08_065959) do
     t.text "line_item"
     t.jsonb "cart"
     t.jsonb "additional_fields", default: {}
+    t.text "unfulfilled_reservation_custom_email_tpl"
+    t.boolean "unfulfilled_reservation_custom_email_tpl_enabled"
+    t.boolean "unfulfilled_reservation_email_sent"
+    t.boolean "is_unfulfilled"
     t.index ["location_id"], name: "index_reservations_on_location_id"
     t.index ["store_id"], name: "index_reservations_on_store_id"
   end
@@ -137,6 +141,16 @@ ActiveRecord::Schema.define(version: 2021_01_08_065959) do
     t.datetime "trial_extend_date"
     t.jsonb "show_stock_status_labels", default: {"in_reserve_modal_cart_items"=>["in_stock", "low_stock", "no_stock", "stock_unknown"], "in_reserve_modal_cart_page_locations"=>["all_items_available", "x_items_available", "no_stock"], "in_choose_location_modal_product_page"=>["in_stock", "low_stock", "no_stock", "stock_unknown"], "in_reserve_modal_product_page_locations"=>["in_stock", "low_stock", "no_stock", "stock_unknown"]}
     t.boolean "hide_location_search"
+    t.boolean "reservation_fulfilled_send_notification"
+    t.boolean "reservation_unfulfilled_send_notification"
+    t.text "unfulfilled_reservation_notification_email_tpl"
+    t.boolean "unfulfilled_reservation_notification_email_tpl_enabled"
+    t.string "unfulfilled_reservation_sender_name"
+    t.string "unfulfilled_reservation_subject"
+    t.text "fulfilled_reservation_notification_email_tpl"
+    t.boolean "fulfilled_reservation_notification_email_tpl_enabled"
+    t.string "fulfilled_reservation_sender_name"
+    t.string "fulfilled_reservation_subject"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

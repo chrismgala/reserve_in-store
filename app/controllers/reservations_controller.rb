@@ -35,8 +35,27 @@ class ReservationsController < LoggedInController
   def update
     respond_to do |format|
       if @reservation.update(reservation_params)
+        if reservation_params[:fulfilled].to_bool == true && @current_store.reservation_fulfilled_send_notification?
+          ReservationMailer.fulfilled_reservation(store: @current_store, reservation:@reservation).deliver_later
+        end
         format.html { redirect_to reservations_path, notice: 'Reservation was successfully updated.' }
         format.json { render :show, status: :ok, reservation: @reservation }
+      else
+        format.html { redirect_to reservations_path, flash: { error: @reservation.errors.full_messages.join("\n") } }
+        format.json { render json: @reservation.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  ##
+  # POST /reservations/:reservation_id/unfulfilled_send_email
+  def unfulfilled_send_email
+    @reservation = @current_store.reservations.find(params[:reservation_id])
+    @reservation.update(reservation_params)
+    respond_to do |format|
+      if ReservationMailer.unfulfilled_reservation(store: @current_store, reservation:@reservation).deliver_later
+        format.html { redirect_to reservations_path, notice: 'Unfulfilled Reservation Notification was successfully sent.' }
+        format.json { render :reservations, status: :ok }
       else
         format.html { redirect_to reservations_path, flash: { error: @reservation.errors.full_messages.join("\n") } }
         format.json { render json: @reservation.errors, status: :unprocessable_entity }

@@ -33,6 +33,32 @@ class ReservationMailer < ApplicationMailer
                 reply_to: store_location_contact)
   end
 
+  def unfulfilled_reservation(store:, reservation:)
+    @store = store
+    @reservation = reservation
+    if reservation.unfulfilled_reservation_custom_email_tpl_enabled?
+      @rendered_unfulfilled_reservation_notification_email_template = @reservation.rendered_unfulfilled_reservation_custom_notification_email_template
+    else
+      @rendered_unfulfilled_reservation_notification_email_template = @reservation.rendered_unfulfilled_reservation_notification_email_template
+    end
+
+    staged_mail(to: customer_contact,
+                subject: store.unfulfilled_reservation_subject.presence || "In-store Reservation Unfulfilled",
+                from: unfulfilled_reservation_sender,
+                reply_to: store_location_contact)
+  end
+
+  def fulfilled_reservation(store:, reservation:)
+    @store = store
+    @reservation = reservation
+    @rendered_fulfilled_reservation_notification_email_template = @reservation.rendered_fulfilled_reservation_notification_email_template
+
+    staged_mail(to: customer_contact,
+                subject: store.fulfilled_reservation_subject.presence || "In-store Reservation Fulfilled",
+                from: fulfilled_reservation_sender,
+                reply_to: store_location_contact)
+  end
+
   private
 
   def store_location_contact
@@ -51,6 +77,30 @@ class ReservationMailer < ApplicationMailer
     else
       store_email.split('@').first
     end
+  end
+
+  def unfulfilled_reservation_sender_name
+    if @store.unfulfilled_reservation_sender_name?
+      @store.unfulfilled_reservation_sender_name
+    else
+      system_name
+    end
+  end
+
+  def unfulfilled_reservation_sender
+    "\"#{unfulfilled_reservation_sender_name}\" <#{system_email}>"
+  end
+
+  def fulfilled_reservation_sender_name
+    if @store.fulfilled_reservation_sender_name?
+      @store.fulfilled_reservation_sender_name
+    else
+      system_name
+    end
+  end
+
+  def fulfilled_reservation_sender
+    "\"#{fulfilled_reservation_sender_name}\" <#{system_email}>"
   end
 
   def customer_confirmation_sender_name

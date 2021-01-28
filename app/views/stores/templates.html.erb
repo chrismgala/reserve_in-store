@@ -85,7 +85,6 @@
             # frontend_mode: true
         } %>
 
-
         <%= render partial: 'stores/shared/email_template_section', locals: {
             heading: 'Location Notification Email',
             enabled: @current_store.location_notification_email_tpl_enabled?,
@@ -104,6 +103,41 @@
             f: f
         } %>
 
+        <%= render partial: 'stores/shared/email_template_section', locals: {
+            heading: 'Fulfilled Reservation Notification Email',
+            enabled: @current_store.fulfilled_reservation_notification_email_tpl_enabled?,
+            subheading: 'Customize the reservation status email that gets sent to customers.',
+            attr: 'fulfilled_reservation_notification_email_tpl',
+            db_value: @current_store.fulfilled_reservation_notification_email_tpl,
+            value_in_use: @current_store.fulfilled_reservation_notification_email_tpl_in_use,
+            default_value: @current_store.default_fulfilled_reservation_notification_email_tpl,
+            preview_vars: Reservation.new(store: @current_store).preview_email_liquid_params,
+            dont_use_global_css: true,
+            preview_params: { email: true },
+            sender_name_field: :fulfilled_reservation_sender_name,
+            sender_name_field_default: 'Default: Reserve In-store',
+            subject_field: :fulfilled_reservation_subject,
+            subject_field_default: 'Default: In-store Reservation Fulfilled',
+            f: f
+        } %>
+
+        <%= render partial: 'stores/shared/email_template_section', locals: {
+            heading: 'Unfulfilled Reservation Notification Email',
+            enabled: @current_store.unfulfilled_reservation_notification_email_tpl_enabled?,
+            subheading: 'Customize the reservation status email that gets sent to customers.',
+            attr: 'unfulfilled_reservation_notification_email_tpl',
+            db_value: @current_store.unfulfilled_reservation_notification_email_tpl,
+            value_in_use: @current_store.unfulfilled_reservation_notification_email_tpl_in_use,
+            default_value: @current_store.default_unfulfilled_reservation_notification_email_tpl,
+            preview_vars: Reservation.new(store: @current_store).preview_email_liquid_params,
+            dont_use_global_css: true,
+            preview_params: { email: true },
+            sender_name_field: :unfulfilled_reservation_sender_name,
+            sender_name_field_default: 'Default: Reserve In-store',
+            subject_field: :unfulfilled_reservation_subject,
+            subject_field_default: 'Default: In-store Reservation Unfulfilled',
+            f: f
+        } %>
 
         <%= render partial: 'stores/shared/liquid_editor_section', locals: {
             heading: 'Product Page Reserve Button',
@@ -116,7 +150,6 @@
             extra_css: '.reserveInStore-btn-container { margin-top: 0 }',
             frontend_mode: true
         } %>
-
 
         <%= render partial: 'stores/shared/liquid_editor_section', locals: {
             heading: 'Cart Reserve Button',

@@ -14,8 +14,9 @@ class Reservation < ActiveRecord::Base
 
   PERMITTED_PARAMS = [
     :customer_name, :customer_email, :customer_phone, :location_id, :platform_product_id,
-    :platform_variant_id, :instructions_from_customer, :fulfilled, :line_item, :cart => {},
-    :additional_fields => {}
+    :platform_variant_id, :instructions_from_customer, :fulfilled, :is_unfulfilled, :line_item,
+    :unfulfilled_reservation_custom_email_tpl, :unfulfilled_reservation_custom_email_tpl_enabled, :unfulfilled_reservation_email_sent,
+    :cart => {}, :additional_fields => {}
   ]
 
   def customer_first_name
@@ -40,6 +41,31 @@ class Reservation < ActiveRecord::Base
   # @return [Text] - rendered email template
   def rendered_customer_email_template
     tpl = store.customer_confirm_email_tpl_in_use
+    Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
+  end
+
+  ##
+  # @param [String] shopify_product_link - the link to put in our liquid params
+  # @return [Text] - rendered email template
+  def rendered_unfulfilled_reservation_notification_email_template
+    tpl = store.unfulfilled_reservation_notification_email_tpl_in_use
+    Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
+  end
+
+  ##
+  # Custom email template used for that specific reservation.
+  # @param [String] shopify_product_link - the link to put in our liquid params
+  # @return [Text] - rendered email template
+  def rendered_unfulfilled_reservation_custom_notification_email_template
+    tpl = unfulfilled_reservation_custom_email_tpl
+    Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
+  end
+
+  ##
+  # @param [String] shopify_product_link - the link to put in our liquid params
+  # @return [Text] - rendered email template
+  def rendered_fulfilled_reservation_notification_email_template
+    tpl = store.fulfilled_reservation_notification_email_tpl_in_use
     Liquid::Template.parse(tpl).render(email_liquid_params.deep_stringify_keys).html_safe
   end
 

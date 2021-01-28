@@ -79,7 +79,7 @@ class ReservationMailer < ApplicationMailer
     end
   end
 
-  def unfulfilled_reservation_sender
+  def unfulfilled_reservation_sender_name
     if @store.unfulfilled_reservation_sender_name?
       @store.unfulfilled_reservation_sender_name
     else
@@ -87,12 +87,20 @@ class ReservationMailer < ApplicationMailer
     end
   end
 
-  def fulfilled_reservation_sender
+  def unfulfilled_reservation_sender
+    "\"#{unfulfilled_reservation_sender_name}\" <#{system_email}>"
+  end
+
+  def fulfilled_reservation_sender_name
     if @store.fulfilled_reservation_sender_name?
       @store.fulfilled_reservation_sender_name
     else
       system_name
     end
+  end
+
+  def fulfilled_reservation_sender
+    "\"#{fulfilled_reservation_sender_name}\" <#{system_email}>"
   end
 
   def customer_confirmation_sender_name

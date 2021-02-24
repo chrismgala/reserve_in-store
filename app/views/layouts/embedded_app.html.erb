@@ -10,106 +10,107 @@
   <%= javascript_include_tag 'backend' %>
   <%= csrf_meta_tags %>
 </head>
-
 <body>
 
-<% unless hide_menu? %>
-  <!-- top navigation bar -->
-  <div class="Polaris-Card top_navbar">
-    <ul role="tablist" class="Polaris-Tabs">
-      <li role="presentation" class="Polaris-Tabs__TabContainer">
-        <a class="Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'settings') %>" href="<%= stores_settings_path(view: 'settings') %>">
-          <span class="Polaris-Tabs__Title">Settings</span></a>
-      </li>
-      <li role="presentation" class="Polaris-Tabs__TabContainer">
-        <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'reservations') %>" href="<%= reservations_path %>">
-          <span class="Polaris-Tabs__Title">Reservations</span></a>
-      </li>
-      <li role="presentation" class="Polaris-Tabs__TabContainer">
-        <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'locations') %>" href="<%= locations_path %>">
-          <span class="Polaris-Tabs__Title">Locations</span></a>
-      </li>
-      <li role="presentation" class="Polaris-Tabs__TabContainer">
-        <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'templates') %>" href="<%= stores_templates_path %>">
-          <span class="Polaris-Tabs__Title">Templates</span></a>
-      </li>
-      <% if @current_store.webhooks_enabled? %>
+  <% unless hide_menu? %>
+    <!-- top navigation bar -->
+    <div class="Polaris-Card top_navbar">
+      <ul role="tablist" class="Polaris-Tabs">
         <li role="presentation" class="Polaris-Tabs__TabContainer">
-          <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'webhooks') %>" href="<%= stores_webhooks_path %>">
-            <span class="Polaris-Tabs__Title">Webhooks</span></a>
+          <a class="Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'settings') %>" href="<%= stores_settings_path(view: 'settings') %>">
+            <span class="Polaris-Tabs__Title">Settings</span></a>
         </li>
-      <% end %>
-      <li role="presentation" class="Polaris-Tabs__TabContainer">
-        <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'help') %>" href="<%= stores_help_path %>">
-          <span class="Polaris-Tabs__Title">Help</span></a>
-      </li>
-    </ul>
-  </div>
-<% end %>
+        <li role="presentation" class="Polaris-Tabs__TabContainer">
+          <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'reservations') %>" href="<%= reservations_path %>">
+            <span class="Polaris-Tabs__Title">Reservations</span></a>
+        </li>
+        <li role="presentation" class="Polaris-Tabs__TabContainer">
+          <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'locations') %>" href="<%= locations_path %>">
+            <span class="Polaris-Tabs__Title">Locations</span></a>
+        </li>
+        <li role="presentation" class="Polaris-Tabs__TabContainer">
+          <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'templates') %>" href="<%= stores_templates_path %>">
+            <span class="Polaris-Tabs__Title">Templates</span></a>
+        </li>
+        <% if @current_store.webhooks_enabled? %>
+          <li role="presentation" class="Polaris-Tabs__TabContainer">
+            <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'webhooks') %>" href="<%= stores_webhooks_path %>">
+              <span class="Polaris-Tabs__Title">Webhooks</span></a>
+          </li>
+        <% end %>
+        <li role="presentation" class="Polaris-Tabs__TabContainer">
+          <a class="nav-item nav-link Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'help') %>" href="<%= stores_help_path %>">
+            <span class="Polaris-Tabs__Title">Help</span></a>
+        </li>
+      </ul>
+    </div>
+  <% end %>
 
-<!-- Main section-->
-<div class="app-wrapper">
-  <div class="app-content">
-    <main role="main">
+  <!-- Main section-->
+  <div class="app-wrapper">
+    <div class="app-content">
+      <main role="main">
 
-      <%= yield %>
-    </main>
-  </div>
-</div>
-
-<%= render 'layouts/flash_messages' %>
-
-<script src="https://cdn.shopify.com/s/assets/external/app.js?<%= Time.now.strftime('%Y%m%d%H') %>"></script>
-
-<script type="text/javascript">
-    addPaddingToAppWrapper();
-    ShopifyApp.init({
-        apiKey: "<%= ShopifyApp.configuration.api_key %>",
-        shopOrigin: "<%= "https://#{ @shop_session.domain }" if @shop_session %>",
-        debug: <%= Rails.env.development? %>,
-        forceRedirect: true,
-    });
-
-
-    ShopifyApp.ready(function(){
-        $('.display-if-enabled').displayIfEnabled();
-        $('.display-if-selected-option').displayIfSelectedValue();
-    });
-
-
-    <% if content_for?(:title) %>
-      ShopifyApp.Bar.setTitle('<%= yield :title %>');
-    <% end %>
-</script>
-
-<div style="--top-bar-background:#00848e; --top-bar-color:#f9fafb; --top-bar-background-lighter:#1d9ba4;">
-  <div class="Polaris-FooterHelp">
-    <div class="Polaris-FooterHelp__Content">
-      <div class="Polaris-FooterHelp__Icon"><span class="Polaris-Icon Polaris-Icon--colorTeal Polaris-Icon--isColored Polaris-Icon--hasBackdrop"><svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
-            <circle cx="10" cy="10" r="9" fill="currentColor"></circle>
-            <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m0-4a1 1 0 1 0 0 2 1 1 0 1 0 0-2m0-10C8.346 4 7 5.346 7 7a1 1 0 1 0 2 0 1.001 1.001 0 1 1 1.591.808C9.58 8.548 9 9.616 9 10.737V11a1 1 0 1 0 2 0v-.263c0-.653.484-1.105.773-1.317A3.013 3.013 0 0 0 13 7c0-1.654-1.346-3-3-3"></path>
-          </svg></span></div>
-      <div class="Polaris-FooterHelp__Text">Need help? <a class="Polaris-Link" href="#"  data-get-help="true">Chat with us</a>. We'd love to hear from you!</div>
+        <%= yield %>
+      </main>
     </div>
   </div>
-</div>
 
-<% if content_for?(:javascript) %>
-  <div id="ContentForJavascript" data-turbolinks-temporary>
-    <%= yield :javascript %>
+  <%= render 'layouts/flash_messages' %>
+
+  <script src="https://cdn.shopify.com/s/assets/external/app.js?<%= Time.now.strftime('%Y%m%d%H') %>"></script>
+
+  <script type="text/javascript">
+      addPaddingToAppWrapper();
+      ShopifyApp.init({
+          apiKey: "<%= ShopifyApp.configuration.api_key %>",
+          shopOrigin: "<%= "https://#{ @shop_session.domain }" if @shop_session %>",
+          debug: <%= Rails.env.development? %>,
+          forceRedirect: true,
+      });
+
+
+      ShopifyApp.ready(function(){
+          $('.display-if-enabled').displayIfEnabled();
+          $('.display-if-selected-option').displayIfSelectedValue();
+      });
+
+
+      <% if content_for?(:title) %>
+        ShopifyApp.Bar.setTitle('<%= yield :title %>');
+      <% end %>
+  </script>
+
+  <div style="--top-bar-background:#00848e; --top-bar-color:#f9fafb; --top-bar-background-lighter:#1d9ba4;">
+    <div class="Polaris-FooterHelp">
+      <div class="Polaris-FooterHelp__Content">
+        <div class="Polaris-FooterHelp__Icon"><span class="Polaris-Icon Polaris-Icon--colorTeal Polaris-Icon--isColored Polaris-Icon--hasBackdrop"><svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
+              <circle cx="10" cy="10" r="9" fill="currentColor"></circle>
+              <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m0-4a1 1 0 1 0 0 2 1 1 0 1 0 0-2m0-10C8.346 4 7 5.346 7 7a1 1 0 1 0 2 0 1.001 1.001 0 1 1 1.591.808C9.58 8.548 9 9.616 9 10.737V11a1 1 0 1 0 2 0v-.263c0-.653.484-1.105.773-1.317A3.013 3.013 0 0 0 13 7c0-1.654-1.346-3-3-3"></path>
+            </svg></span></div>
+        <div class="Polaris-FooterHelp__Text">Need help? <a class="Polaris-Link" href="#"  data-get-help="true">Chat with us</a>. We'd love to hear from you!</div>
+      </div>
+    </div>
   </div>
-<% end %>
 
-<%= intercom_script_tag unless embedded_mode? %>
+  <% if content_for?(:javascript) %>
+    <div id="ContentForJavascript" data-turbolinks-temporary>
+      <%= yield :javascript %>
+    </div>
+  <% end %>
 
-<% if  ENV['HEROKU_RELEASE_VERSION'].present? && ENV['HEROKU_RELEASE_CREATED_AT'].present? %>
-  <!--
-      Server software <strong><%= ENV['HEROKU_RELEASE_VERSION'] %></strong>.
-      Server last updated <strong><%= local_time_ago(Time.parse(ENV['HEROKU_RELEASE_CREATED_AT'])) %></strong>.
-   -->
-<% end %>
+  <%= intercom_script_tag unless embedded_mode? %>
 
+  <% if  ENV['HEROKU_RELEASE_VERSION'].present? && ENV['HEROKU_RELEASE_CREATED_AT'].present? %>
+    <!--
+        Server software <strong><%= ENV['HEROKU_RELEASE_VERSION'] %></strong>.
+        Server last updated <strong><%= local_time_ago(Time.parse(ENV['HEROKU_RELEASE_CREATED_AT'])) %></strong>.
+     -->
+  <% end %>
 
+  <%= render(partial: 'layouts/partials/footer/facebook_pixel') %>
+  <%= render(partial: 'layouts/partials/footer/linkedin_pixel') %>
+  <%= render(partial: 'layouts/partials/footer/adroll') %>
 
 </body>
 </html>

@@ -3,6 +3,7 @@ class TriggerWebhookJob < ActiveJob::Base
 
   def perform(store_id:, topic:, object_id:, object_klass:)
     @topic = topic
+    @object_id = object_id
 
     @store = Store.find(store_id)
     return if @store.blank?
@@ -22,16 +23,20 @@ class TriggerWebhookJob < ActiveJob::Base
     url = url.to_s.strip.chomp('?')
     return if url.blank?
 
-    ForcedLogger.log("Hitting webhook #{url}", store: store.id, topic: topic, object: object_id)
+    ForcedLogger.log("Hitting webhook #{url}", store: store.id, topic: topic, object: @object_id)
 
-    url += url.include?('?') ? '&' : '?&'
+    url += url.include?('?') ? '&' : '?'
     url += { secret_key: store.secret_key }.to_param
 
     data = object.respond_to?(:to_api_h) ? object.to_api_h : object.attributes
 
     headers = headers(auth_token)
 
-    HTTParty.post(url, body: data.to_json, timeout: 10, headers: headers)
+    HTTParty.post(url, body: data.to_json, timeout: 60, headers: headers)
+
+  rescue StandardError => e
+    ForcedLogger.error(e, log: "Webhook failed to trigger.", store: store.id, topic: topic, object: @object_id)
+    raise e
   end
 
   def headers(auth_token)

@@ -33,6 +33,7 @@ class Location < ActiveRecord::Base
       country: country,
       city: city,
       state: state,
+      zip: zip,
       province: state,
       region: state,
       phone: phone,

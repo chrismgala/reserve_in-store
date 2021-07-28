@@ -38,7 +38,7 @@ module Shopify
 
       @current_rac = current_store.api.recurring_application_charge.find(params[:charge_id])
 
-      if @current_rac.status == 'active'
+      if @current_rac.status == 'active' || @current_rac.status == 'accepted'
         find_or_update_subscription
 
         if @subscription.save

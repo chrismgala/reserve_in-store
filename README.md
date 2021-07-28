@@ -32,7 +32,7 @@ Here's how to get the app running on your local computer for development.
 You must have the following to run this app:
 1. Postgres 9.6.8
 2. Redis
-3. Ruby 2.3.3
+3. Ruby 2.6.7
 
 
 ### Dev tools

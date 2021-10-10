@@ -68,7 +68,7 @@
 
       var app = createApp({
           apiKey: "<%= ShopifyApp.configuration.api_key %>",
-          shopOrigin: "<%= "https://#{ @shop_session.domain }" if @shop_session %>",
+          shopOrigin: "<%= "#{ @shop_session.domain }" if @shop_session %>",
           debug: <%= Rails.env.development? %>,
           forceRedirect: true,
       });

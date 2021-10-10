@@ -6,11 +6,13 @@
   if (!document.documentElement.hasAttribute("data-turbolinks-preview")) {
     document.addEventListener(eventName, function flash() {
       <% if flash[:notice] %>
-        ShopifyApp.flashNotice("<%= j flash[:notice].html_safe %>");
+        var successNotice = Toast.create(app, { message: '<%= j flash[:notice].html_safe %>' });
+        successNotice.dispatch(Toast.Action.SHOW);
       <% end %>
 
       <% if flash[:error] %>
-        ShopifyApp.flashError("<%= j flash[:error].html_safe %>");
+        var errorNotice = Toast.create(app, { message: '<%= j flash[:error].html_safe %>', isError: true });
+        errorNotice.dispatch(Toast.Action.SHOW);
       <% end %>
                              
       document.removeEventListener(eventName, flash)

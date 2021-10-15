@@ -70,6 +70,7 @@
       var Toast = actions.Toast;
       var Modal = actions.Modal;
       var Button = actions.Button;
+      var ResourcePicker = actions.ResourcePicker;
 
       var app = createApp({
           apiKey: "<%= ShopifyApp.configuration.api_key %>",
@@ -79,7 +80,7 @@
       });
 
 
-      ShopifyApp.ready(function(){
+      $(document).ready(function() {
           $('.display-if-enabled').displayIfEnabled();
           $('.display-if-selected-option').displayIfSelectedValue();
       });

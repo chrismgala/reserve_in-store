@@ -23,6 +23,7 @@ var PolarisModal = function (opts) {
                 resourceType: ResourcePicker.ResourceType.Product,
                 options: {
                     selectMultiple: false,
+                    showVariants: false,
                 },
             }).dispatch(ResourcePicker.Action.OPEN);
 

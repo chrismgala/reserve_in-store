@@ -51,7 +51,9 @@ ReserveInStore.Geo = function (opts) {
 
                 callback(self.ipResult);
             },
-            dataType: "jsonp",
+            // Shopify check pages restrictions on the `script-src-elem` header that restrict jsonp requests and there
+            // there is unfortunately no efficient way to solve this issue other than doing this check here.
+            dataType: window.location.toString().match('/checkouts|/cart') !== -1 ? 'json' : "jsonp",
             error: function (jqXHR, textStatus, errorThrown) {
                 if (runCallbackAnyway) callback({});
             }

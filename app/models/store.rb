@@ -407,22 +407,34 @@ class Store < ApplicationRecord
     custom_css_enabled? ? custom_css.to_s : ''
   end
 
+  def auto_product_btn_location?
+    reserve_product_btn_action == 'auto'
+  end
+
+  def auto_cart_btn_location?
+    reserve_cart_btn_action == 'auto'
+  end
+
+  def auto_stock_status_location?
+    stock_status_action == 'auto'
+  end
+
   def footer_config
     {
       reserve_product_btn: {
-        tpl: reserve_product_btn_tpl_in_use,
-        selector: reserve_product_btn_selector,
-        action: reserve_product_btn_action
+        tpl: reserve_product_btn_tpl_enabled? ? reserve_product_btn_tpl_in_use : nil,
+        selector: auto_product_btn_location? ? nil : reserve_product_btn_selector,
+        action: auto_product_btn_location? ? nil : reserve_product_btn_action
       },
       reserve_cart_btn: {
-        tpl: reserve_cart_btn_tpl_in_use,
-        selector: reserve_cart_btn_selector,
-        action: reserve_cart_btn_action
+        tpl: reserve_cart_btn_tpl_enabled? ? reserve_cart_btn_tpl_in_use : nil,
+        selector: auto_cart_btn_location? ? nil : reserve_cart_btn_selector,
+        action: auto_cart_btn_location? ? nil : reserve_cart_btn_action
       },
       stock_status: {
-        tpl: stock_status_tpl_in_use,
-        selector: stock_status_selector,
-        action: stock_status_action,
+        tpl: stock_status_tpl_enabled? ? stock_status_tpl_in_use : nil,
+        selector: auto_stock_status_location? ? nil : stock_status_selector,
+        action: auto_stock_status_location? ? nil : stock_status_action,
         behavior_when: {
           stock_unknown: stock_status_behavior_when_stock_unknown,
           no_location_selected: stock_status_behavior_when_no_location_selected,
@@ -434,13 +446,6 @@ class Store < ApplicationRecord
       api_url: ENV['BASE_APP_URL'],
       store_pk: public_key
     }
-  end
-
-  def trial_days_left
-    plan = subscription.try(:plan) || recommended_plan
-    return nil if plan.blank?
-
-    [plan.trial_days - ((Time.now.utc.to_i - created_at.to_i)/1.day), 0].max.ceil
   end
 
   ##

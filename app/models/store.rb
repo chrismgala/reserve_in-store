@@ -393,7 +393,7 @@ class Store < ApplicationRecord
     else
       current_page_condition = "visible_in_cart = true"
     end
-    product_tag_condition = "(string_to_array(product_tag_filter,',')::text[]) && (ARRAY[?]::text[]) OR product_tag_filter = ? ", params[:product_tag_filter], ''
+    product_tag_condition = "(string_to_array(product_tag_filter,',')::text[]) && (ARRAY[?]::text[]) OR product_tag_filter = ? OR product_tag_filter IS NULL ", params[:product_tag_filter], ''
     {
       locations: (locations.where(product_tag_condition)
                     .where(current_page_condition)

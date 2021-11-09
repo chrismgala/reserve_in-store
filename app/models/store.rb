@@ -668,7 +668,7 @@ class Store < ApplicationRecord
 
   def update_footer_asset!
     if @footer_needs_update
-      UpdateFooterJob.perform_later(self.id)
+      UpdateFooterJob.perform_now(self.id)
       @footer_needs_update = false
     end
     true

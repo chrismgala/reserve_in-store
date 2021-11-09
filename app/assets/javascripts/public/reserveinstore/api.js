@@ -148,9 +148,15 @@ ReserveInStore.Api = function (opts) {
 
     self.get = function (path, params, successCallback, errorCallback) {
         successCallback = successCallback || function () { };
+        params = params || {}
+        params.api_client = apiClientDescriptor;
         return $.ajax({
             url: self.urlPath(path, params),
-            headers: { 'API-CLIENT': apiClientDescriptor },
+            method: 'GET',
+            // Shopify check pages restrictions on the `script-src-elem` header that restrict jsonp requests and there
+            // there is unfortunately no efficient way to solve this issue other than doing this check here.
+            // TODO - doesn't seem to help out, so leaving this off for now.
+            // dataType: window.location.toString().match('/checkouts|/cart') !== -1 ? 'json' : "jsonp",
             success: function (data, textStatus, jqXHR) {
                 successCallback(data, textStatus, jqXHR);
             },

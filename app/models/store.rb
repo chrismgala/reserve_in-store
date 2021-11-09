@@ -627,6 +627,19 @@ class Store < ApplicationRecord
     super.to_a
   end
 
+  def permitted_attribute_changed?
+    changed_attributes.keys.any? do |attr|
+      PERMITTED_PARAMS.any? do |param|
+        if param.is_a?(Hash)
+          param.keys.any?{ |key| key.to_s == attr.to_s }
+        else
+          attr.to_s == param.to_s
+        end
+      end
+    end
+  end
+  alias_method :permitted_attributes_changed?, :permitted_attribute_changed?
+
   private
 
   ##
@@ -644,7 +657,7 @@ class Store < ApplicationRecord
   end
 
   def see_if_footer_needs_update
-    @footer_needs_update = changed_attributes.keys.any?{ |attr| attr.to_s =~ /active|reserve_product_btn.*|reserve_cart_btn.*|custom_css.*|stock_status.*/i }
+    @footer_needs_update = permitted_attribute_changed?
     true
   end
 

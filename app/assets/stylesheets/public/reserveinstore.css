@@ -767,6 +767,22 @@ h5.ris-faq-question {
     font-size: 12px;
 }
 
+/* Shopify Dawn theme support - BEGIN */
+.cart__footer .cart__blocks .reserveInStore-btn-container {
+    text-align: center;
+}
+
+.cart__footer .cart__blocks .reserveInStore-btn.cart__checkout-button.button {
+    width: 100%;
+}
+
+.cart__footer .cart__blocks .reserveInStore-btn-container button {
+    max-width: 36rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+/* END - Shopify Dawn theme support */
+
 @media screen and (max-width: 980px) {
     .ris-columns .ris-column {
         margin-bottom: 5px;

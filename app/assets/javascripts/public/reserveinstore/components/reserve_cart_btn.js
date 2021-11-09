@@ -4,9 +4,9 @@ ReserveInStore.ReserveCartBtn = function (opts) {
     opts = opts || {};
     var config, component;
 
-    var DEFAULT_SELECTOR = '#main-card-footer .cart__ctas, form[action~="/cart"] input[type="submit"][name="checkout"],form[action~="/cart"] button[type="submit"][name="checkout"]';
+    var DEFAULT_SELECTOR = '#main-cart-footer .cart__ctas, form[action~="/cart"] input[type="submit"][name="checkout"],form[action~="/cart"] button[type="submit"][name="checkout"]';
     var DEFAULT_ACTION = 'insert_after';
-    var DEFAULT_TPL = '<div class="reserveInStore-btn-container reserveInStore-reserveCart-btn-container"><button class="btn reserveInStore-btn reserveInStore-reserveCart-btn"><span>Reserve In Store</span></button></div>';
+    var DEFAULT_TPL = '<div class="reserveInStore-btn-container reserveInStore-reserveCart-btn-container"><button class="button button--full-width btn reserveInStore-btn reserveInStore-reserveCart-btn"><span>Reserve In Store</span></button></div>';
 
     var init = function () {
         config = opts.config || {};

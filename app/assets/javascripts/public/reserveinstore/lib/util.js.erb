@@ -196,6 +196,19 @@ ReserveInStore.Util = {
     },
 
     /**
+     * @param $el - Show the element and strip any transform css. This is necessary due to the zepto fx_methods library causing us headaches with position styles.
+     */
+    showWithoutTransform: function($el) {
+        $el.show().css({
+            '-webkit-transform': '',
+            '-moz-transform': '',
+            '-ms-transform': '',
+            '-o-transform': '',
+            'transform': '',
+        });
+    },
+
+    /**
      * Adds the Zepto library to the current document body
      */
     addZepto: function(opts, callback) {

@@ -190,7 +190,7 @@ ReserveInStore.ReserveModal = function (opts) {
      */
     self.insertModal = function (modalHTML) {
         self.$modalContainer.html(modalHTML);
-        self.$modalContainer.show();
+        ReserveInStore.Util.showWithoutTransform(self.$modalContainer);
         $modalBackground = self.$modalContainer.find('.reserveInStore-modal-background');
         $reserveModal = $modalBackground.find('.reserveInStore-reserve-modal');
         $successModal = $modalBackground.find('.reserveInStore-success-modal');
@@ -691,7 +691,7 @@ ReserveInStore.ReserveModal = function (opts) {
         opts.app.trigger('reserve_modal.submit', self);
 
         $reserveModal.hide();
-        $successModal.show();
+        ReserveInStore.Util.showWithoutTransform($successModal);
 
         // If we're reserving a whole cart, then clear the cart
         if (!product && !variant && cart) {

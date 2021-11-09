@@ -53,7 +53,7 @@ ReserveInStore.ChooseLocationModal = function (opts) {
      */
     self.createModal = function (modalHTML) {
         self.$modalContainer.html(modalHTML);
-        self.$modalContainer.show();
+        ReserveInStore.Util.showWithoutTransform(self.$modalContainer);
         $modalBackground = self.$modalContainer.find('.reserveInStore-modal-background');
         $modal = $modalBackground.find('.reserveInStore-reserve-modal');
         $clearSearchLink = $modal.find(".reserveInStore-locationSearch-clear");

@@ -26,7 +26,7 @@ ReserveInStore.IntegratedComponent = function (opts) {
     };
 
     var insert = function(targetSelector, orientation) {
-        self.$targets = $(targetSelector);
+        self.$targets = $(targetSelector).first();
 
         self.$targets.each(function() {
             var $container = $(config.tpl || opts.defaults.tpl);

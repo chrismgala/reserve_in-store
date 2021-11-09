@@ -11,7 +11,7 @@ ReserveInStore.VariantLoader = function (opts) {
 
         loadVariant();
 
-        $form.find(':input').on('change', function() {
+        $form.find('input,textarea,select').on('change', function() {
            setTimeout(function() {
                loadVariant();
            }, 1);

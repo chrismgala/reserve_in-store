@@ -4,7 +4,7 @@ ReserveInStore.ReserveProductBtn = function (opts) {
     opts = opts || {};
     var config, component;
 
-    var DEFAULT_SELECTOR = 'form[action~="/cart/add"]';
+    var DEFAULT_SELECTOR = 'form[action~="/cart/add"] .product-form__buttons, form[action~="/cart/add"]';
     var DEFAULT_ACTION = 'insert_after';
     var DEFAULT_TPL = '<div class="reserveInStore-btn-container reserveInStore-reserveProduct-btn-container"><button class="btn reserveInStore-btn reserveInStore-reserveProduct-btn"><span>Reserve In Store</span></button></div>';
 

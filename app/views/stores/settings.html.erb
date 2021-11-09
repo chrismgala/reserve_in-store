@@ -583,10 +583,6 @@
 
 <% content_for(:javascript) do %>
   <script>
-      ShopifyApp.ready(function () {
-          ShopifyApp.Bar.initialize({title: "Settings", icon: "<%= image_url('reserve_32x32.png') %>"});
-      });
-
       var parsleyBinder = new ParsleyBinder({
           btnSelector: '#submission_button',
           formSelector: '#store_settings_form'

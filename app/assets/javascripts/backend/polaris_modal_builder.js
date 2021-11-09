@@ -19,18 +19,27 @@ var PolarisModal = function (opts) {
 
     this.show = function() {
         if (opts.chooseProductsFirst) {
-            ShopifyApp.Modal.productPicker({ 'selectMultiple': false }, function(success, data) {
-                if (!success) return;
+            const productPicker = ResourcePicker.create(app, {
+                resourceType: ResourcePicker.ResourceType.Product,
+                options: {
+                    selectMultiple: false,
+                    showVariants: false,
+                },
+            }).dispatch(ResourcePicker.Action.OPEN);
 
-                if (data.products.length > 0) {
-                    var prod = data.products[0];
+            productPicker.subscribe(ResourcePicker.Action.SELECT, (selectPayload) => {
+                const data = selectPayload.selection;
+
+                if (data) {
+                    var prod = data[0];
+                    var prodId = (prod.id).replace('gid://shopify/Product/', '');
                     var options = [];
                     for (var i = 0 ; i < prod.variants.length; i++) {
-                        options.push('<option value="' + prod.variants[i].id + '">' + prod.variants[i].title + '</option>');
+                        options.push('<option value="' + (prod.variants[i].id).replace('gid://shopify/ProductVariant/', '') + '">' + prod.variants[i].title + '</option>');
                     }
 
                     $form.find('#reservation_platform_variant_id').html(options.join("\n"));
-                    $form.find('#reservation_platform_product_id').val(prod.id);
+                    $form.find('#reservation_platform_product_id').val(prodId);
 
                     $modalContainer.show();
                 } else {

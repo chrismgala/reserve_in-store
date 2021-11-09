@@ -62,22 +62,35 @@
 
   <script type="text/javascript">
       addPaddingToAppWrapper();
-      ShopifyApp.init({
+
+      var AppBridge = window['app-bridge'];
+      var createApp = AppBridge.default;
+      var actions = AppBridge.actions;
+      var TitleBar = actions.TitleBar;
+      var Toast = actions.Toast;
+      var Modal = actions.Modal;
+      var Button = actions.Button;
+      var ResourcePicker = actions.ResourcePicker;
+
+      var app = createApp({
           apiKey: "<%= ShopifyApp.configuration.api_key %>",
-          shopOrigin: "<%= "https://#{ @shop_session.domain }" if @shop_session %>",
+          shopOrigin: "<%= "#{ @shop_session.domain }" if @shop_session %>",
           debug: <%= Rails.env.development? %>,
           forceRedirect: true,
       });
 
 
-      ShopifyApp.ready(function(){
+      $(document).ready(function() {
           $('.display-if-enabled').displayIfEnabled();
           $('.display-if-selected-option').displayIfSelectedValue();
       });
 
 
       <% if content_for?(:title) %>
-        ShopifyApp.Bar.setTitle('<%= yield :title %>');
+          TitleBar.create(app, {
+              title: "<%= yield :title %>",
+              icon: "<%= image_url('reserve_32x32.png') %>"
+          });
       <% end %>
   </script>
 

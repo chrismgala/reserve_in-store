@@ -14,5 +14,5 @@
 //= require activestorage
 //= require turbolinks
 //= require jquery
-
-
+//= require @shopify/app-bridge/umd
+//= require @shopify/app-bridge/actions

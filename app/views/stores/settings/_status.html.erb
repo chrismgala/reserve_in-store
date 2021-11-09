@@ -54,27 +54,38 @@
 
 <% content_for(:javascript) do %>
   <script>
-    $('.btn-deactivate').on('click', function(e) {
-        e.preventDefault();
-        ShopifyApp.Modal.confirm({
-            title: "Are you sure?",
-            message: "Once deactivated your reserve in-store buttons and modals will no longer show to your shoppers.",
-            okButton: "Yes, Deactivate",
-            cancelButton: "No, Keep Active",
-            style: "danger"
-        }, function(result) {
-            if (result) {
-                window.location= '<%= stores_deactivate_url %>'
-            }
-        });
-    });
-    $('.btn-activate').on('click', function(e) {
-        e.preventDefault();
-        <% if store.needs_subscription? %>
-        window.open('<%= subscribe_path(post_subscribe_url: stores_activate_url) %>');
-        <% else %>
-        window.location = '<%= stores_activate_url %>';
-        <% end %>
-    });
+      $('.btn-deactivate').on('click', function(e) {
+          e.preventDefault();
+
+          const okButton = Button.create(app, { label: 'Yes, Deactivate', style: Button.Style.Danger });
+          okButton.subscribe(Button.Action.CLICK, () => {
+              window.location= '<%= stores_deactivate_url %>'
+              myModal.dispatch(Modal.Action.CLOSE);
+          });
+
+          const cancelButton = Button.create(app, { label: 'No, Keep Active' });
+          cancelButton.subscribe(Button.Action.CLICK, () => {
+              myModal.dispatch(Modal.Action.CLOSE);
+          });
+
+          const myModal = Modal.create(app, {
+              title: "Are you sure?",
+              message: "Once deactivated your reserve in-store buttons and modals will no longer show to your shoppers.",
+              footer: {
+                  buttons: {
+                      primary: okButton,
+                      secondary: [cancelButton],
+                  },
+              },
+          }).dispatch(Modal.Action.OPEN);
+      });
+      $('.btn-activate').on('click', function(e) {
+          e.preventDefault();
+          <% if store.needs_subscription? %>
+          window.open('<%= subscribe_path(post_subscribe_url: stores_activate_url) %>');
+          <% else %>
+          window.location = '<%= stores_activate_url %>';
+          <% end %>
+      });
   </script>
 <% end %>

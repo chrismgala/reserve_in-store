@@ -44,7 +44,7 @@
     max-width: 1200px;
     width: 93%;
     margin: auto;
-    overflow: scroll;
+    overflow: auto;
     bottom: 27px;
     left: 0;
     right: 0;

@@ -29,14 +29,14 @@ gem 'rainbow', '~> 3.0.0'  # Ruby gem for colorizing printed text on ANSI termin
 gem 'sass-rails', '~> 5.0' # Use SCSS for stylesheets
 gem 'scout_apm', '~>2.6.7' # For performance monitoring
 gem 'sentry-raven', '~> 2.7.4' # For bug tracking
-gem 'shopify_api', '~> 9.0.0'
-gem 'shopify_app', '~> 9.0.4' # Shopify Application Rails engine and generator
+gem 'shopify_api', '~> 9.5.1'
+gem 'shopify_app', '~> 18.1.1' # Shopify Application Rails engine and generator
 gem "slack-notifier", '~> 2.3.2' # For sending notifications to slack
 gem 'sprockets-es6', '~> 0.9.2' # For es6 automatic compilation
 gem 'to_bool', '~> 1.0.1' # For easy parsing of boolean values in params
 gem 'turbolinks', '~> 5' # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'uglifier', '>= 1.3.0' # Use Uglifier as codampressor for JavaScript assets
-gem 'rails_same_site_cookie', '0.1.5' # Allow all cookies to be fetched in a 3rd party context, since we are an embedded app
+gem 'rails_same_site_cookie', '0.1.9' # Allow all cookies to be fetched in a 3rd party context, since we are an embedded app
 
 group :production do
   gem 'sendgrid-ruby', '~> 5.2.0' # For sending email in production only

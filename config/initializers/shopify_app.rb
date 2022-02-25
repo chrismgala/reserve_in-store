@@ -2,11 +2,11 @@ ShopifyApp.configure do |config|
   config.application_name = 'Reserve In-store'
   config.api_key = ENV['SHOPIFY_CLIENT_API_KEY'].presence || ENV['SHOPIFY_API_KEY'].presence
   config.secret = ENV['SHOPIFY_CLIENT_API_SECRET'].presence || ENV['SHOPIFY_API_SECRET'].presence
-  config.api_version = '2021-04'
+  config.api_version = '2022-01'
   config.scope = 'read_products, read_themes, write_themes, read_script_tags, write_script_tags, read_locations, read_inventory, read_product_listings' # read_customers,write_customers
   config.embedded_app = true
   config.after_authenticate_job = { job: AppInstalledJob }
-  config.session_repository = Store
+  config.shop_session_repository = Store
   config.webhooks = [
       {topic: 'app/uninstalled', address: "#{ENV['BASE_APP_URL']}/webhooks/app_uninstalled", format: 'json'},
       {topic: 'inventory_levels/update', address: "#{ENV['BASE_APP_URL']}/webhooks/inventory_levels_update", format: 'json'},

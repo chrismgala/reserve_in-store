@@ -93,7 +93,9 @@ class Store < ApplicationRecord
       'show_additional_fields' => show_additional_fields,
       'success_msg' => success_msg,
       'faq' => reserve_modal_faq_tpl_in_use,
-      'hide_location_search' => hide_location_search
+      'hide_location_search' => hide_location_search,
+      'checkout_without_clearing_cart' => checkout_without_clearing_cart,
+      'discount_code' => discount_code,
     }
   end
 

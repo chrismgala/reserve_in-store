@@ -221,6 +221,31 @@
           </div>
         </div>
 
+        <%= render partial: "stores/shared/polaris_layout/annotated_section", locals: {
+            heading: "Place orders in Shopify",
+            desc:  "Redirect customers to checkout after reservation is submitted.",
+            form: f,
+            checkbox: true,
+            options: [
+                       {
+                         label_for: "checkout_without_clearing_cart",
+                         label_text: "Redirect to checkout instead of clearing cart.",
+                         attr: :checkout_without_clearing_cart,
+                       },
+                     ],
+            input_text_fields: [
+                                {
+                                  attr: :discount_code,
+                                  label_for: "discount_code",
+                                  label_text: "Free shipping discount code:",
+                                  display_if_enabled: true,
+                                  if_enabled_selector: 'data-if_enabled_selector=#store_checkout_without_clearing_cart',
+                                  help_text: 'You need to manually create discount code from shopify >> discount.'
+                                },
+                              ],
+            store: @current_store
+        } %>
+
 
         <div class="Polaris-Layout__AnnotatedSection">
           <div class="Polaris-Layout__AnnotationWrapper">

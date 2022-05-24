@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_18_045027) do
+ActiveRecord::Schema.define(version: 2022_05_24_061244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,8 @@ ActiveRecord::Schema.define(version: 2022_05_18_045027) do
     t.boolean "unfulfilled_reservation_custom_email_tpl_enabled"
     t.boolean "unfulfilled_reservation_email_sent"
     t.boolean "is_unfulfilled"
+    t.string "custom_reservation_id"
+    t.string "platform_order_id"
     t.index ["location_id"], name: "index_reservations_on_location_id"
     t.index ["store_id"], name: "index_reservations_on_store_id"
   end

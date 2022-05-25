@@ -36,6 +36,7 @@ class Store < ApplicationRecord
     :unfulfilled_reservation_notification_email_tpl, :unfulfilled_reservation_notification_email_tpl_enabled,
     :fulfilled_reservation_subject, :unfulfilled_reservation_subject,
     :fulfilled_reservation_sender_name, :unfulfilled_reservation_sender_name,
+    :checkout_without_clearing_cart, :discount_code,
     show_stock_status_labels: {}
   ]
 
@@ -95,7 +96,6 @@ class Store < ApplicationRecord
       'faq' => reserve_modal_faq_tpl_in_use,
       'hide_location_search' => hide_location_search,
       'checkout_without_clearing_cart' => checkout_without_clearing_cart,
-      'discount_code' => discount_code,
     }
   end
 
@@ -389,7 +389,7 @@ class Store < ApplicationRecord
   # @return [Hash] - liquid params used by JS email previewer
   def frontend_tpl_vars(params = {})
     params[:product_tag_filter] = '' if params[:product_tag_filter].nil?
-    
+
     if params[:current_page] == "product"
       current_page_condition = "visible_in_product = true"
     else
@@ -445,6 +445,8 @@ class Store < ApplicationRecord
         },
         stock_label: show_stock_status_labels
       },
+      discount_code: discount_code,
+      checkout_without_clearing_cart: checkout_without_clearing_cart,
       api_url: ENV['BASE_APP_URL'],
       store_pk: public_key
     }

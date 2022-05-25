@@ -69,6 +69,14 @@ ReserveInStore.Api = function (opts) {
     };
 
     /**
+     * generate unique code
+     * https://www.codegrepper.com/code-examples/javascript/javascript+unique+id+generator
+     */
+    self.generateUniqueUUID = function() {
+        return (new Date().getTime()) + Math.random().toString(36).substr(2, 9);
+    };
+
+    /**
      * Request modal via the API /api/v1/inventory.json
      * @param params URL params to send with the GET request.
      * @param successCallback {function} (optional) Callback to run if the request is successful. This will not be called if the request fails.

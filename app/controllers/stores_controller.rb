@@ -107,7 +107,7 @@ class StoresController < LoggedInController
       false
     else
       if !params[:view] && params[:action] != 'templates' && params[:action] != 'help' && @current_store.reservations.count > 0
-        redirect_to reservations_path
+        redirect_to reservations_path(platform_order_id: params[:id])
       end
       true
     end

@@ -27,6 +27,9 @@
                     <%= sortable('created_at', 'Placed at') %>
                   </th>
                   <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header"></th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Order Id
+                  </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
                     <%= sortable('location_id', 'Location') %>
                   </th>
@@ -48,6 +51,10 @@
                     <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row">
                       <p class="polaris-header-text"><%= local_time_ago(reservation.created_at) %></p></th>
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
+
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <%= reservation.platform_order_id || "No checkout order" %>
+                    </td>
 
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <%= reservation.location.name %>

@@ -8,7 +8,8 @@ class ReservationsController < LoggedInController
   def index
     @reservations = @current_store.reservations
     @reservations = @reservations.where(location_id: params[:search_location]) if params[:search_location].present?
-    @reservations = @reservations.where('customer_name ILIKE :query OR LOWER(customer_email) LIKE :query', query: "%#{params[:search]}%") if params[:search].present?
+    @reservations = @reservations.where(platform_order_id: params[:platform_order_id]) if params[:platform_order_id].present?
+    @reservations = @reservations.where('customer_name ILIKE :query OR LOWER(customer_email) LIKE :query OR custom_reservation_id ILIKE :query', query: "%#{params[:search]}%") if params[:search].present?
     @reservations = @reservations.where(fulfilled: params[:search_status].to_bool) if params[:search_status].present?
     @reservations = @reservations.order(column_sort_query).page(params[:page]).includes(:location)
     @reservation = Reservation.new

@@ -138,7 +138,13 @@
                     </div>
                     <div class="ris-noteAfterCart">You will receive a confirmation email after you submit your reservation.</div>
                     <div class="ris-no-stock-message">Some products are out of stock. It is not possible to reserve . </div>
-                    <button type="button" class="reserveInStore-form-submit">Reserve Now</button>
+
+                    {% if is_cart_page and settings.checkout_without_clearing_cart %}
+                      <button type="button" value="{{ settings.checkout_without_clearing_cart }}" class="reserveInStore-form-submit">Reserve and checkout</button>
+                    {% else %}
+                      <button type="button" value="{{ settings.checkout_without_clearing_cart }}" class="reserveInStore-form-submit">Reserve Now</button>
+                    {% endif %}
+
                     <div class="ris-faqs">{{ settings.faq }}</div>
                 </div>
 

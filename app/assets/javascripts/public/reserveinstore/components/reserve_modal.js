@@ -8,6 +8,9 @@ ReserveInStore.ReserveModal = function (opts) {
     var inventoryManager = opts.inventoryManager;
     var showReserveBtnWhenUnknown = false;
     var inStockTextWhenUnknown = false;
+    var checkoutCreateOrder;
+    var checkoutWithoutClearingCart;
+    var customReservationId = opts.api.generateUniqueUUID();
 
     // inventoryData and stockData is a 3-level nested hash that contains data pertaining to product stock by location,
     // the fields should look like this:
@@ -44,6 +47,7 @@ ReserveInStore.ReserveModal = function (opts) {
         showReserveBtnWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('show_button') !== -1;
         inStockTextWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('in_stock') !== -1;
         storeStockLabelsToDisplay = config.stock_status.stock_label || DEFAULT_STOCK_STATUS_LABEL_VISIBLE;
+        checkoutWithoutClearingCart = config.checkout_without_clearing_cart;
         updateCartOnAjax();
     };
 
@@ -685,17 +689,27 @@ ReserveInStore.ReserveModal = function (opts) {
     };
 
     /**
+     * redirect to checkout page if reservation is from cart page and checkout_without_clearing_cart is enabled.
      * Display a nice modal to say "thank you... etc" and whatever is configured to display via the store settings
      */
     self.displaySuccessModal = function () {
-        opts.app.trigger('reserve_modal.submit', self);
+        var email = $reserveModal.find('input[name="reservation[customer_email]"').val();
+        if (cart && checkoutWithoutClearingCart) {
+            checkoutCreateOrder = new ReserveInStore.CheckoutCreateOrder({
+                config: config,
+                storage: opts.storage,
+                customReservationId: customReservationId,
+                email: email,
+            });
+        } else {
+            opts.app.trigger('reserve_modal.submit', self);
+            $reserveModal.hide();
+            ReserveInStore.Util.showWithoutTransform($successModal);
 
-        $reserveModal.hide();
-        ReserveInStore.Util.showWithoutTransform($successModal);
-
-        // If we're reserving a whole cart, then clear the cart
-        if (!product && !variant && cart) {
-            clearCart();
+            // If we're reserving a whole cart then clear the cart
+            if (!product && !variant && cart && !$reserveModal.find(".reserveInStore-form-submit").val()) {
+                clearCart();
+            }
         }
     };
 
@@ -741,6 +755,11 @@ ReserveInStore.ReserveModal = function (opts) {
     var getFormData = function () {
         var data = ReserveInStore.Util.serializeObject($form);
         data.reservation.cart = getCartObject();
+
+        if (cart && checkoutWithoutClearingCart) {
+            data.reservation.custom_reservation_id = customReservationId;
+        }
+
         return data;
     };
 

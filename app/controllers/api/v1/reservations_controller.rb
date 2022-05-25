@@ -25,6 +25,10 @@ module Api
           liquid_vars[:items] = load_product_data(liquid_vars[:items])
         end
 
+        if params[:current_page] == "cart"
+          liquid_vars[:is_cart_page] = true;
+        end
+
         content = Liquid::Template.parse(tpl).render!(liquid_vars.deep_stringify_keys).html_safe
 
         respond_to do |format|

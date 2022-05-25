@@ -53,7 +53,11 @@
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
 
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <%= reservation.platform_order_id || "No checkout order" %>
+                      <% if reservation.platform_order_id %>
+                        <a href="https://<%= @current_store.shopify_domain %>/admin/orders/<%= reservation.platform_order_id %>" target="_blank"><%= reservation.platform_order_id %></a>
+                      <% else %>
+                        No checkout order
+                      <% end %>
                     </td>
 
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">

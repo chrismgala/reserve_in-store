@@ -92,22 +92,31 @@ ReserveInStore.ReserveModal = function (opts) {
             self.$modalContainer = $('<div class="reserveInStore-modal-container" id="reserveInStore-reserveModalContainer" style="display:none;"></div>').appendTo('body');
         }
 
-        var modalParams = { cart: getCartObject() };
         if (opts.app.getProduct()) {
+            var modalParams = { cart: getCartObject() };
             api.getReservationModal(modalParams, locationsManager.getLocationProductParams(), function(response) {
                 self.insertModal(response.content);
             });
         } else {
-            opts.app.cart.getProductTags(function(tags) {
-                api.getReservationModal(modalParams, { product_tag_filter: tags, current_page: "cart" }, function(response) {
-                    self.insertModal(response.content);
+            opts.app.cart.getAjaxData(function(cartData) {
+                cart = cartData;
+                var modalParams = { cart: getCartObject() };
+                opts.app.cart.getProductTags(function(tags) {
+                    api.getReservationModal(modalParams, { product_tag_filter: tags, current_page: "cart" }, function(response) {
+                        self.insertModal(response.content);
+                    });
                 });
-            });    
+            });
         }
 
         opts.app.trigger('reserve_modal.show reserve_modal.open', self);
     };
 
+
+    /**
+     * will remove later after some test
+     * @deprecated in favor of #opts.app.cart.getAjaxData(function(cartData)
+     */
     var updateCartOnAjax = function() {
         $(document).on('ajaxComplete', function( event, xhr, settings ) {
             if (xhr.status >= 300) return; // Bad ajax request, don't do anything

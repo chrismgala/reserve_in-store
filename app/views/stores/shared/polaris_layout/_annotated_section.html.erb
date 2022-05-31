@@ -63,6 +63,12 @@
               <% end %>
             <% end %>
 
+            <% if local_assigns[:liquid_editor].present? %>
+              <div class="<%= 'display-if-enabled' if liquid_editor[:display_if_enabled].present? %>" <%= liquid_editor[:if_enabled_selector] %>>
+                <%= render partial: 'stores/shared/liquid_editor_section', locals: local_assigns[:liquid_editor] %>
+              </div>
+            <% end %>
+            
           </div>
         </div>
       </div>

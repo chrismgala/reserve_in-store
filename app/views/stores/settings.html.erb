@@ -243,6 +243,21 @@
                                   help_text: 'You need to manually create discount code from shopify >> discount.'
                                 },
                               ],
+            liquid_editor: {
+              heading: 'Checkout success message',
+              subheading: 'Customize checkout success message that shows up when a new reservation order is being created by a shopper.',
+              attr: 'checkout_success_message_tpl',
+              enabled: @current_store.checkout_success_message_tpl_enabled?,
+              db_value: @current_store.checkout_success_message_tpl,
+              value_in_use: @current_store.checkout_success_message_tpl_in_use,
+              default_value: @current_store.default_checkout_success_message_tpl,
+              container_css_class: 'reserveInStore-reserve-modal',
+              extra_css: '.reserveInStore-modal-background { padding-top: 8px; } .reserveInStore-reserve-modal { position: relative; top: 0; }',
+              frontend_mode: true,
+              just_field: true,
+              display_if_enabled: true,
+              if_enabled_selector: 'data-if_enabled_selector=#store_checkout_without_clearing_cart',
+            },
             store: @current_store
         } %>
 

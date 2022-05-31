@@ -2,11 +2,17 @@ ReserveInStore.CheckoutSuccessMessage = function (opts) {
     opts = opts || {};
 
     var init = function () {
-        var reservation_id = opts.storage.getItem('reservationCustomId');
+        var reservationId = opts.storage.getItem('reservationCustomId');
+        var checkoutSuccessMessageTpl = opts.storage.getItem('checkoutSuccessMessageTpl');
+        if (reservationId) {
+            successMessage(reservationId, checkoutSuccessMessageTpl);
+        }
+    };
 
-        if (window.location.toString().indexOf('/thank_you') !== -1 && reservation_id)  {
+    var successMessage = function(reservationId, checkoutSuccessMessageTpl) {
+        if (window.location.toString().indexOf('/thank_you') !== -1 && reservationId)  {
             Shopify.Checkout.OrderStatus.addContentBox(
-                '<h2>Your In-store reservation #' + reservation_id + ' has been received please check email for further instructions</h2>',
+                checkoutSuccessMessageTpl.replace(/reservation_id/g, reservationId)
             );
             window.localStorage.removeItem('reservationCustomId');
         }

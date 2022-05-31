@@ -37,6 +37,7 @@ class Store < ApplicationRecord
     :fulfilled_reservation_subject, :unfulfilled_reservation_subject,
     :fulfilled_reservation_sender_name, :unfulfilled_reservation_sender_name,
     :checkout_without_clearing_cart, :discount_code,
+    :checkout_success_message_tpl_enabled, :checkout_success_message_tpl,
     show_stock_status_labels: {}
   ]
 
@@ -289,6 +290,26 @@ class Store < ApplicationRecord
   end
 
 
+  ##
+  # Checkout success message tpl
+  # @return [Text] - default, un-rendered email template
+  def self.default_checkout_success_message_tpl
+    return @default_checkout_success_message_tpl if @default_checkout_success_message_tpl.present? && !Rails.env.development?
+
+    @default_checkout_success_message_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/default_templates/checkout_success_message.liquid.html')
+  end
+  def default_checkout_success_message_tpl; self.class.default_checkout_success_message_tpl; end
+
+  ##
+  # @return [Text] - Template we want to use for checkout success message email for this store
+  def checkout_success_message_tpl_in_use
+    if checkout_success_message_tpl_enabled?
+      checkout_success_message_tpl.to_s
+    else
+      self.class.default_checkout_success_message_tpl
+    end
+  end
+
 
   ######################################################
   # For Reserve Modal TPL
@@ -447,6 +468,7 @@ class Store < ApplicationRecord
       },
       discount_code: discount_code,
       checkout_without_clearing_cart: checkout_without_clearing_cart,
+      checkout_success_message_tpl: checkout_success_message_tpl_in_use,
       api_url: ENV['BASE_APP_URL'],
       store_pk: public_key
     }

@@ -26,7 +26,7 @@ module Api
         end
 
         if params[:current_page] == "cart"
-          liquid_vars[:is_cart_page] = true;
+          liquid_vars[:is_cart_page] = true
         end
 
         content = Liquid::Template.parse(tpl).render!(liquid_vars.deep_stringify_keys).html_safe
@@ -43,7 +43,7 @@ module Api
       def create
         @reservation = Reservation.new(reservation_params.merge(store: @store))
         if @reservation.save_and_email
-          render json: { message: "Reservation was successfully created." }, status: :ok
+          render json: { message: "Reservation was successfully created.", reservation_id: @reservation.id }, status: :ok
         else
           render json: @reservation.errors.full_messages, status: :unprocessable_entity
         end

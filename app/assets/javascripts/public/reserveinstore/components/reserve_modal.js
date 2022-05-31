@@ -8,8 +8,7 @@ ReserveInStore.ReserveModal = function (opts) {
     var inventoryManager = opts.inventoryManager;
     var showReserveBtnWhenUnknown = false;
     var inStockTextWhenUnknown = false;
-    var checkoutCreateOrder;
-    var checkoutSuccessMessageTpl;
+    var discountCode;
     var checkoutWithoutClearingCart;
     var customReservationId = opts.api.generateUniqueUUID();
 
@@ -703,18 +702,19 @@ ReserveInStore.ReserveModal = function (opts) {
      * Display a nice modal to say "thank you... etc" and whatever is configured to display via the store settings
      */
     self.displaySuccessModal = function () {
-        var email = $reserveModal.find('input[name="reservation[customer_email]"').val();
-
-        // Save for 10 minutes I think 10 minutes should be enough to complete checkout.
-        opts.storage.setItem('checkoutSuccessMessageTpl', config.checkout_success_message_tpl, opts.debugMode ? 1 : 1000*60*10);
-
         if (cart && checkoutWithoutClearingCart) {
-            checkoutCreateOrder = new ReserveInStore.CheckoutCreateOrder({
-                config: config,
-                storage: opts.storage,
-                customReservationId: customReservationId,
-                email: email,
-            });
+            var email = $reserveModal.find('input[name="reservation[customer_email]"').val();
+
+            // Save for 10 minutes I think 10 minutes should be enough to complete checkout.
+            opts.storage.setItem('checkoutSuccessMessageTpl', config.checkout_success_message_tpl, opts.debugMode ? 1 : 1000*60*10);
+
+            discountCode = config.discount_code;
+            // Save for 10 minutes I think 10 minutes should be enough to complete checkout.
+            opts.storage.setItem('reservationCustomId', customReservationId, opts.debugMode ? 1 : 1000*60*10);
+            window.location = '/checkout?discount=' + discountCode +
+                '&note=In-store reservation id: ' + customReservationId + "" +
+                "&checkout[email]=" + email;
+
         } else {
             opts.app.trigger('reserve_modal.submit', self);
             $reserveModal.hide();

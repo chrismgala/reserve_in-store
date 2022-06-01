@@ -12,7 +12,7 @@ class OrdersCreateJob < ActiveJob::Base
       index= note.index('id:')
       note.from(index + 4)
 
-      @reservation = @store.reservations.find_by(custom_reservation_id: note.from(index + 4))
+      @reservation = @store.reservations.find_by(id: note.from(index + 4))
 
       if @reservation
         @reservation.update(platform_order_id: @platform_order_id)

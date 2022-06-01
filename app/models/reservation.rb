@@ -95,7 +95,7 @@ class Reservation < ActiveRecord::Base
       cart: cart,
       fulfilled: fulfilled?,
       created_at: created_at,
-      updated_at: updated_at,
+      updated_at: updated_at
     }
   end
 

@@ -24,23 +24,29 @@
                 <thead>
                 <tr>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--header Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
-                    <%= sortable('created_at', 'Placed at') %>
+                    <%= sortable('id', '#') %>
                   </th>
                   <th aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational Polaris-DataTable__Cell--header"></th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
+                    <%= sortable('created_at', 'Placed at') %>
+                  </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Order Id
+                    Customer
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
+                    Pickup Time/Date
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
-                    <%= sortable('location_id', 'Location') %>
+                    <%= sortable('location_id', 'Pickup Location') %>
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Product
-                  </th>
-                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text" scope="col" aria-disabled="true">
-                    Customer Details
+                    Order
                   </th>
                   <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
                     <%= sortable('fulfilled', 'Status') %>
+                  </th>
+                  <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--header Polaris-DataTable__Cell--text Polaris-DataTable__Cell--sortable" scope="col" aria-disabled="true">
+
                   </th>
                 </tr>
                 </thead>
@@ -49,40 +55,19 @@
                 <% @reservations.includes(:location).each do |reservation| %>
                   <tr class="Polaris-DataTable__TableRow">
                     <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row">
-                      <p class="polaris-header-text"><%= local_time_ago(reservation.created_at) %></p></th>
+                      <p class="polaris-header-text"><%= reservation.id %></p></th>
                     <td aria-hidden="true" role="presentation" class="Polaris-DataTable__Cell Polaris-DataTable__Cell--presentational"></td>
 
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <% if reservation.platform_order_id %>
-                        <a href="https://<%= @current_store.shopify_domain %>/admin/orders/<%= reservation.platform_order_id %>" target="_blank"><%= reservation.platform_order_id %></a>
-                      <% else %>
-                        No checkout order
-                      <% end %>
-                    </td>
-
-                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <%= reservation.location.name %>
+                      <p class="polaris-header-text"><%= local_time_ago(reservation.created_at) %></p>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <% reservation.cart[:items].to_a.each do |item| %>
-                        <div class="reserved-cart-items">
-                          <%= truncate(item[:product_title], length: 30, separator: '...') %>
-                          <% if item[:variant_title].present? && item[:variant_title] != 'Default Title' %>
-                            <div class="ris-text-small">
-                              Variant: <%= item[:variant_title] %>
-                            </div>
-                          <% end %>
-                        </div>
-                      <% end %>
-                      <div>
-                        <a href="#" class="Polaris-Link" onclick="$('.reservationItems-<%= reservation.id %>').show(); return false;">
-                          View Item details
-                        </a>
-                      </div>
-                      <%= render partial: 'reserved_items_modal', locals: { store: @current_store, reservation: reservation } %>
+                      <%= reservation.customer_name %>
+                      <br><%= reservation.customer_email %><br><%= reservation.customer_phone %>
+                    </td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <% if reservation.instructions_from_customer.present? || reservation.additional_fields.present? %>
-                        <div class="reservation-additional-info">
-                          <div class="additional-info-head">Pickup Time/Date & more info</div>
+                        <div>
                           <%= reservation.instructions_from_customer if reservation.instructions_from_customer.present? %>
                           <% if reservation.additional_fields.present? %>
                             <div>
@@ -103,9 +88,27 @@
                       <% end %>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
-                      <%= reservation.customer_name %>
-                      <br><%= reservation.customer_email %><br><%= reservation.customer_phone %>
+                      <%= reservation.location.name %>
                     </td>
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <% reservation.cart[:items].to_a.each do |item| %>
+                        <div class="reserved-cart-items">
+                          <%= truncate(item[:product_title], length: 30, separator: '...') %>
+                          <% if item[:variant_title].present? && item[:variant_title] != 'Default Title' %>
+                            <div class="ris-text-small">
+                              Variant: <%= item[:variant_title] %>
+                            </div>
+                          <% end %>
+                        </div>
+                      <% end %>
+                      <div>
+                        <a href="#" class="Polaris-Link" onclick="$('.reservationItems-<%= reservation.id %>').show(); return false;">
+                          View Item details
+                        </a>
+                      </div>
+                      <%= render partial: 'reserved_items_modal', locals: { store: @current_store, reservation: reservation } %>
+                    </td>
+
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text datatable-cell-small-width">
                       <% if reservation.fulfilled? %>
                         <span>
@@ -152,6 +155,9 @@
                           <% end %>
                         <% end %>
                       <% end %>
+                    </td>
+
+                    <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text datatable-cell-small-width">
                       <a class="Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim" data-confirm="Are you sure you want to delete this reservation?" rel="nofollow" data-method="delete" href="<%= reservation_path(reservation.id) %>">
                         <span class="Polaris-Icon">
                           <svg class="Polaris-Icon__Svg" aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg="">

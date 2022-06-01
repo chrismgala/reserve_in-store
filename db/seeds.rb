@@ -121,3 +121,5 @@ unless Plan.find_by(code: 'enterprise')
     trial_days: 30
   )
 end
+
+Dir[File.join(Rails.root, 'db', 'seeds', '*.rb')].sort.each { |seed| load seed }

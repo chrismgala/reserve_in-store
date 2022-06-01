@@ -91,6 +91,8 @@
                       <%= reservation.location.name %>
                     </td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
+                      <%= "<p>##{reservation.platform_order_id}</p>" if reservation.platform_order_id %>
+
                       <% reservation.cart[:items].to_a.each do |item| %>
                         <div class="reserved-cart-items">
                           <%= truncate(item[:product_title], length: 30, separator: '...') %>

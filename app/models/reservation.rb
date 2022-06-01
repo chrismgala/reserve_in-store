@@ -16,7 +16,6 @@ class Reservation < ActiveRecord::Base
     :customer_name, :customer_email, :customer_phone, :location_id, :platform_product_id,
     :platform_variant_id, :instructions_from_customer, :fulfilled, :is_unfulfilled, :line_item,
     :unfulfilled_reservation_custom_email_tpl, :unfulfilled_reservation_custom_email_tpl_enabled, :unfulfilled_reservation_email_sent,
-    :custom_reservation_id,
     :cart => {}, :additional_fields => {}
   ]
 
@@ -97,7 +96,6 @@ class Reservation < ActiveRecord::Base
       fulfilled: fulfilled?,
       created_at: created_at,
       updated_at: updated_at,
-      custom_reservation_id: custom_reservation_id
     }
   end
 

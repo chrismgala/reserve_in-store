@@ -2,7 +2,7 @@ ReserveInStore.CheckoutSuccessMessage = function (opts) {
     opts = opts || {};
 
     var init = function () {
-        var reservationId = opts.storage.getItem('reservationCustomId');
+        var reservationId = opts.storage.getItem('reservationId');
         var checkoutSuccessMessageTpl = opts.storage.getItem('checkoutSuccessMessageTpl');
         if (reservationId) {
             successMessage(reservationId, checkoutSuccessMessageTpl);

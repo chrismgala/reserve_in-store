@@ -10,7 +10,6 @@ ReserveInStore.ReserveModal = function (opts) {
     var inStockTextWhenUnknown = false;
     var discountCode;
     var checkoutWithoutClearingCart;
-    var customReservationId = opts.api.generateUniqueUUID();
 
     // inventoryData and stockData is a 3-level nested hash that contains data pertaining to product stock by location,
     // the fields should look like this:
@@ -587,7 +586,10 @@ ReserveInStore.ReserveModal = function (opts) {
         api.getStockAvail({ product_ids: productIdArray }, function(stock) {
             stockData = stock;
             if (showHideReserveItemsNotAvailMessage(formData.reservation.location_id, reserveItems)) {
-                api.createReservation(getFormData(), self.displaySuccessModal, showErrorMessages);
+                api.createReservation(getFormData(), function(response) {
+                    response = JSON.parse(JSON.stringify(response));
+                    self.displaySuccessModal(response.reservation_id);
+                });
             }
         });
     };
@@ -701,20 +703,18 @@ ReserveInStore.ReserveModal = function (opts) {
      * redirect to checkout page if reservation is from cart page and checkout_without_clearing_cart is enabled.
      * Display a nice modal to say "thank you... etc" and whatever is configured to display via the store settings
      */
-    self.displaySuccessModal = function () {
+    self.displaySuccessModal = function (reservationId) {
         if (cart && checkoutWithoutClearingCart) {
             var email = $reserveModal.find('input[name="reservation[customer_email]"').val();
+            discountCode = config.discount_code;
 
             // Save for 10 minutes I think 10 minutes should be enough to complete checkout.
             opts.storage.setItem('checkoutSuccessMessageTpl', config.checkout_success_message_tpl, opts.debugMode ? 1 : 1000*60*10);
+            opts.storage.setItem('reservationId', reservationId, opts.debugMode ? 1 : 1000*60*10);
 
-            discountCode = config.discount_code;
-            // Save for 10 minutes I think 10 minutes should be enough to complete checkout.
-            opts.storage.setItem('reservationCustomId', customReservationId, opts.debugMode ? 1 : 1000*60*10);
             window.location = '/checkout?discount=' + discountCode +
-                '&note=In-store reservation id: ' + customReservationId + "" +
+                '&note=In-store reservation id: ' + reservationId + "" +
                 "&checkout[email]=" + email;
-
         } else {
             opts.app.trigger('reserve_modal.submit', self);
             $reserveModal.hide();
@@ -769,11 +769,6 @@ ReserveInStore.ReserveModal = function (opts) {
     var getFormData = function () {
         var data = ReserveInStore.Util.serializeObject($form);
         data.reservation.cart = getCartObject();
-
-        if (cart && checkoutWithoutClearingCart) {
-            data.reservation.custom_reservation_id = customReservationId;
-        }
-
         return data;
     };
 

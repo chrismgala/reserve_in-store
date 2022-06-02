@@ -634,7 +634,7 @@ class Store < ApplicationRecord
   end
 
   def needs_subscription?
-    #return false if sandbox_store?
+    return false if sandbox_store?
 
     subscription.blank? && recommended_plan.present?
   end

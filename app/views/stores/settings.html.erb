@@ -627,5 +627,13 @@
           btnSelector: '#submission_button',
           formSelector: '#store_settings_form'
       });
+
+      <% if @current_store.needs_subscription? ||
+            @current_store.subscription.present? && (@current_store.recommended_feature_plan('pay_before_pickup').price > @current_store.subscription.plan.price)
+      %>
+          $('#store_checkout_without_clearing_cart').click(function () {
+              $("#store_checkout_without_clearing_cart").prop("checked", false);
+          });
+      <% end %>
   </script>
 <% end %>

@@ -20,7 +20,7 @@
                         <label class="Polaris-Choice" for="store_<%= option[:label_for] %>">
                           <div class="Polaris-Choice__Control">
                             <div class="Polaris-Checkbox">
-                              <%= local_assigns[:form].check_box option[:attr], class: 'Polaris-Checkbox__Input' %>
+                              <%= local_assigns[:form].check_box option[:attr], class: 'Polaris-Checkbox__Input disabled' %>
                               <div class="Polaris-Checkbox__Backdrop"></div>
                               <div class="Polaris-Checkbox__Icon">
                               <span class="Polaris-Icon">
@@ -68,7 +68,8 @@
                 <%= render partial: 'stores/shared/liquid_editor_section', locals: local_assigns[:liquid_editor] %>
               </div>
             <% end %>
-            
+
+            <%= render partial: 'stores/subscriptions/partials/feature_upgrade_subscription', locals: { store: @current_store, feature: 'pay_before_pickup' } %>
           </div>
         </div>
       </div>

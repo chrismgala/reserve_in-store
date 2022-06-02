@@ -606,6 +606,21 @@ class Store < ApplicationRecord
     end
   end
 
+  def recommended_feature_plan(feature_key)
+    plan_code = recommended_feature_plan_code(feature_key)
+    return nil if plan_code.blank?
+    Plan.find_by(code: plan_code)
+  end
+
+  def recommended_feature_plan_code(feature_key)
+    if plan_overrides.to_h['code'].present?
+      return plan_overrides.to_h['code']
+    end
+
+    min_plan = Plan.find_by("(features ->> '#{feature_key}')::boolean")
+    min_plan.code
+  end
+
   def sandbox_store?
     shopify_settings.try(:[], :plan_name).to_s.downcase.include?('affiliate')
   end
@@ -619,7 +634,7 @@ class Store < ApplicationRecord
   end
 
   def needs_subscription?
-    return false if sandbox_store?
+    #return false if sandbox_store?
 
     subscription.blank? && recommended_plan.present?
   end

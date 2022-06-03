@@ -629,7 +629,7 @@
       });
 
       <% if @current_store.needs_subscription? ||
-            @current_store.subscription.present? && (@current_store.recommended_feature_plan('pay_before_pickup').price > @current_store.subscription.plan.price)
+            @current_store.needs_upgrade_subscription? && (@current_store.recommended_feature_plan('pay_before_pickup').price > @current_store.subscription.plan.price)
       %>
           $('#store_checkout_without_clearing_cart').click(function () {
               $("#store_checkout_without_clearing_cart").prop("checked", false);

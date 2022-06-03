@@ -625,6 +625,14 @@ class Store < ApplicationRecord
     shopify_settings.try(:[], :plan_name).to_s.downcase.include?('affiliate')
   end
 
+  ##
+  # Is this store a dev store that has not been launched yet?
+  def in_development?
+    return true if name.to_s =~ /test|dev(elopment|eloper)?[^a-z]|example|sample|staging|ris/i
+    return true if shopify_domain.to_s =~ /test|dev(elopment|eloper)?[^a-z]|example|sample|staging|ris/i
+    false
+  end
+
   def is_fera_team?
     email.to_s =~ /.*@(fera|reserveinstore|bananastand|wellfounded).*/i
   end
@@ -635,8 +643,14 @@ class Store < ApplicationRecord
 
   def needs_subscription?
     return false if sandbox_store?
-
+    return false if in_development?
     subscription.blank? && recommended_plan.present?
+  end
+
+  def needs_upgrade_subscription?
+    return false if sandbox_store?
+    return false if in_development?
+    subscription.present?
   end
 
   def trial_ends_at

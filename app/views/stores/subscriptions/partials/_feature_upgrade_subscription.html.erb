@@ -1,5 +1,5 @@
 <% if store.needs_subscription? ||
-  store.subscription.present? && (store.recommended_feature_plan(local_assigns[:feature]).price > store.subscription.plan.price)
+  store.needs_upgrade_subscription? && (store.recommended_feature_plan(local_assigns[:feature]).price > store.subscription.plan.price)
 %>
   <div class="Polaris-Layout__Section Polaris-Banner Polaris-Banner--statusWarning Polaris-Banner--withinPage subscription-banner">
     <div class="Polaris-Banner__Ribbon">

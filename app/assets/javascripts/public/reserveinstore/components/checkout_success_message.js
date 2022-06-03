@@ -5,11 +5,11 @@ ReserveInStore.CheckoutSuccessMessage = function (opts) {
         var reservationId = opts.storage.getItem('reservationId');
         var checkoutSuccessMessageTpl = opts.storage.getItem('checkoutSuccessMessageTpl');
         if (reservationId) {
-            successMessage(reservationId, checkoutSuccessMessageTpl);
+            showMessage(reservationId, checkoutSuccessMessageTpl);
         }
     };
 
-    var successMessage = function(reservationId, checkoutSuccessMessageTpl) {
+    var showMessage = function(reservationId, checkoutSuccessMessageTpl) {
         if (window.location.toString().indexOf('/thank_you') !== -1 && reservationId)  {
             Shopify.Checkout.OrderStatus.addContentBox(
                 checkoutSuccessMessageTpl.replace(/reservation_id/g, reservationId)

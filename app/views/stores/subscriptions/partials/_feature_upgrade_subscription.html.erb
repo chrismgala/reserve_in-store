@@ -16,7 +16,7 @@
           <% if store.needs_subscription? %>
             You are not subscribed to a plan yet.
           <% else %>
-            Upgrade now
+            Upgrade your plan
           <% end %>
         </div>
       </div>
@@ -31,8 +31,8 @@
           <div class="Polaris-ButtonGroup">
             <div class="Polaris-ButtonGroup__Item">
               <div class="Polaris-Banner__PrimaryAction">
-                <a href="<%= subscribe_path(plan: store.recommended_feature_plan_code(local_assigns[:feature]), post_subscribe_url: stores_settings_url) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
-                  Upgrade Plan
+                <a href="<%= subscribe_path(plan: store.recommended_feature_plan_code(local_assigns[:feature]), post_subscribe_url: stores_settings_url(action: 'upgrade')) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
+                  Upgrade now
                 </a>
               </div>
             </div>

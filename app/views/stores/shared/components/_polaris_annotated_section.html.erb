@@ -69,7 +69,9 @@
               </div>
             <% end %>
 
-            <%= render partial: 'stores/subscriptions/partials/feature_upgrade_subscription', locals: { store: @current_store, feature: 'pay_before_pickup' } %>
+            <div class="<%= 'display-if-enabled' if subscription_message[:display_if_enabled].present? %>" <%= subscription_message[:if_enabled_selector] %>>
+              <%= render partial: 'stores/subscriptions/partials/feature_upgrade_subscription', locals: { store: @current_store, feature: 'pay_before_pickup' } %>
+            </div>
           </div>
         </div>
       </div>

@@ -258,6 +258,10 @@
               display_if_enabled: true,
               if_enabled_selector: 'data-if_enabled_selector=#store_checkout_without_clearing_cart',
             },
+            subscription_message: {
+              display_if_enabled: true,
+              if_enabled_selector: 'data-if_enabled_selector=#store_checkout_without_clearing_cart',
+            },
             store: @current_store
         } %>
 
@@ -631,9 +635,15 @@
       <% if @current_store.needs_subscription? ||
             @current_store.needs_upgrade_subscription? && (@current_store.recommended_feature_plan('pay_before_pickup').price > @current_store.subscription.plan.price)
       %>
-          $('#store_checkout_without_clearing_cart').click(function () {
-              $("#store_checkout_without_clearing_cart").prop("checked", false);
-          });
+      var featureSubscriptionModal = new FeatureSubscriptionModal({
+          btnSelector: "#submission_button",
+          featureName: "Pay Before Pickup",
+          subscriptionModalTitle: "<%= @current_store.needs_subscription? ? 'You are not subscribed to a plan yet.' : 'Upgrade your plan' %>",
+          checkoutWithoutClearingCartSelector: "#store_checkout_without_clearing_cart",
+          recommendedPlanCode: "<%= @current_store.recommended_feature_plan_code('pay_before_pickup') %>",
+          recommendedPlanPrice: "<%= @current_store.recommended_feature_plan('pay_before_pickup').price.to_s.chomp('.00').chomp('.0') %>",
+          subscriptionPath: "<%= subscribe_path(plan: @current_store.recommended_feature_plan_code('pay_before_pickup'), post_subscribe_url: stores_settings_url(action: 'upgrade')) %>"
+      });
       <% end %>
   </script>
 <% end %>

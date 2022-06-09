@@ -10,6 +10,7 @@ ReserveInStore.App = function(opts) {
     var product, variant, cart, stockStatus;
     var reserveModal, chooselocationModal, variantLoader;
     var locationsManager, inventoryManager;
+    var checkoutSuccessMessage;
     var reserveProductBtn, reserveCartBtn, stockStatusIndicator;
 
     var eventListeners = {
@@ -48,6 +49,14 @@ ReserveInStore.App = function(opts) {
             }
             
             self.cart = new ReserveInStore.Cart({
+                api: api,
+                storage: storage,
+                app: self,
+                config: config || {}
+            });
+
+
+            checkoutSuccessMessage = new ReserveInStore.CheckoutSuccessMessage({
                 api: api,
                 storage: storage,
                 app: self,

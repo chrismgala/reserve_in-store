@@ -8,6 +8,8 @@ ReserveInStore.ReserveModal = function (opts) {
     var inventoryManager = opts.inventoryManager;
     var showReserveBtnWhenUnknown = false;
     var inStockTextWhenUnknown = false;
+    var discountCode;
+    var checkoutWithoutClearingCart;
 
     // inventoryData and stockData is a 3-level nested hash that contains data pertaining to product stock by location,
     // the fields should look like this:
@@ -44,6 +46,7 @@ ReserveInStore.ReserveModal = function (opts) {
         showReserveBtnWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('show_button') !== -1;
         inStockTextWhenUnknown = config.stock_status.behavior_when && config.stock_status.behavior_when.stock_unknown.indexOf('in_stock') !== -1;
         storeStockLabelsToDisplay = config.stock_status.stock_label || DEFAULT_STOCK_STATUS_LABEL_VISIBLE;
+        checkoutWithoutClearingCart = config.checkout_without_clearing_cart;
         updateCartOnAjax();
     };
 
@@ -88,22 +91,31 @@ ReserveInStore.ReserveModal = function (opts) {
             self.$modalContainer = $('<div class="reserveInStore-modal-container" id="reserveInStore-reserveModalContainer" style="display:none;"></div>').appendTo('body');
         }
 
-        var modalParams = { cart: getCartObject() };
         if (opts.app.getProduct()) {
+            var modalParams = { cart: getCartObject() };
             api.getReservationModal(modalParams, locationsManager.getLocationProductParams(), function(response) {
                 self.insertModal(response.content);
             });
         } else {
-            opts.app.cart.getProductTags(function(tags) {
-                api.getReservationModal(modalParams, { product_tag_filter: tags, current_page: "cart" }, function(response) {
-                    self.insertModal(response.content);
+            opts.app.cart.getAjaxData(function(cartData) {
+                cart = cartData;
+                var modalParams = { cart: getCartObject() };
+                opts.app.cart.getProductTags(function(tags) {
+                    api.getReservationModal(modalParams, { product_tag_filter: tags, current_page: "cart" }, function(response) {
+                        self.insertModal(response.content);
+                    });
                 });
-            });    
+            });
         }
 
         opts.app.trigger('reserve_modal.show reserve_modal.open', self);
     };
 
+
+    /**
+     * will remove later after some test
+     * @deprecated in favor of #opts.app.cart.getAjaxData(function(cartData)
+     */
     var updateCartOnAjax = function() {
         $(document).on('ajaxComplete', function( event, xhr, settings ) {
             if (xhr.status >= 300) return; // Bad ajax request, don't do anything
@@ -574,7 +586,10 @@ ReserveInStore.ReserveModal = function (opts) {
         api.getStockAvail({ product_ids: productIdArray }, function(stock) {
             stockData = stock;
             if (showHideReserveItemsNotAvailMessage(formData.reservation.location_id, reserveItems)) {
-                api.createReservation(getFormData(), self.displaySuccessModal, showErrorMessages);
+                api.createReservation(getFormData(), function(response) {
+                    response = JSON.parse(JSON.stringify(response));
+                    self.displaySuccessModal(response.reservation_id);
+                });
             }
         });
     };
@@ -685,17 +700,30 @@ ReserveInStore.ReserveModal = function (opts) {
     };
 
     /**
+     * redirect to checkout page if reservation is from cart page and checkout_without_clearing_cart is enabled.
      * Display a nice modal to say "thank you... etc" and whatever is configured to display via the store settings
      */
-    self.displaySuccessModal = function () {
-        opts.app.trigger('reserve_modal.submit', self);
+    self.displaySuccessModal = function (reservationId) {
+        if (cart && checkoutWithoutClearingCart) {
+            var email = $reserveModal.find('input[name="reservation[customer_email]"').val();
+            discountCode = config.discount_code;
 
-        $reserveModal.hide();
-        ReserveInStore.Util.showWithoutTransform($successModal);
+            // Save for 10 minutes I think 10 minutes should be enough to complete checkout.
+            opts.storage.setItem('checkoutSuccessMessageTpl', config.checkout_success_message_tpl, opts.debugMode ? 1 : 1000*60*10);
+            opts.storage.setItem('reservationId', reservationId, opts.debugMode ? 1 : 1000*60*10);
 
-        // If we're reserving a whole cart, then clear the cart
-        if (!product && !variant && cart) {
-            clearCart();
+            window.location = '/checkout?discount=' + discountCode +
+                '&note=In-store reservation id: ' + reservationId + "" +
+                "&checkout[email]=" + email;
+        } else {
+            opts.app.trigger('reserve_modal.submit', self);
+            $reserveModal.hide();
+            ReserveInStore.Util.showWithoutTransform($successModal);
+
+            // If we're reserving a whole cart then clear the cart
+            if (!product && !variant && cart && !$reserveModal.find(".reserveInStore-form-submit").val()) {
+                clearCart();
+            }
         }
     };
 

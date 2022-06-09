@@ -36,6 +36,8 @@ class Store < ApplicationRecord
     :unfulfilled_reservation_notification_email_tpl, :unfulfilled_reservation_notification_email_tpl_enabled,
     :fulfilled_reservation_subject, :unfulfilled_reservation_subject,
     :fulfilled_reservation_sender_name, :unfulfilled_reservation_sender_name,
+    :checkout_without_clearing_cart, :discount_code,
+    :checkout_success_message_tpl_enabled, :checkout_success_message_tpl,
     show_stock_status_labels: {}
   ]
 
@@ -93,7 +95,8 @@ class Store < ApplicationRecord
       'show_additional_fields' => show_additional_fields,
       'success_msg' => success_msg,
       'faq' => reserve_modal_faq_tpl_in_use,
-      'hide_location_search' => hide_location_search
+      'hide_location_search' => hide_location_search,
+      'checkout_without_clearing_cart' => checkout_without_clearing_cart,
     }
   end
 
@@ -287,6 +290,26 @@ class Store < ApplicationRecord
   end
 
 
+  ##
+  # Checkout success message tpl
+  # @return [Text] - default, un-rendered email template
+  def self.default_checkout_success_message_tpl
+    return @default_checkout_success_message_tpl if @default_checkout_success_message_tpl.present? && !Rails.env.development?
+
+    @default_checkout_success_message_tpl = ApplicationController.new.render_to_string(partial: 'api/v1/reservations/default_templates/checkout_success_message.liquid.html')
+  end
+  def default_checkout_success_message_tpl; self.class.default_checkout_success_message_tpl; end
+
+  ##
+  # @return [Text] - Template we want to use for checkout success message email for this store
+  def checkout_success_message_tpl_in_use
+    if checkout_success_message_tpl_enabled?
+      checkout_success_message_tpl.to_s
+    else
+      self.class.default_checkout_success_message_tpl
+    end
+  end
+
 
   ######################################################
   # For Reserve Modal TPL
@@ -387,7 +410,7 @@ class Store < ApplicationRecord
   # @return [Hash] - liquid params used by JS email previewer
   def frontend_tpl_vars(params = {})
     params[:product_tag_filter] = '' if params[:product_tag_filter].nil?
-    
+
     if params[:current_page] == "product"
       current_page_condition = "visible_in_product = true"
     else
@@ -443,6 +466,9 @@ class Store < ApplicationRecord
         },
         stock_label: show_stock_status_labels
       },
+      discount_code: discount_code,
+      checkout_without_clearing_cart: checkout_without_clearing_cart,
+      checkout_success_message_tpl: checkout_success_message_tpl_in_use,
       api_url: ENV['BASE_APP_URL'],
       store_pk: public_key
     }
@@ -580,8 +606,31 @@ class Store < ApplicationRecord
     end
   end
 
+  def recommended_feature_plan(feature_key)
+    plan_code = recommended_feature_plan_code(feature_key)
+    return nil if plan_code.blank?
+    Plan.find_by(code: plan_code)
+  end
+
+  def recommended_feature_plan_code(feature_key)
+    if plan_overrides.to_h['code'].present?
+      return plan_overrides.to_h['code']
+    end
+
+    min_plan = Plan.find_by("(features ->> '#{feature_key}')::boolean")
+    min_plan.code
+  end
+
   def sandbox_store?
     shopify_settings.try(:[], :plan_name).to_s.downcase.include?('affiliate')
+  end
+
+  ##
+  # Is this store a dev store that has not been launched yet?
+  def in_development?
+    return true if name.to_s =~ /test|dev(elopment|eloper)?[^a-z]|example|sample|staging|ris/i
+    return true if shopify_domain.to_s =~ /test|dev(elopment|eloper)?[^a-z]|example|sample|staging|ris/i
+    false
   end
 
   def is_fera_team?
@@ -594,8 +643,14 @@ class Store < ApplicationRecord
 
   def needs_subscription?
     return false if sandbox_store?
-
+    return false if in_development?
     subscription.blank? && recommended_plan.present?
+  end
+
+  def needs_upgrade_subscription?
+    return false if sandbox_store?
+    return false if in_development?
+    subscription.present?
   end
 
   def trial_ends_at

@@ -25,6 +25,10 @@ module Api
           liquid_vars[:items] = load_product_data(liquid_vars[:items])
         end
 
+        if params[:current_page] == "cart"
+          liquid_vars[:is_cart_page] = true
+        end
+
         content = Liquid::Template.parse(tpl).render!(liquid_vars.deep_stringify_keys).html_safe
 
         respond_to do |format|
@@ -39,7 +43,7 @@ module Api
       def create
         @reservation = Reservation.new(reservation_params.merge(store: @store))
         if @reservation.save_and_email
-          render json: { message: "Reservation was successfully created." }, status: :ok
+          render json: { message: "Reservation was successfully created.", reservation_id: @reservation.id }, status: :ok
         else
           render json: @reservation.errors.full_messages, status: :unprocessable_entity
         end

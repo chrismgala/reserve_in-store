@@ -74,14 +74,25 @@
 .reservedItems .details {
     margin-left: 60px;
 }
-.reservation-unFulfill-btn {
+.reservation-unFulfill-btn,
+.reservation-fulfill-btn {
     margin-left: 3px;
     margin-right: 3px;
+
+    path {
+        fill: #ffffff;
+    }
 }
+
 .reservation-fulfill-svg:hover path,
 .reservation-unFulfill-svg:hover path {
-    fill: #5563c1;
+    fill: #ffffff;
 }
+
+.cta-col {
+    text-align: right;
+}
+
 @media screen and (max-width: 1024px) {
     .reservation-page {
         font-size: 12px;

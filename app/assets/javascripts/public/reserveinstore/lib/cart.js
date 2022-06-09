@@ -14,6 +14,13 @@ ReserveInStore.Cart = function (opts) {
 
     self.getData = function() { return data; };
 
+    self.getAjaxData = function(callback) {
+        $.getJSON('/cart.js', function(cartData) {
+            opts.app.setCart(cartData);
+            callback(cartData);
+        });
+    };
+
     self.getProductTags = function(callback) {
         var tags = [];
                 
@@ -40,6 +47,6 @@ ReserveInStore.Cart = function (opts) {
             }
         }
     };
-        
+
     init();
 };

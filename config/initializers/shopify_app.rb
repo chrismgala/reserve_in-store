@@ -3,7 +3,7 @@ ShopifyApp.configure do |config|
   config.api_key = ENV['SHOPIFY_CLIENT_API_KEY'].presence || ENV['SHOPIFY_API_KEY'].presence
   config.secret = ENV['SHOPIFY_CLIENT_API_SECRET'].presence || ENV['SHOPIFY_API_SECRET'].presence
   config.api_version = '2022-01'
-  config.scope = 'read_products, read_themes, write_themes, read_script_tags, write_script_tags, read_locations, read_inventory, read_product_listings' # read_customers,write_customers
+  config.scope = 'read_products, read_orders, read_themes, write_themes, read_script_tags, write_script_tags, read_locations, read_inventory, read_product_listings' # read_customers,write_customers
   config.embedded_app = true
   config.after_authenticate_job = { job: AppInstalledJob }
   config.shop_session_repository = Store
@@ -16,6 +16,7 @@ ShopifyApp.configure do |config|
       {topic: 'products/create', address: "#{ENV['BASE_APP_URL']}/webhooks/products_create", format: 'json'},
       {topic: 'products/update', address: "#{ENV['BASE_APP_URL']}/webhooks/products_update", format: 'json'},
       {topic: 'shop/update', address: "#{ENV['BASE_APP_URL']}/webhooks/shop_update", format: 'json'},
+      {topic: 'orders/create', address: "#{ENV['BASE_APP_URL']}/webhooks/orders_create", format: 'json'},
   ]
   config.scripttags = [
     {event:'onload', src: "#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}/reserveinstore.js"}

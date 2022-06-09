@@ -1,0 +1,80 @@
+<div class="Polaris-Layout__AnnotatedSection">
+  <div class="Polaris-Layout__AnnotationWrapper">
+    <div class="Polaris-Layout__Annotation">
+      <div class="Polaris-TextContainer">
+        <h2 class="Polaris-Heading"><%= local_assigns[:heading] %></h2>
+        <p><%= local_assigns[:desc] %></p>
+      </div>
+    </div>
+    <div class="Polaris-Layout__AnnotationContent">
+      <div class="Polaris-Card">
+        <div class="Polaris-Card__Section">
+          <div class="Polaris-FormLayout">
+
+            <% if local_assigns[:checkbox].present? %>
+              <div class="Polaris-FormLayout__Item">
+                <fieldset class="Polaris-ChoiceList">
+                  <ul class="Polaris-ChoiceList__Choices">
+                    <% local_assigns[:options].each do |option| %>
+                      <li>
+                        <label class="Polaris-Choice" for="store_<%= option[:label_for] %>">
+                          <div class="Polaris-Choice__Control">
+                            <div class="Polaris-Checkbox">
+                              <%= local_assigns[:form].check_box option[:attr], class: 'Polaris-Checkbox__Input disabled' %>
+                              <div class="Polaris-Checkbox__Backdrop"></div>
+                              <div class="Polaris-Checkbox__Icon">
+                              <span class="Polaris-Icon">
+                                <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20">
+                                  <g fill-rule="evenodd">
+                                    <path d="M8.315 13.859l-3.182-3.417a.506.506 0 0 1 0-.684l.643-.683a.437.437 0 0 1 .642 0l2.22 2.393 4.942-5.327a.437.437 0 0 1 .643 0l.643.684a.504.504 0 0 1 0 .683l-5.91 6.35a.437.437 0 0 1-.642 0"></path>
+                                  </g>
+                                </svg>
+                              </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="Polaris-Choice__Label">
+                            <%= option[:label_text] %>
+                          </div>
+                        </label>
+                      </li>
+                    <% end %>
+                  </ul>
+                </fieldset>
+              </div>
+            <% end %>
+
+            <% if local_assigns[:input_text_fields].present? %>
+              <% local_assigns[:input_text_fields].each do |input_field| %>
+                <div class="Polaris-FormLayout__Item <%= 'display-if-enabled' if input_field[:display_if_enabled].present? %>" <%= input_field[:if_enabled_selector] %> >
+                  <div class="Polaris-Labelled__LabelWrapper">
+                    <%= local_assigns[:form].label input_field[:attr], class: 'Polaris-Label__Text' do %>
+                      <%= input_field[:label_text] %>
+                    <% end %>
+                  </div>
+                  <div class="Polaris-TextField">
+                    <%= local_assigns[:form].text_field input_field[:attr], class: 'Polaris-TextField__Input' %>
+                    <div class="Polaris-Select__Backdrop"></div>
+                  </div>
+                  <div class="Polaris-Labelled__HelpText">
+                    <%= input_field[:help_text] %>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+
+            <% if local_assigns[:liquid_editor].present? %>
+              <div class="<%= 'display-if-enabled' if liquid_editor[:display_if_enabled].present? %>" <%= liquid_editor[:if_enabled_selector] %>>
+                <%= render partial: 'stores/shared/liquid_editor_section', locals: local_assigns[:liquid_editor] %>
+              </div>
+            <% end %>
+
+            <div class="<%= 'display-if-enabled' if subscription_message[:display_if_enabled].present? %>" <%= subscription_message[:if_enabled_selector] %>>
+              <%= render partial: 'stores/subscriptions/partials/feature_upgrade_subscription', locals: { store: @current_store, feature: 'pay_before_pickup' } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

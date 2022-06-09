@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_25_165339) do
+ActiveRecord::Schema.define(version: 2022_06_01_045815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,6 +79,7 @@ ActiveRecord::Schema.define(version: 2021_01_25_165339) do
     t.boolean "unfulfilled_reservation_custom_email_tpl_enabled"
     t.boolean "unfulfilled_reservation_email_sent"
     t.boolean "is_unfulfilled"
+    t.string "platform_order_id"
     t.index ["location_id"], name: "index_reservations_on_location_id"
     t.index ["store_id"], name: "index_reservations_on_store_id"
   end
@@ -151,6 +152,10 @@ ActiveRecord::Schema.define(version: 2021_01_25_165339) do
     t.boolean "fulfilled_reservation_notification_email_tpl_enabled"
     t.string "fulfilled_reservation_sender_name"
     t.string "fulfilled_reservation_subject"
+    t.boolean "checkout_without_clearing_cart"
+    t.text "discount_code"
+    t.string "checkout_success_message_tpl"
+    t.boolean "checkout_success_message_tpl_enabled"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

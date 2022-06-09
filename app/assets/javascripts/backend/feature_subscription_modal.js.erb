@@ -1,0 +1,63 @@
+/**
+ * A modal pop-up to upgrade subscription.
+ *
+ * Construct with the following hash:
+ * {string} formSelector, selector for the form we will submit
+ * {string} btnSelector, selector for the submit button
+ * {string} subscriptionModalTitle, title to be displayed in modal
+ * {string} recommendedPlanCode, plan code - startup, small.....
+ * {string} $featureName, eg: feature plan name / title
+ *
+ * @param {object} [opts] - An optional hash used for setup, as described above.
+ */
+var FeatureSubscriptionModal = function (opts) {
+    var $form = $(opts.formSelector);
+    var $subscriptionModalTitle = opts.subscriptionModalTitle;
+    var $subscriptionPath = opts.subscriptionPath;
+    var $recommendedPlanCode = opts.recommendedPlanCode;
+    var $recommendedPlanPrice = opts.recommendedPlanPrice;
+    var $featureName = opts.featureName;
+
+    var init = function () {
+        $(opts.btnSelector).click(function(e) {
+            if ($(opts.checkoutWithoutClearingCartSelector).is(":checked")) {
+                createModal(e);
+            } else {
+                $form.submit();
+            }
+        });
+    };
+
+    var createModal = function (e) {
+        e.preventDefault();
+
+        const upgradeButton = Button.create(app, {label: 'Upgrade Now'});
+        upgradeButton.subscribe(Button.Action.CLICK, () => {
+            window.open($subscriptionPath, '_blank');
+            subscriptionModal.dispatch(Modal.Action.CLOSE);
+        });
+
+        const cancelButton = Button.create(app, {label: 'Cancel'});
+        cancelButton.subscribe(Button.Action.CLICK, () => {
+            subscriptionModal.dispatch(Modal.Action.CLOSE);
+        });
+
+        const modalOptions = {
+            title: $subscriptionModalTitle,
+            message: 'Feature "' + $featureName + '" is only available in ' +
+                $recommendedPlanCode + '($' + $recommendedPlanPrice + ' /mo)' +
+                ' and above plans.',
+            footer: {
+                buttons: {
+                    primary: upgradeButton,
+                    secondary: [cancelButton],
+                },
+            },
+        };
+
+        const subscriptionModal = Modal.create(app, modalOptions);
+        subscriptionModal.dispatch(Modal.Action.OPEN);
+    };
+
+    init();
+};

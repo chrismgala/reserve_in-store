@@ -36,7 +36,7 @@
 
 <%= render partial: 'layouts/partials/error_banner', locals: {item: @current_store} %>
 
-<% if @current_store.distinctly_named_location_count > 0 && !@current_store.sandbox_store? %>
+<% if @current_store.distinctly_named_location_count > 0 && !@current_store.sandbox_store? && !@current_store.in_development? %>
   <% if @current_store.needs_subscription? %>
     <%= render partial: 'stores/subscriptions/partials/need_subscription', locals: { store: @current_store } %>
   <% else %>

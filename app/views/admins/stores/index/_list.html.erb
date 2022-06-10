@@ -13,6 +13,7 @@
           <th>Store ID</th>
           <th>Name &amp; URL</th>
           <th>Subscription</th>
+          <th>Pay Before pickup</th>
           <th># Locations</th>
           <th># Reservations</th>
           <th>Created</th>
@@ -36,6 +37,13 @@
             </td>
             <td class="text-success">
               <%= store.subscription.nice_price if store.connected? && store.subscription.present? %>
+            </td>
+            <td class="text-success">
+              <% if store.checkout_without_clearing_cart? %>
+                <span class="ml-2 text-success d-inline-block">
+                  <i class="fas fa-check-circle text-success"></i>
+                </span>
+              <% end %>
             </td>
             <td>
               <span class="text-danger text-bold">

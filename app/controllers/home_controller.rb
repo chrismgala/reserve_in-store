@@ -11,8 +11,4 @@ class HomeController < LoggedInController
   def embedded_mode?
     false
   end
-
-  def index
-    redirect_to stores_settings_path(shop: @current_store.shopify_domain)
-  end
 end

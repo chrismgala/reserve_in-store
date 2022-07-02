@@ -16,7 +16,7 @@
   </div>
 
   <div class="Polaris-Page__Content">
-    <%= form_for location, url: {action: action}, html: {id: "location-form"} do |f| %>
+    <%= form_with(model: location, html: {id: "location-form"}) do |f| %>
       <div class="Polaris-Layout">
 
         <div class="Polaris-Layout__AnnotatedSection">

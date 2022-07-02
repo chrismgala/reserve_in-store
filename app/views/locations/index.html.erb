@@ -1,3 +1,4 @@
+<%= render partial: 'layouts/partials/topnavbar/menu' %>
 <% content_for(:title) { 'Locations' } %>
 
 <div class="Polaris-Page">
@@ -70,7 +71,7 @@
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text"><%= location.phone %></td>
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text">
                       <%= link_to 'Edit', edit_location_path(location), class: 'Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim button-margin-right' %>
-                      <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: {confirm: "Are you sure? Deleting this location will also delete all its locations."} %>
+                      <%= link_to 'Delete', location, method: :delete, class: 'Polaris-Button Polaris-Button--destructive Polaris-Button--sizeSlim', data: {confirm: "Are you sure? Deleting this location will also delete all its locations.", remote: true } %>
                     </td>
                   </tr>
                 <% end %>

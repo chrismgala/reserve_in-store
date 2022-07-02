@@ -37,9 +37,18 @@
                 </span>Inactive
               </div>
               <div class="Polaris-SettingAction__Action">
-                <button class="btn-activate Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge Polaris-Button--success">
-                  ACTIVATE
-                </button>
+                <% if store.needs_subscription? %>
+                  <a class="btn-activate Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge Polaris-Button--success"
+                     href="<%= subscribe_path(post_subscribe_url: stores_activate_path) %>" data-polaris-unstyled="true">
+                    ACTIVATE
+                  </a>
+                <% else %>
+                  <a class="btn-activate Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge Polaris-Button--success"
+                     href="<%= stores_activate_path %>" data-polaris-unstyled="true">
+                    ACTIVATE
+                  </a>
+                <% end %>
+
               </div>
               <div class="Polaris-SettingAction__Setting">
                 <p>The Reserve In-Store modal is not currently showing to your shoppers. Click the "TURN ON" button to make it start showing.</p>
@@ -78,14 +87,6 @@
                   },
               },
           }).dispatch(Modal.Action.OPEN);
-      });
-      $('.btn-activate').on('click', function(e) {
-          e.preventDefault();
-          <% if store.needs_subscription? %>
-          window.open('<%= subscribe_path(post_subscribe_url: stores_activate_url) %>');
-          <% else %>
-          window.location = '<%= stores_activate_url %>';
-          <% end %>
       });
   </script>
 <% end %>

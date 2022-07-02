@@ -1,4 +1,5 @@
 
+<%= render partial: 'layouts/partials/topnavbar/menu' %>
 <% content_for(:title) { 'Reservations' } %>
 
 <div class="Polaris-Card reservation-search-bar">
@@ -133,7 +134,7 @@
                     <td class="Polaris-DataTable__Cell Polaris-DataTable__Cell--text datatable-cell-small-width cta-col" >
 
                       <% if !reservation.fulfilled? && !reservation.is_unfulfilled?  %>
-                        <%= form_for :reservation, url: reservation_path(reservation), html: { class: 'reservation-status-form' }, method: :put do |f| %>
+                        <%= form_with(model: reservation, url: reservation_path(reservation), html: { class: 'reservation-status-form' }, method: :put) do |f| %>
                           <%= f.hidden_field :fulfilled, value: true %>
                           <button type="submit" class="Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim reservation-fulfill-btn" title="Fulfill Reservation">
                             <span class="Polaris-Icon">
@@ -155,7 +156,7 @@
                           </a>
                           <%= render partial: 'unfulfilled_reservation_email_modal', locals: { store: @current_store, reservation: reservation } %>
                         <% else %>
-                          <%= form_for :reservation, url: reservation_path(reservation), html: { class: 'reservation-status-form' }, method: :put do |f| %>
+                          <%= form_with(model: reservation, url: reservation_path(reservation), html: { class: 'reservation-status-form' }, method: :put) do |f| %>
                             <%= f.hidden_field :is_unfulfilled, value: true %>
                             <button type="submit" class="Polaris-Button Polaris-Button--primary Polaris-Button--sizeSlim reservation-unFulfill-btn" title="UnFulfill Reservation">
                               <span class="Polaris-Icon">

@@ -1,4 +1,4 @@
-<%= form_for :unfulfilled_reservation_email, url: reservation_unfulfilled_send_email_path(reservation), html: { class: 'reservation-status-form' }, method: :post do |f| %>
+<%= form_with(model: unfulfilled_reservation_email, url: reservation_unfulfilled_send_email_path(reservation), html: { class: 'reservation-status-form' }, method: :post) do |f| %>
 <div class="unfulfilled-reservation-email-modal-<%= reservation.id %>" style="display:none;">
   <div class="Polaris-Modal-Dialog__Container" data-polaris-layer="true" data-polaris-overlay="true">
     <div class="Polaris-Modal-Dialog__Modal" role="dialog" aria-labelledby="modal-header" tabindex="-1">

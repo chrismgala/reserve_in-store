@@ -1,3 +1,4 @@
+<%= render partial: 'layouts/partials/topnavbar/menu' %>
 <% content_for(:title) { 'New Location' } %>
 <%= render partial:'form', locals: {action: 'create', location: @location} %>
 

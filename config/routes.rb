@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  #root :to => 'stores#settings'
-  #get 'auth/shopify/callback' => 'callbacks#callback'
+  root to: 'splash_page#index'
+  get '/home', to: 'home#index', as: :home
+  get 'splash_page/index', to: 'splash_page#index'
 
   resources :reservations do
     post 'unfulfilled_send_email'
@@ -45,10 +46,10 @@ Rails.application.routes.draw do
     sessions: "admins/sessions",
     registrations: "admins/registrations",
     passwords: "admins/passwords",
-  }, path_names: { 
+  }, path_names: {
     sign_in: 'login', sign_out: 'logout'
   }
-  
+
   scope :admin, module: :admins, as: :admin do
     root :to => 'stores#index'
     resources :stores do
@@ -73,8 +74,7 @@ Rails.application.routes.draw do
     match 'stores/override_subscriptions' => 'stores#override_subscriptions', via: [:post, :patch]
     match 'stores/notes' => 'stores#save_notes', via: [:post, :patch]
   end
-    
+
   mount ShopifyApp::Engine, at: '/'
-    root :to => 'stores#settings'
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

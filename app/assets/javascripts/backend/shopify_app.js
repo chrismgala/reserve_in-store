@@ -32,9 +32,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // console.log("Get session token: " + getSessionToken);
 
-  var actions = AppBridge.actions;
-  // var TitleBar = actions.TitleBar;
-
   // Wait for a session token before trying to load an authenticated page
   await retrieveToken(app);
 

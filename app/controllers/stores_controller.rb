@@ -103,7 +103,7 @@ class StoresController < LoggedInController
 
   def require_user!
     unless @current_store.users.any?
-      redirect_to(stores_settings_path(shop: @current_store.shopify_domain))
+      redirect_to(stores_setup_url)
       false
     else
       if !params[:view] && params[:action] != 'templates' && params[:action] != 'help' && params[:action] != 'upgrade' && @current_store.reservations.count > 0

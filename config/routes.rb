@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root to: 'splash_page#index'
-  get '/home', to: 'stores#settings', as: :home
+  get '/home', to: 'home#index', as: :home
   get 'splash_page/index', to: 'splash_page#index'
 
   resources :reservations do

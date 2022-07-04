@@ -1,1 +1,4 @@
 <%= render partial: 'layouts/partials/topnavbar/menu' %>
+<% unless @current_store.users.any? %>
+  <%= render partial: 'stores/shared/setup' %>
+<% end %>

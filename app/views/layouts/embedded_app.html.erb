@@ -80,5 +80,18 @@
         <%= yield :javascript %>
       </div>
     <% end %>
+
+    <%= intercom_script_tag unless embedded_mode? %>
+
+    <% if  ENV['HEROKU_RELEASE_VERSION'].present? && ENV['HEROKU_RELEASE_CREATED_AT'].present? %>
+  <!--
+         Server software <strong><%= ENV['HEROKU_RELEASE_VERSION'] %></strong>.
+         Server last updated <strong><%= local_time_ago(Time.parse(ENV['HEROKU_RELEASE_CREATED_AT'])) %></strong>.
+      -->
+<% end %>
+
+    <%= render(partial: 'layouts/partials/footer/facebook_pixel') %>
+    <%= render(partial: 'layouts/partials/footer/linkedin_pixel') %>
+    <%= render(partial: 'layouts/partials/footer/adroll') %>
   </body>
 </html>

@@ -1,0 +1,53 @@
+<%= render partial: 'layouts/partials/topnavbar/menu' %>
+<div class="setupPanel">
+  <h1 class="Polaris-Heading">
+    <% if @current_store.created_at > 15.minutes.ago %>
+      Create User Account
+    <% else %>
+      We need some extra details from you...
+    <% end %>
+  </h1>
+  <p>Before you continue to the app we need to know how we can reach you.</p>
+
+  <%= form_with(model: User.new,
+                html: { role: "form",
+                        data: { 'parsley-validate': ''}}) do |f| %>
+
+    <div class="Polaris-FormLayout">
+      <div role="group" class="Polaris-FormLayout--condensed">
+        <div class="Polaris-FormLayout__Items">
+          <div class="Polaris-FormLayout__Item">
+            <div class="">
+              <div class="Polaris-Labelled__LabelWrapper">
+                <div class="Polaris-Label">
+                  <label id="user_name_label" for="user_name" class="Polaris-Label__Text">Your Name</label></div>
+              </div>
+              <div class="Polaris-TextField">
+                <input id="user_name" required type="text" class="Polaris-TextField__Input" aria-label="Length" aria-labelledby="user_name_label" aria-invalid="false" name="user[name]">
+                <div class="Polaris-TextField__Backdrop"></div>
+              </div>
+            </div>
+          </div>
+          <div class="Polaris-FormLayout__Item">
+            <div class="">
+              <div class="Polaris-Labelled__LabelWrapper">
+                <div class="Polaris-Label">
+                  <label id="user_email_label" for="user_email" class="Polaris-Label__Text">Your Email</label></div>
+              </div>
+              <div class="Polaris-TextField">
+                <input id="user_email" required type="email" class="Polaris-TextField__Input" aria-label="Length" aria-labelledby="user_email_label" aria-invalid="false" name="user[email]">
+                <div class="Polaris-TextField__Backdrop"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="setupPanel-actions">
+      <button type="submit" class="Polaris-Button Polaris-Button--primary">
+        <span class="Polaris-Button__Content"><span class="Polaris-Button__Text">Save &amp; Continue</span></span>
+      </button>
+    </div>
+  <% end %>
+
+</div>

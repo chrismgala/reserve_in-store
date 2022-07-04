@@ -11,4 +11,16 @@ class HomeController < LoggedInController
   def embedded_mode?
     false
   end
+
+  ##
+  # GET /home
+  def index
+    if @current_store.users.any?
+      if @current_store.reservations.count > 0
+        redirect_to(reservations_path)
+      else
+        redirect_to(stores_settings_path)
+      end
+    end
+  end
 end

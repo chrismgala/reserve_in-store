@@ -20,10 +20,12 @@ class LocationsController < LoggedInController
 
     respond_to do |format|
       if @location.save
-        format.html { redirect_to edit_location_path(@location), notice: 'Location was successfully created.' }
+        flash[:notice] = "Location was successfully created."
+        format.js { render  :template => "layouts/flash_messages.js.erb"}
         format.json { render json: @location, status: :ok }
       else
-        format.html { redirect_to edit_location_path(@location), flash: { error: @location.errors.full_messages.join("\n") } }
+        flash[:error] = @location.errors.full_messages.join("\n")
+        format.js { render  :template => "layouts/flash_messages.js.erb"}
         format.json { render json: @location.errors, status: :unprocessable_entity }
       end
     end
@@ -39,10 +41,12 @@ class LocationsController < LoggedInController
   def update
     respond_to do |format|
       if @location.update(location_params)
-        format.html { redirect_to locations_path, notice: 'Location was successfully updated.' }
+        flash[:notice] = "Location was successfully updated."
+        format.js { render  :template => "layouts/flash_messages.js.erb"}
         format.json { render :show, status: :ok, location: @location }
       else
-        format.html { redirect_to locations_path, flash: { error: @location.errors.full_messages.join("\n") } }
+        flash[:error] = @location.errors.full_messages.join("\n")
+        format.js { render  :template => "layouts/flash_messages.js.erb"}
         format.json { render json: @location.errors, status: :unprocessable_entity }
       end
     end

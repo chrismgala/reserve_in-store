@@ -86,8 +86,9 @@ class StoresController < LoggedInController
       @current_store.assign_attributes(save_params)
 
       if @current_store.save
-        format.html { redirect_to params[:next_url].presence || stores_settings_url(view: 'settings'), notice: 'Store settings were successfully updated.' }
-        format.json { render :settings, status: :ok }
+        flash[:notice] = "Store settings were successfully updated."
+        format.js { render  :template => "layouts/flash_messages.js.erb"}
+        format.json { render json: @location, status: :ok }
       else
         format.html { render :settings }
         format.json { render json: @store.errors, status: :unprocessable_entity }

@@ -16,12 +16,13 @@ Rails.application.routes.draw do
   get 'stores/setup'
   get 'stores/help'
   get 'stores/templates'
-  get 'stores/iframe_preview'
   get 'stores/webhooks'
   match 'stores/settings' => 'stores#save_settings', via: [:post, :patch]
 
   get 'shopify/recurring_application_charge/create' => 'shopify/recurring_application_charge#create', as: :subscribe
   get 'shopify/recurring_application_charge/callback' => 'shopify/recurring_application_charge#callback', as: :recurring_application_charge_callback
+
+  get '/iframe_preview', to: 'iframe_preview#index', as: :iframe_preview
 
   namespace :api do
     namespace :v1 do

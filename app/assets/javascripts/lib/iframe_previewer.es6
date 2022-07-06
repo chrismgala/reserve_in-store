@@ -144,6 +144,7 @@ class IframePreviewer {
         var previewParams = {};
         if (this._opts.getPreviewParams) previewParams = this._opts.getPreviewParams();
         if (this._opts.previewPageCss) previewParams.preview_css = this._opts.previewPageCss;
+        if (this._opts.storeUrl) previewParams.store = this._opts.storeUrl;
         previewParams.test_mode = '1';
         if (!this._opts.frontendMode) previewParams.omit_css = true;
         this._$iframe.attr('src', this._opts.iframePreviewPath + "?" + $.param(previewParams));

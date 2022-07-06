@@ -21,13 +21,6 @@ class StoresController < LoggedInController
   end
 
   ##
-  # Used by the skill editors to provide previews of the components that are being built.
-  # GET /stores/iframe_preview
-  def iframe_preview
-    render layout: false
-  end
-
-  ##
   # GET /stores/settings
   def settings
     require_user! || return

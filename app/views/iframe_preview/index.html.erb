@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" style="overflow: hidden;">
+<head>
+  <meta charset="utf-8">
+  <title>Template Preview Window</title>
+
+
+  <% if params[:email] %>
+    <%= render partial: 'shared_mailer/head' %>
+  <% else %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <% end %>
+
+  <% unless params[:omit_css] %>
+    <style>
+      <%= raw Bananastand::StoreCrawler.new(@current_store).cached_stylesheet_contents %>
+    </style>
+    <link crossorigin="anonymous" media="all" rel="stylesheet" href="<%= stylesheet_path('public/reserveinstore.css') %>">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans|Roboto:300" rel="stylesheet">
+  <% end %>
+  <style>
+    <%= raw params[:preview_css] || 'body { padding: 0 !important; }' %>
+  </style>
+</head>
+<body style="margin: 0 !important;">
+
+<% if params[:email] %>
+  <table class="body-wrap" bgcolor="#f6f6f6">
+    <tr>
+      <td></td>
+      <td class="container" bgcolor="#FFFFFF">
+
+        <!-- content -->
+        <div class="content">
+          <table>
+            <tr>
+              <td id="body">
+
+              </td>
+            </tr>
+          </table>
+        </div>
+        <!-- /content -->
+
+      </td>
+      <td></td>
+    </tr>
+  </table>
+<% end %>
+
+</body>
+</html>

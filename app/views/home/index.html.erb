@@ -1,4 +1,12 @@
 <%= render partial: 'layouts/partials/topnavbar/menu' %>
-<% unless @current_store.users.any? %>
+<% if @current_store.users.any? %>
+  <script>
+      <% if @current_store.reservations.count > 0 %>
+          Turbolinks.visit("<%= reservations_path %>");
+      <% else %>
+          Turbolinks.visit("<%= stores_settings_path(view: 'settings') %>");
+      <% end %>
+  </script>
+<% else %>
   <%= render partial: 'stores/shared/setup' %>
 <% end %>

@@ -3,7 +3,7 @@
   <div class="Polaris-Card top_navbar">
     <ul role="tablist" class="Polaris-Tabs">
       <li role="presentation" class="Polaris-Tabs__TabContainer">
-        <a class="Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'settings') %>" href="<%= stores_settings_path(view: 'settings', shop: @current_shopify_session.domain) %>">
+        <a class="Polaris-Tabs__Tab <%= 'Polaris-Tabs__Tab--selected' if (params[:controller] == 'stores' && params[:action] == 'settings') %>" href="<%= stores_settings_path(view: 'settings') %>">
           <span class="Polaris-Tabs__Title">Settings</span></a>
       </li>
       <li role="presentation" class="Polaris-Tabs__TabContainer">

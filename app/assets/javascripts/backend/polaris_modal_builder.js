@@ -73,6 +73,7 @@ var PolarisModal = function (opts) {
     var bindForm = function () {
         $('#' + opts.submitBtnID).on('click', function () {
             if ($form[0].checkValidity()) {
+                e.preventDefault();
                 $form.submit();
                 $modalContainer.hide();
             } else {

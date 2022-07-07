@@ -32,8 +32,8 @@
   </div>
 <% end %>
 
-<%= render partial: 'layouts/partials/topnavbar/menu' %>
 <% content_for(:title) { 'Settings' } %>
+
 <%= render partial: 'layouts/partials/error_banner', locals: {item: @current_store} %>
 
 <% if @current_store.distinctly_named_location_count > 0 && !@current_store.sandbox_store? && !@current_store.in_development? %>

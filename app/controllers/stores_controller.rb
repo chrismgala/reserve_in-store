@@ -80,7 +80,7 @@ class StoresController < LoggedInController
 
       if @current_store.save
         flash[:notice] = "Store settings were successfully updated."
-        format.js { render  :template => "layouts/flash_messages.js.erb"}
+        format.js { render "layouts/flash_messages" }
         format.json { render json: @location, status: :ok }
       else
         format.html { render :settings }

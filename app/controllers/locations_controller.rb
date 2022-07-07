@@ -21,11 +21,11 @@ class LocationsController < LoggedInController
     respond_to do |format|
       if @location.save
         flash[:notice] = "Location was successfully created."
-        format.js { render  :template => "layouts/flash_messages.js.erb"}
+        format.js { render "layouts/flash_messages" }
         format.json { render json: @location, status: :ok }
       else
         flash[:error] = @location.errors.full_messages.join("\n")
-        format.js { render  :template => "layouts/flash_messages.js.erb"}
+        format.js { render "layouts/flash_messages" }
         format.json { render json: @location.errors, status: :unprocessable_entity }
       end
     end

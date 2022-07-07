@@ -13,10 +13,9 @@
               <div class="Polaris-SettingAction__Setting" style="color: green; font-size: 18px; margin-top: 23px;">
               </div>
               <div class="Polaris-SettingAction__Action">
-                <a class="btn-reinstall Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge"
-                   href="<%= stores_reinstall_path %>" data-polaris-unstyled="true">
+                <button class="btn-reinstall Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge">
                   Re-install Scripts
-                </a>
+                </button>
               </div>
               <div class="Polaris-SettingAction__Setting" style="margin-top: 6px;">
                 <div style="--top-bar-background:#00848e; --top-bar-color:#f9fafb; --top-bar-background-lighter:#1d9ba4;">
@@ -42,10 +41,9 @@
               <div class="Polaris-SettingAction__Setting" style="color: green; font-size: 18px; margin-top: 23px;">
               </div>
               <div class="Polaris-SettingAction__Action">
-                <a class="btn-resync Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge"
-                   href="<%= stores_resync_path %>" data-polaris-unstyled="true">
+                <button class="btn-resync Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge">
                   Re-sync Locations
-                </a>
+                </button>
               </div>
               <div class="Polaris-SettingAction__Setting" style="margin-top: 6px;">
 
@@ -71,4 +69,17 @@
       </div>
     </div>
   </div>
+<% end %>
+
+<% content_for(:javascript) do %>
+  <script>
+    $('.btn-reinstall').on('click', function(e) {
+        e.preventDefault();
+        Turbolinks.visit("<%= stores_reinstall_url %>");
+    });
+    $('.btn-resync').on('click', function(e) {
+        e.preventDefault();
+        Turbolinks.visit("<%= stores_resync_url %>");
+    });
+  </script>
 <% end %>

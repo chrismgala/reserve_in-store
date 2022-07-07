@@ -37,18 +37,9 @@
                 </span>Inactive
               </div>
               <div class="Polaris-SettingAction__Action">
-                <% if store.needs_subscription? %>
-                  <a class="btn-activate Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge Polaris-Button--success"
-                     href="<%= subscribe_path(post_subscribe_url: stores_activate_path) %>" data-polaris-unstyled="true">
-                    ACTIVATE
-                  </a>
-                <% else %>
-                  <a class="btn-activate Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge Polaris-Button--success"
-                     href="<%= stores_activate_path %>" data-polaris-unstyled="true">
-                    ACTIVATE
-                  </a>
-                <% end %>
-
+                <button class="btn-activate Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge Polaris-Button--success">
+                  ACTIVATE
+                </button>
               </div>
               <div class="Polaris-SettingAction__Setting">
                 <p>The Reserve In-Store modal is not currently showing to your shoppers. Click the "TURN ON" button to make it start showing.</p>
@@ -68,16 +59,16 @@
 
           const okButton = Button.create(app, { label: 'Yes, Deactivate', style: Button.Style.Danger });
           okButton.subscribe(Button.Action.CLICK, () => {
-              window.location= '<%= stores_deactivate_url %>'
-              myModal.dispatch(Modal.Action.CLOSE);
+              Turbolinks.visit("<%= stores_deactivate_url %>");
+              deactivatesModal.dispatch(Modal.Action.CLOSE);
           });
 
           const cancelButton = Button.create(app, { label: 'No, Keep Active' });
           cancelButton.subscribe(Button.Action.CLICK, () => {
-              myModal.dispatch(Modal.Action.CLOSE);
+              deactivatesModal.dispatch(Modal.Action.CLOSE);
           });
 
-          const myModal = Modal.create(app, {
+          const deactivatesModal = Modal.create(app, {
               title: "Are you sure?",
               message: "Once deactivated your reserve in-store buttons and modals will no longer show to your shoppers.",
               footer: {
@@ -87,6 +78,14 @@
                   },
               },
           }).dispatch(Modal.Action.OPEN);
+      });
+      $('.btn-activate').on('click', function(e) {
+          e.preventDefault();
+          <% if store.needs_subscription? %>
+              window.open('<%= subscribe_path(post_subscribe_url: stores_activate_url) %>', '_blank');
+          <% else %>
+              Turbolinks.visit("<%= stores_activate_url %>");
+          <% end %>
       });
   </script>
 <% end %>

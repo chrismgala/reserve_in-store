@@ -42,11 +42,11 @@ class LocationsController < LoggedInController
     respond_to do |format|
       if @location.update(location_params)
         flash[:notice] = "Location was successfully updated."
-        format.js { render  :template => "layouts/flash_messages.js.erb"}
+        format.js { render "layouts/flash_messages" }
         format.json { render :show, status: :ok, location: @location }
       else
         flash[:error] = @location.errors.full_messages.join("\n")
-        format.js { render  :template => "layouts/flash_messages.js.erb"}
+        format.js { render "layouts/flash_messages" }
         format.json { render json: @location.errors, status: :unprocessable_entity }
       end
     end

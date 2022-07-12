@@ -2,7 +2,6 @@ class LoggedInController < ShopifyApp::AuthenticatedController
   include Bananastand::AllowsEmbedding
   before_action :load_current_store
   before_action :set_raven_context
-  skip_after_action :intercom_rails_auto_include
   skip_before_action :verify_authenticity_token, if: :jwt_shopify_domain
 
   helper_method :hide_menu?, :embedded_mode?

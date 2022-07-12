@@ -103,6 +103,7 @@
   <script>
       var <%= attr %>_editor = new LiquidTemplateEditor({
           attr: '<%= attr %>',
+          storeUrl: '<%= @current_store.shopify_domain %>',
           previewParams: <%= raw local_assigns[:preview_params].to_h.to_json %>,
           frontendMode: <%= local_assigns[:frontend_mode].to_bool %>,
           containerClasses: '<%= local_assigns[:container_css_class] %>',

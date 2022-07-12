@@ -54,7 +54,7 @@ var LiquidTemplateEditor = function(opts) {
             maxHeight: 1000,
             frontendMode: opts.frontendMode,
             containerClasses: opts.containerClasses,
-            iframePreviewPath: '/stores/iframe_preview',
+            iframePreviewPath: '/iframe_preview',
             $fieldsContainer: self.$form,
             $previewPanel: $previewContainer,
             $previewContainer: $previewContainer,
@@ -79,7 +79,8 @@ var LiquidTemplateEditor = function(opts) {
 
                 return true;
             },
-            previewPageCss: opts.previewPageCss
+            previewPageCss: opts.previewPageCss,
+            storeUrl: opts.storeUrl,
         });
     };
 

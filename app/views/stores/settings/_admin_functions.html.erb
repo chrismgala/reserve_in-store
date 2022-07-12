@@ -75,11 +75,11 @@
   <script>
     $('.btn-reinstall').on('click', function(e) {
         e.preventDefault();
-        window.location = '<%= stores_reinstall_url %>';
+        Turbolinks.visit("<%= stores_reinstall_url %>");
     });
     $('.btn-resync').on('click', function(e) {
         e.preventDefault();
-        window.location = '<%= stores_resync_url %>';
+        Turbolinks.visit("<%= stores_resync_url %>");
     });
   </script>
 <% end %>

@@ -21,13 +21,6 @@ class StoresController < LoggedInController
   end
 
   ##
-  # Used by the skill editors to provide previews of the components that are being built.
-  # GET /stores/iframe_preview
-  def iframe_preview
-    render layout: false
-  end
-
-  ##
   # GET /stores/settings
   def settings
     require_user! || return
@@ -86,8 +79,9 @@ class StoresController < LoggedInController
       @current_store.assign_attributes(save_params)
 
       if @current_store.save
-        format.html { redirect_to params[:next_url].presence || stores_settings_url(view: 'settings'), notice: 'Store settings were successfully updated.' }
-        format.json { render :settings, status: :ok }
+        flash[:notice] = "Store settings were successfully updated."
+        format.js { render "layouts/flash_messages" }
+        format.json { render json: @location, status: :ok }
       else
         format.html { render :settings }
         format.json { render json: @store.errors, status: :unprocessable_entity }

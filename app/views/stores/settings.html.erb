@@ -46,7 +46,7 @@
 
 <div class="Polaris-Page">
   <div class="Polaris-Page__Content">
-    <%= form_for @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'} do |f| %>
+    <%= form_with(model: @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'}) do |f| %>
       <div class="Polaris-Layout">
         <% if @current_store.created_at > 1.day.ago %>
           <%= render partial: "stores/settings/status", locals: { f: f, store: @current_store } %>

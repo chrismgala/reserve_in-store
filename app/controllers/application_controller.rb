@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   skip_after_action :intercom_rails_auto_include
+  before_action :set_host
 
   helper_method :embedded_mode?
 
@@ -8,6 +9,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def set_host
+    @host = params[:host]
+  end
 
   # Overwriting the sign_out redirect path method
   def after_sign_out_path_for(admins)

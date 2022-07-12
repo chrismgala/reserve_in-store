@@ -4,7 +4,7 @@
 
 <div class="Polaris-Page">
   <div class="Polaris-Page__Content">
-    <%= form_for @current_store, url: { action: 'save_settings' }, html: { id: 'store_settings_form' } do |f| %>
+    <%= form_with(model: @current_store, url: { action: 'save_settings' }, html: { id: 'store_settings_form' }) do |f| %>
       <input type="hidden" value="<%= stores_webhooks_url %>" name="next_url">
 
       <div class="Polaris-Layout">

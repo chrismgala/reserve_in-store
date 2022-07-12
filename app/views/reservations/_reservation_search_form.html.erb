@@ -35,3 +35,13 @@
     <%= link_to 'clear search', reservations_path, class: 'Polaris-Link' %>
   </div>
 <% end %>
+
+<% content_for(:javascript) do %>
+  <script>
+      $(".reserveInStore-reservation-search-form").submit(function(e) {
+          e.preventDefault();
+          var form = $(this);
+          Turbolinks.visit(this.action + (this.action.indexOf('?') == -1 ? '?' : '&') + form.serialize());
+      });
+  </script>
+<% end %>

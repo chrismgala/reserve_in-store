@@ -7,10 +7,24 @@
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/5.13.0/fontawesome-pro-5.13.0.tgz#fde32ed4d9933c4c9b60b8a74a79c67eba58d984"
   integrity sha512-97Su0vmIuCdxrklVbjTzY1i16nvyKaqFmFBgrTsgeCVmyIWXNydiS62jhKlkwH9sMb8Tw4wYQ+J1EKbRILowxw==
 
+"@shopify/app-bridge-utils@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@shopify/app-bridge-utils/-/app-bridge-utils-3.1.1.tgz#cee566f983b60f96a848998a3ad3b0ba5c7bc4e3"
+  integrity sha512-le1/A62naIj5yq2o/G8htECvYTiAbVzOo9Ue3/gGqlJJC6w7+Uu4ppDHdkg6yfZCmkPUXCIr7+yU3kZHYV5z0g==
+  dependencies:
+    "@shopify/app-bridge" "^3.1.1"
+
 "@shopify/app-bridge@^2.0.4":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@shopify/app-bridge/-/app-bridge-2.0.4.tgz#d49761f77a5ae0ff7d01cf4f6a61a0ba3a710be9"
   integrity sha512-vAY7V4xuS6PZTRR9S5SqliZY3jvbZz4E6i5Lqbx3EZ2aB1DtKuEVKjRZoPj5ukcybhdGBu9ya6qhx1/MD6FoDQ==
+  dependencies:
+    base64url "^3.0.1"
+
+"@shopify/app-bridge@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@shopify/app-bridge/-/app-bridge-3.1.1.tgz#40106efb23edf3b209da7f8aae37759e023561ad"
+  integrity sha512-RyjKDFfdytcDu3hcHIjBXvpXKDKMlsvpWshuE5lv5H4WEF+7IQomxmmJSXOJJIYnXv3COIamUml3WP/qVMak5A==
   dependencies:
     base64url "^3.0.1"
 

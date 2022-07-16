@@ -31,7 +31,7 @@
         apiKey: "<%= ShopifyApp.configuration.api_key %>",
         shopOrigin: "<%= "#{ @current_shopify_session.domain }" if @current_shopify_session %>",
         debug: <%= Rails.env.development? %>,
-        forceRedirect: false,
+        forceRedirect: "<%= true if params[:forced_redirect] %>",
     });
 
     $(document).ready(function() {
@@ -63,7 +63,7 @@
 
     <%= content_tag(:div, nil, id: 'shopify-app-init', data: {
       api_key: ShopifyApp.configuration.api_key,
-      host: @host,
+      host: @host || params[:host],
       load_path: params[:return_to] || home_path,
       debug: Rails.env.development?
     } ) %>

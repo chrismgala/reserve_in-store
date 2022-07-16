@@ -138,7 +138,7 @@ module Shopify
 
     def redirect_to_correct_path(success)
       general_url = session.delete('post_subscribe_url')
-      default_url = "/stores/settings"
+      default_url = "/stores/settings?forced_redirect=true"
       failure_url = session.delete('post_subscribe_failure_url') || general_url || default_url
       success_url = session.delete('post_subscribe_success_url') || general_url || default_url
 

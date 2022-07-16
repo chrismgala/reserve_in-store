@@ -24,7 +24,7 @@
             <div class="Polaris-ButtonGroup">
               <div class="Polaris-ButtonGroup__Item">
                 <div class="Polaris-Banner__PrimaryAction">
-                  <a href="<%= subscribe_path(plan: store.recommended_feature_plan_code(local_assigns[:feature]), post_subscribe_url: stores_settings_url(action: 'upgrade')) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
+                  <a href="#" class="Polaris-Button Polaris-Button--outline btn-feature-subscribe">
                   Upgrade now
                   </a>
                 </div>
@@ -35,4 +35,12 @@
       </div>
     </div>
   </div>
+  <% content_for(:javascript) do %>
+    <script>
+        var subscriptionRedirect = new SubscriptionRedirect({
+            btnSelector: ".btn-feature-subscribe",
+            subscriptionPath: "<%= subscribe_path(plan: store.recommended_feature_plan_code(local_assigns[:feature]), post_subscribe_url: stores_settings_url(action: 'upgrade')) %>"
+        });
+    </script>
+  <% end %>
 

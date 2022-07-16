@@ -1,9 +1,9 @@
 <% if @current_store.users.any? %>
   <script>
       <% if @current_store.reservations.count > 0 %>
-          Turbolinks.visit("<%= reservations_path %>");
+          Turbolinks.visit("<%= reservations_path(shop: @current_store.shopify_domain) %>");
       <% else %>
-          Turbolinks.visit("<%= stores_settings_path(view: 'settings') %>");
+          Turbolinks.visit("<%= stores_settings_path(view: 'settings', shop: @current_store.shopify_domain) %>");
       <% end %>
   </script>
 <% else %>

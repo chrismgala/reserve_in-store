@@ -35,7 +35,7 @@
   <script>
       var subscriptionRedirect = new SubscriptionRedirect({
           btnSelector: ".btn-subscribe",
-          subscriptionPath: "<%= subscribe_path(plan: @current_store.recommended_plan.code, store: @current_store.shopify_domain) %>"
+          subscriptionPath: "<%= subscribe_path(plan: @current_store.recommended_plan.code, shop: @current_store.shopify_domain) %>"
       });
   </script>
 <% end %>

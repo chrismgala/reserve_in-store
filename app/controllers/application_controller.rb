@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  skip_after_action :intercom_rails_auto_include
   before_action :set_host
 
   helper_method :embedded_mode?

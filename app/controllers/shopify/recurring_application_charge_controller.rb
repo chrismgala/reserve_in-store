@@ -23,7 +23,7 @@ module Shopify
       @current_rac.return_url = recurring_application_charge_callback_url
 
       if @current_rac.save
-        redirect_to @current_rac.confirmation_url
+        fullpage_redirect_to @current_rac.confirmation_url
       else
         ForcedLogger.error("Failed to save the recurring application charge in shopify: #{@current_rac.errors.inspect}.", store: @current_store.try(:id))
 

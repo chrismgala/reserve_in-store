@@ -1,5 +1,5 @@
 /**
- * Subscribe to a plan.
+ * Redirect subscription to load in iframe use app bridge
  *
  * Construct with the following hash:
  * {string} btnSelector, selector for the submit button
@@ -10,9 +10,7 @@ var SubscriptionRedirect = function (opts) {
     var $subscriptionPath = opts.subscriptionPath;
 
     var init = function () {
-        $(opts.btnSelector).click(function(e) {
-            subscribe();
-        });
+        $(opts.btnSelector).on('click', subscribe);
     };
 
     var subscribe = function () {

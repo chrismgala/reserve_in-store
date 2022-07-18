@@ -23,7 +23,7 @@ module Shopify
       @current_rac.return_url = recurring_application_charge_callback_url
 
       if @current_rac.save
-        redirect_to @current_rac.confirmation_url
+        fullpage_redirect_to @current_rac.confirmation_url
       else
         ForcedLogger.error("Failed to save the recurring application charge in shopify: #{@current_rac.errors.inspect}.", store: @current_store.try(:id))
 
@@ -138,7 +138,7 @@ module Shopify
 
     def redirect_to_correct_path(success)
       general_url = session.delete('post_subscribe_url')
-      default_url = "/stores/settings"
+      default_url = stores_settings_path(forced_redirect: true)
       failure_url = session.delete('post_subscribe_failure_url') || general_url || default_url
       success_url = session.delete('post_subscribe_success_url') || general_url || default_url
 

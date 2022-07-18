@@ -33,7 +33,8 @@ var FeatureSubscriptionModal = function (opts) {
 
         const upgradeButton = Button.create(app, {label: 'Upgrade Now'});
         upgradeButton.subscribe(Button.Action.CLICK, () => {
-            window.open($subscriptionPath, '_blank');
+            var Redirect = actions.Redirect;
+            Redirect.create(app).dispatch(Redirect.Action.APP, $subscriptionPath);
             subscriptionModal.dispatch(Modal.Action.CLOSE);
         });
 

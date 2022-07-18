@@ -18,7 +18,7 @@
           <div class="Polaris-ButtonGroup">
             <div class="Polaris-ButtonGroup__Item">
               <div class="Polaris-Banner__PrimaryAction">
-                <a href="<%= subscribe_path(plan: store.recommended_plan.code, post_subscribe_url: stores_settings_url) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
+                <a href="#" class="Polaris-Button Polaris-Button--outline btn-subscribe">
                   Subscribe Now
                 </a>
               </div>
@@ -53,7 +53,7 @@
           <div class="Polaris-ButtonGroup">
             <div class="Polaris-ButtonGroup__Item">
               <div class="Polaris-Banner__PrimaryAction">
-                <a href="<%= subscribe_path(plan: store.recommended_plan.code, post_subscribe_url: stores_settings_url) %>" class="Polaris-Button Polaris-Button--outline" target="_blank">
+                <a href="#" class="Polaris-Button Polaris-Button--outline btn-subscribe" target="_blank">
                   Subscribe Now
                 </a>
               </div>
@@ -63,4 +63,12 @@
       </div>
     </div>
   </div>
+<% end %>
+<% content_for(:javascript) do %>
+  <script>
+      var subscriptionRedirect = new SubscriptionRedirect({
+          btnSelector: ".btn-subscribe",
+          subscriptionPath: "<%= subscribe_path(plan: @current_store.recommended_plan.code, shop: @current_store.shopify_domain) %>"
+      });
+  </script>
 <% end %>

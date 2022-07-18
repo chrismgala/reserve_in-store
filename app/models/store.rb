@@ -622,12 +622,22 @@ class Store < ApplicationRecord
   end
 
   def sandbox_store?
+    return false if fera_team_actual_live_view?
     shopify_settings.try(:[], :plan_name).to_s.downcase.include?('affiliate')
+  end
+
+  ##
+  # It is difficult to test subscription live because sandbox and in_development is true
+  # we can use is_fera_team but just wanted to allow some email
+  # to make it easier for our team to test allow email with ristest to see everything similar to actual site
+  def fera_team_actual_live_view?
+    user.email.to_s.downcase.include?('ristest')
   end
 
   ##
   # Is this store a dev store that has not been launched yet?
   def in_development?
+    return false if fera_team_actual_live_view?
     return true if name.to_s =~ /test|dev(elopment|eloper)?[^a-z]|example|sample|staging|ris/i
     return true if shopify_domain.to_s =~ /test|dev(elopment|eloper)?[^a-z]|example|sample|staging|ris/i
     false

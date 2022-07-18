@@ -31,12 +31,7 @@
         apiKey: "<%= ShopifyApp.configuration.api_key %>",
         shopOrigin: "<%= "#{ @current_shopify_session.domain }" if @current_shopify_session %>",
         debug: <%= Rails.env.development? %>,
-        forceRedirect: false,
-    });
-
-    $(document).ready(function() {
-        $('.display-if-enabled').displayIfEnabled();
-        $('.display-if-selected-option').displayIfSelectedValue();
+        forceRedirect: "<%= true if params[:forced_redirect] %>",
     });
 
     <% if content_for?(:title) %>
@@ -45,6 +40,19 @@
         icon: "<%= image_url('reserve_32x32.png') %>"
     });
     <% end %>
+
+    $(document).ready(function() {
+        $('.display-if-enabled').displayIfEnabled();
+        $('.display-if-selected-option').displayIfSelectedValue();
+    });
+
+    $(document).ready(function() {
+        $('[data-get-help="true"]').on('click', function(e) {
+            e.preventDefault();
+            var $el = $(this);
+            return getHelp($el.data('get-help-msg') || $el.data('get-help-subject'));
+        });
+    });
 </script>
 
   <!-- Main section-->
@@ -63,7 +71,7 @@
 
     <%= content_tag(:div, nil, id: 'shopify-app-init', data: {
       api_key: ShopifyApp.configuration.api_key,
-      host: @host,
+      host: @host || params[:host],
       load_path: params[:return_to] || home_path,
       debug: Rails.env.development?
     } ) %>
@@ -86,7 +94,7 @@
     </div>
   <% end %>
 
-  <div data-turbolinks-permanent>
+  <div id="IntercomSettingsScriptTag" data-turbolinks-permanent>
     <%= intercom_script_tag unless embedded_mode? %>
   </div>
 

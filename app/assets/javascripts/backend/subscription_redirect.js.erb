@@ -1,0 +1,22 @@
+/**
+ * Redirect subscription to load in iframe use app bridge
+ *
+ * Construct with the following hash:
+ * {string} btnSelector, selector for the submit button
+ *
+ * @param {object} [opts] - An optional hash used for setup, as described above.
+ */
+var SubscriptionRedirect = function (opts) {
+    var $subscriptionPath = opts.subscriptionPath;
+
+    var init = function () {
+        $(opts.btnSelector).on('click', subscribe);
+    };
+
+    var subscribe = function () {
+        var Redirect = actions.Redirect;
+        Redirect.create(app).dispatch(Redirect.Action.APP, $subscriptionPath);
+    };
+
+    init();
+};

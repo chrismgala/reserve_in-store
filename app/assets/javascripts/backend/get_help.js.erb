@@ -17,11 +17,3 @@ var getHelp = function(msg) {
 
     return false;
 };
-
-$(document).ready(function() {
-   $('[data-get-help="true"]').on('click', function(e) {
-      e.preventDefault();
-      var $el = $(this);
-      return getHelp($el.data('get-help-msg') || $el.data('get-help-subject'));
-   });
-});

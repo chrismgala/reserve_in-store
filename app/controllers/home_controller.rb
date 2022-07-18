@@ -5,7 +5,7 @@ class HomeController < LoggedInController
   helper_method :hide_menu?, :embedded_mode?
 
   def hide_menu?
-    false
+    true
   end
 
   def embedded_mode?

@@ -86,10 +86,6 @@
     </div>
   <% end %>
 
-  <div data-turbolinks-permanent>
-    <%= intercom_script_tag unless embedded_mode? %>
-  </div>
-
   <% if  ENV['HEROKU_RELEASE_VERSION'].present? && ENV['HEROKU_RELEASE_CREATED_AT'].present? %>
     <!--
       Server software <strong><%= ENV['HEROKU_RELEASE_VERSION'] %></strong>.

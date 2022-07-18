@@ -34,17 +34,25 @@
         forceRedirect: "<%= true if params[:forced_redirect] %>",
     });
 
-    $(document).ready(function() {
-        $('.display-if-enabled').displayIfEnabled();
-        $('.display-if-selected-option').displayIfSelectedValue();
-    });
-
     <% if content_for?(:title) %>
     TitleBar.create(app, {
         title: "<%= yield :title %>",
         icon: "<%= image_url('reserve_32x32.png') %>"
     });
     <% end %>
+
+    $(document).ready(function() {
+        $('.display-if-enabled').displayIfEnabled();
+        $('.display-if-selected-option').displayIfSelectedValue();
+    });
+
+    $(document).ready(function() {
+        $('[data-get-help="true"]').on('click', function(e) {
+            e.preventDefault();
+            var $el = $(this);
+            return getHelp($el.data('get-help-msg') || $el.data('get-help-subject'));
+        });
+    });
 </script>
 
   <!-- Main section-->

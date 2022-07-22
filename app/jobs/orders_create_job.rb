@@ -8,7 +8,7 @@ class OrdersCreateJob < ActiveJob::Base
 
     note = webhook[:note]
 
-    if note.include? "id:"
+    if note.to_s.include? "id:"
       index= note.index('id:')
       note.from(index + 4)
 

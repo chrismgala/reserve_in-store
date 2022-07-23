@@ -21,6 +21,36 @@ ReserveInStore.Cart = function (opts) {
         });
     };
 
+    /**
+     * after reservation if reserved from product then first clear any previous cart items and then add new reserved items to checkout
+     * if reserved from cart then no need to clear redirect it to checkout page
+     * {object} reservationData
+     * {int} reservationId - reservation id
+     * {string} discountCode
+     * {string}  email
+     * {object} cart - if reserved from cart page
+     */
+    self.checkout = function(reservationData, reservationId, discountCode, email, cart) {
+        if (cart) {
+            checkoutPath(reservationId, discountCode, email);
+        } else {
+            $.getJSON( "/cart/clear", function() {
+                data = { quantity: reservationData.cart.items[0].quantity || 1,
+                    id: reservationData.cart.items[0].variant_id
+                }
+                $.post('/cart/add.js', data, function() {
+                    checkoutPath(reservationId, discountCode, email);
+                }, 'json');
+            });
+        }
+    };
+
+    var checkoutPath = function (reservationId, discountCode, email) {
+        window.location = '/checkout?discount=' + discountCode +
+            '&note=In-store reservation id: ' + reservationId + "" +
+            "&checkout[email]=" +  email;
+    };
+
     self.getProductTags = function(callback) {
         var tags = [];
                 

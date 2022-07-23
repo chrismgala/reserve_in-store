@@ -132,13 +132,15 @@ ReserveInStore.ReserveModal = function (opts) {
         var _cart = {}, item;
 
         if (product && variant) {
-            // product mode
+            let quantity = $('input[name=quantity]').val() || 1;
+
             item = {
                 product_title: product.title,
                 variant_title: variant.title,
                 product_id: product.id,
                 variant_id: variant.id,
-                total: variant.price,
+                quantity: quantity,
+                total: quantity * variant.price,
                 variant: variant,
                 product: product
             };
@@ -700,7 +702,7 @@ ReserveInStore.ReserveModal = function (opts) {
     };
 
     /**
-     * redirect to checkout page if reservation is from cart page and checkout_without_clearing_cart is enabled.
+     * redirect to checkout page if checkout_without_clearing_cart is enabled.
      * Display a nice modal to say "thank you... etc" and whatever is configured to display via the store settings
      */
     self.displaySuccessModal = function (reservationId) {

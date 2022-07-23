@@ -27,7 +27,7 @@ ReserveInStore.Cart = function (opts) {
      * {object} reservationData
      * {int} reservationId - reservation id
      * {string} discountCode
-     * {string}  email
+     * {string} email
      * {object} cart - if reserved from cart page
      */
     self.checkout = function(reservationData, reservationId, discountCode, email, cart) {
@@ -48,7 +48,7 @@ ReserveInStore.Cart = function (opts) {
     var checkoutPath = function (reservationId, discountCode, email) {
         window.location = '/checkout?discount=' + discountCode +
             '&note=In-store reservation id: ' + reservationId + "" +
-            "&checkout[email]=" +  email;
+            "&checkout[email]=" + email;
     };
 
     self.getProductTags = function(callback) {

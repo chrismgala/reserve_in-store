@@ -27,14 +27,15 @@
   %>
 <% end %>
 
-<% # we did add a notice for everyone above but will disable only for new signups after July 23, 2022 %>
-<% if @current_store.needs_subscription? || @current_store.created_at >  Time.parse('July 23, 2022 EDT') &&
-  (@current_store.needs_upgrade_subscription? && (@current_store.recommended_feature_plan('custom_templates').price > @current_store.subscription.plan.price))
-     disableEditing = 'disable-editing'
+<% if @current_store.needs_subscription? ||
+      @current_store.created_at >  Time.parse('July 23, 2022 EDT') &&
+      (@current_store.needs_upgrade_subscription? && (@current_store.recommended_feature_plan('custom_templates').price > @current_store.subscription.plan.price))
+
+     disable_editing = 'disable-editing'
    end
 %>
 
-<div class="Polaris-Page templatePage <%= disableEditing || '' %>">
+<div class="Polaris-Page templatePage <%= disable_editing || '' %>">
   <div class="Polaris-Page__Content">
     <%= form_with(model: @current_store, url: {action: 'save_settings'}, html: {id: 'store_settings_form'}) do |f| %>
       <input type="hidden" value="<%= stores_templates_url %>" name="next_url">

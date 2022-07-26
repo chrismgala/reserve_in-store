@@ -14,10 +14,8 @@
 </div>
 
 <div class="Polaris-Page reservation-page">
-  <% if @current_store.needs_subscription? && @reservations.where("created_at > ?", Time.now-30.days).count > 10
-  %>
-    <%= render partial: 'stores/subscriptions/partials/need_subscription',
-               locals: { store: @current_store } %>
+  <% if @current_store.needs_subscription? && @reservations.where("created_at > ?", Time.now-30.days).count > 10 %>
+    <%= render partial: 'stores/subscriptions/partials/need_subscription', locals: { store: @current_store } %>
   <% end %>
   <div class="Polaris-Page__Content">
     <% if @reservations.any? %>

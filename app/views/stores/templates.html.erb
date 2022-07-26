@@ -21,9 +21,7 @@
   @current_store.needs_upgrade_subscription? && (@current_store.recommended_feature_plan('custom_templates').price > @current_store.subscription.plan.price)
 %>
   <%= render partial: 'stores/subscriptions/partials/feature_upgrade_subscription',
-             locals: { store: @current_store,
-                       feature: 'custom_templates'
-             }
+             locals: { store: @current_store, feature: 'custom_templates' }
   %>
 <% end %>
 

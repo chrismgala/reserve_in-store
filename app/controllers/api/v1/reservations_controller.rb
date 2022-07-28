@@ -42,6 +42,11 @@ module Api
       # POST /api/v1/store_reservations
       def create
         @reservation = Reservation.new(reservation_params.merge(store: @store))
+
+        if @reservation.save && @store.checkout_without_clearing_cart?
+          return render json: { message: "Reservation was successfully created.", reservation_id: @reservation.id }, status: :ok
+        end
+
         if @reservation.save_and_email
           render json: { message: "Reservation was successfully created.", reservation_id: @reservation.id }, status: :ok
         else

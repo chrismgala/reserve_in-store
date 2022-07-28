@@ -16,6 +16,7 @@ class OrdersCreateJob < ActiveJob::Base
 
       if @reservation
         @reservation.update(platform_order_id: @platform_order_id)
+        @reservation.send_notification_emails!
       end
     end
   end

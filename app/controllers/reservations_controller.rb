@@ -11,6 +11,11 @@ class ReservationsController < LoggedInController
     @reservations = @reservations.where(platform_order_id: params[:platform_order_id]) if params[:platform_order_id].present?
     @reservations = @reservations.where('customer_name ILIKE :query OR LOWER(customer_email) LIKE :query', query: "%#{params[:search]}%") if params[:search].present?
     @reservations = @reservations.where(fulfilled: params[:search_status].to_bool) if params[:search_status].present?
+
+    if @current_store.checkout_without_clearing_cart?
+      @reservations = @reservations.where("platform_order_id IS NOT NULL") if params[:search_online_pay] != "false"
+    end
+
     @reservations = @reservations.order(column_sort_query).page(params[:page]).includes(:location)
     @reservation = Reservation.new
   end

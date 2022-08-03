@@ -28,6 +28,21 @@
       </div>
     </div>
   </div>
+  <% if @current_store.checkout_without_clearing_cart? %>
+    <div class="Polaris-Stack__Item">
+      <div class="Polaris-Select">
+        <%= select_tag "search_online_pay", options_for_select([["Paid", true], ["All", false]], params[:search_online_pay]),
+                       class: "Polaris-Select__Input" %>
+        <div class="Polaris-Select__Icon">
+          <span class="Polaris-Icon">
+            <svg class="Polaris-Icon__Svg" viewBox="0 0 20 20" focusable="false" aria-hidden="true">
+              <path d="M13 8l-3-3-3 3h6zm-.1 4L10 14.9 7.1 12h5.8z" fill-rule="evenodd"></path>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  <% end %>
   <div class="Polaris-Stack__Item">
     <button type="submit" name="reservation_search" class="Polaris-Button Polaris-Button--primary">
       <span class="Polaris-Button__Content"><span>Search</span></span>

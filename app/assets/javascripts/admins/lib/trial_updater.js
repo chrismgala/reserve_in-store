@@ -46,7 +46,7 @@ var TrialUpdater = function(opts) {
             return then();
         }
 
-        Swal.fire({
+        swal({
             type: 'warning',
             title: "Changing Trial Requires Re-authorization",
             html: "<div class=\"text-danger\">Changing the store's trial will only change it locally and won't update for the store own until " +

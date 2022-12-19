@@ -4,7 +4,8 @@
 # For further information see the following documentation
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 #
-initial_frame_ancestors = [:https, "*.myshopify.com", "admin.shopify.com", "*.ngrok.io", "app.reserveinstore.com"]
+initial_frame_ancestors = [:https, "*.myshopify.com", "admin.shopify.com", "app.reserveinstore.com", "*.reserveinstore.com"]
+initial_frame_ancestors << "*.ngrok.io" if Rails.env.development?
 
 def current_domain
   @current_domain ||= (params[:shop] && ShopifyApp::Utils.sanitize_shop_domain(params[:shop])) ||
@@ -12,7 +13,18 @@ def current_domain
     session[:shopify_domain]
 end
 
-frame_ancestors = lambda { current_domain ? [ current_domain, "admin.shopify.com", "*.ngrok.io", "app.reserveinstore.com" ] : initial_frame_ancestors }
+frame_ancestors = lambda {
+  ancestors = []
+
+  if current_domain
+    ancestors += [ current_domain, "admin.shopify.com", "app.reserveinstore.com" ]
+    ancestors << "*.ngrok.io" if Rails.env.development?
+  else
+    ancestors += initial_frame_ancestors
+  end
+
+  ancestors
+}
 
  Rails.application.config.content_security_policy do |policy|
 #   policy.default_src :self, :https

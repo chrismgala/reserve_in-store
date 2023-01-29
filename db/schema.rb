@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_01_045815) do
+ActiveRecord::Schema.define(version: 2023_01_29_173123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,6 +156,7 @@ ActiveRecord::Schema.define(version: 2022_06_01_045815) do
     t.text "discount_code"
     t.string "checkout_success_message_tpl"
     t.boolean "checkout_success_message_tpl_enabled"
+    t.float "fixed_price"
     t.index ["shopify_domain"], name: "index_stores_on_shopify_domain", unique: true
   end
 

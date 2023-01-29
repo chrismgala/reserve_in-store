@@ -13,6 +13,10 @@ class Plan < ApplicationRecord
   end
 
   def price_for_store(store)
+    if store.custom_fixed_price.present? && store.custom_fixed_price > 0
+      return store.custom_fixed_price
+    end
+
     locations_left = location_limit - store.distinctly_named_location_count
     if locations_left >= 0
       price

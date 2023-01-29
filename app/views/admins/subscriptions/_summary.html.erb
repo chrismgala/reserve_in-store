@@ -60,6 +60,14 @@
           <%= store.recommended_plan.name if store.recommended_plan.present? %>
         </td>
       </tr>
+
+      <tr>
+        <th>Discount Custom Price</th>
+        <td>
+          <span class="text-success"><%= nice_monthly_amount(store.fixed_price) %></span>
+        </td>
+      </tr>
+
       <tr>
         <th>Subscription url</th>
         <td>

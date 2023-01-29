@@ -40,7 +40,11 @@
   <% if @current_store.needs_subscription? %>
     <%= render partial: 'stores/subscriptions/partials/need_subscription', locals: { store: @current_store } %>
   <% else %>
-    <%= render partial: 'stores/subscriptions/partials/upgrade_subscription', locals: { store: @current_store } %>
+    <% if @current_store.custom_fixed_price.present? && @current_store.custom_fixed_price > 0 %>
+      <%= render partial: 'stores/subscriptions/partials/custom_subscription', locals: { store: @current_store } %>
+    <% else %>
+      <%= render partial: 'stores/subscriptions/partials/upgrade_subscription', locals: { store: @current_store } %>
+    <% end %>
   <% end %>
 <% end %>
 

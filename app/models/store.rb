@@ -588,6 +588,15 @@ class Store < ApplicationRecord
     @distinctly_named_location_count ||= locations.pluck(:name).to_a.uniq.count
   end
 
+  ##
+  # custom fixed price is only for merchants that are subscribed to a plan
+  # eg - if subscribed to $399/mo plan then custom pricing can be 280.00
+  def custom_fixed_price
+    return unless subscription.present?
+
+    fixed_price
+  end
+
   def recommended_plan_code
     if plan_overrides.to_h['code'].present?
       return plan_overrides.to_h['code']

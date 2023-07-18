@@ -60,6 +60,10 @@ class Store < ApplicationRecord
     @integrator ||= StoreIntegrator.new(self)
   end
 
+  def check_footer_script
+    StoreIntegrator.new(self).check_footer_script
+  end
+
   def url
     "https://#{shopify_domain}"
   end

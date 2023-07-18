@@ -10,6 +10,63 @@
         <div class="Polaris-Layout__AnnotationWrapper">
           <div class="Polaris-Layout__Annotation">
             <div class="Polaris-TextContainer">
+              <h2 class="Polaris-Heading">Installation:</h2>
+              <p>Install Footer Script</p>
+            </div>
+          </div>
+          <div class="Polaris-Layout__AnnotationContent">
+            <div class="Polaris-Card">
+              <div class="Polaris-Card__Section">
+                <div class="Polaris-CalloutCard">
+                  <div class="Polaris-CalloutCard__Content">
+                    <div class="Polaris-CalloutCard__Title Polaris-TextContainer--spacingLoose">
+                      <h2 class="Polaris-Heading">How to install missing footer code in your store theme?</h2>
+                      <p>After installation, if you are not able to activate follow below instruction.</p>
+                      <p><strong>Step 1:</strong> Navigate to shopify theme or <a href="https://<%= @current_store.shopify_domain %>/admin/themes" class="Polaris-Link" target="_blank">click here</a>.
+                      >> Click 3 dots on right Edit code.</p>
+                      <p><strong>Step 2:</strong> Snippets >> Add a new snippet >> Enter <strong>reserveinstore_footer</strong> in text box >> done.</p>
+                      <p><strong>Step 3:</strong> Paste this code.</p>
+                      <textarea class="helpful-code-read-only" rows="10" disabled="disabled">
+ <!-- // BEGIN // Reserve In-store App Code - DO NOT MODIFY // -->
+<script type="application/javascript">
+(function(){
+  window.reserveInStore = window.reserveInStore || window.__reserveInStore || [];
+  window.reserveInStore.push('configure', {"reserve_product_btn":{"tpl":null,"selector":null,"action":null},"reserve_cart_btn":{"tpl":null,"selector":null,"action":null},"stock_status":{"tpl":null,"selector":null,"action":null,"behavior_when":{"stock_unknown":"unknown_stock_hide_button","no_location_selected":"use_nearby","no_nearby_locations_and_no_location":"show_first_available","show_when_only_available_online":true},"stock_label":{"in_reserve_modal_cart_items":["","in_stock","","low_stock","","no_stock","","stock_unknown"],"in_reserve_modal_cart_page_locations":["","all_items_available","","x_items_available","","no_stock"],"in_choose_location_modal_product_page":["","in_stock","","low_stock","","no_stock","","stock_unknown"],"in_reserve_modal_product_page_locations":["","in_stock","","low_stock","","no_stock","","stock_unknown"]}},"discount_code":"RIS-disc","checkout_without_clearing_cart":true,"checkout_success_message_tpl":"\u003ch2\u003eYour in-store reservation number is #reservation_id.\u003c/h2\u003e\n\u003cp\u003eYou'll receive a notification over email once your reservation is ready for pick-up.\u003c/p\u003e\n\u003cp\u003ePlease bring your reservation number with you when you pick up your order.\u003c/p\u003e\n","api_url":"https://app.reserveinstore.com","store_pk":"<%=- @current_store.public_key %>"});
+  {% if product and product.available %}window.reserveInStore.push('setProduct', {{ product | json }});{% endif %}
+  {% if cart %}window.reserveInStore.push('setCart', {{ cart | json }}); {% endif %}
+  var headSrcUrls = document.getElementsByTagName("head")[0].innerHTML.match(/var urls = \[.*\]/);if (headSrcUrls && window.reserveInStore) { if (JSON.parse(headSrcUrls[0].replace("var urls = ", "")).find(function(url) {return url.indexOf("reserveinstore.js") !== -1 && (window.reserveInStoreJsUrl = url)})) { var ReserveInStoreCachedAsset=function(r){var n=this;var a=r.name||r.url.split("?")[0].split("#")[0];var o="ReserveInStore.AssetCache."+a;var i=(new Date).getTime()/1e3;var c=r.type||(r.url.indexOf(".html")!==-1?"text/template":"text/javascript");n.load=function(t){t=t||function(){};if(n.content){return t(n.content)}if(!e()){s(r.url,function(e){n.content=e;u(e);n.save(e);t(e)})}else{t(n.content)}return true};n.save=function(e){var t=i+(r.expiresIn||900);if(!l()){return false}var n={name:a,url:r.url,expires:t,content:e};window.localStorage.setItem(o,JSON.stringify(n));return true};n.clear=function(){window.localStorage.removeItem(o);return false};var e=function(){if(!l())return false;var e=window.localStorage.getItem(o);if(!e||typeof e!=="string"){return null}var t=JSON.parse(e);if(t.expires<i||t.url!==r.url){return n.clear()}n.content=t.content;u(n.content);return true};var u=function(e){if(document.getElementById(o))return;var t=document.createElement("script");t.type=c;t.id=o;t.async=!0;t.innerHTML=e;document.body.appendChild(t)};var s=function(e,t){var n=new XMLHttpRequest;n.async=true;n.onreadystatechange=function(){if(this.readyState==4&&this.status<300){t(this.responseText)}};n.open("GET",e,true);n.send()};var l=function(){var e="test";try{window.localStorage.setItem(e,"t");window.localStorage.removeItem(e);return 1}catch(e){return 0}}}; new ReserveInStoreCachedAsset({ name: 'reserveinstore.js', expiresIn: 900, url: window.reserveInStoreJsUrl || "https://cdn.reserveinstore.com/reserveinstore.js"}).load(); } }
+})();</script>
+<link crossorigin="anonymous" media="all" rel="stylesheet" href="https://cdn.reserveinstore.com/reserveinstore.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<style></style>
+<!-- // END // Reserve In-store App Code // -->
+                      </textarea>
+                      <p><strong>Step 4:</strong> Save.</p>
+                      <p><strong>Add footer code in theme.liquid</strong></p>
+                      <p><strong>Step 1:</strong> Edit Layout >> theme.liquid.</p>
+                      <p><strong>Step 2:</strong> Paste below code before </body> ending tag. </p>
+                      <textarea rows="1" class="helpful-code-read-only">{% include 'reserveinstore_footer' %}</textarea>
+                      <% unless @current_store.active? %>
+                      <p> <div class="Polaris-SettingAction__Action" style="text-align: center;">
+                      <button class="btn-activate Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge Polaris-Button--success">
+                        ACTIVATE
+                      </button>
+                      </div>
+                      </p>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="Polaris-Layout__AnnotatedSection">
+        <div class="Polaris-Layout__AnnotationWrapper">
+          <div class="Polaris-Layout__Annotation">
+            <div class="Polaris-TextContainer">
               <h2 class="Polaris-Heading">How Reserve In-Store Works:</h2>
               <p>A tutorial explaining our interactions with your customers</p>
             </div>
@@ -50,7 +107,7 @@
                     <div class="Polaris-CalloutCard__Title Polaris-TextContainer--spacingLoose">
                       <h2 class="Polaris-Heading">How to add additional fields in Reserve Modal?</h2>
                       <p>To make it easier for you by default Address field is added, now lets add new field City.</p>
-                      <p><strong>Step 1:</strong> Enable show additional fields for Reserve Popup from Settings.</p>
+
                       <p><strong>Step 2:</strong> Click Templates >> Select specify custom templates. Once done template will be loaded.</p>
                       <p>Approx Line 66 - 69 you will see this code:</p>
                       <textarea class="helpful-code-read-only" rows="6" disabled="disabled">
@@ -159,3 +216,17 @@
     </div>
   </div>
 </div>
+
+<% content_for(:javascript) do %>
+  <script>
+      $('.btn-activate').on('click', function(e) {
+          e.preventDefault();
+          <% if @current_store.needs_subscription? %>
+          var Redirect = actions.Redirect;
+          Redirect.create(app).dispatch(Redirect.Action.APP, "<%= subscribe_path(post_subscribe_url: stores_activate_url, forced_redirect: true, shop: @current_store.shopify_domain) %>");
+          <% else %>
+          Turbolinks.visit("<%= @current_store_activate_url %>");
+          <% end %>
+      });
+  </script>
+<% end %>

@@ -42,9 +42,12 @@ class StoresController < LoggedInController
   ##
   # GET /stores/activate
   def activate
-    @current_store.activate!
-
-    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been activated.'
+    if @current_store.check_footer_script
+      @current_store.activate!
+      redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been activated.'
+    else
+      redirect_to stores_help_url(view: 'help'), notice: 'Reserve In-store could not be activated due to missing footer code. Please follow instruction in help article.'
+    end
   end
 
   ##

@@ -17,7 +17,7 @@ class StoreIntegrator
     store.with_shopify_session do
       reset_errors!
 
-      footer_install_success = install_footer!
+      footer_install_success = check_footer!
 
       set_platform_data if footer_install_success
 
@@ -85,7 +85,21 @@ class StoreIntegrator
   end
 
   ##
+  # @@return [Boolean] True if footer code found
+  def check_footer_script
+    store.with_shopify_session do
+      theme_template = load_asset('layout/theme.liquid')
+      include_code = "{% include 'reserveinstore_footer' %}"
+
+      return true if theme_template.value.include?(include_code)
+    end
+
+    false
+  end
+
+  ##
   # @return [Boolean] True if successful, raise an error otherwise.
+  # @deprecated In favor of Theme 2.0 blocks
   def install_footer!
     store.with_shopify_session do
 
@@ -117,6 +131,7 @@ class StoreIntegrator
       if theme_template.value.include?(include_code)
         true
       else
+
         if theme_template.value.to_s.include?('</body>')
           theme_template.value = theme_template.value.gsub('</body>', "#{include_code}\n</body>")
           log("Shopify API update asset 'layout/theme.liquid'")
@@ -153,14 +168,7 @@ class StoreIntegrator
   def load_asset(asset_path, report_not_found: true)
     asset(asset_path)
 
-  rescue ActiveResource::ResourceNotFound => e
-    msg = "Failed to load Shopify asset #{asset_path} - #{e.message}."
-    if report_not_found
-      ForcedLogger.error(msg, store: @store.try(:id), sentry: true)
-    else
-      log(msg)
-    end
-
+  rescue ActiveResource::ResourceNotFound
     nil
   end
 
@@ -191,6 +199,7 @@ class StoreIntegrator
   # @param [Object]  snippet_path Path of the snippet to check and update if necessary
   # @param [Object]  snippet_content Content to ensure is in the path requested
   # @return [Boolean] True if successful, false otherwise.
+  # @deprecated In favor of Theme 2.0 blocks
   def ensure_snippet!(snippet_path, snippet_content)
     snippet = load_asset(snippet_path)
 

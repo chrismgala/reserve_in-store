@@ -123,8 +123,6 @@ class StoreIntegrator
         footer_script = "<!-- #{RESERVE_IN_STORE_CODE} Deactivated. Please contact our support team if you need help. -->"
       end
 
-      ensure_snippet!("snippets/reserveinstore_footer.liquid", footer_script)
-
       theme_template = load_asset('layout/theme.liquid')
       include_code = "{% include 'reserveinstore_footer' %}"
 

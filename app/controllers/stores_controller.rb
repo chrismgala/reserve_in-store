@@ -36,17 +36,17 @@ class StoresController < LoggedInController
   def deactivate
     @current_store.deactivate!
 
-    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been deactivated.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'In- store Reserver has been deactivated.'
   end
 
   ##
   # GET /stores/activate
   def activate
-    if @current_store.check_footer_script
+    if @current_store.footer_script_integrated?
       @current_store.activate!
-      redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been activated.'
+      redirect_to stores_settings_url(view: 'settings'), notice: 'In-store Reserver has been activated.'
     else
-      redirect_to stores_help_url(view: 'help'), notice: 'Reserve In-store could not be activated due to missing footer code. Please follow instruction in help article.'
+      redirect_to stores_help_url(view: 'help'), notice: 'In- store Reserver could not be activated due to missing footer code. Please follow instruction in help article.'
     end
   end
 
@@ -55,14 +55,14 @@ class StoresController < LoggedInController
   def reinstall
     UpdateFooterJob.new.perform(@current_store.id)
 
-    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been re-installed into your store.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'In- store Reserver has been re-installed into your store.'
   end
   ##
   # GET /stores/resync
   def resync
     @current_store.sync_locations!
 
-    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has re-synced your store locations.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'In- store Reserver has re-synced your store locations.'
   end
   ##
   # PUT/PATCH /stores/settings

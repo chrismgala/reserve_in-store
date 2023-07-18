@@ -60,8 +60,8 @@ class Store < ApplicationRecord
     @integrator ||= StoreIntegrator.new(self)
   end
 
-  def check_footer_script
-    StoreIntegrator.new(self).check_footer_script
+  def footer_script_integrated?
+    StoreIntegrator.new(self).footer_script_integrated
   end
 
   def url

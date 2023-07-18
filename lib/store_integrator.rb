@@ -17,7 +17,7 @@ class StoreIntegrator
     store.with_shopify_session do
       reset_errors!
 
-      footer_install_success = check_footer!
+      footer_install_success = footer_script_integrated
 
       set_platform_data if footer_install_success
 
@@ -86,7 +86,7 @@ class StoreIntegrator
 
   ##
   # @@return [Boolean] True if footer code found
-  def check_footer_script
+  def footer_script_integrated
     store.with_shopify_session do
       theme_template = load_asset('layout/theme.liquid')
       include_code = "{% include 'reserveinstore_footer' %}"
@@ -131,7 +131,6 @@ class StoreIntegrator
       if theme_template.value.include?(include_code)
         true
       else
-
         if theme_template.value.to_s.include?('</body>')
           theme_template.value = theme_template.value.gsub('</body>', "#{include_code}\n</body>")
           log("Shopify API update asset 'layout/theme.liquid'")

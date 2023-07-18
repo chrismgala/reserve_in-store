@@ -36,7 +36,7 @@ class StoresController < LoggedInController
   def deactivate
     @current_store.deactivate!
 
-    redirect_to stores_settings_url(view: 'settings'), notice: 'In- store Reserver has been deactivated.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'In-store Reserver has been deactivated.'
   end
 
   ##
@@ -55,14 +55,14 @@ class StoresController < LoggedInController
   def reinstall
     UpdateFooterJob.new.perform(@current_store.id)
 
-    redirect_to stores_settings_url(view: 'settings'), notice: 'In- store Reserver has been re-installed into your store.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'In-store Reserver has been re-installed into your store.'
   end
   ##
   # GET /stores/resync
   def resync
     @current_store.sync_locations!
 
-    redirect_to stores_settings_url(view: 'settings'), notice: 'In- store Reserver has re-synced your store locations.'
+    redirect_to stores_settings_url(view: 'settings'), notice: 'In-store Reserver has re-synced your store locations.'
   end
   ##
   # PUT/PATCH /stores/settings

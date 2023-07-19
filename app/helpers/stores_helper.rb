@@ -28,4 +28,11 @@ module StoresHelper
       in_choose_location_modal_product_page: "Choose Location Modal (product page)"
     }
   end
+
+  ##
+  # Shopify does not allow us to edit theme due to which we need to provide manual installation footer js script.
+  # Used in help article to manually copy and paste code.
+  def footer_script_js_code
+    StoreIntegrator.new(@current_store).footer_script_code
+  end
 end

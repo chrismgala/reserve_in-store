@@ -1,7 +1,7 @@
 class StoreIntegrator
   attr_accessor :errors, :store
 
-  RESERVE_IN_STORE_CODE = "Reserve In-store App Code" # Code that lets you recognize the footer start/end
+  RESERVE_IN_STORE_CODE = "In-store Reserver App Code" # Code that lets you recognize the footer start/end
 
   ##
   # @param store [Store] The store that you want to integrate into
@@ -82,6 +82,24 @@ class StoreIntegrator
         " new ReserveInStoreCachedAsset({ name: 'reserveinstore.js', expiresIn: #{cached_asset_js_expiry_time}, url: window.reserveInStoreJsUrl || \"#{Store::JS_SCRIPT_PATH}\"}).load();"
     return cached_asset_code if checkout_mode
     'var headSrcUrls = document.getElementsByTagName("head")[0].innerHTML.match(/var urls = \[.*\]/);if (headSrcUrls && window.reserveInStore) { if (JSON.parse(headSrcUrls[0].replace("var urls = ", "")).find(function(url) {return url.indexOf("reserveinstore.js") !== -1 && (window.reserveInStoreJsUrl = url)})) { ' + cached_asset_code + ' } }'
+  end
+
+  def footer_script_code
+    "
+<!-- // BEGIN // #{RESERVE_IN_STORE_CODE} - DO NOT MODIFY // -->
+<script type=\"application/javascript\">
+(function(){
+  window.reserveInStore = window.reserveInStore || window.__reserveInStore || [];
+  window.reserveInStore.push('configure', #{store.footer_config.to_json});
+  {% if product and product.available %}window.reserveInStore.push('setProduct', {{ product | json }});{% endif %}
+  {% if cart %}window.reserveInStore.push('setCart', {{ cart | json }}); {% endif %}
+  #{js_preloader}
+})();</script>
+<link crossorigin=\"anonymous\" media=\"all\" rel=\"stylesheet\" href=\"#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}/reserveinstore.css\">
+<link href=\"https://fonts.googleapis.com/css?family=Open+Sans\" rel=\"stylesheet\">
+#{cached_css}
+<!-- // END // #{RESERVE_IN_STORE_CODE} // -->
+    "
   end
 
   ##

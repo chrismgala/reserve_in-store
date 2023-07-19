@@ -213,7 +213,7 @@
           var Redirect = actions.Redirect;
           Redirect.create(app).dispatch(Redirect.Action.APP, "<%= subscribe_path(post_subscribe_url: stores_activate_url, forced_redirect: true, shop: @current_store.shopify_domain) %>");
           <% else %>
-          Turbolinks.visit("<%= @current_store_activate_url %>");
+          Turbolinks.visit("<%= stores_activate_url %>");
           <% end %>
       });
   </script>

@@ -79,10 +79,10 @@ class StoresController < LoggedInController
       @current_store.assign_attributes(save_params)
 
       if @current_store.save
-        format.html { redirect_to params[:next_url].presence || stores_settings_url(view: 'settings'), notice: 'Store settings were successfully updated.' }
-        format.json { render :settings, status: :ok }
+       format.html { redirect_to params[:next_url].presence || stores_settings_url(view: 'settings'), notice: 'Store settings were successfully updated.' }
+       format.json { render :settings, status: :ok }
       else
-        format.html { render :settings }
+        format.html { redirect_to params[:next_url].presence || stores_settings_url(view: 'settings'), flash: { error: "Store settings was not saved. Please contact our support team for help." }}
         format.json { render json: @store.errors, status: :unprocessable_entity }
       end
     end

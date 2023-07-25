@@ -1,9 +1,0 @@
-<% if flash[:notice] %>
-  var successNotice = Toast.create(app, { message: '<%= j flash[:notice].html_safe %>' });
-  successNotice.dispatch(Toast.Action.SHOW);
-<% end %>
-
-<% if flash[:error] %>
-  var errorNotice = Toast.create(app, { message: '<%= j flash[:error].html_safe %>', isError: true });
-  errorNotice.dispatch(Toast.Action.SHOW);
-<% end %>

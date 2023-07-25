@@ -20,3 +20,5 @@
 //= require lib/iframe_previewer
 //= require lib/iframe_previewer
 //= require lib/simple_tabs
+
+//= require lib/select2.min

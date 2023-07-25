@@ -42,7 +42,8 @@ module Shopify
     end
 
     def locations
-      cache_key = "stores/#{store.id}/cached_shopify_api/locations"
+      params = { limit: 250 }
+      cache_key = "stores/#{store.id}/cached_shopify_api/locations/#{params.to_param}"
       Rails.cache.fetch(cache_key, expires_in: 1.day) do
         super
       end

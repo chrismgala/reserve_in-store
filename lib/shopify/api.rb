@@ -188,7 +188,7 @@ module Shopify
     end
 
     def locations
-      ShopifyAPI::Location.all
+      ShopifyAPI::Location.find(:all, params: { limit: 250 })
     end
 
     ##

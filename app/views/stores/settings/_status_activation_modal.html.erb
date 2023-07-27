@@ -1,0 +1,72 @@
+<div id="activationModal" style="display: none;">
+  <div>
+    <div class="Polaris-Modal-Dialog__Container" data-polaris-layer="true" data-polaris-overlay="true">
+      <div>
+        <div role="dialog" aria-labelledby="modal-header" tabindex="-1" class="Polaris-Modal-Dialog" style="outline: none">
+          <div class="Polaris-Modal-Dialog__Modal">
+            <div class="Polaris-Modal-Header" style="display: flex; justify-content: space-between;">
+              <div id="modal-header" class="Polaris-Modal-Header__Title">
+                <h2 class="Polaris-DisplayText Polaris-DisplayText--sizeSmall">Activate</h2>
+              </div>
+              <button class="Polaris-Modal-CloseButton inStoreReserver-close-btn" aria-label="Close" style="border: none; background: none;">
+                <span class="Polaris-Icon Polaris-Icon--colorInkLighter Polaris-Icon--isColored">
+                  <svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
+                    <path d="M11.414 10l6.293-6.293a.999.999 0 1 0-1.414-1.414L10 8.586 3.707 2.293a.999.999 0 1 0-1.414 1.414L8.586 10l-6.293 6.293a.999.999 0 1 0 1.414 1.414L10 11.414l6.293 6.293a.997.997 0 0 0 1.414 0 .999.999 0 0 0 0-1.414L11.414 10z" fill-rule="evenodd"></path>
+                  </svg>
+                </span>
+              </button>
+            </div>
+
+            <%= render 'layouts/partials/flash_notice' %>
+
+            <div class="Polaris-Modal__BodyWrapper">
+              <div class="Polaris-Modal__Body Polaris-Scrollable Polaris-Scrollable--vertical" data-polaris-scrollable="true">
+                <section class="Polaris-Modal-Section">
+                  <div class="Polaris-TextContainer">
+                    <p><strong>Follow below steps to activate In-store-reserver app.</strong></p>
+
+                    <p><strong>Step 1:</strong> Navigate to shopify theme or <a href="https://<%= @current_store.shopify_domain %>/admin/themes/<%= StoreIntegrator.new(@current_store).get_active_theme_id %>" class="Polaris-Link" target="_blank">click here</a>.
+                     </p>
+                    <p><strong>Step 2:</strong> Snippets >> Add a new snippet >> Enter <strong>reserveinstore_footer</strong> in text box >> done.</p>
+                    <p><strong>Step 3:</strong> Paste this code.</p>
+                    <textarea class="helpful-code-read-only" rows="10" disabled="disabled">
+                        <%= StoreIntegrator.new(@current_store).footer_script_js_code %>
+                      </textarea>
+                    <p><strong>Step 4:</strong> Save.</p>
+                    <p><strong>Add footer code in theme.liquid</strong></p>
+                    <p><strong>Step 1:</strong> Edit Layout >> theme.liquid.</p>
+                    <p><strong>Step 2:</strong> Paste below code before </body> ending tag. </p>
+                    <textarea rows="1" class="helpful-code-read-only">{% include 'reserveinstore_footer' %}</textarea>
+                    <p><strong>Step 3:</strong> Once done click activate button below. </p>
+                  </div>
+                </section>
+              </div>
+            </div>
+            <div class="Polaris-Modal-Footer">
+              <div class="Polaris-Modal-Footer__FooterContent">
+                <div class="Polaris-Stack Polaris-Stack--alignmentCenter">
+                  <div class="Polaris-Stack__Item Polaris-Stack__Item--fill"></div>
+                  <div class="Polaris-Stack__Item">
+                    <div class="Polaris-ButtonGroup">
+                      <div class="Polaris-ButtonGroup__Item">
+                        <button type="button" class="Polaris-Button inStoreReserver-close-btn">
+                          <span class="Polaris-Button__Content"><span class="Polaris-Button__Text">Cancel</span></span>
+                        </button>
+                      </div>
+                      <div class="Polaris-ButtonGroup__Item">
+                        <button type="button" class="activate-status-btn Polaris-Button Polaris-Button--primary Polaris-Button Polaris-Button--success">
+                          <span class="Polaris-Button__Content"><span class="Polaris-Button__Text">Activate</span></span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="Polaris-Backdrop"></div>
+  </div>
+</div>

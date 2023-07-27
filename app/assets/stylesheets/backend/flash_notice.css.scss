@@ -3,11 +3,11 @@
         padding: 16px;
         font-size: 13px;
         text-align: center;
-        background-color: #00b884;;
+        background-color: #00b884;
         color: #004d37;
 
         &.inSoreReserver-flash-error {
-            background-color:#EE0026;
+            background-color: #EE0026;
 
             .inSoreReserver-flash-body {
                 color: #ffffff;
@@ -16,6 +16,15 @@
 
         .inSoreReserver-flash-body {
             margin: 0.5rem 0 0.25rem;
+        }
+
+        .text-success {
+            font-weight: bold;
+        }
+
+        .text-failed {
+            font-weight: bold;
+            color: #b01e25;
         }
     }
 }

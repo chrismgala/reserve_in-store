@@ -52,8 +52,6 @@
   </div>
 </div>
 
-
-
 <% content_for(:javascript) do %>
   <script>
       var deactivateStatus = new Instore_Reserver_Modal({
@@ -63,19 +61,28 @@
           okBtnUrl: "<%= stores_deactivate_url %>",
       });
 
+      var activateStatus = new Instore_Reserver_Modal({
+          modalSelector: "#activationModal",
+          btnSelector: ".activate-status-btn",
+          closeSelector: ".inStoreReserver-close-btn",
+          okBtnUrl: "<%= stores_activate_url %>",
+      });
+
       $('.btn-deactivate').on('click', function(e) {
           e.preventDefault();
           $('#deactivationModal').show();
       });
 
-      $('.btn-activate').on('click', function(e) {
-          e.preventDefault();
-          <% if store.needs_subscription? %>
-              var Redirect = actions.Redirect;
-              Redirect.create(app).dispatch(Redirect.Action.APP, "<%= subscribe_path(post_subscribe_url: stores_activate_url, forced_redirect: true, shop: store.shopify_domain) %>");
-          <% else %>
-              Turbolinks.visit("<%= stores_activate_url %>");
-          <% end %>
-      });
+      <% if store.needs_subscription? %>
+        var subscriptionRedirect = new SubscriptionRedirect({
+          btnSelector: ".btn-activate",
+          subscriptionPath: "<%= subscribe_path(post_subscribe_url: stores_settings_url) %>"
+        });
+      <% else %>
+        $('.btn-activate').on('click', function(e) {
+            e.preventDefault();
+            $('#activationModal').show();
+        });
+      <% end %>
   </script>
 <% end %>

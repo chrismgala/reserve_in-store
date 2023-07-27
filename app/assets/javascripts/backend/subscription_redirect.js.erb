@@ -7,15 +7,14 @@
  * @param {object} [opts] - An optional hash used for setup, as described above.
  */
 var SubscriptionRedirect = function (opts) {
-    var $subscriptionPath = opts.subscriptionPath;
+    var subscriptionPath = opts.subscriptionPath;
 
     var init = function () {
         $(opts.btnSelector).on('click', subscribe);
     };
 
     var subscribe = function () {
-        var Redirect = actions.Redirect;
-        Redirect.create(app).dispatch(Redirect.Action.APP, $subscriptionPath);
+        window.open(subscriptionPath, "_blank");
     };
 
     init();

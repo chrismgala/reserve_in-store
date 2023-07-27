@@ -626,6 +626,7 @@
 </div>
 
 <%= render partial: "stores/settings/status_deactivation_modal", locals: { store: @current_store } %>
+<%= render partial: "stores/settings/status_activation_modal", locals: { store: @current_store } %>
 
 <% content_for(:javascript) do %>
   <script>

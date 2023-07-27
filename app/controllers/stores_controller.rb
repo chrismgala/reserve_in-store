@@ -45,12 +45,34 @@ class StoresController < LoggedInController
     end
   end
 
+  def footer_code_integrated
+    return '<span class="text-success">Passed</span> ' if @current_store.integrator.footer_script_included?
+
+    '<span class="text-failed">Failed</span>'
+  end
+
+  def snippet_integrated
+    return '<span class="text-success">Passed</span>' if @current_store.integrator.snippet_footer_code_found?
+
+    '<span class="text-failed">Failed</span>'
+  end
+
   ##
   # GET /stores/activate
   def activate
-    @current_store.activate!
+    message = "In-Store Reserver app could not be activated."
+    footer_script_not_included = "<p>Footer code: layout/theme.liquid - #{ footer_code_integrated }</p>"
+    snippet_not_found = "<p>Snippet: snippets/reserveinstore_footer.liquid - #{ snippet_integrated }</p>"
 
-    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been activated.'
+    if @current_store.integrator.snippet_footer_code_found? && @current_store.integrator.footer_script_included?  && @current_store.activate!
+      render json: { store: @current_store, type: "success", message: "In-Store Reserver app has been activated." }
+    else
+      if !@current_store.integrator.snippet_footer_code_found? || !@current_store.integrator.footer_script_included?
+        render json: { store: @current_store, type: "error", message: "#{ message } #{ snippet_not_found } #{ footer_script_not_included }" }
+      else
+        render json: { store: @current_store, type: "error", message: "#{ message } Please contact our support team for help." }
+      end
+    end
   end
 
   ##

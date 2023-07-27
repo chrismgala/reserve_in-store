@@ -1,0 +1,16 @@
+.inSoreReserver-flash-container {
+    .inSoreReserver-flash-message {
+        padding: 16px;
+        font-size: 14px;
+        text-align: center;
+
+        &.inSoreReserver-flash-error {
+            background-color: #EE0026;
+            color: #ffffff;
+        }
+
+        .inSoreReserver-flash-body {
+            margin: 0.5rem 0 0.25rem;
+        }
+    }
+}

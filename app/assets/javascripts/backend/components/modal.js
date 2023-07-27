@@ -1,10 +1,10 @@
 /**
- * A modal pop-up to show flash / toast message .
+ * A modal with cancel and action button.
  *
  * Construct with the following hash:
  * {string} modalSelector, selector for the modal
  * {string} closeSelector, selector for the modal close button
- * {string} okBtnUrl
+ * {string} submitBtnUrl
  *
  * @param {object} [opts] - An optional hash used for setup, as described above.
  */
@@ -12,7 +12,7 @@ var Instore_Reserver_Modal = function (opts) {
     var modalSelector = $(opts.modalSelector);
     var closeSelector = $(opts.closeSelector);
     var btnSelector = $(opts.btnSelector);
-    var okBtnUrl = opts.okBtnUrl;
+    var submitBtnUrl = opts.submitBtnUrl
 
     var init = function () {
         modalSelector.hide();
@@ -27,7 +27,7 @@ var Instore_Reserver_Modal = function (opts) {
 
     var showMessage = function () {
         $.ajax({
-            url: okBtnUrl,
+            url: submitBtnUrl,
             type: 'GET',
             success: function(response) {
                 if (response.type === "success") {

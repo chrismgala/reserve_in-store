@@ -1,6 +1,6 @@
 /**
  * Show / Hide flash notice with success or error message.
- * {string} containerSelector, selector for main container
+ * {string} containerSelector
  * {string} heading
  * {string} message
  * {string} type, eg: success, error

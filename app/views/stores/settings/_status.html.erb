@@ -58,14 +58,14 @@
           modalSelector: "#deactivationModal",
           btnSelector: ".deactivate-status-btn",
           closeSelector: ".inStoreReserver-close-btn",
-          okBtnUrl: "<%= stores_deactivate_url %>",
+          submitBtnUrl: "<%= stores_deactivate_url %>",
       });
 
       var activateStatus = new Instore_Reserver_Modal({
           modalSelector: "#activationModal",
           btnSelector: ".activate-status-btn",
           closeSelector: ".inStoreReserver-close-btn",
-          okBtnUrl: "<%= stores_activate_url %>",
+          submitBtnUrl: "<%= stores_activate_url %>",
       });
 
       $('.btn-deactivate').on('click', function(e) {

@@ -73,6 +73,13 @@ class StoreIntegrator
     Rails.env.development? ? 1.second : 15.minutes
   end
 
+  def get_active_theme_id
+    store.with_shopify_session do
+      @theme_asset = ShopifyAPI::Asset.find('layout/theme.liquid')
+      @theme_asset.theme_id
+    end
+  end
+
   ##
   # This preloading JS will add the JS script tag in the top immediately if it is not yet there.
   # By default Shopify will wait for the whole page to load first before adding scripts, so doing this
@@ -83,6 +90,14 @@ class StoreIntegrator
     return cached_asset_code if checkout_mode
     'var headSrcUrls = document.getElementsByTagName("head")[0].innerHTML.match(/var urls = \[.*\]/);if (headSrcUrls && window.reserveInStore) { if (JSON.parse(headSrcUrls[0].replace("var urls = ", "")).find(function(url) {return url.indexOf("reserveinstore.js") !== -1 && (window.reserveInStoreJsUrl = url)})) { ' + cached_asset_code + ' } }'
   end
+
+  def footer_script_included?
+    theme_template = load_asset('layout/theme.liquid')
+    include_code = "{% include 'reserveinstore_footer' %}"
+
+    theme_template.value.include?(include_code)
+  end
+
 
   ##
   # @return [Boolean] True if successful, raise an error otherwise.

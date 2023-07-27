@@ -34,9 +34,15 @@ class StoresController < LoggedInController
   ##
   # GET /stores/deactivate
   def deactivate
-    @current_store.deactivate!
-
-    redirect_to stores_settings_url(view: 'settings'), notice: 'Reserve In-store has been deactivated.'
+    if !@current_store.integrator.footer_script_included? && @current_store.deactivate!
+      render json: { store: @current_store, type: "success", message: "In-Store Reserver app has been deactivated." }
+    else
+      if @current_store.integrator.footer_script_included?
+        render json: { store: @current_store, type: "error", message: "Footer script is still included in your store theme. In-Store Reserver app could not be deactivated." }
+      else
+        render json: { store: @current_store, type: "error", message: "In-Store Reserver app could not be deactivated. Please contact our support team for help." }
+      end
+    end
   end
 
   ##

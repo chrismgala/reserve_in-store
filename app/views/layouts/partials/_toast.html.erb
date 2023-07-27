@@ -11,15 +11,15 @@
   if (!document.documentElement.hasAttribute("data-turbolinks-preview")) {
     document.addEventListener(eventName, function flash() {
       <% if flash[:notice] %>
-        var toast = new FlashNotice({
-            heading: 'Saved Successfully',
+        new Instore_Reserver_Toast_Notice({
+            heading: 'Success',
             type: 'success',
             message: '<%= j flash[:notice].html_safe %>',
         });
       <% end %>
 
       <% if flash[:error] %>
-        var toast = new FlashNotice({
+        new Instore_Reserver_Toast_Notice({
             heading: 'Something Went Wrong!',
             type: 'error',
             message: '<%= j flash[:error].html_safe %>',

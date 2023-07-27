@@ -625,6 +625,8 @@
   </div>
 </div>
 
+<%= render partial: "stores/settings/status_deactivation_modal", locals: { store: @current_store } %>
+
 <% content_for(:javascript) do %>
   <script>
       var parsleyBinder = new ParsleyBinder({

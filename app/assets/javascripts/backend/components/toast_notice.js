@@ -5,7 +5,7 @@
  * {string} message
  * {string} type, eg: success, error
  */
-var FlashNotice  = function (opts) {
+var Instore_Reserver_Toast_Notice  = function (opts) {
     var containerSelector = $('.reserveInStore-toast-container');
     var heading = opts.heading;
     var message = opts.message;

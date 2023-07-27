@@ -1,0 +1,94 @@
+.reserveInStore-toast-container {
+    position: fixed;
+    overflow: visible;
+    height: 0;
+    width: 350px;
+    right: 25px;
+    top: 0;
+    z-index: 999999;
+
+    .reserveInStore-toast-container-inner {
+        position: relative;
+        top: 0.75rem;
+        right: 0.75rem;
+        overflow: visible;
+        width: 354px;
+    }
+
+    .reserveInStore-toast-message {
+        padding: 16px;
+        width: 354px;
+        box-shadow: 7px 7px 17px rgba(0,0,0,.1);
+        border-radius: 5px;
+        height: fit-content;
+
+        .toast-wrapper {
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+            gap: 14px;
+
+            .toast-content {
+                width: 100%;
+
+                .toast-body {
+                    background-color: inherit;
+                    font-size: 13px;
+                    margin: 0.5rem 0 0.25rem;
+                    padding: 0;
+                }
+            }
+
+            .close-container {
+                width: 16px;
+
+                .reserveInStore-toast-close {
+                    position: absolute;
+                    right: 0;
+                    border: none;
+                    background: none;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        &.reserveInStore-toast-success {
+            background-color: #c1f0df;
+
+            .toast-header {
+                color: #004d37;
+            }
+
+            .reserveInStore-toast-close {
+                color: #00a979;
+            }
+        }
+
+        &.reserveInStore-toast-error {
+            background-color: #ffb3bf;
+
+            .toast-header {
+                color: #800014;
+            }
+
+            .toast-body {
+                color: #800014;
+            }
+
+            .reserveInStore-toast-close {
+                color: #800014;
+            }
+        }
+    }
+
+    .reserveInStore-toast-message {
+        animation: hideAnimation 0s ease-in 5s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes hideAnimation {
+        to {
+            display: none;
+        }
+    }
+}

@@ -22,7 +22,6 @@
     var createApp = AppBridge.default;
     var actions = AppBridge.actions;
     var TitleBar = actions.TitleBar;
-    var Toast = actions.Toast;
     var Modal = actions.Modal;
     var Button = actions.Button;
     var ResourcePicker = actions.ResourcePicker;
@@ -65,7 +64,7 @@
     </div>
   </div>
 
-    <%= render 'layouts/flash_messages' %>
+    <%= render 'layouts/partials/toast' %>
 
     <script src="https://cdn.shopify.com/s/assets/external/app.js?<%= Time.now.strftime('%Y%m%d%H') %>"></script>
 

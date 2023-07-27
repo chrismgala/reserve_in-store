@@ -8,8 +8,7 @@ class Store < ApplicationRecord
 
   before_create :generate_keys
   before_save :nil_default_templates
-  before_save :see_if_footer_needs_update
-  after_save :update_footer_asset!, :clear_api_cache!
+  after_save  :clear_api_cache!
 
   alias_attribute :email_template, :customer_confirm_email_tpl # Alias for reverse compatibility, can be removed probably by July 1, 2019
   alias_attribute :company_name, :name

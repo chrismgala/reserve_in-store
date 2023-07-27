@@ -73,6 +73,13 @@ class StoreIntegrator
     Rails.env.development? ? 1.second : 15.minutes
   end
 
+  def get_active_theme_id
+    store.with_shopify_session do
+      @theme_asset = ShopifyAPI::Asset.find('layout/theme.liquid')
+      @theme_asset.theme_id
+    end
+  end
+
   ##
   # This preloading JS will add the JS script tag in the top immediately if it is not yet there.
   # By default Shopify will wait for the whole page to load first before adding scripts, so doing this
@@ -84,8 +91,42 @@ class StoreIntegrator
     'var headSrcUrls = document.getElementsByTagName("head")[0].innerHTML.match(/var urls = \[.*\]/);if (headSrcUrls && window.reserveInStore) { if (JSON.parse(headSrcUrls[0].replace("var urls = ", "")).find(function(url) {return url.indexOf("reserveinstore.js") !== -1 && (window.reserveInStoreJsUrl = url)})) { ' + cached_asset_code + ' } }'
   end
 
+  def footer_script_included?
+    theme_template = load_asset('layout/theme.liquid')
+    include_code = "{% include 'reserveinstore_footer' %}"
+
+    theme_template.value.include?(include_code)
+  end
+
+  def snippet_footer_code_found?
+    asset = load_asset('snippets/reserveinstore_footer.liquid')
+    tpl = asset.try(:value)
+    return false if tpl.blank?
+
+    true
+  end
+
+  def footer_script_js_code
+"<!-- // BEGIN // #{RESERVE_IN_STORE_CODE} - DO NOT MODIFY // -->
+<script type=\"application/javascript\">
+(function(){
+  window.reserveInStore = window.reserveInStore || window.__reserveInStore || [];
+  window.reserveInStore.push('configure', #{store.footer_config.to_json});
+  {% if product and product.available %}window.reserveInStore.push('setProduct', {{ product | json }});{% endif %}
+  {% if cart %}window.reserveInStore.push('setCart', {{ cart | json }}); {% endif %}
+  #{js_preloader}
+})();</script>
+<link crossorigin=\"anonymous\" media=\"all\" rel=\"stylesheet\" href=\"#{ENV['PUBLIC_CDN_BASE_PATH'].chomp('/')}/reserveinstore.css\">
+<link href=\"https://fonts.googleapis.com/css?family=Open+Sans\" rel=\"stylesheet\">
+#{cached_css}
+<!-- // END // #{RESERVE_IN_STORE_CODE} // -->
+    "
+  end
+
+
   ##
   # @return [Boolean] True if successful, raise an error otherwise.
+  # @deprecated as of July 2023 shopify does not allow us to install footer code automatically so we need to manually as merchants to add foooter code.
   def install_footer!
     store.with_shopify_session do
 
@@ -150,17 +191,10 @@ class StoreIntegrator
   ##
   # @param [String] asset_path Path of the asset to load
   # @return [ShopifyAPI::Asset|NilClass] The Shopify asset object if successful, nil otherwise.
-  def load_asset(asset_path, report_not_found: true)
+  def load_asset(asset_path)
     asset(asset_path)
 
-  rescue ActiveResource::ResourceNotFound => e
-    msg = "Failed to load Shopify asset #{asset_path} - #{e.message}."
-    if report_not_found
-      ForcedLogger.error(msg, store: @store.try(:id), sentry: true)
-    else
-      log(msg)
-    end
-
+  rescue ActiveResource::ResourceNotFound
     nil
   end
 

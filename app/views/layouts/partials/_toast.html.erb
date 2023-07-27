@@ -1,0 +1,33 @@
+<div class="reserveInStore-toast-container">
+  <div aria-live="polite" aria-atomic="true" class="reserveInStore-toast-container">
+    <div class="reserveInStore-toast-container-inner">
+    </div></div>
+</div>
+
+<% content_for :javascript do %>
+<script type="text/javascript">
+  var eventName = typeof(Turbolinks) !== 'undefined' ? 'turbolinks:load' : 'DOMContentLoaded';
+
+  if (!document.documentElement.hasAttribute("data-turbolinks-preview")) {
+    document.addEventListener(eventName, function flash() {
+      <% if flash[:notice] %>
+        new Instore_Reserver_Toast_Notice({
+            heading: 'Success',
+            type: 'success',
+            message: '<%= j flash[:notice].html_safe %>',
+        });
+      <% end %>
+
+      <% if flash[:error] %>
+        new Instore_Reserver_Toast_Notice({
+            heading: 'Something Went Wrong!',
+            type: 'error',
+            message: '<%= j flash[:error].html_safe %>',
+        });
+      <% end %>
+                             
+      document.removeEventListener(eventName, flash)
+    });
+  }
+</script>
+<% end %>

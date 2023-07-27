@@ -13,34 +13,6 @@
               <div class="Polaris-SettingAction__Setting" style="color: green; font-size: 18px; margin-top: 23px;">
               </div>
               <div class="Polaris-SettingAction__Action">
-                <button class="btn-reinstall Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge">
-                  Re-install Scripts
-                </button>
-              </div>
-              <div class="Polaris-SettingAction__Setting" style="margin-top: 6px;">
-                <div style="--top-bar-background:#00848e; --top-bar-color:#f9fafb; --top-bar-background-lighter:#1d9ba4;">
-                  <div class="Polaris-Banner Polaris-Banner--statusInfo Polaris-Banner--hasDismiss Polaris-Banner--withinPage" tabindex="0" role="status" aria-live="polite" aria-labelledby="Banner5Heading" aria-describedby="Banner5Content">
-                    <div class="Polaris-Banner__Ribbon"><span class="Polaris-Icon Polaris-Icon--colorTealDark Polaris-Icon--isColored Polaris-Icon--hasBackdrop"><svg viewBox="0 0 20 20" class="Polaris-Icon__Svg" focusable="false" aria-hidden="true">
-                                                            <circle cx="10" cy="10" r="9" fill="currentColor"></circle>
-                                                            <path d="M10 0C4.486 0 0 4.486 0 10s4.486 10 10 10 10-4.486 10-10S15.514 0 10 0m0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8m1-5v-3a1 1 0 0 0-1-1H9a1 1 0 1 0 0 2v3a1 1 0 0 0 1 1h1a1 1 0 1 0 0-2m-1-5.9a1.1 1.1 0 1 0 0-2.2 1.1 1.1 0 0 0 0 2.2"></path>
-                                                          </svg></span></div>
-                    <div>
-                      <div class="Polaris-Banner__Content" id="Banner5Content" style="padding-top: 0;">
-                        <p>Run this command will re-install the footer scripts into your store. This includes API
-                          configuration.
-                          If you recently changed our theme, you should try running this process.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="Polaris-Card__Section">
-            <div class="Polaris-SettingAction">
-              <div class="Polaris-SettingAction__Setting" style="color: green; font-size: 18px; margin-top: 23px;">
-              </div>
-              <div class="Polaris-SettingAction__Action">
                 <button class="btn-resync Polaris-Button Polaris-Button--primary Polaris-Button--sizeLarge">
                   Re-sync Locations
                 </button>
@@ -73,11 +45,7 @@
 
 <% content_for(:javascript) do %>
   <script>
-    $('.btn-reinstall').on('click', function(e) {
-        e.preventDefault();
-        Turbolinks.visit("<%= stores_reinstall_url %>");
-    });
-    $('.btn-resync').on('click', function(e) {
+      $('.btn-resync').on('click', function(e) {
         e.preventDefault();
         Turbolinks.visit("<%= stores_resync_url %>");
     });

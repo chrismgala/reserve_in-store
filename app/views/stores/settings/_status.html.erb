@@ -54,39 +54,35 @@
 
 <% content_for(:javascript) do %>
   <script>
+      var deactivateStatus = new Instore_Reserver_Modal({
+          modalSelector: "#deactivationModal",
+          btnSelector: ".deactivate-status-btn",
+          closeSelector: ".inStoreReserver-close-btn",
+          submitBtnUrl: "<%= stores_deactivate_url %>",
+      });
+
+      var activateStatus = new Instore_Reserver_Modal({
+          modalSelector: "#activationModal",
+          btnSelector: ".activate-status-btn",
+          closeSelector: ".inStoreReserver-close-btn",
+          submitBtnUrl: "<%= stores_activate_url %>",
+      });
+
       $('.btn-deactivate').on('click', function(e) {
           e.preventDefault();
-
-          const okButton = Button.create(app, { label: 'Yes, Deactivate', style: Button.Style.Danger });
-          okButton.subscribe(Button.Action.CLICK, () => {
-              Turbolinks.visit("<%= stores_deactivate_url %>");
-              deactivatesModal.dispatch(Modal.Action.CLOSE);
-          });
-
-          const cancelButton = Button.create(app, { label: 'No, Keep Active' });
-          cancelButton.subscribe(Button.Action.CLICK, () => {
-              deactivatesModal.dispatch(Modal.Action.CLOSE);
-          });
-
-          const deactivatesModal = Modal.create(app, {
-              title: "Are you sure?",
-              message: "Once deactivated your reserve in-store buttons and modals will no longer show to your shoppers.",
-              footer: {
-                  buttons: {
-                      primary: okButton,
-                      secondary: [cancelButton],
-                  },
-              },
-          }).dispatch(Modal.Action.OPEN);
+          $('#deactivationModal').show();
       });
-      $('.btn-activate').on('click', function(e) {
-          e.preventDefault();
-          <% if store.needs_subscription? %>
-              var Redirect = actions.Redirect;
-              Redirect.create(app).dispatch(Redirect.Action.APP, "<%= subscribe_path(post_subscribe_url: stores_activate_url, forced_redirect: true, shop: store.shopify_domain) %>");
-          <% else %>
-              Turbolinks.visit("<%= stores_activate_url %>");
-          <% end %>
-      });
+
+      <% if store.needs_subscription? %>
+        var subscriptionRedirect = new SubscriptionRedirect({
+          btnSelector: ".btn-activate",
+          subscriptionPath: "<%= subscribe_path(post_subscribe_url: stores_settings_url) %>"
+        });
+      <% else %>
+        $('.btn-activate').on('click', function(e) {
+            e.preventDefault();
+            $('#activationModal').show();
+        });
+      <% end %>
   </script>
 <% end %>

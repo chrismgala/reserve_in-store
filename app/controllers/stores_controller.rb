@@ -1,5 +1,4 @@
 class StoresController < LoggedInController
-  include IconsHelper
 
   ##
   # GET /stores/help
@@ -36,43 +35,19 @@ class StoresController < LoggedInController
   # GET /stores/deactivate
   def deactivate
     if !@current_store.integrator.footer_script_included? && @current_store.deactivate!
-      render json: { store: @current_store, type: "success", message: "In-Store Reserver app has been deactivated." }
+      redirect_to stores_settings_url(view: 'settings'), flash: { notice: "In-Store Reserver app has been deactivated." }
     else
-      if @current_store.integrator.footer_script_included?
-        render json: { store: @current_store, type: "error", message: "Footer script is still included in your store theme. In-Store Reserver app could not be deactivated." }
-      else
-        render json: { store: @current_store, type: "error", message: "In-Store Reserver app could not be deactivated. Please contact our support team for help." }
-      end
+      redirect_to stores_settings_url(view: 'settings', deactivation: "failed")
     end
-  end
-
-  def footer_code_integrated_svg_icon
-    return success_svg_icon if @current_store.integrator.footer_script_included?
-
-    failed_svg_icon
-  end
-
-  def snippet_integrated_svg_icon
-    return success_svg_icon if @current_store.integrator.snippet_footer_code_found?
-
-    failed_svg_icon
   end
 
   ##
   # GET /stores/activate
   def activate
-    message = "In-Store Reserver app could not be activated."
-    footer_script_not_included = "<p>#{ footer_code_integrated_svg_icon } Footer code: layout/theme.liquid</p>"
-    snippet_not_found = "<p>#{ snippet_integrated_svg_icon } Snippet: snippets/reserveinstore_footer.liquid</p>"
-
     if @current_store.integrator.snippet_footer_code_found? && @current_store.integrator.footer_script_included?  && @current_store.activate!
-      render json: { store: @current_store, type: "success", message: "In-Store Reserver app has been activated." }
+      redirect_to stores_settings_url(view: 'settings'), flash: { notice: "In-Store Reserver app has been activated." }
     else
-      if !@current_store.integrator.snippet_footer_code_found? || !@current_store.integrator.footer_script_included?
-        render json: { store: @current_store, type: "error", message: "#{ message } #{ snippet_not_found } #{ footer_script_not_included } " }
-      else
-        render json: { store: @current_store, type: "error", message: "#{ message } Please contact our support team for help." }
-      end
+      redirect_to stores_settings_url(view: 'settings', activation: "failed")
     end
   end
 

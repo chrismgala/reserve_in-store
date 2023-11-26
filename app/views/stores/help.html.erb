@@ -10,6 +10,40 @@
         <div class="Polaris-Layout__AnnotationWrapper">
           <div class="Polaris-Layout__Annotation">
             <div class="Polaris-TextContainer">
+              <h2 class="Polaris-Heading">Changes in Settings / Template:</h2>
+              <p>After any changes in settings, new changes need to be applied in your store theme snippet reserveinstore_footer.liquid file</p>
+              <p></p>
+            </div>
+          </div>
+          <div class="Polaris-Layout__AnnotationContent">
+            <div class="Polaris-Card">
+              <div class="Polaris-Card__Section">
+                <div class="Polaris-CalloutCard">
+                  <div class="Polaris-CalloutCard__Content">
+                    <div class="Polaris-CalloutCard__Title Polaris-TextContainer--spacingLoose">
+
+                      <p><strong>Follow below steps if there was any changes in settings / template.</strong></p>
+
+                      <p><strong>Step 1:</strong> Navigate to shopify theme or <a href="https://<%= @current_store.shopify_domain %>/admin/themes/<%= StoreIntegrator.new(@current_store).get_active_theme_id %>" class="Polaris-Link" target="_blank">click here</a>.
+                      </p>
+                      <p><strong>Step 2:</strong> Snippets >> Edit  <strong>reserveinstore_footer.liquid</strong> snippet.</p>
+                      <p><strong>Step 3:</strong> Paste this code.</p>
+                      <textarea class="helpful-code-read-only" rows="10" disabled="disabled">
+                        <%= StoreIntegrator.new(@current_store).footer_script_js_code %>
+                      </textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="Polaris-Layout__AnnotatedSection">
+        <div class="Polaris-Layout__AnnotationWrapper">
+          <div class="Polaris-Layout__Annotation">
+            <div class="Polaris-TextContainer">
               <h2 class="Polaris-Heading">How Reserve In-Store Works:</h2>
               <p>A tutorial explaining our interactions with your customers</p>
             </div>

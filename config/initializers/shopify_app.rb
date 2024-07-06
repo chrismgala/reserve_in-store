@@ -2,7 +2,7 @@ ShopifyApp.configure do |config|
   config.application_name = 'Reserve In-store'
   config.api_key = ENV['SHOPIFY_CLIENT_API_KEY'].presence || ENV['SHOPIFY_API_KEY'].presence
   config.secret = ENV['SHOPIFY_CLIENT_API_SECRET'].presence || ENV['SHOPIFY_API_SECRET'].presence
-  config.api_version = '2024-04'
+  config.api_version = '2024-07'
   config.scope = 'read_products, read_orders, read_themes, write_themes, read_script_tags, write_script_tags, read_locations, read_inventory, read_product_listings' # read_customers,write_customers
   config.embedded_app = true
   #config.after_authenticate_job = false

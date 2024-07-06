@@ -93,7 +93,7 @@ class StoreIntegrator
 
   def footer_script_included?
     theme_template = load_asset('layout/theme.liquid')
-    include_code = "{% include 'reserveinstore_footer' %}"
+    include_code = "{% render 'reserveinstore_footer' %}"
 
     theme_template.value.include?(include_code)
   end

@@ -26,7 +26,7 @@
                     <p><strong>Follow below steps to deactivate In-store-reserver app.</strong></p>
                     <p><strong>Step 1:</strong> Edit Layout >> theme.liquid <a href="https://<%= @current_store.shopify_domain %>/admin/themes/<%= StoreIntegrator.new(@current_store).get_active_theme_id %>" class="Polaris-Link" target="_blank">click here</a>.</p>
                     <p><strong>Step 2:</strong> Find and remove below code. </p>
-                    <textarea rows="1" class="helpful-code-read-only">{% include 'reserveinstore_footer' %}</textarea>
+                    <textarea rows="1" class="helpful-code-read-only">{% render 'reserveinstore_footer' %}</textarea>
                     <p><strong>Step 3:</strong> Once done click deactivate button. </p>
                   </div>
                 </section>

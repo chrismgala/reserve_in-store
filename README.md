@@ -21,7 +21,9 @@ This repository is for the In-Store Reserver Shopify app.
 When customers comes in to your online store, they either make the purchases right away or they leaves. Especially when it comes to high-priced items, many people won't place their orders online. Let customers actually see the products will clearly increase their chance of buying. In-Store Reserver is a simple application that adds a "reserve in store" option in your online store. By adding this feature, you will have the chance to make more deals when customers comes into your store in person.
 
 #### How do merchants start using the app?
-** TODO: PLEASE FILL THIS OUT **
+1. Insert script into `reserveinstore_footer.liquid` (Help instructions)
+2. Activate the widget by inserting code at bottom of `layout/theme.liquid`
+3. Re-sync Locations (**App** -> **Settings** -> **Admin Functions**)
 
 ----
 
@@ -30,27 +32,27 @@ Here's how to get the app running on your local computer for development.
 
 ### Prerequisites
 You must have the following to run this app:
-1. Postgres 9.6.8
-2. Redis
-3. Ruby 2.6.7
+1. Ruby `2.6.7`
+2. Postgres `9.6.8`
+3. Redis
 
 
-### Dev tools
+### Developer Tools
 * Bundler is used
-* For JS/CSS assets we use [yarn](https://yarnpkg.com/lang/en/).
-* To view emails being send installed [mailcatcher](https://mailcatcher.me)
+* For JS / CSS assets we use [yarn](https://yarnpkg.com/lang/en/)
+* To view emails being sent installed [mailcatcher](https://mailcatcher.me)
 
 
 ### Installation
 Follow these instructions to setup your local development environment:
 
-1. Create a DB in postgres called `reserve_in-store` and the appropriate user permissions, OR run `rake db:create`
-2. Copy .env-example to .env and fill in the relevant details. Assuming default settings from postgres and redis, then you'll probably not have to set anything up.
-3. Run `bundle install && bundle exec rake db:migrate && bundle exec rake db:seed && yarn`. Then run `rails server` to run your rails server. All of these chained commands must pass for successful installation.
+1. Create a `.env` in the project's root and fill in the relevant details. Assuming default settings from Postgres and Redis, you shouldn't have to set anything up.
+2. Run `rake db:create` *or* create a DB in Postgres called `reserve_in-store` and the appropriate user permissions.
+3. Run `bundle install && bundle exec rake db:migrate && bundle exec rake db:seed && yarn`. Then run `rails server` to run your rails server. All of these chained commands must pass for successful installation. You may need to restart your terminal for the `rails` command to work.
 
 By default it runs at http://localhost:3000. You can also run the server through RubyMine so you can use the debugger and step through code.
 
-You'll want to run this on another port other than 3000, so you don't conflict with other servers that are running. To do that you can run `rails server -p 3003` for example to run the rails server on port 3003.
+You'll want to run this on another port other than 3000, so you don't conflict with other servers that are running. To do that you can run `rails server -p 3003` for example to run the Rails server on port 3003.
 
 If everything ran properly you should be able to see a standard Rails Getting Started when you got to http://localhost:3003 (or whatever your port is) in your browser.
 

@@ -61,7 +61,7 @@ If you want to test installing In-Store Reserver App store you will need to crea
 
 #### 1. Setup ngrok.io
 Signup at `ngrok.io` and/or install the app into your computer. Then just run it with `ngrok http 3000` if your port number is `3000` for your rails app. The default port for rails apps is `3000`. 
-After setting this up you should be able to access your rails app from `https://**whatever**.ngrok.io`. Note you're ngrok URL for the next step.
+After setting this up you should be able to access your rails app from `https://**whatever**.ngrok.io`. Note your ngrok URL for the next step.
 
 Update your `.env` file with your ngrok URLs. For example if your ngrok URL was `reserve_in-store.ngrok.io` then you should have this in your `.env`:
 ```
@@ -70,10 +70,6 @@ BASE_APP_URL="https://reserve_in-store.ngrok.io"
 
 #### 2. Create Draft/Private App
 To do this for Shopify simply go to your partner dashboard and create a new private (or draft) app. The same thing applies for BigCommerce.
-
-Here's what the setup looks like for Shopify after you're done setting up your draft app: ![](<img src="https://monosnap.com/image/fXPIUvzfILzDza1JGYzgLZVJgJXjNx.png">)
-
-Replace the ngrok URLs you see in the screenshot with your own ngrok domains (IE instead of `reserveinstore.ngrok.io` use your own ngrok domain)
 
 #### 3. Update your `.env` file
 Update the following values in your `.env` file then restart your rails server:

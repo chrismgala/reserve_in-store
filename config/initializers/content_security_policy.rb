@@ -5,7 +5,7 @@
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 #
 initial_frame_ancestors = [:https, "*.myshopify.com", "admin.shopify.com", "app.reserveinstore.com", "*.reserveinstore.com"]
-initial_frame_ancestors << "*.ngrok.io" if Rails.env.development?
+initial_frame_ancestors << "*.ngrok-free.app" if Rails.env.development?
 
 def current_domain
   @current_domain ||= (params[:shop] && ShopifyApp::Utils.sanitize_shop_domain(params[:shop])) ||
@@ -18,7 +18,7 @@ frame_ancestors = lambda {
 
   if current_domain
     ancestors += [ current_domain, "admin.shopify.com", "app.reserveinstore.com" ]
-    ancestors << "*.ngrok.io" if Rails.env.development?
+    ancestors << "*.ngrok-free.app" if Rails.env.development?
   else
     ancestors += initial_frame_ancestors
   end

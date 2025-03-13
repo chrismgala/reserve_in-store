@@ -54,7 +54,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                <% @products = related_products(@reservations) %>
                 <% @reservations.includes(:location).each do |reservation| %>
                   <tr class="Polaris-DataTable__TableRow">
                     <th class="Polaris-DataTable__Cell Polaris-DataTable__Cell--fixed Polaris-DataTable__Cell--text" scope="row">

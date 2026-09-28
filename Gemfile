@@ -12,7 +12,7 @@ gem 'chosen-rails', '~> 1.9'# To do much nicer drop downs with built-in searches
 gem 'dalli', '~> 2.7.6' # For memcached caching in production only
 gem 'devise' # For admin logins.
 gem 'dotenv-rails', '~> 2.4.0' # Adds the `ENV['BLEH']` ability to access environment variables
-gem 'httparty', '~> 0.21.0' # To party... and to do some really easy HTTP requests for things such as pulling the CSS content from the store for previews
+gem 'httparty', '~> 0.13.7' # To party... and to do some really easy HTTP requests for things such as pulling the CSS content from the store for previews
 gem 'jbuilder', '~> 2.5' # Build JSON APIs with ease, not really being used.
 gem 'jquery-rails', '~> 4.3', '>= 4.3.3' # Use jquery as the JavaScript library
 gem 'kaminari', '~> 1.1', '>= 1.1.1' # Pagination such as `Product.all.page(params[:page])`
@@ -39,7 +39,7 @@ gem 'uglifier', '>= 1.3.0' # Use Uglifier as codampressor for JavaScript assets
 gem 'rails_same_site_cookie', '0.1.9' # Allow all cookies to be fetched in a 3rd party context, since we are an embedded app
 
 group :production do
-  gem 'resend', '~> 1.1.0' # For sending email in production only
+  gem 'sendgrid-ruby', '~> 5.2.0' # For sending email in production only
 end
 
 group :development, :test do
@@ -78,3 +78,4 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+

@@ -7,26 +7,35 @@ class InventoryFetcher
   end
 
   def inventory
+    Rails.logger.info("INVENTORY_FETCHER: Starting inventory fetch for product_ids: #{product_ids.inspect}, store_id: #{store.id}, shopify_domain: #{store.shopify_domain}")
+
     store.with_shopify_session do
+      Rails.logger.info("INVENTORY_FETCHER: Shopify session activated, fetching products")
+
       # Get Product(s)
       product_list = store.api.products(ids: product_ids.join(','))
+      Rails.logger.info("INVENTORY_FETCHER: Products fetched - count: #{product_list.try(:count)}, blank?: #{product_list.blank?}")
 
       return {} if product_list.blank?
 
       variant_map = {}
       product_map = {}
       product_list.each do |product|
+        Rails.logger.info("INVENTORY_FETCHER: Processing product - id: #{product.id}, variants count: #{product.variants.try(:count)}")
         variants = product.variants.to_a
         variant_map.merge!(variants.map{ |v| [v.inventory_item_id.to_s, v.id.to_s] }.to_h)
         product_map.merge!(variants.map{ |v| [v.id.to_s, product.id.to_s] }.to_h)
       end
 
+      Rails.logger.info("INVENTORY_FETCHER: Variant mapping complete - variant_map keys: #{variant_map.keys.count}, product_map keys: #{product_map.keys.count}")
 
       inventory_item_ids = variant_map.keys.join(",")
       return {} if inventory_item_ids.blank?
 
       # Get Inventory Levels. We will make one API call even if we receive multiple products
+      Rails.logger.info("INVENTORY_FETCHER: Fetching inventory levels for inventory_item_ids: #{inventory_item_ids}")
       inventory_levels = store.api.inventory_levels(inventory_item_ids: inventory_item_ids, limit: 250)
+      Rails.logger.info("INVENTORY_FETCHER: Inventory levels fetched - count: #{inventory_levels.try(:count)}")
 
       # concentrate inventory data based on variant ID
       inventory_map = {}
@@ -36,6 +45,8 @@ class InventoryFetcher
         inventory_map[variant_id] ||= {}
         inventory_map[variant_id][il.location_id.to_s] = il.available.to_i
       end
+
+      Rails.logger.info("INVENTORY_FETCHER: Inventory mapping complete - inventory_map keys: #{inventory_map.keys.count}")
 
       result_map = {}
 
@@ -47,14 +58,43 @@ class InventoryFetcher
         result_map[p_id][variant_id] = im_value
       end
 
+      Rails.logger.info("INVENTORY_FETCHER: Result mapping complete - result_map keys: #{result_map.keys.inspect}")
       result_map
     end
+  rescue ActiveResource::ClientError => e
+    Rails.logger.error("INVENTORY_FETCHER: Shopify API ClientError - store_id: #{store.id}, product_ids: #{product_ids.inspect}, response_code: #{e.try(:response).try(:code)}, error: #{e.message}")
+    raise e
+  rescue ActiveResource::UnauthorizedAccess => e
+    Rails.logger.error("INVENTORY_FETCHER: Shopify API UnauthorizedAccess - store_id: #{store.id}, shopify_domain: #{store.shopify_domain}, product_ids: #{product_ids.inspect}, error: #{e.message}")
+    raise e
+  rescue ActiveResource::ConnectionError => e
+    Rails.logger.error("INVENTORY_FETCHER: Shopify API ConnectionError - store_id: #{store.id}, product_ids: #{product_ids.inspect}, error: #{e.message}")
+    raise e
+  rescue StandardError => e
+    Rails.logger.error("INVENTORY_FETCHER: Unexpected error - store_id: #{store.id}, product_ids: #{product_ids.inspect}, error: #{e.message}, class: #{e.class}")
+    Rails.logger.error("INVENTORY_FETCHER: Backtrace: #{e.backtrace[0..5].join("\n")}")
+    raise e
   end
 
   def levels
+    Rails.logger.info("INVENTORY_FETCHER_LEVELS: Starting levels fetch - use_cache: #{@use_cache}, product_ids: #{product_ids.inspect}, store_id: #{store.id}")
+
     return load_levels unless @use_cache
+
     cache_key = "stores/#{store.id}/inventory_fetcher/product-#{product_ids}"
-    Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+    Rails.logger.info("INVENTORY_FETCHER_LEVELS: Attempting cache fetch - cache_key: #{cache_key}")
+
+    begin
+      result = Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+        Rails.logger.info("INVENTORY_FETCHER_LEVELS: Cache miss, calling load_levels")
+        load_levels
+      end
+      Rails.logger.info("INVENTORY_FETCHER_LEVELS: Cache fetch successful - result keys: #{result.try(:keys).inspect}")
+      result
+    rescue StandardError => e
+      Rails.logger.error("INVENTORY_FETCHER_LEVELS: Cache error - cache_key: #{cache_key}, error: #{e.message}, class: #{e.class}")
+      # Fallback to loading without cache on error
+      Rails.logger.info("INVENTORY_FETCHER_LEVELS: Falling back to load_levels without cache")
       load_levels
     end
   end

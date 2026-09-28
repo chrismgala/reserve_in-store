@@ -14,17 +14,34 @@ module Shopify
     end
 
     def inventory_levels(params = {})
+      Rails.logger.info("SHOPIFY_API: Fetching inventory_levels - params: #{params.inspect}, store_id: #{@store.id}")
+
       results = []
 
       levels = ShopifyAPI::InventoryLevel.where(params)
+      Rails.logger.info("SHOPIFY_API: Inventory levels fetched - count: #{levels.try(:count)}")
       results = levels.to_a
 
       while levels.next_page?
+        Rails.logger.info("SHOPIFY_API: Fetching next page of inventory levels")
         levels = levels.fetch_next_page
         results += levels.to_a
       end
 
+      Rails.logger.info("SHOPIFY_API: Total inventory levels fetched: #{results.count}")
       results
+    rescue ActiveResource::ClientError => e
+      Rails.logger.error("SHOPIFY_API: InventoryLevels ClientError - store_id: #{@store.id}, params: #{params.inspect}, response_code: #{e.try(:response).try(:code)}, error: #{e.message}")
+      raise e
+    rescue ActiveResource::UnauthorizedAccess => e
+      Rails.logger.error("SHOPIFY_API: InventoryLevels UnauthorizedAccess - store_id: #{@store.id}, shopify_domain: #{@store.shopify_domain}, params: #{params.inspect}, error: #{e.message}")
+      raise e
+    rescue ActiveResource::ConnectionError => e
+      Rails.logger.error("SHOPIFY_API: InventoryLevels ConnectionError - store_id: #{@store.id}, params: #{params.inspect}, error: #{e.message}")
+      raise e
+    rescue StandardError => e
+      Rails.logger.error("SHOPIFY_API: InventoryLevels unexpected error - store_id: #{@store.id}, params: #{params.inspect}, error: #{e.message}, class: #{e.class}")
+      raise e
     end
 
     def order(id, params = {})
@@ -55,7 +72,22 @@ module Shopify
     end
 
     def products(params = {})
-      ShopifyAPI::Product.where(params)
+      Rails.logger.info("SHOPIFY_API: Fetching products - params: #{params.inspect}, store_id: #{@store.id}")
+      result = ShopifyAPI::Product.where(params)
+      Rails.logger.info("SHOPIFY_API: Products fetched - count: #{result.try(:count)}")
+      result
+    rescue ActiveResource::ClientError => e
+      Rails.logger.error("SHOPIFY_API: Products ClientError - store_id: #{@store.id}, params: #{params.inspect}, response_code: #{e.try(:response).try(:code)}, error: #{e.message}")
+      raise e
+    rescue ActiveResource::UnauthorizedAccess => e
+      Rails.logger.error("SHOPIFY_API: Products UnauthorizedAccess - store_id: #{@store.id}, shopify_domain: #{@store.shopify_domain}, params: #{params.inspect}, error: #{e.message}")
+      raise e
+    rescue ActiveResource::ConnectionError => e
+      Rails.logger.error("SHOPIFY_API: Products ConnectionError - store_id: #{@store.id}, params: #{params.inspect}, error: #{e.message}")
+      raise e
+    rescue StandardError => e
+      Rails.logger.error("SHOPIFY_API: Products unexpected error - store_id: #{@store.id}, params: #{params.inspect}, error: #{e.message}, class: #{e.class}")
+      raise e
     end
 
     def product(id, params = {})

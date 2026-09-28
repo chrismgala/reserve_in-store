@@ -26,7 +26,16 @@ class LoggedInController < ShopifyApp::AuthenticatedController
   end
 
   def load_current_store
+    Rails.logger.info("LOAD_CURRENT_STORE: Attempting to load store - current_shopify_domain: #{current_shopify_domain.inspect}")
     @current_store ||= Store.find_by(shopify_domain: current_shopify_domain)
+    if @current_store.present?
+      Rails.logger.info("LOAD_CURRENT_STORE: Store loaded successfully - store_id: #{@current_store.id}, shopify_domain: #{@current_store.shopify_domain}, active: #{@current_store.active?}")
+    else
+      Rails.logger.error("LOAD_CURRENT_STORE: Store NOT found for current_shopify_domain: #{current_shopify_domain.inspect}")
+    end
+  rescue StandardError => e
+    Rails.logger.error("LOAD_CURRENT_STORE: Error loading store - current_shopify_domain: #{current_shopify_domain.inspect}, error: #{e.message}, class: #{e.class}")
+    raise e
   end
 
   def current_store; @current_store; end

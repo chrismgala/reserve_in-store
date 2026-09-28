@@ -23,7 +23,34 @@ class StoresController < LoggedInController
   ##
   # GET /stores/settings
   def settings
+    Rails.logger.info("STORES_SETTINGS: Starting settings page request")
+    Rails.logger.info("STORES_SETTINGS: @current_store present: #{@current_store.present?}, shopify_domain: #{@current_store.try(:shopify_domain)}, store_id: #{@current_store.try(:id)}")
+    Rails.logger.info("STORES_SETTINGS: Request params: #{params.except(:controller, :action).inspect}")
+    Rails.logger.info("STORES_SETTINGS: current_shopify_domain: #{current_shopify_domain.inspect}")
+    Rails.logger.info("STORES_SETTINGS: Shopify session valid: #{ShopifyAPI::Session.present?}")
+
+    if @current_store.present?
+      Rails.logger.info("STORES_SETTINGS: Store found - checking if integrator can be initialized")
+      begin
+        @integrator = @current_store.integrator
+        Rails.logger.info("STORES_SETTINGS: Integrator initialized successfully, has_errors: #{@integrator.try(:has_errors?)}")
+        if @integrator.try(:has_errors?)
+          Rails.logger.warn("STORES_SETTINGS: Integrator has errors: #{@integrator.errors.inspect}")
+        end
+      rescue StandardError => e
+        Rails.logger.error("STORES_SETTINGS: Failed to initialize integrator - error: #{e.message}, class: #{e.class}")
+      end
+    else
+      Rails.logger.error("STORES_SETTINGS: @current_store is nil! current_shopify_domain: #{current_shopify_domain.inspect}")
+    end
+
     require_user! || return
+
+    Rails.logger.info("STORES_SETTINGS: Settings page request completed successfully")
+  rescue StandardError => e
+    Rails.logger.error("STORES_SETTINGS: Unexpected error in settings action - error: #{e.message}, class: #{e.class}")
+    Rails.logger.error("STORES_SETTINGS: Backtrace: #{e.backtrace[0..5].join("\n")}")
+    raise e
   end
 
   ##
